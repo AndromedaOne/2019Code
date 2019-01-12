@@ -20,7 +20,7 @@ public class DriveTrain extends Subsystem {
    
 
     @Override
-    public void initDefaultCommand() {
+    public void initDefaultCommand(){
         driveTrainLeftFrontTalon = new WPI_TalonSRX(0);
         driveTrainLeftRearTalon = new WPI_TalonSRX(2);
         driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftFrontTalon, driveTrainLeftRearTalon  );
