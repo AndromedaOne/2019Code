@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     //m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);
-    i2cbus = new I2CBusDriver(true, 0x1E).getBus();
+    i2cbus = new I2CBusDriver(true, 0x9).getBus();
   }
 
   /**
