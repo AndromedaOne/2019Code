@@ -40,7 +40,9 @@ public class TeleOpDrive extends Command {
         double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(drivecontroller);
         Robot.driveTrain.move(forwardBackwardStickValue*mod, rotateStickValue*mod);
 
-        if (m_slowmodedelaycounter > 24
+
+        //48 on slowmodedelaycounter is about a second
+        if (m_slowmodedelaycounter > 12
                 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
             m_slowmodedelaycounter = 0;
             if (!slowMoEnabled) {
