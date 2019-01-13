@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -38,6 +41,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
+
+    Config conf = ConfigFactory.load();
+    System.out.println("My name is "+conf.getString("robot.name"));
+
+
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
