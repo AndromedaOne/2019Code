@@ -29,6 +29,8 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
   I2C i2cbus;
+  int callCount = 0;
+  byte[] buffer = new byte[16];
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -125,11 +127,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    byte[] buffer;
-    buffer = new byte[16];
-    i2cbus.readOnly(buffer, 16);
-    for (int i = 0; i<buffer.length; i++) {
-      System.out.println("buffer[" + i + "]: " + buffer[i]);
+    if (callCount >= 50) {
+      i2cbus.readOnly(buffer, 16);
+      for (int i = 0; i<buffer.length; i++) {
+        System.out.println("buffer[" + i + "]: " + buffer[i]);
+      }
+      callCount = 0;
+    } else {
+      callCount++;
     }
   }
 
