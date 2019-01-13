@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    driveTrain = new DriveTrain();
     driveController = new Joystick(0);
     //m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());

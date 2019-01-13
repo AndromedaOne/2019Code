@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import frc.robot.commands.TeleOpDrive;
 /**
  *
  */
@@ -21,7 +22,8 @@ public class DriveTrain extends Subsystem {
 
     @Override
     public void initDefaultCommand(){
-        driveTrainLeftFrontTalon = new WPI_TalonSRX(0);
+        setDefaultCommand(new TeleOpDrive());
+        driveTrainLeftFrontTalon = new WPI_TalonSRX(1);
         driveTrainLeftRearTalon = new WPI_TalonSRX(2);
         driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftFrontTalon, driveTrainLeftRearTalon  );
         driveTrainRightFrontTalon = new WPI_TalonSRX(3);
