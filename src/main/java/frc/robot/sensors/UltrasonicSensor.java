@@ -20,4 +20,9 @@ public class UltrasonicSensor extends SensorBase<DoubleSensorSrc> {
             }
         };
     }
+
+    @Override
+    public void reset() {
+        return;
+    }
 }

@@ -6,8 +6,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 
 public class NavXGyroSensor extends SensorBase<DoubleSensorSrc> {
-    AHRS gyro; /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
+    AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
     static NavXGyroSensor instance = new NavXGyroSensor();
+    private double initialAngleReading = 0.0;
+    boolean angleReadingSet = false;
     private NavXGyroSensor(){
         try {
 			/* Communicate w/navX MXP via the MXP SPI Bus. */
@@ -31,7 +33,7 @@ public class NavXGyroSensor extends SensorBase<DoubleSensorSrc> {
     }
 
     public double getZAngle() {
-        return gyro.getAngle();
+        return gyro.getAngle() - initialAngleReading;
     }
     
     public DoubleSensorSrc getClosedLoopSrc() {
@@ -46,6 +48,9 @@ public class NavXGyroSensor extends SensorBase<DoubleSensorSrc> {
 
     @Override
     public void reset() {
-
+        initialAngleReading = getZAngle();
+        System.out.println("Initial angle set to: " + initialAngleReading);
+        angleReadingSet = true;
+        
     }
 }
