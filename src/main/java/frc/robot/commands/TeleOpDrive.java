@@ -29,8 +29,7 @@ public class TeleOpDrive extends Command {
     	double forwardBackwardStickValue = -EnumeratedRawAxis.getLeftStickVertical(drivecontroller);
     	double rotateStickValue = EnumeratedRawAxis.getRightStickHorizontal(drivecontroller);
         Robot.driveTrain.move(forwardBackwardStickValue, rotateStickValue);
-        
-        if(Enumerated)
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
