@@ -34,7 +34,7 @@ public class NavXGyroSensor extends SensorBase<DoubleSensorSrc> {
         return gyro.getAngle();
     }
     
-    public DoubleSensorSrc getClosedLoopZSrc() {
+    public DoubleSensorSrc getClosedLoopSrc() {
         return new DoubleSensorSrc(){
         
             @Override
@@ -42,5 +42,10 @@ public class NavXGyroSensor extends SensorBase<DoubleSensorSrc> {
                 return getZAngle();
             }
         };
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

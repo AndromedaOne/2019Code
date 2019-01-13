@@ -1,13 +1,9 @@
 package frc.robot.sensors;
 
-public class SensorBase <T extends SensorReadingSrc>{
+public abstract class SensorBase <T extends SensorReadingSrc>{
    
-    public void reset() {
-        return;
-    }
+    public abstract void reset();
 
-    public T getClosedLoopSrc(){
-        return null;
-    }
+    public abstract T getClosedLoopSrc();
 
 }

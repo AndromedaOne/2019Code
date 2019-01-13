@@ -29,4 +29,9 @@ public class LimitSwitchSensor extends SensorBase<BooleanSensorSrc> {
             }
         };
     }
+
+    @Override
+    public void reset() {
+        return;
+    }
 }
