@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 public class UltrasonicSensor extends SensorBase<DoubleSensorSrc> {
     private Ultrasonic ultraSonic;
 
-    public UltrasonicSensor (int ping, int echo){
+    public UltrasonicSensor(int ping, int echo){
         ultraSonic = new Ultrasonic(ping, echo);
     }
-    public double getDistanceInches () {
+    public double getDistanceInches() {
         return ultraSonic.getRangeInches();
     }
-    public DoubleSensorSrc getClosedLoopSrc () {
+    public DoubleSensorSrc getClosedLoopSrc() {
         return new DoubleSensorSrc(){
         
             @Override
