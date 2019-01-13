@@ -19,7 +19,7 @@ public class LimitSwitchSensor extends SensorBase<BooleanSensorSrc> {
     }
 
     public LimitSwitchSensor(int port){
-        LimitSwitchSensor(port, false);
+        this(port, false);
     }
 
     public boolean isAtLimit() {
