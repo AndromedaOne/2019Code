@@ -11,7 +11,7 @@ public class I2CSensor extends SensorBase {
     /**
      * Takes same parameters as I2CBusDriver() and passes it along to said constructor
      * @param isOnboard
-     * @param address
+     * @param address The Hexadecimal address of the I2C device
      * @author Owen Salter
      */
     public I2CSensor(boolean isOnboard, int address) {
