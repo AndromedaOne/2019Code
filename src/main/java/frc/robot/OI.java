@@ -48,6 +48,4 @@ public class OI {
   //Controllers
   Joystick driveStick = new Joystick(0);
   
-  //Buttons
-  Button leftBumper = ButtonsEnumerated.LEFTBUMPERBUTTON.getJoystickButton(driveStick);
 }
