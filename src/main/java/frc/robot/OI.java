@@ -49,5 +49,5 @@ public class OI {
   Joystick driveStick = new Joystick(0);
   
   //Buttons
-  Button leftBumper = new Button.LeftButton(driveStick);
+  Button leftBumper = ButtonsEnumerated.LEFTBUMPERBUTTON.getJoystickButton(driveStick);
 }

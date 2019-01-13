@@ -109,7 +109,7 @@ public enum ButtonsEnumerated {
 	}
 
 	//This is the button we want to pass into OI for now
-	public static Button getLeftButton(Joystick gamepad) {
+	public static ButtonsEnumerated getLeftButton(Joystick gamepad) {
 		return LEFTBUMPERBUTTON;
 	}
 
