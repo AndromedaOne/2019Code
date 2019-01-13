@@ -43,9 +43,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
-    //m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    //SmartDashboard.putData("Auto mode", m_chooser);
+    m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
+    chooser.addOption("My Auto", new MyAutoCommand());
+    SmartDashboard.putData("Auto mode", m_chooser);
     i2cbus = new I2CBusDriver(true, 0x9).getBus();
   }
 
