@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,6 +28,7 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+  I2C i2cbus;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -37,9 +40,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     driveController = new Joystick(0);
-    m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
+    //m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    //SmartDashboard.putData("Auto mode", m_chooser);
+    i2cbus = new I2CBusDriver(true, 0x1E).getBus();
   }
 
   /**
@@ -121,6 +125,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    byte[] buffer;
+    buffer = new byte[8];
+    i2cbus.readOnly(buffer, 8);
+    for (int i = 0; i<buffer.length; i++) {
+      System.out.println("buffer[" + i + "]: " + buffer[i]);
+    }
   }
 
   /**
