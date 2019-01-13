@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.cscore.UsbCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,9 +38,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
-    m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    //Camera Code
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setResolution(320, 240);
+    camera.setFPS(10);
+
   }
 
   /**
