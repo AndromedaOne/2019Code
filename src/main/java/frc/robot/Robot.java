@@ -126,8 +126,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     byte[] buffer;
-    buffer = new byte[8];
-    i2cbus.readOnly(buffer, 8);
+    buffer = new byte[16];
+    i2cbus.readOnly(buffer, 16);
     for (int i = 0; i<buffer.length; i++) {
       System.out.println("buffer[" + i + "]: " + buffer[i]);
     }
