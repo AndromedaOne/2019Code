@@ -1,4 +1,4 @@
-package frc.robot.Sensors;
+package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.sensors.SensorBase;
@@ -20,7 +20,7 @@ public class I2CSensor extends SensorBase {
 
     /**
      * @return An array of booleans where true means that a line was detected and false means that a line wasn't detected
-     * @author Owen salter
+     * @author Owen Salter
      */
     public boolean[] whereIsLine() {
         boolean[] boolBuf = new boolean[buffer.length/2];
