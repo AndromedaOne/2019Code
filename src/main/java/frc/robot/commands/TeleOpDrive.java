@@ -27,7 +27,7 @@ public class TeleOpDrive extends Command {
     protected void initialize() {
         m_slowmodedelaycounter = 0;
 
-        mod = 0.9;
+        mod = 1;
         slowMoEnabled = false;
     }
 
@@ -38,7 +38,7 @@ public class TeleOpDrive extends Command {
         double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(drivecontroller);
 
         double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(drivecontroller);
-        Robot.driveTrain.move(forwardBackwardStickValue*mod, rotateStickValue);
+        Robot.driveTrain.move(forwardBackwardStickValue*mod, rotateStickValue*mod);
 
         if (m_slowmodedelaycounter > 24
                 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
@@ -48,7 +48,7 @@ public class TeleOpDrive extends Command {
                 slowMoEnabled = true;
                 System.out.println("Slow Mode IS enabled!");
             } else {
-                mod = 0.9;
+                mod = 1;
                 slowMoEnabled = false;
                 System.out.println("SLOW MODE HAS ENDED!");
             }
