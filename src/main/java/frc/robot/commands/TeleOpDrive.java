@@ -3,6 +3,7 @@ package frc.robot.commands;
 import frc.robot.Robot;
 
 import frc.robot.utilities.EnumeratedRawAxis;
+import frc.robot.utilities.ButtonsEnumerated;
 import edu.wpi.first.wpilibj.Joystick;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -27,7 +28,9 @@ public class TeleOpDrive extends Command {
     	Joystick drivecontroller = Robot.driveController;
     	double forwardBackwardStickValue = -EnumeratedRawAxis.getLeftStickVertical(drivecontroller);
     	double rotateStickValue = EnumeratedRawAxis.getRightStickHorizontal(drivecontroller);
-    	Robot.driveTrain.move(forwardBackwardStickValue, rotateStickValue);
+        Robot.driveTrain.move(forwardBackwardStickValue, rotateStickValue);
+        
+        if(Enumerated)
     }
 
     // Make this return true when this Command no longer needs to run execute()
