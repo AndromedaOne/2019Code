@@ -25,7 +25,7 @@ public class TeleOpDrive extends Command {
     @Override
     protected void execute() {
     	Joystick drivecontroller = Robot.driveController;
-    	double forwardBackwardStickValue = EnumeratedRawAxis.getLeftStickVertical(drivecontroller);
+    	double forwardBackwardStickValue = -EnumeratedRawAxis.getLeftStickVertical(drivecontroller);
     	double rotateStickValue = EnumeratedRawAxis.getRightStickHorizontal(drivecontroller);
     	Robot.driveTrain.move(forwardBackwardStickValue, rotateStickValue);
     }
