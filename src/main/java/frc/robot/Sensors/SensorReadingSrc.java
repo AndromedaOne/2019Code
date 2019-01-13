@@ -1,4 +1,4 @@
-package frc.robot.Sensors;
+package frc.robot.sensors;
 
 public class SensorReadingSrc{
 

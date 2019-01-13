@@ -1,13 +1,5 @@
-package frc.robot.Sensors;
+package frc.robot.sensors;
 
-public class DoubleSensorSrc extends SensorReadingSrc {
-    private Double reading;
-
-    public Double getReading (){
-        return reading;
-    }
-
-    public void setReading (Double newReading){
-        reading = newReading;
-    }
+public abstract class DoubleSensorSrc extends SensorReadingSrc {
+    public abstract Double getReading (); 
 }

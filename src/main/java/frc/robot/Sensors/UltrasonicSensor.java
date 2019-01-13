@@ -1,16 +1,9 @@
-package frc.robot.Sensors;
+package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class UltrasonicSensor extends SensorBase<DoubleSensorSrc> {
     private Ultrasonic ultraSonic;
-
-    private class UltrasonicSensorSrc extends DoubleSensorSrc {
-        public Double getReading () {
-            return getDistanceInches();
-        }
-    }
-    private UltrasonicSensorSrc ultrasonicSensorSrc = new UltrasonicSensorSrc();
 
     public UltrasonicSensor (int ping, int echo){
         ultraSonic = new Ultrasonic(ping, echo);
@@ -19,6 +12,12 @@ public class UltrasonicSensor extends SensorBase<DoubleSensorSrc> {
         return ultraSonic.getRangeInches();
     }
     public DoubleSensorSrc getClosedLoopSrc () {
-        return ultrasonicSensorSrc;
+        return new DoubleSensorSrc(){
+        
+            @Override
+            public Double getReading() {
+                return getDistanceInches();
+            }
+        };
     }
 }

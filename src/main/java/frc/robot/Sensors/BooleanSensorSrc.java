@@ -1,9 +1,5 @@
-package frc.robot.Sensors;
+package frc.robot.sensors;
 
-public class BooleanSensorSrc extends SensorReadingSrc {
-    private Boolean reading;
-
-    public Boolean getReading (){
-        return reading;
-    }
+public abstract class BooleanSensorSrc extends SensorReadingSrc {
+    public abstract Boolean getReading ();
 }
