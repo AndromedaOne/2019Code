@@ -29,6 +29,7 @@ import com.typesafe.config.ConfigFactory;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+  protected static Config conf = ConfigFactory.load();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -41,11 +42,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
-
-    Config conf = ConfigFactory.load();
-    System.out.println("My name is "+conf.getString("robot.name"));
-
-
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -137,5 +133,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+
+  public static String getName(){
+    return conf.getString("robot.name");
   }
 }
