@@ -1,9 +1,11 @@
 package frc.robot.Sensors;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class GyroSensor extends SensorBase<DoubleSensorSrc> {
-    private  NavxGyro navX;
+    AHRS gyro; /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
 
     private class GyroSensorSrc extends DoubleSensorSrc {
         public Double getReading () {
