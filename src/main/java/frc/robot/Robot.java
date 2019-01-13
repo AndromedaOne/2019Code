@@ -129,9 +129,11 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     if (callCount >= 50) {
       i2cbus.readOnly(buffer, 16);
+      System.out.println("-----Begin Grouping-----");
       for (int i = 0; i<buffer.length; i++) {
         System.out.println("buffer[" + i + "]: " + buffer[i]);
       }
+      System.out.println("-----End Grouping-----");
       callCount = 0;
     } else {
       callCount++;
