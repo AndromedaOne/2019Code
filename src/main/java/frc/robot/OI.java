@@ -45,7 +45,20 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-  //Controllers
-  Joystick driveStick = new Joystick(0);
+  private static OI instance = new OI();
+
+  private OI(){}
+
+  // Controllers
+  protected Joystick driveStick = new Joystick(0);
+
+  public Joystick getDriveStick(){
+    return driveStick;
+  }
   
+  public static OI getInstance(){
+    return instance;
+  }
+
 }
+
