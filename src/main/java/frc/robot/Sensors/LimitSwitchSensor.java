@@ -6,13 +6,6 @@ public class LimitSwitchSensor extends SensorBase<BooleanSensorSrc> {
     private DigitalInput limitSwitch;
     private boolean m_reversedPolarity;
 
-    private class LimitSwitchSensorSrc extends BooleanSensorSrc {
-        public Boolean getReading() {
-            return isAtLimit();
-        }
-    }
-    private LimitSwitchSensorSrc limitSwitchSensorSrc = new LimitSwitchSensorSrc();
-
     public LimitSwitchSensor(int port, boolean reversedPolarity){
         limitSwitch = new DigitalInput(port);
         m_reversedPolarity = reversedPolarity;
@@ -30,6 +23,10 @@ public class LimitSwitchSensor extends SensorBase<BooleanSensorSrc> {
     }
 
     public BooleanSensorSrc getClosedLoopSrc() {
-        return limitSwitchSensorSrc;
+        return new BooleanSensorSrc() {
+            public Boolean getReading() {
+                return isAtLimit();
+            }
+        };
     }
 }
