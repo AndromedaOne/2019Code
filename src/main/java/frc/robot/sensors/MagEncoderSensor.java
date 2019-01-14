@@ -3,9 +3,7 @@ package frc.robot.sensors;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Ultrasonic;
-
-public class MagEncoderSensor extends SensorBase<DoubleSensorSrc> {
+public class MagEncoderSensor implements PIDLoopable {
     private WPI_TalonSRX talonSpeedController;
     private static final double TICKSTOINCHES = 0.0;
 
@@ -24,14 +22,10 @@ public class MagEncoderSensor extends SensorBase<DoubleSensorSrc> {
         return talonSpeedController.getSelectedSensorPosition();
     }
 
-    public DoubleSensorSrc getClosedLoopSrc() {
-        return new DoubleSensorSrc(){
-        
-            @Override
-            public Double getReading() {
-                return getDistanceInches();
-            }
-        };
+    @Override
+    public double getClosedLoopSrc() {
+        return getDistanceInches();
+ 
     }
 
     @Override
