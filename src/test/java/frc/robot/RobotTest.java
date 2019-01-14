@@ -1,5 +1,7 @@
-import static org.junit.Assert.assertEquals;
+package frc.robot;
+
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import frc.robot.Robot;
 
