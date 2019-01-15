@@ -26,7 +26,7 @@ public class DriveTrain extends Subsystem {
     @Override
     public void initDefaultCommand(){
         Config conf = Robot.getConfig();
-        Config driveConf = conf.getConfig("ports.drivetrain");
+        Config driveConf = conf.getConfig("ports.driveTrain");
         setDefaultCommand(new TeleOpDrive());
         driveTrainLeftFrontTalon = new WPI_TalonSRX(driveConf.getInt("leftFrontTalon"));
         driveTrainLeftRearTalon = new WPI_TalonSRX(driveConf.getInt("leftRearTalon"));
