@@ -139,4 +139,8 @@ public class Robot extends TimedRobot {
   public static String getName(){
     return conf.getString("robot.name");
   }
+
+  public static Config getConfig() {
+    return conf;
+  }
 }
