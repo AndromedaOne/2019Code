@@ -21,7 +21,7 @@ public class LineFollowerSensor {
      * @return An array of booleans where true means that a line was detected and false means that a line wasn't detected
      * @author Owen Salter
      */
-    public boolean[] whereIsLine() {
+    public boolean[] isThereLine() {
         boolean[] boolBuf = new boolean[buffer.length/2];
 
         mI2cBus.readOnly(buffer, 16);
@@ -34,5 +34,9 @@ public class LineFollowerSensor {
         }
 
         return boolBuf;
+    }
+
+    public double whereIsLine() {
+        //TODO: Fun Math Trickery
     }
 }
