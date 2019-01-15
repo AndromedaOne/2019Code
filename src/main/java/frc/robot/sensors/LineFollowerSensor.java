@@ -45,6 +45,10 @@ public class LineFollowerSensor implements PIDLoopable {
         return boolBuf;
     }
 
+    /**
+     * Doesn't do anything right now.
+     * @return null. Don't use it. Bad method.
+     */
     public double getClosedLoopSrc() {
         //TODO: Fun Math Trickery
         return null;
