@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.I2C;
 import frc.robot.sensors.SensorBase;
 import frc.robot.utilities.I2CBusDriver;
 
-public class I2CSensor extends SensorBase {
+public class LineFollowerSensor extends SensorBase {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
 
@@ -14,7 +14,7 @@ public class I2CSensor extends SensorBase {
      * @param address The Hexadecimal address of the I2C device
      * @author Owen Salter
      */
-    public I2CSensor(boolean isOnboard, int address) {
+    public LineFollowerSensor(boolean isOnboard, int address) {
         mI2cBus = new I2CBusDriver(isOnboard, address).getBus();
     }
 
