@@ -16,6 +16,9 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.cscore.UsbCamera;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -26,6 +29,7 @@ import edu.wpi.cscore.UsbCamera;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+  protected static Config conf = ConfigFactory.load();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -131,5 +135,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+
+  public static String getName(){
+    return conf.getString("robot.name");
   }
 }
