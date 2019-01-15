@@ -3,7 +3,7 @@ package frc.robot.sensors;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.utilities.I2CBusDriver;
 
-public class LineFollowerSensor {
+public class LineFollowerSensor implements PIDLoopable {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
 
@@ -15,6 +15,15 @@ public class LineFollowerSensor {
      */
     public LineFollowerSensor(boolean isOnboard, int address) {
         mI2cBus = new I2CBusDriver(isOnboard, address).getBus();
+    }
+
+    /**
+     * Sets the buffer of values to 0. Not much else to say or do here. It's boring. Move along.
+     */
+    public void reset() {
+        for (int i = 0; i < buffer.length; i++) {
+            buffer[i] = 0;
+        }
     }
 
     /**
@@ -36,7 +45,7 @@ public class LineFollowerSensor {
         return boolBuf;
     }
 
-    public double whereIsLine() {
+    public double getClosedLoopSrc() {
         //TODO: Fun Math Trickery
         return null;
     }
