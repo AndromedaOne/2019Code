@@ -1,10 +1,9 @@
 package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.I2C;
-import frc.robot.sensors.SensorBase;
 import frc.robot.utilities.I2CBusDriver;
 
-public class LineFollowerSensor extends SensorBase {
+public class LineFollowerSensor {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
 
