@@ -18,6 +18,9 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.I2CBusDriver;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -28,9 +31,7 @@ import frc.robot.utilities.I2CBusDriver;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
-  I2C i2cbus;
-  int callCount = 0;
-  byte[] buffer = new byte[16];
+  protected static Config conf = ConfigFactory.load();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -153,5 +154,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+
+  public static String getName(){
+    return conf.getString("robot.name");
   }
 }

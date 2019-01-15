@@ -2,7 +2,7 @@ package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.Ultrasonic;
 
-public class UltrasonicSensor extends SensorBase<DoubleSensorSrc> {
+public class UltrasonicSensor implements PIDLoopable {
     private Ultrasonic ultraSonic;
 
     public UltrasonicSensor(int ping, int echo){
@@ -11,13 +11,13 @@ public class UltrasonicSensor extends SensorBase<DoubleSensorSrc> {
     public double getDistanceInches() {
         return ultraSonic.getRangeInches();
     }
-    public DoubleSensorSrc getClosedLoopSrc() {
-        return new DoubleSensorSrc(){
-        
-            @Override
-            public Double getReading() {
-                return getDistanceInches();
-            }
-        };
+    public double getClosedLoopSrc() {
+        return getDistanceInches();
+
+    }
+
+    @Override
+    public void reset() {
+        return;
     }
 }

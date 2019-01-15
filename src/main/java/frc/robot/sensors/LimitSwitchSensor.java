@@ -2,7 +2,7 @@ package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class LimitSwitchSensor extends SensorBase<BooleanSensorSrc> {
+public class LimitSwitchSensor {
     private DigitalInput limitSwitch;
     private boolean m_reversedPolarity;
 
@@ -22,11 +22,4 @@ public class LimitSwitchSensor extends SensorBase<BooleanSensorSrc> {
         return limitSwitch.get();
     }
 
-    public BooleanSensorSrc getClosedLoopSrc() {
-        return new BooleanSensorSrc() {
-            public Boolean getReading() {
-                return isAtLimit();
-            }
-        };
-    }
 }
