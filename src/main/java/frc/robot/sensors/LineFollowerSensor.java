@@ -38,5 +38,6 @@ public class LineFollowerSensor {
 
     public double whereIsLine() {
         //TODO: Fun Math Trickery
+        return null;
     }
 }
