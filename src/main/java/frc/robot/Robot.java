@@ -42,11 +42,14 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
-    //Camera Code
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    camera.setResolution(320, 240);
-    camera.setFPS(10);
 
+    //Camera Code 
+    UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+    UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+    camera0.setResolution(320, 240);
+    camera0.setFPS(10);
+    camera1.setResolution(320, 240);
+    camera1.setFPS(10);
   }
 
   /**
