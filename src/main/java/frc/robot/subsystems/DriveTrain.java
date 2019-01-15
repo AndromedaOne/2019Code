@@ -32,7 +32,7 @@ public class DriveTrain extends Subsystem {
         driveTrainLeftRearTalon = new WPI_TalonSRX(driveConf.getInt("leftRearTalon"));
         driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftFrontTalon, driveTrainLeftRearTalon  );
         driveTrainRightFrontTalon = new WPI_TalonSRX(driveConf.getInt("rightFrontTalon"));
-        driveTrainRightRearTalon = new WPI_TalonSRX("rightRearTalon");
+        driveTrainRightRearTalon = new WPI_TalonSRX(driveConf.getInt("rightRearTalon"));
         driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightFrontTalon, driveTrainRightRearTalon);
         differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
     }
