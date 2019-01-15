@@ -3,7 +3,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.typesafe.config.Config;
+
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
 /**
  *
@@ -22,12 +25,14 @@ public class DriveTrain extends Subsystem {
 
     @Override
     public void initDefaultCommand(){
+        Config conf = Robot.getConfig();
+        Config driveConf = conf.getConfig("ports.driveTrain");
         setDefaultCommand(new TeleOpDrive());
-        driveTrainLeftFrontTalon = new WPI_TalonSRX(1);
-        driveTrainLeftRearTalon = new WPI_TalonSRX(2);
+        driveTrainLeftFrontTalon = new WPI_TalonSRX(driveConf.getInt("leftFrontTalon"));
+        driveTrainLeftRearTalon = new WPI_TalonSRX(driveConf.getInt("leftRearTalon"));
         driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftFrontTalon, driveTrainLeftRearTalon  );
-        driveTrainRightFrontTalon = new WPI_TalonSRX(3);
-        driveTrainRightRearTalon = new WPI_TalonSRX(4);
+        driveTrainRightFrontTalon = new WPI_TalonSRX(driveConf.getInt("rightFrontTalon"));
+        driveTrainRightRearTalon = new WPI_TalonSRX(driveConf.getInt("rightRearTalon"));
         driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightFrontTalon, driveTrainRightRearTalon);
         differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
     }
