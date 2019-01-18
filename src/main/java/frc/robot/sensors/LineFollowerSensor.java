@@ -62,13 +62,15 @@ public class LineFollowerSensor implements PIDLoopable {
             - return angle
         */
         boolean[] boolBuf = new boolean[buffer.length/2];
-        boolBuf = isThereLine();
         int senseCount = 0;
+        int adj1;
+
+        boolBuf = isThereLine();
         for (int i = 0; i < boolBuf.length; i++) {
             if (boolBuf[i] == true) {
                 senseCount++;
             }
         }
-
+        adj1 = (int) DistanceBtSensors*senseCount;
     }
 }
