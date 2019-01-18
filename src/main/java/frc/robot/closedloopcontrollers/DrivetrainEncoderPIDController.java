@@ -77,14 +77,19 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
         return _d;
     }
 
-    // ----Setting P I D
+    /**
+     * Allows you to set the P I and D of the Drivetrain encoder PID 
+     */
     public void setPID(double p, double i, double d){
         _p = p;
         _i = i;
         _d = d;
     }
 
-    // ----Setting Output Range
+    /** 
+     * This sets both the max and minimum output range for the Drivetrain
+     * Enoder PID
+     */
     public void setOutputRange(double range){
         outputRange = range;
     }
