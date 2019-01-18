@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
-    i2cbus = new I2CBusDriver(true, 0x9).getBus();
   }
 
   /**
@@ -129,24 +128,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    if (callCount >= 50) {
-      i2cbus.readOnly(buffer, 16);
-      System.out.println("-----Begin Grouping-----");
-
-      System.out.println("buffer[0]: " + buffer[0]);
-      System.out.println("buffer[2]: " + buffer[2]);
-      System.out.println("buffer[4]: " + buffer[4]);
-      System.out.println("buffer[6]: " + buffer[6]);
-      System.out.println("buffer[8]: " + buffer[8]);
-      System.out.println("buffer[10]: " + buffer[10]);
-      System.out.println("buffer[12]: " + buffer[12]);
-      System.out.println("buffer[14]: " + buffer[14]);
-
-      System.out.println("-----End Grouping-----");
-      callCount = 0;
-    } else {
-      callCount++;
-    }
   }
 
   /**

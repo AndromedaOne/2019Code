@@ -6,6 +6,10 @@ import frc.robot.utilities.I2CBusDriver;
 public class LineFollowerSensor implements PIDLoopable {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
+    //Distance to sensor array in centimetres
+    private final double DistanceToSensor = 10;
+    //Distance between sensors in centimetres
+    private final double DistanceBtSensors = 0.5;
 
     /**
      * Takes same parameters as I2CBusDriver() and passes it along to said constructor
@@ -47,10 +51,24 @@ public class LineFollowerSensor implements PIDLoopable {
 
     /**
      * Doesn't do anything right now.
-     * @return null. Don't use it. Bad method.
+     * @return the angle to get to the line in radians
      */
     public double getClosedLoopSrc() {
-        //TODO: Fun Math Trickery
-        return null;
+        /*
+            Need to:
+            - figure out adj from DistanceToSensor
+            - get hyp from adj and op
+            - use hyp to calculate angle
+            - return angle
+        */
+        boolean[] boolBuf = new boolean[buffer.length/2];
+        boolBuf = isThereLine();
+        int senseCount = 0;
+        for (int i = 0; i < boolBuf.length; i++) {
+            if (boolBuf[i] == true) {
+                senseCount++;
+            }
+        }
+
     }
 }
