@@ -89,7 +89,7 @@ public class LineFollowerSensorArray {
         return sensorReading;
     }
 
-    class LineFollowArraySensorReading {
+    public class LineFollowArraySensorReading {
         public boolean lineFound;
         public double lineAngle;
     }
