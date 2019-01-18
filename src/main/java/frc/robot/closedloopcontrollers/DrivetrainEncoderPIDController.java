@@ -9,6 +9,9 @@ import frc.robot.Robot;
 
 public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase {
 
+    static DrivetrainEncoderPIDController instance = 
+    new DrivetrainEncoderPIDController();
+
     private PIDController encoderPID;
     private EncoderPIDIn encoderPIDIn;
     private EncoderPIDOut encoderPIDOut;
@@ -49,7 +52,6 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
         @Override
         public void pidWrite(double output) {
            Robot.driveTrain.move(output, 0);
-
         }
     }
 
@@ -98,9 +100,13 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
         absoluteTolerance = tolerance;
     }
 
+    public static DrivetrainEncoderPIDController getInstance(){
+        return instance;
+    }
+
     public void run(){
     }
-    
+
     /**
      * This method takes in a setpoint in ticks to move the robot using the 
      * encoder PID
