@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.utilities.I2CBusDriver;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -43,7 +45,7 @@ public class Robot extends TimedRobot {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
-    // chooser.addOption("My Auto", new MyAutoCommand());
+    //chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
   }
 
@@ -82,7 +84,7 @@ public class Robot extends TimedRobot {
    *
    * <p>You can add additional auto modes by adding additional commands to the
    * chooser code above (like the commented example) or additional comparisons
-   * to the switch structure below with additional strings & commands.
+   * to the switch structure below with additional strings and commands.
    */
   @Override
   public void autonomousInit() {
@@ -136,6 +138,9 @@ public class Robot extends TimedRobot {
   }
 
 
+  /**
+   * Get the robot name (set in the config)
+   */
   public static String getName(){
     return conf.getString("robot.name");
   }
