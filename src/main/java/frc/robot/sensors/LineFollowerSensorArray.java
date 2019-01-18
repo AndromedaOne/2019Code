@@ -90,8 +90,8 @@ public class LineFollowerSensorArray {
     }
 
     class LineFollowArraySensorReading {
-        boolean lineFound;
-        double lineAngle;
+        public boolean lineFound;
+        public double lineAngle;
     }
 
 }
