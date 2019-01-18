@@ -26,7 +26,7 @@ public class RealDriveTrain extends DriveTrain {
     @Override
     public void initDefaultCommand(){
         Config conf = Robot.getConfig();
-        Config driveConf = conf.getConfig("ports.driveTrain");
+        Config driveConf = conf.getConfig("ports.can");
         setDefaultCommand(new TeleOpDrive());
         driveTrainLeftFrontTalon = new WPI_TalonSRX(driveConf.getInt("leftFrontTalon"));
         driveTrainLeftRearTalon = new WPI_TalonSRX(driveConf.getInt("leftRearTalon"));
