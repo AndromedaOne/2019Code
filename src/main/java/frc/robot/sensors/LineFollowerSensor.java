@@ -17,8 +17,8 @@ public class LineFollowerSensor {
      * @param address The Hexadecimal address of the I2C device
      * @author Owen Salter
      */
-    public LineFollowerSensor(boolean isOnboard, int address) {
-        mI2cBus = new I2CBusDriver(isOnboard, address).getBus();
+    public LineFollowerSensor(I2CBusDriver i2cBusDriver) {
+        mI2cBus = i2cBusDriver.getBus();
     }
 
     /**
@@ -39,12 +39,18 @@ public class LineFollowerSensor {
 
         mI2cBus.readOnly(buffer, 16);
         for (int i = 0; i < buffer.length; i++) {
-            if (buffer[i] >= 19) {
-                boolBuf[i] = true;
+            if (i%2 == 0) {
+                if (buffer[i] >= 19) {
+                    boolBuf[i] = true;
+                } else {
+                    boolBuf[i] = false;
+                }
             } else {
-                boolBuf[i] = false;
+                // Do nothing
             }
         }
+
+
 
         return boolBuf;
     }
