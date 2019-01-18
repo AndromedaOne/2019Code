@@ -96,10 +96,19 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
 
     public void setAbsoluteTolerance(double tolerance){
         absoluteTolerance = tolerance;
-
     }
 
     public void run(){
+    }
+    
+    /**
+     * This method takes in a setpoint in ticks to move the robot using the 
+     * encoder PID
+     * @param setpoint
+     */
+    public void enable(double setpoint){
+        encoderPID.setSetpoint(setpoint + encoder.getDistanceTicks());
+        encoderPID.enable();
     }
 
     public void reset(){
