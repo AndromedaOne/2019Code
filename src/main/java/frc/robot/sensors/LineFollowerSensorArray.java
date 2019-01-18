@@ -3,7 +3,7 @@ package frc.robot.sensors;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.utilities.I2CBusDriver;
 
-public class LineFollowerSensor {
+public class LineFollowerSensorArray {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
     //Distance to sensor array in centimetres
@@ -17,8 +17,8 @@ public class LineFollowerSensor {
      * @param address The Hexadecimal address of the I2C device
      * @author Owen Salter
      */
-    public LineFollowerSensor(boolean isOnboard, int address) {
-        mI2cBus = new I2CBusDriver(isOnboard, address).getBus();
+    public LineFollowerSensorArray(I2CBusDriver i2cBusDriver) {
+        mI2cBus = i2cBusDriver.getBus();
     }
 
     /**
@@ -39,13 +39,17 @@ public class LineFollowerSensor {
 
         mI2cBus.readOnly(buffer, 16);
         for (int i = 0; i < buffer.length; i++) {
-            if (buffer[i] >= 19) {
-                boolBuf[i] = true;
+            // Only if it's even, do it
+            if (i%2 == 0) {
+                if (buffer[i] >= 19) {
+                    boolBuf[i/2] = true;
+                } else {
+                    boolBuf[i/2] = false;
+                }
             } else {
-                boolBuf[i] = false;
+                // Do nothing
             }
         }
-
         return boolBuf;
     }
 
@@ -89,4 +93,5 @@ public class LineFollowerSensor {
         boolean lineFound;
         double lineAngle;
     }
+
 }
