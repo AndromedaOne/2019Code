@@ -28,10 +28,16 @@ public class NavXGyroSensor implements PIDLoopable {
 		}
     }
 
+    /**
+     * @return NavX Object
+     */
     public static NavXGyroSensor getInstance() {
         return instance;
     }
 
+    /**
+     * @return Value of the z-angle
+     */
     public double getZAngle() {
         return gyro.getAngle() - initialAngleReading;
     }
