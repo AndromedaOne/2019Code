@@ -39,6 +39,7 @@ public class LineFollowerSensor {
 
         mI2cBus.readOnly(buffer, 16);
         for (int i = 0; i < buffer.length; i++) {
+            // Only if it's even, do it
             if (i%2 == 0) {
                 if (buffer[i] >= 19) {
                     boolBuf[i] = true;
