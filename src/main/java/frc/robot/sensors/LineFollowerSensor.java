@@ -3,7 +3,7 @@ package frc.robot.sensors;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.utilities.I2CBusDriver;
 
-public class LineFollowerSensor implements PIDLoopable {
+public class LineFollowerSensor {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
     //Distance to sensor array in centimetres
@@ -51,9 +51,9 @@ public class LineFollowerSensor implements PIDLoopable {
 
     /**
      * Doesn't do anything right now.
-     * @return the angle to get to the line in radians
+     * @return structure containing a boolean of whether the line is found, and the angle in radians
      */
-    public double getClosedLoopSrc() {
+    public LineFollowArraySensorReading getSensorReading() {
         /*
             Need to:
             - figure out adj from DistanceToSensor
@@ -73,6 +73,20 @@ public class LineFollowerSensor implements PIDLoopable {
         }
         adj1 = (int) DistanceBtSensors*senseCount;
         double angle = Math.toRadians(Math.acos(DistanceToSensor/adj1));
-        return angle;
+
+        LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
+        sensorReading.lineAngle = angle;
+
+        if (senseCount != 0) {
+            sensorReading.lineFound = true;
+        } else {
+            sensorReading.lineFound = false;
+        }
+        return sensorReading;
+    }
+
+    class LineFollowArraySensorReading {
+        boolean lineFound;
+        double lineAngle;
     }
 }
