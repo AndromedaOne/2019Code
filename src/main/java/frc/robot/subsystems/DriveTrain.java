@@ -41,9 +41,17 @@ public class DriveTrain extends Subsystem {
     public void periodic() {
     }
 
+    /**
+     * @param forwardBackSpeed Speed to move forward/backwards
+     * @param rotateAmount Amount to rotate as a double
+     */
     public void move(double forwardBackSpeed, double rotateAmount) {
     	differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
     }
+
+    /**
+     * Stops the motor
+     */
     public void stop() {
     	differentialDrive.stopMotor();
     }
