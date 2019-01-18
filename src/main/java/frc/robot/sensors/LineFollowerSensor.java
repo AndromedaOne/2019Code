@@ -72,5 +72,7 @@ public class LineFollowerSensor implements PIDLoopable {
             }
         }
         adj1 = (int) DistanceBtSensors*senseCount;
+        double angle = Math.toRadians(Math.acos(DistanceToSensor/adj1));
+        return angle;
     }
 }
