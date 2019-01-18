@@ -42,9 +42,9 @@ public class LineFollowerSensor {
             // Only if it's even, do it
             if (i%2 == 0) {
                 if (buffer[i] >= 19) {
-                    boolBuf[i] = true;
+                    boolBuf[i/2] = true;
                 } else {
-                    boolBuf[i] = false;
+                    boolBuf[i/2] = false;
                 }
             } else {
                 // Do nothing
@@ -93,4 +93,5 @@ public class LineFollowerSensor {
         boolean lineFound;
         double lineAngle;
     }
+
 }
