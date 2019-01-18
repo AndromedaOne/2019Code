@@ -50,9 +50,6 @@ public class LineFollowerSensor {
                 // Do nothing
             }
         }
-
-
-
         return boolBuf;
     }
 
