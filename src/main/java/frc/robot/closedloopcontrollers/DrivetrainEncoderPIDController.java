@@ -15,7 +15,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     private PIDController encoderPID;
     private EncoderPIDIn encoderPIDIn;
     private EncoderPIDOut encoderPIDOut;
-    private MagEncoderSensor encoder = new MagEncoderSensor(talon, port);
+    private MagEncoderSensor encoder = new MagEncoderSensor(, port);
     private double _maxAllowableDelta;
     private boolean useDelay = true;
     private double outputRange = 1;

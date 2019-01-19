@@ -7,7 +7,7 @@ public class MagEncoderSensor implements PIDLoopable {
     private WPI_TalonSRX talonSpeedController;
     private static final double TICKSTOINCHES = 0.0;
 
-    public MagEncoderSensor(WPI_TalonSRX talon, int port){
+    public MagEncoderSensor(WPI_TalonSRX talon){
         talonSpeedController = talon;
         talon.configSelectedFeedbackSensor(FeedbackDevice
         .CTRE_MagEncoder_Relative, 0, 10);
