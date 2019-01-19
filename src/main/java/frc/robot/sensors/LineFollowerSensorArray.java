@@ -40,7 +40,7 @@ public class LineFollowerSensorArray {
             // Only if it's even, do it
             if (i%2 == 0) {
                 System.out.println(buffer[i]);
-                if (buffer[i] >= 19) {
+                if (buffer[i] >= 20) {
                     boolBuf[i/2] = true;
                 } else {
                     boolBuf[i/2] = false;
