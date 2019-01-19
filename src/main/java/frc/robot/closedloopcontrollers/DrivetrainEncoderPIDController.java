@@ -34,6 +34,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
         encoderPID = new PIDController(p, i, d, encoderPIDIn, encoderPIDOut);
         encoderPID.setOutputRange(-outputRange, outputRange);
         encoderPID.setAbsoluteTolerance(absoluteTolerance);
+
         System.out.print(" - Added Encoder PID To Live Window - ");
         LiveWindow.add(encoderPID);
         encoderPID.setName("DriveTrain", "Encoder");
@@ -52,8 +53,9 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
 
         @Override
         public double pidGet() {
-            System.out.println("EncoderTicks: " + encoder.getDistanceTicks());
-            return encoder.getDistanceTicks();
+            double ticks = encoder.getDistanceTicks();
+            System.out.println("EncoderTicks: " + ticks);
+            return ticks;
         }
     }
 
