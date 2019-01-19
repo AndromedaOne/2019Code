@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
-  private static Config environmentalConfig = ConfigFactory.parseFile(new File("./robot.conf"));
+  private static Config environmentalConfig = ConfigFactory.parseFile(new File("/home/lvuser/robot.conf"));
 
   /**
    * This config lives in the jar and has hardware-independent configs.
