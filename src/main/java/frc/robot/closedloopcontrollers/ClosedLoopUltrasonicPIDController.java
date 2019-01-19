@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import frc.robot.sensors.UltrasonicSensor;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.Robot;
 
 public class ClosedLoopUltrasonicPIDController implements 
@@ -23,7 +24,21 @@ public class ClosedLoopUltrasonicPIDController implements
     private double _p=0;
     private double _i=0;
     private double _d=0;
+    private Ultrasonic ultrasonic;
     
+    private ClosedLoopUltrasonicPIDController(Ultrasonic ultrasonicParameter) {
+        ultrasonic = ultrasonicParameter;
+        ultrasonicPIDIn = new UltrasonicPIDIn();
+        ultrasonicPIDOut = new UltrasonicPIDOut(_maxAllowableDelta, delay);
+        ultrasonicPID = new PIDController(p, i, d, ultrasonicPIDIn, 
+        ultrasonicPIDOut);
+        ultrasonicPID.setOutputRange(3, 5);
+        ultrasonicPID.setAbsoluteTolerance(12);
+    }
+
+    public ClosedLoopUltrasonicPIDController() {
+    }
+
     private class UltrasonicPIDIn implements PIDSource {
 
         @Override
