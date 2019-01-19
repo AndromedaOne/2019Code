@@ -6,13 +6,13 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.sensors.MagEncoderSensor;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.Robot;
 
 public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase {
 
-    private static DrivetrainEncoderPIDController instance = 
-    new DrivetrainEncoderPIDController();
-    private WPI_TalonSRX rightRearEncoder;
+    private static DrivetrainEncoderPIDController instance;
+    private static WPI_TalonSRX rightRearEncoder;
     private PIDController encoderPID;
     private EncoderPIDIn encoderPIDIn;
     private EncoderPIDOut encoderPIDOut;
@@ -21,14 +21,22 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     private boolean useDelay = true;
     private double outputRange = 1;
     private double absoluteTolerance;
-    private double _p = 0;
-    private double _i = 0;
-    private double _d = 0;
+    private double p = 0;
+    private double i = 0;
+    private double d = 0;
     //I did not add an F variable because we have yet to use it
 
     private DrivetrainEncoderPIDController(){
         rightRearEncoder = Robot.driveTrain.getRightRearEncoder();
         encoder = new MagEncoderSensor(rightRearEncoder);
+        encoderPIDIn = new EncoderPIDIn();
+        encoderPIDOut = new EncoderPIDOut(_maxAllowableDelta, useDelay);
+        encoderPID = new PIDController(p, i, d, encoderPIDIn, encoderPIDOut);
+        encoderPID.setOutputRange(-outputRange, outputRange);
+        encoderPID.setAbsoluteTolerance(absoluteTolerance);
+        System.out.print(" - Added Encoder PID To Live Window - ");
+        LiveWindow.add(encoderPID);
+        encoderPID.setName("DriveTrain", "Encoder");
     }
 
     private class EncoderPIDIn implements PIDSource{
@@ -64,35 +72,35 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
 
     // ----P Value
     public void setP(double p) {
-        _p = p;
+        encoderPID.setP(p);
     }
     public double getP(){
-        return _p;
+        return encoderPID.getP();
     }
     // ----I Value
     public void setI(double i) {
-        _i = i;
+        encoderPID.setI(i);
     }
     
     public double getI() {
-        return _i;
+        return encoderPID.getI();
     }
     // ----D Value
     public void setD(double d) {
-        _d = d;
+        encoderPID.setD(d);
     }
 
     public double getD() {
-        return _d;
+        return encoderPID.getD();
     }
 
     /**
      * Allows you to set the P I and D of the Drivetrain encoder PID 
      */
     public void setPID(double p, double i, double d) {
-        _p = p;
-        _i = i;
-        _d = d;
+        encoderPID.setP(p);
+        encoderPID.setI(i);
+        encoderPID.setD(d);
     }
 
     /** 
@@ -108,7 +116,15 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     }
 
     public static DrivetrainEncoderPIDController getInstance() {
+        System.out.println(" --- Asking for Instance --- ");
+        if (instance == null) {
+            instance = new DrivetrainEncoderPIDController();
+        }
         return instance;
+    }
+
+    public PIDController getEncoderPID(){
+        return encoderPID;
     }
 
     public void run() {
@@ -131,14 +147,13 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     public void stop() {
         encoderPID.disable();
     }
-
+    /**
+     * This creates a new Encoder PID In and Out as well as a PID Controller
+     * using all the passed in parameters. It also set the output Range and the
+     *  absolute tolerance.
+     */
     public void initialize() {
-        encoderPIDIn = new EncoderPIDIn();
-        encoderPIDOut = new EncoderPIDOut(_maxAllowableDelta, useDelay);
-        encoderPID = new PIDController(_p, _i, _d, encoderPIDIn, encoderPIDOut);
-        encoderPID.setOutputRange(-outputRange, outputRange);
-        encoderPID.setAbsoluteTolerance(absoluteTolerance);
-        encoderPID.setName("DriveTrain", "Encoder");
+
     }
 
     public boolean isDone() {
