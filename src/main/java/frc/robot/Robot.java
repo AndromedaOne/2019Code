@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.I2CBusDriver;
+import frc.robot.sensors.LineFollowerSensorArray;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -31,6 +32,7 @@ import com.typesafe.config.ConfigFactory;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+  public static LineFollowerSensorArray lineFollowerSensorArray;
   protected static Config conf = ConfigFactory.load();
 
   Command m_autonomousCommand;
@@ -44,6 +46,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
+    I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
+    I2C sunfounderbus = sunfounderdevice.getBus();
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus);
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     //chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
