@@ -8,7 +8,8 @@ public class FakeI2CBus extends I2C {
         super(I2C.Port.kOnboard, address);
     }
 
-    public byte[] readOnly(byte[] buffer, int length) {
+    public byte[] readOnly() {
+        byte[] buffer = new byte[16];
         for (int i = 0; i < buffer.length; i++) {
             if (i%2 != 0) {
                 buffer[i] = 2;
