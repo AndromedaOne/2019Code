@@ -46,16 +46,10 @@ public class ClosedLoopUltrasonicPIDController implements
 
     }
     private class UltrasonicPIDOut implements PIDOutput {
-
-
-
         public UltrasonicPIDOut(double maxAllowableDelta, boolean delay) {
             _maxAllowableDelta = maxAllowableDelta;
             useDelay = delay;
         }
-
-
-
         @Override
 
         public void pidWrite(double output) {
