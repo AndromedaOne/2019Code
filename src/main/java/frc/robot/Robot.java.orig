@@ -34,7 +34,8 @@ import com.typesafe.config.ConfigFactory;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
-  public static LineFollowerSensorArray lineFollowerSensorArray;
+<<<<<<< HEAD
+
   /**
    * This config should live on the robot and have hardware-
    * specific configs.
@@ -59,6 +60,10 @@ public class Robot extends TimedRobot {
   public static Config getConfig() {
     return conf;
   }
+=======
+  public static LineFollowerSensorArray lineFollowerSensorArray;
+  protected static Config conf = ConfigFactory.load();
+>>>>>>> ClosedLoopControllers
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();

@@ -10,6 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.CallLineFollowerController;
 import frc.robot.utilities.ButtonsEnumerated;
 
 /**
@@ -47,7 +49,9 @@ public class OI {
 
   private static OI instance = new OI();
 
-  private OI(){}
+  private OI(){
+    SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+  }
 
   // Controllers
   protected Joystick driveStick = new Joystick(0);
