@@ -13,8 +13,7 @@ public class LineFollowerSensorArray {
 
     /**
      * Takes same parameters as I2CBusDriver() and passes it along to said constructor
-     * @param isOnboard
-     * @param address The Hexadecimal address of the I2C device
+     * @param i2cBusDriver A prebuilt I2C driver
      * @author Owen Salter
      */
     public LineFollowerSensorArray(I2CBusDriver i2cBusDriver) {
