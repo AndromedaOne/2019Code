@@ -9,8 +9,8 @@ import frc.robot.sensors.LineFollowerSensorArray;
 import frc.robot.utilities.*;
 
 public class LineFollowerSensorTest {
-    FakeI2CBus i2cBusDriver = new FakeI2CBus(9);
-    LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBusDriver);
+    FakeI2CBus i2cBus = new FakeI2CBus(9);
+    LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus);
 
     @Test
     public void isThereLineTest() {
