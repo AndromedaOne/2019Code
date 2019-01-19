@@ -17,6 +17,8 @@ import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
+import java.io.File;
+
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -30,8 +32,36 @@ import com.typesafe.config.ConfigFactory;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+<<<<<<< HEAD
   public static DrivetrainEncoderPIDController encoderPID;
   protected static Config conf = ConfigFactory.load();
+=======
+
+  /**
+   * This config should live on the robot and have hardware-
+   * specific configs.
+   */
+  private static Config environmentalConfig = ConfigFactory.parseFile(new File("~/robot.conf"));
+
+  /**
+   * This config lives in the jar and has hardware-independent configs.
+   */
+  private static Config defaultConfig = ConfigFactory.parseResources("application.conf");
+
+  /**
+   * Combined config
+   */
+  protected static Config conf = environmentalConfig.withFallback(defaultConfig).resolve();
+
+
+  /**
+   * Get the robot's config
+   * @return the config
+   */
+  public static Config getConfig() {
+    return conf;
+  }
+>>>>>>> master
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -85,7 +115,7 @@ public class Robot extends TimedRobot {
    *
    * <p>You can add additional auto modes by adding additional commands to the
    * chooser code above (like the commented example) or additional comparisons
-   * to the switch structure below with additional strings & commands.
+   * to the switch structure below with additional strings and commands.
    */
   @Override
   public void autonomousInit() {
@@ -139,11 +169,12 @@ public class Robot extends TimedRobot {
   }
 
 
+  /**
+   * Get the robot name (set in the config)
+   */
   public static String getName(){
     return conf.getString("robot.name");
   }
 
-  public static Config getConfig() {
-    return conf;
-  }
+
 }
