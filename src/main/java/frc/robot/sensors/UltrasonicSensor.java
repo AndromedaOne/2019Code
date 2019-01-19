@@ -3,13 +3,13 @@ package frc.robot.sensors;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class UltrasonicSensor implements PIDLoopable {
-    private Ultrasonic ultraSonic;
+    private Ultrasonic ultrasonic;
 
     public UltrasonicSensor(int ping, int echo){
-        ultraSonic = new Ultrasonic(ping, echo);
+        ultrasonic = new Ultrasonic(ping, echo);
     }
     public double getDistanceInches() {
-        return ultraSonic.getRangeInches();
+        return ultrasonic.getRangeInches();
     }
     public double getClosedLoopSrc() {
         return getDistanceInches();

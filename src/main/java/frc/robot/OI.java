@@ -47,8 +47,6 @@ public class OI {
 
   private static OI instance = new OI();
 
-  private OI(){}
-
   // Controllers
   protected Joystick driveStick = new Joystick(0);
 
@@ -60,5 +58,10 @@ public class OI {
     return instance;
   }
 
+  private OI(){
+    JoystickButton testUltrasonic = new JoystickButton(driveStick, 2);
+    testUltrasonic.whenPressed(new MoveUsingUltrasonicPID());
+  }
+  
 }
 
