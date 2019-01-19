@@ -11,9 +11,9 @@ import frc.robot.Robot;
 public class ClosedLoopUltrasonicPIDController implements 
     ClosedLoopControllerBase  {
 
-        private static UltrasonicPIDController instance = 
-    new UltrasonicPIDController();
-    private UltrasonicPIDController ultrasonicPID;
+        private static ClosedLoopUltrasonicPIDController instance = 
+    new ClosedLoopUltrasonicPIDController();
+    private PIDController ultrasonicPID;
     private UltrasonicPIDIn ultrasonicPIDIn;
     private UltrasonicPIDOut ultrasonicPIDOut;
     private double _maxAllowableDelta;
@@ -26,7 +26,7 @@ public class ClosedLoopUltrasonicPIDController implements
     private double _f=0;
 
     private UltrasonicPIDController() {
-        ultrasonic = Robot.driveTrain.getDistance
+        ultrasonic = frc.robot.sensors.UltrasonicSensor
     }
 
     private class UltrasonicPIDIn implements PIDSource {
@@ -107,13 +107,14 @@ public class ClosedLoopUltrasonicPIDController implements
     }
 
     public void stop(){
-        ultrasonicPID.disble();
+        ultrasonicPID.disable();
     }
 
     public void initialize(){
         ultrasonicPIDIn = new UltrasonicPIDIn();
         ultrasoicPIDOut = new UlrasonicPIDOut();
-        ultrasonicPID = new PIDController(_p, _i, _d, encoderPIDIn, encoderPIDOut);
+        ultrasonicPID = new PIDController(_p, _i, _d, encoderPIDIn, 
+        encoderPIDOut);
         ultrasonicPID.setOutputRange(-outputRange, outputRange);
         ultrasonicPID.setAbsoluteTolerance(absoluteTolerance);s
         ultrasonicPID.setName("Ultrasonic");
