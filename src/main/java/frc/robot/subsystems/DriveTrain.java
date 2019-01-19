@@ -8,6 +8,7 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 /**
  *
  */
@@ -19,10 +20,8 @@ public class DriveTrain extends Subsystem {
     public static WPI_TalonSRX driveTrainRightRearTalon;
     public static SpeedControllerGroup driveTrainRightSpeedController;
     public static DifferentialDrive differentialDrive;
+    public static DrivetrainEncoderPIDController drivetrainEcoder;
     
-    
-   
-
     @Override
     public void initDefaultCommand(){
         Config conf = Robot.getConfig();

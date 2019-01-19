@@ -9,13 +9,13 @@ import frc.robot.Robot;
 
 public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase {
 
-    static DrivetrainEncoderPIDController instance = 
+    private static DrivetrainEncoderPIDController instance = 
     new DrivetrainEncoderPIDController();
 
     private PIDController encoderPID;
     private EncoderPIDIn encoderPIDIn;
     private EncoderPIDOut encoderPIDOut;
-    private MagEncoderSensor encoder;
+    private MagEncoderSensor encoder = new MagEncoderSensor(talon, port);
     private double _maxAllowableDelta;
     private boolean useDelay = true;
     private double outputRange = 1;
@@ -24,6 +24,10 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     private double _i = 0;
     private double _d = 0;
     //I did not add an F variable because we have yet to use it
+
+    private DrivetrainEncoderPIDController(){
+
+    }
 
     private class EncoderPIDIn implements PIDSource{
         @Override
@@ -56,7 +60,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     }
 
     // ----P Value
-    public void setP(double p){
+    public void setP(double p) {
         _p = p;
     }
     public double getP(){
@@ -82,7 +86,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     /**
      * Allows you to set the P I and D of the Drivetrain encoder PID 
      */
-    public void setPID(double p, double i, double d){
+    public void setPID(double p, double i, double d) {
         _p = p;
         _i = i;
         _d = d;
@@ -92,19 +96,19 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
      * This sets both the max and minimum output range for the Drivetrain
      * Enoder PID
      */
-    public void setOutputRange(double range){
+    public void setOutputRange(double range) {
         outputRange = range;
     }
 
-    public void setAbsoluteTolerance(double tolerance){
+    public void setAbsoluteTolerance(double tolerance) {
         absoluteTolerance = tolerance;
     }
 
-    public static DrivetrainEncoderPIDController getInstance(){
+    public static DrivetrainEncoderPIDController getInstance() {
         return instance;
     }
 
-    public void run(){
+    public void run() {
     }
 
     /**
@@ -112,20 +116,20 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
      * encoder PID
      * @param setpoint
      */
-    public void enable(double setpoint){
+    public void enable(double setpoint) {
         encoderPID.setSetpoint(setpoint + encoder.getDistanceTicks());
         encoderPID.enable();
     }
 
-    public void reset(){
+    public void reset() {
         encoderPID.reset();
     }
 
-    public void stop(){
+    public void stop() {
         encoderPID.disable();
     }
 
-    public void initialize(){
+    public void initialize() {
         encoderPIDIn = new EncoderPIDIn();
         encoderPIDOut = new EncoderPIDOut(_maxAllowableDelta, useDelay);
         encoderPID = new PIDController(_p, _i, _d, encoderPIDIn, encoderPIDOut);
@@ -134,7 +138,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
         encoderPID.setName("DriveTrain", "Encoder");
     }
 
-    public boolean isDone(){
+    public boolean isDone() {
         return encoderPID.onTarget();
     }
 }

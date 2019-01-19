@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.commands.MoveUsingEncoderPID;;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -47,7 +48,10 @@ public class OI {
 
   private static OI instance = new OI();
 
-  private OI(){}
+  private OI(){
+    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
+    testEncoder.whenPressed(new MoveUsingEncoderPID());
+  }
 
   // Controllers
   protected Joystick driveStick = new Joystick(0);
@@ -59,6 +63,8 @@ public class OI {
   public static OI getInstance(){
     return instance;
   }
+
+  
 
 }
 
