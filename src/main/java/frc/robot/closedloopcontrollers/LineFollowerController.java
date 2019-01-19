@@ -3,21 +3,33 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.sensors.LineFollowerSensorArray;
 
 public class LineFollowerController implements ClosedLoopControllerBase {
-    private DriveTrain mDriveTrain;
-    private LineFollowerSensorArray mSensor;
+    private DriveTrain driveTrain;
+    private LineFollowerSensorArray sensor;
+    private final double kMinimumLineAngle = Math.toRadians(10);
+    private final double kForwardSpeed = .1;
+    private final double kRotateAmount = .1; //all constants are currently placeholders
 
-    public LineFollowerController (DriveTrain driveTrain, LineFollowerSensorArray lineFollowerSensorArray) {
-    mDriveTrain = driveTrain;
-    mSensor = lineFollowerSensorArray;
+    public LineFollowerController (DriveTrain driveTrain1, LineFollowerSensorArray lineFollowerSensorArray) {
+    driveTrain = driveTrain1;
+    sensor = lineFollowerSensorArray;
 
     }
     
     public void run() {
-        LineFollowerSensorArray.LineFollowArraySensorReading v = getSensorReading();
+        LineFollowerSensorArray.LineFollowArraySensorReading v = sensor.getSensorReading();
         if(v.lineFound = true) {
-            if(v.lineAngle <= -10) {
-                mDriveTrain.move(5.0, 10.0); //5.0 and 10.0 are placeholder numbers
+            if(v.lineAngle <= -kMinimumLineAngle) {
+                driveTrain.move(kForwardSpeed, kRotateAmount);
             }
+            else if(v.lineAngle >= kMinimumLineAngle) {
+                driveTrain.move(kForwardSpeed, -kRotateAmount);
+            }
+            else {
+                driveTrain.move(kForwardSpeed, 0);
+            }
+        } else {
+            driveTrain.move(0, 0);
+            System.out.println("Line Not Found!");
         }
 
 
@@ -28,6 +40,7 @@ public class LineFollowerController implements ClosedLoopControllerBase {
     }
 
     public void stop() {
+        driveTrain.stop();
 
     }
 
