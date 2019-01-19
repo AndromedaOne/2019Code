@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 100);
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 160);
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     //chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
