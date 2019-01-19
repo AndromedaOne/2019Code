@@ -25,9 +25,7 @@ public class ClosedLoopUltrasonicPIDController implements
     private double _d=0;
     private double _f=0;
 
-    private UltrasonicPIDController() {
-        ultrasonic = frc.robot.sensors.UltrasonicSensor
-    }
+
 
     private class UltrasonicPIDIn implements PIDSource {
 
@@ -47,16 +45,13 @@ public class ClosedLoopUltrasonicPIDController implements
 		}
 
     }
-    private class EncoderPIDOut implements PIDOutput {
+    private class UltrasonicPIDOut implements PIDOutput {
 
 
 
-        public EncoderPIDOut(double maxAllowableDelta, boolean delay) {
-
+        public UltrasonicPIDOut(double maxAllowableDelta, boolean delay) {
             _maxAllowableDelta = maxAllowableDelta;
-
             useDelay = delay;
-
         }
 
 
@@ -112,11 +107,11 @@ public class ClosedLoopUltrasonicPIDController implements
 
     public void initialize(){
         ultrasonicPIDIn = new UltrasonicPIDIn();
-        ultrasoicPIDOut = new UlrasonicPIDOut();
-        ultrasonicPID = new PIDController(_p, _i, _d, encoderPIDIn, 
-        encoderPIDOut);
+        ultrasonicPIDOut = new UltrasonicPIDOut(_d, useDelay);
+        ultrasonicPID = new PIDController(_p, _i, _d, ultrasonicPIDIn, 
+        ultrasonicPIDOut);
         ultrasonicPID.setOutputRange(-outputRange, outputRange);
-        ultrasonicPID.setAbsoluteTolerance(absoluteTolerance);s
+        ultrasonicPID.setAbsoluteTolerance(absoluteTolerance);
         ultrasonicPID.setName("Ultrasonic");
 
     }
@@ -124,4 +119,20 @@ public class ClosedLoopUltrasonicPIDController implements
     public boolean isDone(){
         return ultrasonicPID.onTarget();
     }
+
+	public static ClosedLoopUltrasonicPIDController getInstance() {
+		return null;
+	}
+
+	public void setPID(int i, int j, int k) {
+	}
+
+	public void setAbsoluteTolerance(int i) {
+	}
+
+	public void setOutputRange(int i) {
+	}
+
+	public void enable(int i) {
+	}
 }

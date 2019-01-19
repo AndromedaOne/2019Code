@@ -7,8 +7,8 @@ import frc.robot.sensors.UltrasonicSensor;
 
 public class MoveUsingUltrasonicPID extends Command{
 
-    private UltrasonicPIDController ultrasonic = 
-    UltrasonicPIDController.getInstance();
+    private ClosedLoopUltrasonicPIDController ultrasonic = 
+    ClosedLoopUltrasonicPIDController.getInstance();
 
     public MoveUsingUltrasonicPID(){
     }
