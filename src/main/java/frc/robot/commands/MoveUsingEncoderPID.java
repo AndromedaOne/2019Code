@@ -9,33 +9,33 @@ public class MoveUsingEncoderPID extends Command{
     private DrivetrainEncoderPIDController drivetrainEncoder = 
     DrivetrainEncoderPIDController.getInstance();
 
-    public MoveUsingEncoderPID(){
+    private int _setpoint = 0;
 
+    public MoveUsingEncoderPID(int setpoint){
+        drivetrainEncoder.setPID(0.001, 0, 0);
+        drivetrainEncoder.setAbsoluteTolerance(200);
+        drivetrainEncoder.setOutputRange(1);
+        _setpoint = setpoint;
     }
     public void initialize(){
         System.out.println(" -- Called! -- ");
-        // Encoder PID
-        drivetrainEncoder.setPID(0.1, 0, 0);
-        drivetrainEncoder.setAbsoluteTolerance(250);
-        drivetrainEncoder.setOutputRange(1);
         drivetrainEncoder.initialize();
-        drivetrainEncoder.enable(600);
+        drivetrainEncoder.enable(_setpoint);
     }
 
     public void execute(){
-
     }
 
     public boolean isFinished(){
-        return false;
+        return drivetrainEncoder.isDone();
     }
 
     public void end(){
-
+        drivetrainEncoder.stop();
     }
 
     public void interrupt(){
-
+        drivetrainEncoder.stop();
     }
 }
 

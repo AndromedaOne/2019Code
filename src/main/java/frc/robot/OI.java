@@ -50,7 +50,7 @@ public class OI {
 
   private OI(){
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
-    testEncoder.whenPressed(new MoveUsingEncoderPID());
+    testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
   }
 
   // Controllers

@@ -44,6 +44,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
 
         @Override
         public double pidGet() {
+            System.out.println("EncoderTicks: " + encoder.getDistanceTicks());
             return encoder.getDistanceTicks();
         }
     }
@@ -57,7 +58,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
 
         @Override
         public void pidWrite(double output) {
-           Robot.driveTrain.move(output, 0);
+           Robot.driveTrain.move(-output, 0);
         }
     }
 
