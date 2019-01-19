@@ -7,11 +7,14 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.sensors.MagEncoderSensor;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import frc.robot.telemetries.TracePair;
+import frc.robot.telemetries.Trace;
 import frc.robot.Robot;
 
 public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase {
 
     private static DrivetrainEncoderPIDController instance;
+    private static Trace trace; 
     private static WPI_TalonSRX rightRearEncoder;
     private PIDController encoderPID;
     private EncoderPIDIn encoderPIDIn;
@@ -21,12 +24,14 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     private boolean useDelay = true;
     private double outputRange = 1;
     private double absoluteTolerance;
+    private double _setpoint;
     private double p = 0;
     private double i = 0;
     private double d = 0;
     //I did not add an F variable because we have yet to use it
 
     private DrivetrainEncoderPIDController(){
+        trace = Trace.getInstance();
         rightRearEncoder = Robot.driveTrain.getRightRearEncoder();
         encoder = new MagEncoderSensor(rightRearEncoder);
         encoderPIDIn = new EncoderPIDIn();
@@ -68,7 +73,11 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
 
         @Override
         public void pidWrite(double output) {
-           Robot.driveTrain.move(-output, 0);
+            trace.addTrace(true, "Encoder Drivetrain",
+            new TracePair("Output", output),
+            new TracePair("Setpoint", _setpoint),
+            new TracePair("EncoderTicks", encoder.getDistanceTicks()));
+            Robot.driveTrain.move(-output, 0);
         }
     }
 
@@ -138,6 +147,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
      * @param setpoint
      */
     public void enable(double setpoint) {
+        _setpoint = setpoint;
         encoderPID.setSetpoint(setpoint + encoder.getDistanceTicks());
         encoderPID.enable();
     }
@@ -152,7 +162,7 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     /**
      * This creates a new Encoder PID In and Out as well as a PID Controller
      * using all the passed in parameters. It also set the output Range and the
-     *  absolute tolerance.
+     * absolute tolerance.
      */
     public void initialize() {
 

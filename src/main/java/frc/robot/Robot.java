@@ -32,10 +32,7 @@ import com.typesafe.config.ConfigFactory;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
-<<<<<<< HEAD
   public static DrivetrainEncoderPIDController encoderPID;
-  protected static Config conf = ConfigFactory.load();
-=======
 
   /**
    * This config should live on the robot and have hardware-
@@ -61,7 +58,6 @@ public class Robot extends TimedRobot {
   public static Config getConfig() {
     return conf;
   }
->>>>>>> master
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
