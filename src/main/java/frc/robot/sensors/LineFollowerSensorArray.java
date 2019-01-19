@@ -41,6 +41,7 @@ public class LineFollowerSensorArray {
         
        
         mI2cBus.readOnly(buffer, 16);
+        // Step through each even-numbered element in the array
         for (int i = 0; i < buffer.length/2; i++) {
             if(buffer[i * 2] >= 0) {
                 dValues[i] = buffer[i * 2];
@@ -53,6 +54,7 @@ public class LineFollowerSensorArray {
 
 
         SmartDashboard.putNumberArray("LineFollowArray", dValues);
+        // Check for whether the line is found
         for (int i = 0; i < dValues.length; i++) {
                 if (dValues[i] >= detectionThreshold) {
                     boolBuf[i] = true;
