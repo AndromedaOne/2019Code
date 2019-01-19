@@ -1,6 +1,7 @@
 package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LineFollowerSensorArray {
     private I2C mI2cBus;
@@ -36,21 +37,29 @@ public class LineFollowerSensorArray {
      */
     public boolean[] isThereLine() {
         boolean[] boolBuf = new boolean[buffer.length/2];
-
+       double[] dValues = new double[buffer.length/2];
+        
+       
         mI2cBus.readOnly(buffer, 16);
-        for (int i = 0; i < buffer.length; i++) {
-            // Only if it's even, do it
-            if (i%2 == 0) {
-                System.out.println(buffer[i]);
-                if (buffer[i] >= 20) {
-                    boolBuf[i/2] = true;
-                } else {
-                    boolBuf[i/2] = false;
-                }
+        for (int i = 0; i < buffer.length/2; i++) {
+            if(buffer[i * 2] >= 0) {
+                dValues[i] = buffer[i * 2];
             } else {
-                // Do nothing
+                dValues[i] = buffer[i * 2] + 256;
             }
+
+
         }
+
+
+        SmartDashboard.putNumberArray("LineFollowArray", dValues);
+        for (int i = 0; i < dValues.length; i++) {
+                if (dValues[i] >= 19) {
+                    boolBuf[i] = true;
+                } else {
+                    boolBuf[i] = false;
+                }
+            } 
         return boolBuf;
     }
 
