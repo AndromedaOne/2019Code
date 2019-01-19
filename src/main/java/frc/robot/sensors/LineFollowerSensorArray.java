@@ -12,7 +12,7 @@ public class LineFollowerSensorArray {
 
     /**
      * Takes same parameters as I2CBusDriver() and passes it along to said constructor
-     * @param i2cBusDriver A prebuilt I2C driver
+     * @param i2cBus A prebuilt I2C bus
      * @author Owen Salter
      */
     public LineFollowerSensorArray(I2C i2cBus) {
