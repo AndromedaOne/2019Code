@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
-  private static Config environmentalConfig = ConfigFactory.parseFile(new File("~/robot.conf"));
+  private static Config environmentalConfig = ConfigFactory.parseFile(new File("./robot.conf"));
 
   /**
    * This config lives in the jar and has hardware-independent configs.
@@ -71,9 +71,12 @@ public class Robot extends TimedRobot {
       driveTrain = new RealDriveTrain();
     }
     else{
+      System.out.println("Using fake drivetrain");
       driveTrain=new MockDriveTrain();
     } 
     driveController = new Joystick(0);
+
+    System.out.println("This is " + getName() + ".");
   
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
