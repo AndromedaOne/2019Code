@@ -7,9 +7,9 @@ public class LineFollowerSensorArray {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
     //Distance to sensor array in centimetres
-    private final double DistanceToSensor = 10;
+    private double mDistanceToSensor = 10;
     //Distance between sensors in centimetres
-    private final double DistanceBtSensors = 0.5;
+    private double mDistanceBtSensors = 0.5;
 
     /**
      * Takes same parameters as I2CBusDriver() and passes it along to said constructor
@@ -74,8 +74,8 @@ public class LineFollowerSensorArray {
                 senseCount++;
             }
         }
-        adj1 = (int) DistanceBtSensors*senseCount;
-        double angle = Math.toRadians(Math.acos(DistanceToSensor/adj1));
+        adj1 = (int) mDistanceBtSensors*senseCount;
+        double angle = Math.toRadians(Math.acos(mDistanceToSensor/adj1));
 
         LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
         sensorReading.lineAngle = angle;
