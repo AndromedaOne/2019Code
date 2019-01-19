@@ -54,7 +54,7 @@ public class LineFollowerSensorArray {
 
         SmartDashboard.putNumberArray("LineFollowArray", dValues);
         for (int i = 0; i < dValues.length; i++) {
-                if (dValues[i] >= 19) {
+                if (dValues[i] >= detectionThreshold) {
                     boolBuf[i] = true;
                 } else {
                     boolBuf[i] = false;
