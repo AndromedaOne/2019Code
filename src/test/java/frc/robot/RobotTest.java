@@ -17,13 +17,13 @@ public class RobotTest {
   @Test
   public void unsignedByteTest(){
 
-    byte[] a1 = {(byte)0x0A, (byte)0x7F,0,0,0,0,0,0};
-    assertEquals(32522, twoUnsignedBytesToInt(a1[1], a1[0]));
-    //assertEquals(32522L, byteArrayToLong(a1));
+    byte[] a1 = {0,0,(byte)0x7F,(byte)0x0A,0,0,0,0,0,0};
+    assertEquals(32522, twoUnsignedBytesToInt(a1[2], a1[3]));
+    assertEquals(32522L, byteArrayToLong(a1));
 
-    byte[] a2 = { (byte)0x9C,(byte)0x8B, 0,0,0,0,0,0};
-    assertEquals(35740, twoUnsignedBytesToInt(a2[1], a2[0]));
-    //assertEquals(32522L, byteArrayToLong(a2));
+    byte[] a2 = { 0,0,(byte)0x8B,(byte)0x9C, 0,0,0,0,0,0};
+    assertEquals(35740, twoUnsignedBytesToInt(a2[2], a2[3]));
+    assertEquals(35740L, byteArrayToLong(a2));
   }
 
   public int twoUnsignedBytesToInt(byte hob, byte lob){
