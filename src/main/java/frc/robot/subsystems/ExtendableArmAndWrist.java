@@ -59,7 +59,6 @@ public class ExtendableArmAndWrist extends Subsystem {
         shoulderJointTalon.set(ControlMode.PercentOutput, value);
     }
 
-
     /**
      * Sets the default command to the teleoperated control command for the arm
      */
