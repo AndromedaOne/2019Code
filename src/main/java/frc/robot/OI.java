@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.MoveUsingUltrasonicPID;
 import frc.robot.utilities.ButtonsEnumerated;
 
 /**
@@ -62,6 +63,6 @@ public class OI {
     JoystickButton testUltrasonic = new JoystickButton(driveStick, 2);
     testUltrasonic.whenPressed(new MoveUsingUltrasonicPID());
   }
-  
+
 }
 

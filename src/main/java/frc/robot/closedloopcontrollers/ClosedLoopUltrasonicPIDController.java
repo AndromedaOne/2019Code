@@ -23,10 +23,7 @@ public class ClosedLoopUltrasonicPIDController implements
     private double _p=0;
     private double _i=0;
     private double _d=0;
-    private double _f=0;
-
-
-
+    
     private class UltrasonicPIDIn implements PIDSource {
 
         @Override
