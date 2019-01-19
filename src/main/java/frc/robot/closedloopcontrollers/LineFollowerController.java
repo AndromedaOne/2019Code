@@ -1,13 +1,14 @@
 package frc.robot.closedloopcontrollers;
 import frc.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.sensors.LineFollowerSensorArray;
 
 public class LineFollowerController implements ClosedLoopControllerBase {
     private DriveTrain driveTrain;
     private LineFollowerSensorArray sensor;
     private final double kMinimumLineAngle = Math.toRadians(10);
-    private final double kForwardSpeed = .1;
-    private final double kRotateAmount = .1; //all constants are currently placeholders
+    private final double kForwardSpeed = .5;
+    private final double kRotateAmount = .5; //all constants are currently placeholders
 
     public LineFollowerController (DriveTrain driveTrain1, LineFollowerSensorArray lineFollowerSensorArray) {
     driveTrain = driveTrain1;
@@ -17,6 +18,8 @@ public class LineFollowerController implements ClosedLoopControllerBase {
     
     public void run() {
         LineFollowerSensorArray.LineFollowArraySensorReading v = sensor.getSensorReading();
+        SmartDashboard.putBoolean("IsLineFound", v.lineFound);
+        SmartDashboard.putNumber("Angle", v.lineAngle);
         if(v.lineFound = true) {
             //System.out.println("I FOUND A LINE!! :D");
             if(v.lineAngle <= -kMinimumLineAngle) {
