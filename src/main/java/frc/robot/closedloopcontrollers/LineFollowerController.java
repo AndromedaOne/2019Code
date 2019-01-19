@@ -18,6 +18,7 @@ public class LineFollowerController implements ClosedLoopControllerBase {
     public void run() {
         LineFollowerSensorArray.LineFollowArraySensorReading v = sensor.getSensorReading();
         if(v.lineFound = true) {
+            //System.out.println("I FOUND A LINE!! :D");
             if(v.lineAngle <= -kMinimumLineAngle) {
                 driveTrain.move(kForwardSpeed, kRotateAmount);
             }
@@ -27,9 +28,10 @@ public class LineFollowerController implements ClosedLoopControllerBase {
             else {
                 driveTrain.move(kForwardSpeed, 0);
             }
-        } else {
+        } 
+        else {
+            System.out.println("Line Not Found! :c");
             driveTrain.move(0, 0);
-            System.out.println("Line Not Found!");
         }
 
 
