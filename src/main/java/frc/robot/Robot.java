@@ -67,6 +67,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+
+    System.out.println("Here is my config: " + conf);
+
     if (conf.hasPath("subsystems.drivetrain")) {
       driveTrain = new RealDriveTrain();
     }
