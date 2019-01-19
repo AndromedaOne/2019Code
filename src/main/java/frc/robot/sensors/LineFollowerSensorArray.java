@@ -1,7 +1,6 @@
 package frc.robot.sensors;
 
 import edu.wpi.first.wpilibj.I2C;
-import frc.robot.utilities.I2CBusDriver;
 
 public class LineFollowerSensorArray {
     private I2C mI2cBus;
@@ -16,8 +15,8 @@ public class LineFollowerSensorArray {
      * @param i2cBusDriver A prebuilt I2C driver
      * @author Owen Salter
      */
-    public LineFollowerSensorArray(I2CBusDriver i2cBusDriver) {
-        mI2cBus = i2cBusDriver.getBus();
+    public LineFollowerSensorArray(I2C i2cBus) {
+        mI2cBus = i2cBus;
     }
 
     /**
@@ -40,6 +39,7 @@ public class LineFollowerSensorArray {
         for (int i = 0; i < buffer.length; i++) {
             // Only if it's even, do it
             if (i%2 == 0) {
+                System.out.println(buffer[i]);
                 if (buffer[i] >= 19) {
                     boolBuf[i/2] = true;
                 } else {
