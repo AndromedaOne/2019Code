@@ -39,6 +39,6 @@ public class LineFollowerSensorTest {
         - Make sure math works
         */
         System.out.println(lfs.getSensorReading().lineFound);
-        assertTrue(lfs.getSensorReading().lineFound);    
+        assertTrue(lfs.getSensorReading().lineFound);
     }
 }
