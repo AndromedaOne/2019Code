@@ -15,7 +15,7 @@ public class MoveUsingEncoderPID extends Command{
     public void initialize(){
         System.out.println(" -- Called! -- ");
         // Encoder PID
-        drivetrainEncoder.setPID(1, 0, 0);
+        drivetrainEncoder.setPID(0.1, 0, 0);
         drivetrainEncoder.setAbsoluteTolerance(250);
         drivetrainEncoder.setOutputRange(1);
         drivetrainEncoder.initialize();

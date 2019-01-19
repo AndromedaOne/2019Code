@@ -8,19 +8,21 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
-import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 /**
  *
  */
 public class DriveTrain extends Subsystem {
-    public static WPI_TalonSRX driveTrainLeftFrontTalon;
-    public static WPI_TalonSRX driveTrainLeftRearTalon;
-    public static SpeedControllerGroup driveTrainLeftSpeedController;
-    public static WPI_TalonSRX driveTrainRightFrontTalon;
-    public static WPI_TalonSRX driveTrainRightRearTalon;
-    public static SpeedControllerGroup driveTrainRightSpeedController;
-    public static DifferentialDrive differentialDrive;
-    public static DrivetrainEncoderPIDController drivetrainEcoder;
+    private static WPI_TalonSRX driveTrainLeftFrontTalon;
+    private static WPI_TalonSRX driveTrainLeftRearTalon;
+    private static SpeedControllerGroup driveTrainLeftSpeedController;
+    private static WPI_TalonSRX driveTrainRightFrontTalon;
+    private static WPI_TalonSRX driveTrainRightRearTalon;
+    private static SpeedControllerGroup driveTrainRightSpeedController;
+    private static DifferentialDrive differentialDrive;
+
+    public static WPI_TalonSRX getRightRearEncoder(){
+        return driveTrainRightRearTalon;
+    }
     
     @Override
     public void initDefaultCommand(){

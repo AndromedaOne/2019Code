@@ -5,17 +5,18 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.sensors.MagEncoderSensor;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Robot;
 
 public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase {
 
     private static DrivetrainEncoderPIDController instance = 
     new DrivetrainEncoderPIDController();
-
+    private WPI_TalonSRX rightRearEncoder;
     private PIDController encoderPID;
     private EncoderPIDIn encoderPIDIn;
     private EncoderPIDOut encoderPIDOut;
-    private MagEncoderSensor encoder = new MagEncoderSensor(, port);
+    private MagEncoderSensor encoder;
     private double _maxAllowableDelta;
     private boolean useDelay = true;
     private double outputRange = 1;
@@ -26,7 +27,8 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     //I did not add an F variable because we have yet to use it
 
     private DrivetrainEncoderPIDController(){
-
+        rightRearEncoder = Robot.driveTrain.getRightRearEncoder();
+        encoder = new MagEncoderSensor(rightRearEncoder);
     }
 
     private class EncoderPIDIn implements PIDSource{
