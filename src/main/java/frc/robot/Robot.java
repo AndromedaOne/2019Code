@@ -19,7 +19,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.drivetrain.MockDriveTrain;
+import frc.robot.subsystems.drivetrain.RealDriveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,7 +37,7 @@ public class Robot extends TimedRobot {
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
-  private static Config environmentalConfig = ConfigFactory.parseFile(new File("~/robot.conf"));
+  private static Config environmentalConfig = ConfigFactory.parseFile(new File("/home/lvuser/robot.conf"));
 
   /**
    * This config lives in the jar and has hardware-independent configs.
@@ -65,8 +67,22 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    driveTrain = new DriveTrain();
+
+
+    System.out.println("Here is my config: " + conf);
+
+    if (conf.hasPath("subsystems.drivetrain")) {
+      System.out.println("Using real drivetrain");
+      driveTrain = new RealDriveTrain();
+    }
+    else{
+      System.out.println("Using fake drivetrain");
+      driveTrain=new MockDriveTrain();
+    } 
     driveController = new Joystick(0);
+
+    System.out.println("This is " + getName() + ".");
+  
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
