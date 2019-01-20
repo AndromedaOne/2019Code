@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.extendablearmandwrist;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -8,8 +8,8 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 
-public class ExtendableArmAndWrist extends Subsystem {
-    private static ExtendableArmAndWrist instance;
+public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
+    private static RealExtendableArmAndWrist instance;
     private WPI_TalonSRX shoulderJointTalon;
     private WPI_TalonSRX topExtendableArmAndWristTalon;
     private WPI_TalonSRX bottomExtendableArmAndWristTalon;
@@ -28,7 +28,7 @@ public class ExtendableArmAndWrist extends Subsystem {
     /**
      * Creates all of the talons for the arm, wrist, and shoulder joint
      */
-    private ExtendableArmAndWrist() {
+    private RealExtendableArmAndWrist() {
         Config armConf = Robot.getConfig().getConfig("ports.armAndWrist");
         shoulderJointTalon = new WPI_TalonSRX(armConf.getInt("shoulderJointTalon"));
         topExtendableArmAndWristTalon = 
@@ -40,9 +40,9 @@ public class ExtendableArmAndWrist extends Subsystem {
     /**
      * @return the instance
      */
-    public static ExtendableArmAndWrist getInstance() {
+    public static RealExtendableArmAndWrist getInstance() {
         if (instance == null) {
-            instance = new ExtendableArmAndWrist();
+            instance = new RealExtendableArmAndWrist();
         }
         return instance;
     }
@@ -69,14 +69,6 @@ public class ExtendableArmAndWrist extends Subsystem {
      */
     public void moveShoulderJointTalon(double value) {
         shoulderJointTalon.set(ControlMode.PercentOutput, value);
-    }
-
-    /**
-     * Sets the default command to the teleoperated control command for the arm
-     */
-    @Override
-    protected void initDefaultCommand() {
-
     }
 
 }
