@@ -68,21 +68,19 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-
     System.out.println("Here is my config: " + conf);
 
     if (conf.hasPath("subsystems.drivetrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
-    }
-    else{
+    } else {
       System.out.println("Using fake drivetrain");
-      driveTrain=new MockDriveTrain();
-    } 
+      driveTrain = new MockDriveTrain();
+    }
     driveController = new Joystick(0);
 
     System.out.println("This is " + getName() + ".");
-  
+
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
