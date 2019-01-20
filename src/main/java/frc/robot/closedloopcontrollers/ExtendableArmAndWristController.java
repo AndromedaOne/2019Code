@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.Robot;
 import frc.robot.sensors.MagEncoderSensor;
 
@@ -63,6 +64,9 @@ implements ClosedLoopControllerBase {
         outputRange);
         bottomExtendableArmAndWristEncoderPID.
         setAbsoluteTolerance(absoluteTolerance);
+        LiveWindow.add(bottomExtendableArmAndWristEncoderPID);
+        bottomExtendableArmAndWristEncoderPID.setName("ArmAndWrist", 
+        "bottomEncoderPID");
 
         topExtendableArmAndWristEncoderIn = 
         new TopExtendableArmAndWristEncoderIn();
@@ -75,6 +79,9 @@ implements ClosedLoopControllerBase {
         outputRange);
         topExtendableArmAndWristEncoderPID.
         setAbsoluteTolerance(absoluteTolerance);
+        LiveWindow.add(topExtendableArmAndWristEncoderPID);
+        bottomExtendableArmAndWristEncoderPID.setName("ArmAndWrist", 
+        "topEncoderPID");
     }
 
     /**
