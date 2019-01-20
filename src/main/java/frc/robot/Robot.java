@@ -20,6 +20,9 @@ import frc.robot.utilities.I2CBusDriver;
 import frc.robot.sensors.LineFollowerSensorArray;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
+import frc.robot.subsystems.extendablearmandwrist.MockExtendableArmAndWrist;
+import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
 
 import java.io.File;
 
@@ -72,7 +75,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    extendableArmAndWrist = ExtendableArmAndWrist.getInstance();
+    
     System.out.println("Here is my config: " + conf);
 
     if (conf.hasPath("subsystems.drivetrain")) {
@@ -82,6 +85,15 @@ public class Robot extends TimedRobot {
     else{
       System.out.println("Using fake drivetrain");
       driveTrain=new MockDriveTrain();
+    } 
+
+    if (conf.hasPath("subsystems.extendablearmandwrist")) {
+      System.out.println("Using real extendablearmandwrist");
+      extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
+    }
+    else{
+      System.out.println("Using fake extendablearmandwrist");
+      extendableArmAndWrist = new MockExtendableArmAndWrist();
     } 
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
