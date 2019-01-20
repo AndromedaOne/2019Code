@@ -41,16 +41,16 @@ implements ClosedLoopControllerBase {
     private final double inchesToTicksExtensionRatio = 0.0;
     private final double inchesToTicksRotationRatio = 0.0;
     /**
-     * Creates the two encoders for the two motors on the extendable arm and 
+     * Sets the two encoders for the two motors on the extendable arm and 
      * creates the two PID controllers
+     * @param bottomExtendableArmAndWristEncoder1 
+     * @param topExtendableArmAndWristEncoder1
      */
-    private ExtendableArmAndWristController() {
-        bottomExtendableArmAndWristEncoder = new MagEncoderSensor
-        (Robot.extendableArmAndWrist.getBottomExtendableArmAndWristTalon(),
-        bottomExtendableArmAndWristEncoderPort);
-        topExtendableArmAndWristEncoder = new MagEncoderSensor
-        (Robot.extendableArmAndWrist.getTopExtendableArmAndWristTalon(),
-        topExtendableArmAndWristEncoderPort);
+    private ExtendableArmAndWristController(MagEncoderSensor 
+    bottomExtendableArmAndWristEncoder1, MagEncoderSensor 
+    topExtendableArmAndWristEncoder1) {
+        bottomExtendableArmAndWristEncoder = bottomExtendableArmAndWristEncoder1;
+        topExtendableArmAndWristEncoder = topExtendableArmAndWristEncoder1;
 
         bottomExtendableArmAndWristEncoderIn = 
         new BottomExtendableArmAndWristEncoderIn();
@@ -85,10 +85,16 @@ implements ClosedLoopControllerBase {
 
     /**
      * @return the instance
+     * @param bottomExtendableArmAndWristEncoder1
+     * @param topExtendableArmAndWristEncoder1
      */
-    public ExtendableArmAndWristController getInstance() {
+    public ExtendableArmAndWristController getInstance(MagEncoderSensor 
+    bottomExtendableArmAndWristEncoder1, MagEncoderSensor 
+    topExtendableArmAndWristEncoder1) {
         if (instance == null) {
-            instance = new ExtendableArmAndWristController();
+            instance = new ExtendableArmAndWristController(
+                bottomExtendableArmAndWristEncoder1, 
+                topExtendableArmAndWristEncoder1);
         }
         return instance;
     }
