@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.command.PIDCommand;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.Robot;
 import frc.robot.sensors.MagEncoderSensor;
@@ -102,7 +101,7 @@ implements ClosedLoopControllerBase {
      * @param extensionSetpointParam
      * @param wristSetpointParam
      */
-    public void enable(double deltaExtensionSetpoint, 
+    public void enableArmPIDs(double deltaExtensionSetpoint, 
     double deltaWristSetpoint) {
         double deltaTicksExtension = 
         deltaExtensionSetpoint*inchesToTicksExtensionRatio;
