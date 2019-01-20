@@ -29,7 +29,7 @@ public class ExtendableArmAndWrist extends Subsystem {
      * Creates all of the talons for the arm, wrist, and shoulder joint
      */
     private ExtendableArmAndWrist() {
-        Config armConf = Robot.getConfig().getConfig("ports.driveTrain");
+        Config armConf = Robot.getConfig().getConfig("ports.armAndWrist");
         shoulderJointTalon = new WPI_TalonSRX(armConf.getInt("shoulderJointTalon"));
         topExtendableArmAndWristTalon = 
         new WPI_TalonSRX(armConf.getInt("topExtendableArmAndWristTalon"));
