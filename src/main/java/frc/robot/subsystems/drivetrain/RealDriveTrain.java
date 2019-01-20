@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -11,7 +11,7 @@ import frc.robot.commands.TeleOpDrive;
 /**
  *
  */
-public class DriveTrain extends Subsystem {
+public class RealDriveTrain extends DriveTrain {
     public static WPI_TalonSRX driveTrainLeftFrontTalon;
     public static WPI_TalonSRX driveTrainLeftRearTalon;
     public static SpeedControllerGroup driveTrainLeftSpeedController;
@@ -26,7 +26,7 @@ public class DriveTrain extends Subsystem {
     @Override
     public void initDefaultCommand(){
         Config conf = Robot.getConfig();
-        Config driveConf = conf.getConfig("ports.driveTrain");
+        Config driveConf = conf.getConfig("ports.can");
         setDefaultCommand(new TeleOpDrive());
         driveTrainLeftFrontTalon = new WPI_TalonSRX(driveConf.getInt("leftFrontTalon"));
         driveTrainLeftRearTalon = new WPI_TalonSRX(driveConf.getInt("leftRearTalon"));
