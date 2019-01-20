@@ -33,6 +33,7 @@ import com.typesafe.config.ConfigFactory;
  */
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
+  public static ExtendableArmAndWrist extendableArmAndWrist;
   public static Joystick driveController;
   public static LineFollowerSensorArray lineFollowerSensorArray;
   /**
@@ -70,6 +71,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     driveTrain = new DriveTrain();
+    extendableArmAndWrist = ExtendableArmAndWrist.getInstance();
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();

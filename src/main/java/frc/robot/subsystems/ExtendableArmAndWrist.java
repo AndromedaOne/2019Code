@@ -2,33 +2,45 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 
 public class ExtendableArmAndWrist extends Subsystem {
-    private ExtendableArmAndWrist instance;
-    private TalonSRX shoulderJointTalon;
-    private TalonSRX topExtendableArmAndWristTalon;
-    private TalonSRX bottomExtendableArmAndWristTalon;
+    private static ExtendableArmAndWrist instance;
+    private WPI_TalonSRX shoulderJointTalon;
+    private WPI_TalonSRX topExtendableArmAndWristTalon;
+    private WPI_TalonSRX bottomExtendableArmAndWristTalon;
 
+    public WPI_TalonSRX getShoulderJointTalon() {
+        return shoulderJointTalon;
+    }
+
+    public WPI_TalonSRX getTopExtendableArmAndWristTalon() {
+        return topExtendableArmAndWristTalon;
+    }
+
+    public WPI_TalonSRX getBottomExtendableArmAndWristTalon() {
+        return bottomExtendableArmAndWristTalon;
+    }
     /**
      * Creates all of the talons for the arm, wrist, and shoulder joint
      */
     private ExtendableArmAndWrist() {
         Config armConf = Robot.getConfig().getConfig("ports.driveTrain");
-        shoulderJointTalon = new TalonSRX(armConf.getInt("shoulderJointTalon"));
+        shoulderJointTalon = new WPI_TalonSRX(armConf.getInt("shoulderJointTalon"));
         topExtendableArmAndWristTalon = 
-        new TalonSRX(armConf.getInt("topExtendableArmAndWristTalon"));
+        new WPI_TalonSRX(armConf.getInt("topExtendableArmAndWristTalon"));
         bottomExtendableArmAndWristTalon = 
-        new TalonSRX(armConf.getInt("bottomExtendableArmAndWristTalon"));
+        new WPI_TalonSRX(armConf.getInt("bottomExtendableArmAndWristTalon"));
     }
 
     /**
      * @return the instance
      */
-    public ExtendableArmAndWrist getInstance() {
+    public static ExtendableArmAndWrist getInstance() {
         if (instance == null) {
             instance = new ExtendableArmAndWrist();
         }
