@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.sensors.PololuLineSensor;
 import frc.robot.subsystems.*;
 
 import java.io.File;
@@ -31,6 +32,7 @@ import com.typesafe.config.ConfigFactory;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+  public static PololuLineSensor lineSensor;
 
   /**
    * This config should live on the robot and have hardware-
@@ -68,6 +70,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     driveController = new Joystick(0);
+    lineSensor = new PololuLineSensor();
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -133,6 +136,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+    lineSensor.readData();
   }
 
   @Override
