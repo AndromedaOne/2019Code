@@ -25,6 +25,17 @@ public class LineFollowerSensorTest {
         boolBufTest[6] = false;
         boolBufTest[7] = false;
 
+        /*       
+        buffer[0] = 15;
+        buffer[2] = 14;
+        buffer[4] = 16;
+        buffer[6] = 25;
+        buffer[8] = 26;
+        buffer[10] = 17;
+        buffer[12] = 16;
+        buffer[14] = 15;
+        */
+        i2cBus.setBuffer(new byte[]{15,14,16,25,26,17,16,15,});
         boolean[] boolBuf = lfs.isThereLine();
         assertArrayEquals(boolBufTest, boolBuf);
     }
@@ -37,6 +48,7 @@ public class LineFollowerSensorTest {
         - have dummy i2c device return predefined data
         - Make sure math works
         */
+        i2cBus.setBuffer(new byte[]{15,14,16,25,26,17,16,15,});
         System.out.println(lfs.getSensorReading().lineFound);
         assertTrue(lfs.getSensorReading().lineFound);    
     }
