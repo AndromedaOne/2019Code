@@ -12,4 +12,5 @@ public interface ClosedLoopControllerBase{
 
     public boolean isDone();
 
+    public void enable(double setpoint);
 }
