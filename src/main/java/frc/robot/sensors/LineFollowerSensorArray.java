@@ -8,17 +8,22 @@ public class LineFollowerSensorArray {
     private byte[] buffer = new byte[16];
     //Default Distance to sensor array in centimetres
     private double distanceToSensor;
+    // Distance between sensors in centimetres
+    private double distanceBtSensors;
     private int detectionThreshold;
 
     /**
-     * Takes same parameters as I2CBusDriver() and passes it along to said constructor
      * @param i2cBus A prebuilt I2C bus
+     * @param detectionThreshold The minimum level required for activation of the sensor
+     * @param distanceToSensor The distance from the centre of turning to the sensor
+     * @param distanceBtSensors The distance between each sensor
      * @author Owen Salter
      */
-    public LineFollowerSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor) {
+    public LineFollowerSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor, double distanceBtSensors) {
         mI2cBus = i2cBus;
         this.detectionThreshold = detectionThreshold;
         this.distanceToSensor = distanceToSensor;
+        this.distanceBtSensors = distanceBtSensors;
     }
 
     /**
