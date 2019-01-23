@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class LineFollowerSensorArray {
     private I2C mI2cBus;
     private byte[] buffer = new byte[16];
-    //Distance to sensor array in centimetres
-    private double mDistanceToSensor = 10;
+    //Default Distance to sensor array in centimetres
+    private double distanceToSensor;
     private int detectionThreshold;
 
     /**
@@ -15,9 +15,10 @@ public class LineFollowerSensorArray {
      * @param i2cBus A prebuilt I2C bus
      * @author Owen Salter
      */
-    public LineFollowerSensorArray(I2C i2cBus, int detectionThreshold) {
+    public LineFollowerSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor) {
         mI2cBus = i2cBus;
         this.detectionThreshold = detectionThreshold;
+        this.distanceToSensor = distanceToSensor;
     }
 
     /**
@@ -104,7 +105,7 @@ public class LineFollowerSensorArray {
             adj1 = -1.75;
         } 
 
-        double angle = Math.atan2(adj1, mDistanceToSensor);
+        double angle = Math.atan2(adj1, distanceToSensor);
 
         LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
         sensorReading.lineAngle = angle;
