@@ -84,4 +84,13 @@ public class LineFollowerSensorTest {
         LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
         assertEquals(Math.atan2(-1.5, 15), sensorReading.lineAngle, 0.001);
     }
+
+    // Real data, fake measurements
+    @Test
+    public void getSensorReadingRealNumsTest() {
+        LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 50, 10, 0.5);
+        i2cBus.setBuffer(new byte[]{22,26,32,31,33,41,58,64});
+        LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
+        assertEquals(Math.atan2(-1.75, 10), sensorReading.lineAngle, 0.001);
+    }
 }
