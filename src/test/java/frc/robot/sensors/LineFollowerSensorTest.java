@@ -1,11 +1,13 @@
 package frc.robot.sensors;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.sensors.LineFollowerSensorArray.LineFollowArraySensorReading;
 import frc.robot.utilities.*;
 
 public class LineFollowerSensorTest {
@@ -48,8 +50,15 @@ public class LineFollowerSensorTest {
         - have dummy i2c device return predefined data
         - Make sure math works
         */
-        i2cBus.setBuffer(new byte[]{15,14,16,25,26,17,16,15,});
-        System.out.println(lfs.getSensorReading().lineFound);
+        i2cBus.setBuffer(new byte[]{15,14,16,25,26,17,16,15});
         assertTrue(lfs.getSensorReading().lineFound);    
+    }
+
+    @Test
+    public void getSensorReadingLeftTest() {
+        i2cBus.setBuffer(new byte[]{100,0,0,0,0,0,0,0});
+        LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
+        assertTrue(sensorReading.lineFound);
+        assertEquals(5.0, sensorReading.lineAngle, 5.0);
     }
 }

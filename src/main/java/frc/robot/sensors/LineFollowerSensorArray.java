@@ -88,7 +88,7 @@ public class LineFollowerSensorArray {
             }
         }
         adj1 = (int) mDistanceBtSensors*senseCount;
-        double angle = Math.toRadians(Math.acos(mDistanceToSensor/adj1));
+        double angle = Math.toRadians(Math.atan2(mDistanceToSensor, adj1));
 
         LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
         sensorReading.lineAngle = angle;
