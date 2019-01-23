@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.I2C;
  */
 public class PololuLineSensor {
     private I2C i2c = new I2C(I2C.Port.kOnboard, 2);
+    private final int NUM_SENSORS = 3;
 
     public PololuLineSensor() {
 
@@ -23,11 +24,17 @@ public class PololuLineSensor {
 
     public void readData() {
         byte[] buffer = new byte[4];
-        i2c.readOnly(buffer, 4);
-        for(int count =0; count < 4; ++count) {
-            System.out.print(buffer[count] + " ");
+        for (int sensorNumber = 0; sensorNumber < NUM_SENSORS; ++sensorNumber) {
+            i2c.readOnly(buffer, 4);
+            int b = 0;
+            for(int count = 0; count <= 3; ++count) {
+                int a = buffer[count] & 0xFF;
+                b = b | a;
+                if (count != 3) {
+                    b = b << 8;
+                }
+            }
+            System.out.println("Sensor " + (sensorNumber + 1)  + " = " + b);
         }
-        System.out.println();
-        System.out.println(ByteBuffer.wrap(buffer).getInt());
     }
 }
