@@ -7,17 +7,26 @@ public class LineFollowerController implements ClosedLoopControllerBase {
     private DriveTrain driveTrain;
     private LineFollowerSensorArray sensor;
     private final double kMinimumLineAngle = Math.toRadians(10);
-    private final double kForwardSpeed = .5;
-    private final double kRotateAmount = .5; //all constants are currently placeholders
+    private final double kForwardSpeed = .39;
+    private final double kRotateAmount = .6; //all constants are currently placeholders
 
     public LineFollowerController (DriveTrain driveTrain1, LineFollowerSensorArray lineFollowerSensorArray) {
     driveTrain = driveTrain1;
     sensor = lineFollowerSensorArray;
 
     }
-    
+    private int debugCounter = 9;
+    private LineFollowerSensorArray.LineFollowArraySensorReading v;
     public void run() {
-        LineFollowerSensorArray.LineFollowArraySensorReading v = sensor.getSensorReading();
+        if (false) {
+            driveTrain.move(0, 0);
+            return;
+        }
+        debugCounter++;
+        if (debugCounter == 10) {
+            v = sensor.getSensorReading();
+            debugCounter = 0;
+        }
         SmartDashboard.putBoolean("IsLineFound", v.lineFound);
         SmartDashboard.putNumber("Angle", v.lineAngle);
         if (v.lineFound) {

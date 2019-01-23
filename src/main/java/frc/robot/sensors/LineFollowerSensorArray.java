@@ -33,12 +33,18 @@ public class LineFollowerSensorArray {
      * @return An array of booleans where true means that a line was detected and false means that a line wasn't detected
      * @author Owen Salter
      */
+    private boolean once = true;
     public boolean[] isThereLine() {
         boolean[] boolBuf = new boolean[buffer.length/2];
        double[] dValues = new double[buffer.length/2];
         
        
-        mI2cBus.readOnly(buffer, 16);
+        if (mI2cBus.readOnly(buffer, 16) == false) {
+            if (once) {
+                System.out.println("readOnly returned false");
+                once = false;
+            }
+        }
         // Step through each even-numbered element in the array
         for (int i = 0; i < buffer.length/2; i++) {
             if(buffer[i * 2] >= 0) {
