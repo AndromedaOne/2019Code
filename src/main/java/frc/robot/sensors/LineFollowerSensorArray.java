@@ -88,30 +88,15 @@ public class LineFollowerSensorArray {
         boolBuf = isThereLine();
         for (int i = 0; i < boolBuf.length; i++) {
             if (boolBuf[i] == true) {
+                adj1 = getAdjacent(i);
                 senseCount++;
             }
         }
 
-        if (boolBuf[0] == true) {
-            adj1 = 1.75;
-        } else if (boolBuf[1] == true) {
-            adj1 = 1.25;
-        } else if (boolBuf[2] == true) {
-            adj1 = 0.75;
-        } else if (boolBuf[3] == true) {
-            adj1 = 0.25;
-        } else if (boolBuf[4] == true) {
-            adj1 = -0.25;
-        } else if (boolBuf[5] == true) {
-            adj1 = -0.75;
-        } else if (boolBuf[6] == true) {
-            adj1 = -1.25;
-        } else if (boolBuf[7] == true) {
-            adj1 = -1.75;
-        } 
 
         double angle = Math.atan2(adj1, distanceToSensor);
-
+        System.out.println(adj1);
+        System.out.println(angle);
         LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
         sensorReading.lineAngle = angle;
 
@@ -121,6 +106,28 @@ public class LineFollowerSensorArray {
             sensorReading.lineFound = false;
         }
         return sensorReading;
+    }
+
+    private double getAdjacent(int i) {
+        double tempAdj = 0;
+        if (i == 0) {
+            tempAdj = (4*distanceBtSensors)-(distanceBtSensors/2);
+        } else if (i == 1) {
+            tempAdj = (3*distanceBtSensors)-(distanceBtSensors/2);
+        } else if (i == 2) {
+            tempAdj = (2*distanceBtSensors)-(distanceBtSensors/2);
+        } else if (i == 3) {
+            tempAdj = (1*distanceBtSensors)-(distanceBtSensors/2);
+        } else if (i == 4) {
+            tempAdj = -(1*distanceBtSensors)+(distanceBtSensors/2);
+        } else if (i == 5) {
+            tempAdj = -(2*distanceBtSensors)+(distanceBtSensors/2);
+        } else if (i == 6) {
+            tempAdj = -(3*distanceBtSensors)+(distanceBtSensors/2);
+        } else if (i == 7) {
+            tempAdj = -(4*distanceBtSensors)+(distanceBtSensors/2);
+        }
+        return tempAdj;
     }
 
     public class LineFollowArraySensorReading {
