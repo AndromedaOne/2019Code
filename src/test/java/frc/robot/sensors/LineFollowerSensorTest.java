@@ -1,8 +1,13 @@
 package frc.robot.sensors;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+/*
+Potential Test Cases
+- Different Geometries
+- What happens if it's right in front of us
+- "     "       "  we're perpendicular to it
+*/
+
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
