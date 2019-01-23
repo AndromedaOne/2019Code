@@ -8,8 +8,6 @@ public class LineFollowerSensorArray {
     private byte[] buffer = new byte[16];
     //Distance to sensor array in centimetres
     private double mDistanceToSensor = 10;
-    //Distance between sensors in centimetres
-    private double mDistanceBtSensors = 0.5;
     private int detectionThreshold;
 
     /**
