@@ -75,4 +75,13 @@ public class LineFollowerSensorTest {
         assertTrue(sensorReading.lineFound);
         assertEquals(-0.173246, sensorReading.lineAngle, 0.001);
     }
+
+    // Different geometry
+    @Test
+    public void getSensorReadingDiffGeoTest() {
+        LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 20, 15, 3);
+        i2cBus.setBuffer(new byte[]{15,14,16,25,26,17,16,15});
+        LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
+        assertEquals(Math.atan2(-1.5, 15), sensorReading.lineAngle, 0.001);
+    }
 }
