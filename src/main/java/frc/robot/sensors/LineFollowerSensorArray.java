@@ -79,7 +79,7 @@ public class LineFollowerSensorArray {
         */
         boolean[] boolBuf = new boolean[buffer.length/2];
         int senseCount = 0;
-        int adj1;
+        double adj1 = 0;
 
         boolBuf = isThereLine();
         for (int i = 0; i < boolBuf.length; i++) {
@@ -87,8 +87,26 @@ public class LineFollowerSensorArray {
                 senseCount++;
             }
         }
-        adj1 = (int) mDistanceBtSensors*senseCount;
-        double angle = Math.toRadians(Math.atan2(mDistanceToSensor, adj1));
+
+        if (boolBuf[0] == true) {
+            adj1 = 1.75;
+        } else if (boolBuf[1] == true) {
+            adj1 = 1.25;
+        } else if (boolBuf[2] == true) {
+            adj1 = 0.75;
+        } else if (boolBuf[3] == true) {
+            adj1 = 0.25;
+        } else if (boolBuf[4] == true) {
+            adj1 = -0.25;
+        } else if (boolBuf[5] == true) {
+            adj1 = -0.75;
+        } else if (boolBuf[6] == true) {
+            adj1 = -1.25;
+        } else if (boolBuf[7] == true) {
+            adj1 = -1.75;
+        } 
+
+        double angle = Math.atan2(adj1, mDistanceToSensor);
 
         LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
         sensorReading.lineAngle = angle;
