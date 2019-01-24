@@ -112,25 +112,23 @@ public class LineFollowerSensorArray {
     }
 
     private double getAdjacent(int i) {
+        int distFromSensor = getDistanceFromCentre(i);
         double tempAdj = 0;
-        if (i == 0) {
-            tempAdj = (4*distanceBtSensors)-(distanceBtSensors/2);
-        } else if (i == 1) {
-            tempAdj = (3*distanceBtSensors)-(distanceBtSensors/2);
-        } else if (i == 2) {
-            tempAdj = (2*distanceBtSensors)-(distanceBtSensors/2);
-        } else if (i == 3) {
-            tempAdj = (1*distanceBtSensors)-(distanceBtSensors/2);
-        } else if (i == 4) {
-            tempAdj = -(1*distanceBtSensors)+(distanceBtSensors/2);
-        } else if (i == 5) {
-            tempAdj = -(2*distanceBtSensors)+(distanceBtSensors/2);
-        } else if (i == 6) {
-            tempAdj = -(3*distanceBtSensors)+(distanceBtSensors/2);
-        } else if (i == 7) {
-            tempAdj = -(4*distanceBtSensors)+(distanceBtSensors/2);
-        }
+        tempAdj = (distFromSensor*distanceBtSensors)-(distanceBtSensors/2);
         return tempAdj;
+    }
+
+    /**
+     * Gets the distance from the centre of the sensor (assuming 0 is the leftmost sensor and there are an even number of sensors)
+     */
+    private int getDistanceFromCentre(int i) {
+        int halfNumSensors = numSensors/2;
+        if (i<=halfNumSensors) {
+            return halfNumSensors-i;
+        } else {
+            return -(halfNumSensors-i);
+        }
+
     }
 
     public class LineFollowArraySensorReading {
