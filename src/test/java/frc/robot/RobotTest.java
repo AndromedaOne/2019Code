@@ -1,9 +1,8 @@
 package frc.robot;
 
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import frc.robot.Robot;
+import org.junit.Test;
 
 public class RobotTest {
   @Test

@@ -1,9 +1,9 @@
 package frc.robot.sensors;
 
-public interface PIDLoopable{
-   
-    public void reset();
+public interface PIDLoopable {
 
-    public double getClosedLoopSrc();
+  public void reset();
+
+  public double getClosedLoopSrc();
 
 }

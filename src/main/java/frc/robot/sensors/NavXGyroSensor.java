@@ -6,46 +6,47 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 
 public class NavXGyroSensor implements PIDLoopable {
-    AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
-    static NavXGyroSensor instance = new NavXGyroSensor();
-    private double initialAngleReading = 0.0;
-    boolean angleReadingSet = false;
-    private NavXGyroSensor(){
-        try {
-			/* Communicate w/navX MXP via the MXP SPI Bus. */
-			/* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
-			/*
-			 * See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for
-			 * details.
-			 */
-			gyro = new AHRS(SPI.Port.kMXP);
-			
-			System.out.println("Created NavX instance");
-			// New thread to initialize the initial angle
+  AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
+  static NavXGyroSensor instance = new NavXGyroSensor();
+  private double initialAngleReading = 0.0;
+  boolean angleReadingSet = false;
 
-		} catch (RuntimeException ex) {
-			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-		}
-    }
+  private NavXGyroSensor() {
+    try {
+      /* Communicate w/navX MXP via the MXP SPI Bus. */
+      /* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
+      /*
+       * See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for
+       * details.
+       */
+      gyro = new AHRS(SPI.Port.kMXP);
 
-    public static NavXGyroSensor getInstance() {
-        return instance;
-    }
+      System.out.println("Created NavX instance");
+      // New thread to initialize the initial angle
 
-    public double getZAngle() {
-        return gyro.getAngle() - initialAngleReading;
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
     }
-    
-    public double getClosedLoopSrc() {
-                return getZAngle();
+  }
 
-    }
+  public static NavXGyroSensor getInstance() {
+    return instance;
+  }
 
-    @Override
-    public void reset() {
-        initialAngleReading = getZAngle();
-        System.out.println("Initial angle set to: " + initialAngleReading);
-        angleReadingSet = true;
-        
-    }
+  public double getZAngle() {
+    return gyro.getAngle() - initialAngleReading;
+  }
+
+  public double getClosedLoopSrc() {
+    return getZAngle();
+
+  }
+
+  @Override
+  public void reset() {
+    initialAngleReading = getZAngle();
+    System.out.println("Initial angle set to: " + initialAngleReading);
+    angleReadingSet = true;
+
+  }
 }
