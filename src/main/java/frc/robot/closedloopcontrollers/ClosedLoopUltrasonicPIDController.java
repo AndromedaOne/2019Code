@@ -29,8 +29,8 @@ public class ClosedLoopUltrasonicPIDController implements
     private ClosedLoopUltrasonicPIDController(Ultrasonic ultrasonicParameter) {
         ultrasonic = ultrasonicParameter;
         ultrasonicPIDIn = new UltrasonicPIDIn();
-        ultrasonicPIDOut = new UltrasonicPIDOut(_maxAllowableDelta, delay);
-        ultrasonicPID = new PIDController(p, i, d, ultrasonicPIDIn, 
+        ultrasonicPIDOut = new UltrasonicPIDOut(_maxAllowableDelta, useDelay);
+        ultrasonicPID = new PIDController(_p, _i, _d, ultrasonicPIDIn, 
         ultrasonicPIDOut);
         ultrasonicPID.setOutputRange(3, 5);
         ultrasonicPID.setAbsoluteTolerance(12);
