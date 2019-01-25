@@ -114,19 +114,31 @@ public class LineFollowerSensorArray {
     private double getAdjacent(int i) {
         int distFromSensor = getDistanceFromCentre(i);
         double tempAdj = 0;
-        tempAdj = (distFromSensor*distanceBtSensors)-(distanceBtSensors/2);
-        return tempAdj;
+        if (distFromSensor>=0) {
+            tempAdj = -(Math.abs(distFromSensor)*distanceBtSensors)+(distanceBtSensors/2);
+        } else {
+            tempAdj = (distFromSensor*distanceBtSensors)-(distanceBtSensors/2);
+        }
+        return tempAdj *=-1;
     }
 
     /**
      * Gets the distance from the centre of the sensor (assuming 0 is the leftmost sensor and there are an even number of sensors)
      */
     private int getDistanceFromCentre(int i) {
-        int halfNumSensors = numSensors/2;
+        int distFromSensor;
+        int halfNumSensors = (numSensors+1)/2;
+        System.out.println(halfNumSensors);
         if (i<=halfNumSensors) {
-            return halfNumSensors-i;
+            System.out.println("It was on the left!");
+            distFromSensor = (halfNumSensors-i);
+
+            return distFromSensor;
         } else {
-            return -(halfNumSensors-i);
+            System.out.println("It was on the right!");
+            distFromSensor = halfNumSensors-i;
+            System.out.println(distFromSensor);
+            return distFromSensor /**= -1*/;
         }
 
     }
