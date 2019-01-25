@@ -21,18 +21,31 @@ public class DriveTrain extends Subsystem {
     public static DifferentialDrive differentialDrive;
     
     
-   
+    private WPI_TalonSRX initTalonMaster(Config driveConf, String motorName) {
+        WPI_TalonSRX _talon = new WPI_TalonSRX(driveConf.getInt(motorName));
+        _talon.configFactoryDefault();
+
+        return _talon;
+    }
+
+    private WPI_TalonSRX initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master) {
+        WPI_TalonSRX _talon = new WPI_TalonSRX(driveConf.getInt(motorName));
+        _talon.configFactoryDefault();
+        _talon.follow(master);
+
+        return _talon;
+    }
 
     @Override
     public void initDefaultCommand(){
         Config conf = Robot.getConfig();
         Config driveConf = conf.getConfig("ports.driveTrain");
         setDefaultCommand(new TeleOpDrive());
-        driveTrainLeftFrontTalon = new WPI_TalonSRX(driveConf.getInt("leftFrontTalon"));
-        driveTrainLeftRearTalon = new WPI_TalonSRX(driveConf.getInt("leftRearTalon"));
+        driveTrainLeftRearTalon = initTalonMaster(driveConf, "leftRearTalon");
+        driveTrainLeftFrontTalon = initTalonSlave(driveConf, "leftFrontTalon", driveTrainLeftRearTalon);
         driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftFrontTalon, driveTrainLeftRearTalon  );
-        driveTrainRightFrontTalon = new WPI_TalonSRX(driveConf.getInt("rightFrontTalon"));
-        driveTrainRightRearTalon = new WPI_TalonSRX(driveConf.getInt("rightRearTalon"));
+        driveTrainRightRearTalon = initTalonMaster(driveConf, "rightRearTalon");
+        driveTrainRightFrontTalon = initTalonSlave(driveConf, "rightFrontTalon", driveTrainRightRearTalon);
         driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightFrontTalon, driveTrainRightRearTalon);
         differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
     }
