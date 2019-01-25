@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.*;
@@ -14,9 +15,12 @@ public class PIDMultiton implements ClosedLoopControllerBase {
 
     private static Map<PIDName, PIDMultiton> instances;
 
+    static {
+        instances = new HashMap<>();
+    }
    
 
-    public synchronized PIDMultiton gitInstance(PIDSource source, PIDOutput output, PIDConfiguration config) {
+    public static synchronized PIDMultiton getInstance(PIDSource source, PIDOutput output, PIDConfiguration config) {
 
         PIDName name = new PIDName(source, output);
         PIDMultiton instance = instances.getOrDefault(name, new PIDMultiton(name, config));
@@ -33,7 +37,7 @@ public class PIDMultiton implements ClosedLoopControllerBase {
    
    
 
-    private class PIDName {
+    private static class PIDName {
         private PIDSource source;
         private PIDOutput output;
         public PIDName(PIDSource source, PIDOutput output){
