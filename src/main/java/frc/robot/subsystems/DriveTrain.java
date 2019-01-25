@@ -43,11 +43,9 @@ public class DriveTrain extends Subsystem {
         setDefaultCommand(new TeleOpDrive());
         driveTrainLeftRearTalon = initTalonMaster(driveConf, "leftRearTalon");
         driveTrainLeftFrontTalon = initTalonSlave(driveConf, "leftFrontTalon", driveTrainLeftRearTalon);
-        driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftFrontTalon, driveTrainLeftRearTalon  );
         driveTrainRightRearTalon = initTalonMaster(driveConf, "rightRearTalon");
         driveTrainRightFrontTalon = initTalonSlave(driveConf, "rightFrontTalon", driveTrainRightRearTalon);
-        driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightFrontTalon, driveTrainRightRearTalon);
-        differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
+        differentialDrive = new DifferentialDrive(driveTrainLeftRearTalon, driveTrainRightRearTalon);
     }
 
     @Override
