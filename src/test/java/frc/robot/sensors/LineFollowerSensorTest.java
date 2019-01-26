@@ -20,32 +20,24 @@ public class LineFollowerSensorTest {
 
     @Test
     public void isThereLineTest() {
-        boolean boolBufTest[] = new boolean[8];
-        // Set data
-        boolBufTest[0] = false;
-        boolBufTest[1] = false;
-        boolBufTest[2] = false;
-        boolBufTest[3] = true;
-        boolBufTest[4] = true;
-        boolBufTest[5] = false;
-        boolBufTest[6] = false;
-        boolBufTest[7] = false;
-
-        /*       
-        buffer[0] = 15;
-        buffer[2] = 14;
-        buffer[4] = 16;
-        buffer[6] = 25;
-        buffer[8] = 26;
-        buffer[10] = 17;
-        buffer[12] = 16;
-        buffer[14] = 15;
-        */
+        // Set data for testing
+        boolean boolBufTest[] = new boolean[]{false,false,false,true,true,false,false,false};
+        // Set data to be passed in
         i2cBus.setBuffer(new byte[]{15,14,16,25,26,17,16,15,});
         boolean[] boolBuf = lfs.isThereLine();
         assertArrayEquals(boolBufTest, boolBuf);
     }
 
+    @Test
+    public void belowThresholdTest() {
+        boolean[] boolBufTest = new boolean[]{false,false,false,false,false,false,false,false};
+
+        i2cBus.setBuffer(new byte[]{1,2,3,4,5,6,7,8});
+
+        boolean[] boolBuf = lfs.isThereLine();
+
+        assertArrayEquals(boolBufTest, boolBuf);
+    }
     @Test
     public void getSensorReadingTest() {
         /*
