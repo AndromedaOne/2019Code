@@ -90,8 +90,6 @@ public class LineFollowerSensorArray {
 
 
         double angle = Math.atan2(adj1, distanceToSensor);
-        System.out.println(adj1);
-        System.out.println(angle);
         LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
         sensorReading.lineAngle = angle;
 
@@ -120,14 +118,11 @@ public class LineFollowerSensorArray {
     private double getDistanceFromCentre(int i) {
         double distFromSensor;
         int halfNumSensors = (numSensors+1)/2;
-        System.out.println(halfNumSensors);
         if (i<halfNumSensors) {
-            System.out.println("It was on the left!");
             distFromSensor = (halfNumSensors-i);
             distFromSensor = (distFromSensor*distanceBtSensors);
             return distFromSensor;
         } else {
-            System.out.println("It was on the right!");
             distFromSensor = (halfNumSensors-i)-1;
             distFromSensor =  (distFromSensor * distanceBtSensors);
             return distFromSensor /**= -1*/;
