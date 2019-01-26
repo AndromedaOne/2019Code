@@ -72,7 +72,7 @@ public class LineFollowerSensorTest {
         i2cBus.setBuffer(new byte[]{0,0,0,0,0,0,0,100});
         LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
         assertTrue(sensorReading.lineFound);
-        assertEquals(0.173246, sensorReading.lineAngle, 0.001);
+        assertEquals(-0.173246, sensorReading.lineAngle, 0.001);
     }
 
     // Different geometry
