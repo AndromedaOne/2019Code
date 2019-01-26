@@ -8,9 +8,12 @@ public class PololuSensorArray extends LineFollowerSensorArray {
         super(i2cBus, detectionThreshold, distanceToSensor, distanceBtSensors, numSensors);
     }
 
+    /**
+     * This returns null. Don't use
+     */
     @Override
-    public boolean[] isThereLine() {
-        boolean[] boolBuf = new boolean[0];
+    public boolean[] isThereLine() throws NullPointerException {
+        boolean[] boolBuf = null;
 
         return boolBuf;
     }
