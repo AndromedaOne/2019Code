@@ -35,7 +35,7 @@ public class LineFollowerSensorArray {
      * @author Owen Salter
      */
     public boolean[] isThereLine() {
-        boolean[] boolBuf = new boolean[buffer.length/2];
+       boolean[] boolBuf = new boolean[buffer.length/2];
        double[] dValues = new double[buffer.length/2];
         
        
@@ -81,6 +81,7 @@ public class LineFollowerSensorArray {
         double adj1 = 0;
 
         boolBuf = isThereLine();
+        // Get the adjacent for the angles
         for (int i = 0; i < boolBuf.length; i++) {
             if (boolBuf[i] == true) {
                 adj1 = getAdjacent(i);
@@ -117,11 +118,14 @@ public class LineFollowerSensorArray {
      */
     private double getDistanceFromCentre(int i) {
         double distFromSensor;
+        // Get the number of sensors on each side of the center
         int halfNumSensors = (numSensors+1)/2;
+        // If it's on the left...
         if (i<halfNumSensors) {
             distFromSensor = (halfNumSensors-i);
             distFromSensor = (distFromSensor*distanceBtSensors);
             return distFromSensor;
+        // If it's on the right...
         } else {
             distFromSensor = (halfNumSensors-i)-1;
             distFromSensor =  (distFromSensor * distanceBtSensors);
