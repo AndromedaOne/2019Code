@@ -25,7 +25,7 @@ public class DriveTrain extends Subsystem {
     /*100% throttle corresponds to 3600 RPM*/
     private final double kMaxRPM = 3600;
     /*Implement math according to section 12.4.2 of the TALON SRX Software Reference manual Rev 1.22*/
-    private final double kF = 1023 / (kMaxRPM / 60 / 10 * 4096); 
+    private final double kF = 1023 / kMaxRPM; 
     private final double kP = 0;
     private final double kI = 0;
     private final double kD = 0;
@@ -57,16 +57,19 @@ public class DriveTrain extends Subsystem {
     public void setVBusMode() {
         setVBusMode(driveTrainLeftRearTalon);
         setVBusMode(driveTrainRightRearTalon);
+        differentialDrive.setMaxOutput(1.0);
     }
-    private void setVBusMode(WPI_TalonSRX talon) {
-
+    private void setVBusMode(ArbitraryModeWPI_TalonSRX talon) {
+        talon.setControlMode(ControlMode.PercentOutput);
     }
     public void setVelocityMode() {
         setVelocityMode(driveTrainLeftRearTalon);
         setVelocityMode(driveTrainRightRearTalon);
+        differentialDrive.setMaxOutput(kMaxRPM * 4096 / 600);
     }
-    private void setVelocityMode(WPI_TalonSRX talon) {
-        
+    private void setVelocityMode(ArbitraryModeWPI_TalonSRX talon) {
+        talon.setControlMode(ControlMode.Velocity);
+
     }
     // Inspired by https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
     // and 
@@ -116,21 +119,24 @@ public class DriveTrain extends Subsystem {
         driveTrainRightRearTalon = initTalonMaster(driveConf, "rightRearTalon");
         driveTrainRightFrontTalon = initTalonSlave(driveConf, "rightFrontTalon", driveTrainRightRearTalon);
         differentialDrive = new TalonSRXDifferentialDrive(driveTrainLeftRearTalon, driveTrainRightRearTalon);
+        /*For testing only try this in velocity mode*/
+        setVelocityMode();
     }
+    
 
     @Override
     public void periodic() {
     }
 
     public void move(double forwardBackSpeed, double rotateAmount) {
-        printMeasurements("Left ", driveTrainLeftRearTalon, false);
-        printMeasurements("Right", driveTrainRightRearTalon, true);
+        printMeasurements("Left ", driveTrainLeftRearTalon, forwardBackSpeed, false);
+        printMeasurements("Right", driveTrainRightRearTalon, forwardBackSpeed, true);
     	differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
     }
     /* String for output */
     StringBuilder _sb = new StringBuilder();
     int _loops = 0;
-    private void printMeasurements(String side, WPI_TalonSRX _talon, boolean doneMeasuring) {
+    private void printMeasurements(String side, WPI_TalonSRX _talon, double targetVelocity, boolean doneMeasuring) {
         /* Get Talon/Victor's current output percentage */
 		double motorOutput = _talon.getMotorOutputPercent(); 
 		
@@ -143,7 +149,11 @@ public class DriveTrain extends Subsystem {
 		_sb.append("\tspd:");
 		_sb.append(_talon.getSelectedSensorVelocity(0));
         _sb.append("u"); 	// Native units
-        
+        /* Append more signals to print when in speed mode. */
+        _sb.append("\terr:");
+        _sb.append(_talon.getClosedLoopError(0));
+        _sb.append("\ttrg:");
+        _sb.append(targetVelocity);
             /* Print built string every 10 loops */
         if(doneMeasuring) {
 		    if (++_loops >= 10) {
