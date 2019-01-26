@@ -31,15 +31,6 @@ public class LineFollowerSensorArray {
     }
 
     /**
-     * Sets the buffer of values to 0. Not much else to say or do here. It's boring. Move along.
-     */
-    public void reset() {
-        for (int i = 0; i < buffer.length; i++) {
-            buffer[i] = 0;
-        }
-    }
-
-    /**
      * @return An array of booleans where true means that a line was detected and false means that a line wasn't detected
      * @author Owen Salter
      */
