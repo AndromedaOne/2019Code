@@ -12,14 +12,12 @@ public class MoveUsingEncoderPID extends Command{
     private int _setpoint = 0;
 
     public MoveUsingEncoderPID(int setpoint){
-        drivetrainEncoder.setPID(0.001, 0, 0);
-        drivetrainEncoder.setAbsoluteTolerance(200);
-        drivetrainEncoder.setOutputRange(1);
         _setpoint = setpoint;
     }
     public void initialize(){
         System.out.println(" -- Called! -- ");
-        drivetrainEncoder.enable(_setpoint);
+        drivetrainEncoder.setSetpoint(_setpoint);
+        drivetrainEncoder.enable();
     }
 
     public void execute(){

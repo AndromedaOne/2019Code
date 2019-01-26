@@ -11,13 +11,11 @@ import frc.robot.telemetries.TracePair;
 import frc.robot.telemetries.Trace;
 import frc.robot.Robot;
 
-public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase {
+public class DrivetrainEncoderPIDController {
 
     private static DrivetrainEncoderPIDController instance;
     private static Trace trace; 
-    private static WPI_TalonSRX rightRearEncoder;
-    private PIDController encoderPID;
-    private EncoderPIDIn encoderPIDIn;
+    private PIDMultiton encoderPID;
     private EncoderPIDOut encoderPIDOut;
     private MagEncoderSensor encoder;
     private double _maxAllowableDelta;
@@ -25,43 +23,20 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     private double outputRange = 1;
     private double absoluteTolerance;
     private double _setpoint;
-    private double p = 0;
-    private double i = 0;
-    private double d = 0;
+    private PIDConfiguration pidConfiguration;
+    private final double p = 0;
+    private final double i = 0;
+    private final double d = 0;
     //I did not add an F variable because we have yet to use it
 
     private DrivetrainEncoderPIDController(){
         trace = Trace.getInstance();
-        rightRearEncoder = Robot.driveTrain.getRightRearEncoder();
-        encoder = new MagEncoderSensor(rightRearEncoder);
-        encoderPIDIn = new EncoderPIDIn();
+        encoder = new MagEncoderSensor(Robot.driveTrain.driveTrainLeftRearTalon;
+        encoder.putOnSmartDashboard("Drivetrain","RightRearEncoder");
         encoderPIDOut = new EncoderPIDOut(_maxAllowableDelta, useDelay);
-        encoderPID = new PIDController(p, i, d, encoderPIDIn, encoderPIDOut);
-        encoderPID.setOutputRange(-outputRange, outputRange);
-        encoderPID.setAbsoluteTolerance(absoluteTolerance);
-
-        System.out.print(" - Added Encoder PID To Live Window - ");
-        LiveWindow.add(encoderPID);
-        encoderPID.setName("DriveTrain", "Encoder");
-    }
-
-    private class EncoderPIDIn implements PIDSource{
-        @Override
-        public void setPIDSourceType(PIDSourceType pidSource) {
-        }
-
-        @Override
-        public PIDSourceType getPIDSourceType() {
-
-            return PIDSourceType.kDisplacement;
-        }
-
-        @Override
-        public double pidGet() {
-            double ticks = encoder.getDistanceTicks();
-            System.out.println("EncoderTicks: " + ticks);
-            return ticks;
-        }
+        pidConfiguration = new PIDConfiguration();
+        setPIDConfiguration(pidConfiguration);
+        encoderPID = PIDMultiton.getInstance(encoder, encoderPIDOut, pidConfiguration);
     }
 
     private class EncoderPIDOut implements PIDOutput {
@@ -81,51 +56,6 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
         }
     }
 
-    // ----P Value
-    public void setP(double p) {
-        encoderPID.setP(p);
-    }
-    public double getP(){
-        return encoderPID.getP();
-    }
-    // ----I Value
-    public void setI(double i) {
-        encoderPID.setI(i);
-    }
-    
-    public double getI() {
-        return encoderPID.getI();
-    }
-    // ----D Value
-    public void setD(double d) {
-        encoderPID.setD(d);
-    }
-
-    public double getD() {
-        return encoderPID.getD();
-    }
-
-    /**
-     * Allows you to set the P I and D of the Drivetrain encoder PID 
-     */
-    public void setPID(double p, double i, double d) {
-        encoderPID.setP(p);
-        encoderPID.setI(i);
-        encoderPID.setD(d);
-    }
-
-    /** 
-     * This sets both the max and minimum output range for the Drivetrain
-     * Enoder PID
-     */
-    public void setOutputRange(double range) {
-        outputRange = range;
-    }
-
-    public void setAbsoluteTolerance(double tolerance) {
-        absoluteTolerance = tolerance;
-    }
-
     public static DrivetrainEncoderPIDController getInstance() {
         System.out.println(" --- Asking for Instance --- ");
         if (instance == null) {
@@ -134,11 +64,8 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
         return instance;
     }
 
-    public PIDController getEncoderPID(){
+    public PIDMultiton getEncoderPID(){
         return encoderPID;
-    }
-
-    public void run() {
     }
 
     /**
@@ -146,9 +73,11 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
      * encoder PID
      * @param setpoint
      */
-    public void enable(double setpoint) {
+    public void setSetpoint(double setpoint) {
         _setpoint = setpoint;
         encoderPID.setSetpoint(setpoint + encoder.getDistanceTicks());
+    }
+    public void enable(){
         encoderPID.enable();
     }
 
@@ -157,18 +86,20 @@ public class DrivetrainEncoderPIDController implements ClosedLoopControllerBase 
     }
 
     public void stop() {
-        encoderPID.disable();
-    }
-    /**
-     * This creates a new Encoder PID In and Out as well as a PID Controller
-     * using all the passed in parameters. It also set the output Range and the
-     * absolute tolerance.
-     */
-    public void initialize() {
-
+        encoderPID.stop();
     }
 
     public boolean isDone() {
-        return encoderPID.onTarget();
+        return encoderPID.isDone();
+    }
+
+    private void setPIDConfiguration(PIDConfiguration pidConfiguration) {
+        pidConfiguration.setP(p);
+        pidConfiguration.setI(i);
+        pidConfiguration.setD(d);
+        pidConfiguration.setAbsoluteTolerance(absoluteTolerance);
+        pidConfiguration.setMaximumOutput(outputRange);
+        pidConfiguration.setMinimumOutput(-outputRange);
+        pidConfiguration.setLiveWindowName("DriveTrain");
     }
 }

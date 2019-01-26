@@ -10,8 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.*;
 
-public class PIDMultiton implements ClosedLoopControllerBase {
-    
+public class PIDMultiton {
 
     private static Map<PIDName, PIDMultiton> instances;
 
@@ -76,44 +75,34 @@ public class PIDMultiton implements ClosedLoopControllerBase {
     private PIDMultiton(PIDName name, PIDConfiguration config) {
         this.name = name;
         this.config = config;
-        encoderPID = new PIDController(config.p, config.i, config.d, name.source, name.output);
-        encoderPID.setOutputRange(config.minimumOutput, config.maximumOutput);
+        encoderPID = new PIDController(config.getP(), config.getI(), config.getD(), name.source, name.output);
+        encoderPID.setOutputRange(config.getMinimumOutput(), config.getMaximumOutput());
 
-        encoderPID.setAbsoluteTolerance(config.absoluteTolerance);
+        encoderPID.setAbsoluteTolerance(config.getAbsoluteTolerance());
 
         LiveWindow.add(encoderPID);
-        encoderPID.setName(config.LiveWindowName, "Encoder");
+        encoderPID.setName(config.getLiveWindowName(), "Encoder");
 
     } 
     private PIDConfiguration gitConfig() {
         return config;
     }
-    @Override
-    public void run() {
-    }
-    @Override
-    public void enable(double setpoint) {
+
+    public void setSetpoint(double setpoint) {
         encoderPID.setSetpoint(setpoint + name.source.pidGet());
+    }
+    public void enable(){
         encoderPID.enable();
     }
-    @Override
+
     public void reset() {
         encoderPID.reset();
     }
-    @Override
+
     public void stop() {
         encoderPID.disable();
     }
-    /**
-     * This creates a new Encoder PID In and Out as well as a PID Controller
-     * using all the passed in parameters. It also set the output Range and the
-     * absolute tolerance.
-     */
-    @Override
-    public void initialize() {
 
-    }
-    @Override
     public boolean isDone() {
         return encoderPID.onTarget();
     }

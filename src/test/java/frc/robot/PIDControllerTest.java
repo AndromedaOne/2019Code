@@ -17,13 +17,13 @@ public class PIDControllerTest {
   @Test
   public void pidControllerTest() throws InterruptedException {
     PIDConfiguration pidConfiguration = new PIDConfiguration();
-    pidConfiguration.p = 1;
-    pidConfiguration.i = 0;
-    pidConfiguration.d = 0;
-    pidConfiguration.minimumOutput = 0;
-    pidConfiguration.maximumOutput = 2;
-    pidConfiguration.absoluteTolerance = 3;
-    pidConfiguration.LiveWindowName = "Thanos";
+    pidConfiguration.setP(1);
+    pidConfiguration.setI(0);
+    pidConfiguration.setD(0);
+    pidConfiguration.setMinimumOutput(0);
+    pidConfiguration.setMaximumOutput(2);
+    pidConfiguration.setAbsoluteTolerance(3);
+    pidConfiguration.setLiveWindowName ("Thanos");
 
     PIDSource  source = new PIDSource() {
 
@@ -48,7 +48,7 @@ public class PIDControllerTest {
     
 
     PIDMultiton pid = PIDMultiton.getInstance(source, output, pidConfiguration);
-    pid.enable(1.0);
+    pid.setSetpoint(1.0);
     Thread.sleep(1000);
     assertEquals(1.0, output.outputTest, 0.0001);
   }
