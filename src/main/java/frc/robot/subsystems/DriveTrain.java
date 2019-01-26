@@ -14,10 +14,10 @@ import frc.robot.commands.TeleOpDrive;
  */
 public class DriveTrain extends Subsystem {
     public static WPI_TalonSRX driveTrainLeftFrontTalon;
-    public static WPI_TalonSRX driveTrainLeftRearTalon;
+    public static ArbitraryModeWPI_TalonSRX driveTrainLeftRearTalon;
     public static SpeedControllerGroup driveTrainLeftSpeedController;
     public static WPI_TalonSRX driveTrainRightFrontTalon;
-    public static WPI_TalonSRX driveTrainRightRearTalon;
+    public static ArbitraryModeWPI_TalonSRX driveTrainRightRearTalon;
     public static SpeedControllerGroup driveTrainRightSpeedController;
     public static DifferentialDrive differentialDrive;
 
@@ -29,6 +29,30 @@ public class DriveTrain extends Subsystem {
     private final double kP = 0;
     private final double kI = 0;
     private final double kD = 0;
+
+    class ArbitraryModeWPI_TalonSRX extends WPI_TalonSRX {
+        private ControlMode controlMode = ControlMode.PercentOutput;
+        private double speed;
+
+        ArbitraryModeWPI_TalonSRX(int deviceNumber) {
+            super(deviceNumber);
+        }
+
+        public void setControlMode(ControlMode controlMode) {
+            this.controlMode = controlMode;
+        }
+
+        @Override
+        public void set(double speed) {
+            this.speed = speed;
+            set(controlMode, speed);
+            feed();    
+        }
+        @Override
+        public double get() {
+            return speed;
+        }
+    }
 
     public void setVBusMode() {
         setVBusMode(driveTrainLeftRearTalon);
@@ -46,8 +70,8 @@ public class DriveTrain extends Subsystem {
     }
     // Inspired by https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
     // and 
-    private WPI_TalonSRX initTalonMaster(Config driveConf, String motorName) {
-        WPI_TalonSRX _talon = new WPI_TalonSRX(driveConf.getInt(motorName));
+    private ArbitraryModeWPI_TalonSRX initTalonMaster(Config driveConf, String motorName) {
+        ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(driveConf.getInt(motorName));
        /* Factory Default all hardware to prevent unexpected behaviour */
         _talon.configFactoryDefault();
 
