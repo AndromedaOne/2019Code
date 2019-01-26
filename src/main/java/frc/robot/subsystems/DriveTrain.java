@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.utilities.TalonSRXDifferentialDrive;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.*;
 import com.typesafe.config.Config;
@@ -19,7 +19,7 @@ public class DriveTrain extends Subsystem {
     public static WPI_TalonSRX driveTrainRightFrontTalon;
     public static WPI_TalonSRX driveTrainRightRearTalon;
     public static SpeedControllerGroup driveTrainRightSpeedController;
-    public static DifferentialDrive differentialDrive;
+    public static TalonSRXDifferentialDrive differentialDrive;
 
     private final int kTimeoutMs = 30;
     /*100% throttle corresponds to 3600 RPM*/
@@ -91,7 +91,7 @@ public class DriveTrain extends Subsystem {
         driveTrainLeftFrontTalon = initTalonSlave(driveConf, "leftFrontTalon", driveTrainLeftRearTalon);
         driveTrainRightRearTalon = initTalonMaster(driveConf, "rightRearTalon");
         driveTrainRightFrontTalon = initTalonSlave(driveConf, "rightFrontTalon", driveTrainRightRearTalon);
-        differentialDrive = new DifferentialDrive(driveTrainLeftRearTalon, driveTrainRightRearTalon);
+        differentialDrive = new TalonSRXDifferentialDrive(driveTrainLeftRearTalon, driveTrainRightRearTalon);
     }
 
     @Override
