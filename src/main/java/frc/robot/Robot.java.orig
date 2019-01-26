@@ -32,7 +32,7 @@ import frc.robot.subsystems.drivetrain.RealDriveTrain;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static DriveTrain drivetrain;
+  public static DriveTrain driveTrain;
   public static Joystick driveController;
   public static DrivetrainEncoderPIDController encoderPID;
 
@@ -74,15 +74,19 @@ public class Robot extends TimedRobot {
 
     if (conf.hasPath("subsystems.drivetrain")) {
       System.out.println("Using real drivetrain");
-      drivetrain = new RealDriveTrain();
+      driveTrain = new RealDriveTrain();
     } else {
       System.out.println("Using fake drivetrain");
-      drivetrain = new MockDriveTrain();
+      driveTrain = new MockDriveTrain();
     }
     driveController = new Joystick(0);
+<<<<<<< HEAD
     encoderPID = DrivetrainEncoderPIDController.getInstance();
+=======
+
     System.out.println("This is " + getName() + ".");
 
+>>>>>>> master
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
