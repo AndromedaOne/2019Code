@@ -14,13 +14,13 @@
 #include <Wire.h>
 #include <QTRSensors.h>
 
-const int NUM_SENSORS = 1;
+const int NUM_SENSORS = 8;
 const int TIMEOUT = 2500;  // waits for 2500 microseconds for sensor outputs to go low
 const int EMITTER_PIN = 2;
 
 // digital pins
 QTRSensorsRC qtrrc((unsigned char[]) {
-  4
+  3, 4, 5, 6, 7, 8, 9, 10
 },
 NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 unsigned int sensorValues[NUM_SENSORS];
