@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LineFollowerSensorArray {
     private I2C mI2cBus;
-    private byte[] buffer = new byte[16];
+    private byte[] buffer;
     //Default Distance to sensor array in centimetres
     private double distanceToSensor;
     // Distance between sensors in centimetres
@@ -27,6 +27,7 @@ public class LineFollowerSensorArray {
         this.distanceToSensor = distanceToSensor;
         this.distanceBtSensors = distanceBtSensors;
         this.numSensors = numSensors;
+        this.buffer = new byte[(numSensors*2)];
     }
 
     /**
@@ -47,7 +48,7 @@ public class LineFollowerSensorArray {
        double[] dValues = new double[buffer.length/2];
         
        
-        mI2cBus.readOnly(buffer, 16);
+        mI2cBus.readOnly(buffer, (numSensors*2)-1);
         // Step through each even-numbered element in the array
         for (int i = 0; i < buffer.length/2; i++) {
             if(buffer[i * 2] >= 0) {
@@ -84,7 +85,7 @@ public class LineFollowerSensorArray {
             - use hyp to calculate angle
             - return angle
         */
-        boolean[] boolBuf = new boolean[buffer.length/2];
+        boolean[] boolBuf = new boolean[(this.numSensors/2)+1];
         int senseCount = 0;
         double adj1 = 0;
 
@@ -112,32 +113,32 @@ public class LineFollowerSensorArray {
     }
 
     private double getAdjacent(int i) {
-        int distFromSensor = getDistanceFromCentre(i);
+        double distFromSensor = getDistanceFromCentre(i);
         double tempAdj = 0;
         if (distFromSensor>=0) {
-            tempAdj = -(Math.abs(distFromSensor)*distanceBtSensors)+(distanceBtSensors/2);
+            tempAdj = (distFromSensor)-(distanceBtSensors/2);
         } else {
-            tempAdj = (distFromSensor*distanceBtSensors)-(distanceBtSensors/2);
+            tempAdj = (distFromSensor)+(distanceBtSensors/2);
         }
-        return tempAdj *=-1;
+        return tempAdj;
     }
 
     /**
      * Gets the distance from the centre of the sensor (assuming 0 is the leftmost sensor and there are an even number of sensors)
      */
-    private int getDistanceFromCentre(int i) {
-        int distFromSensor;
+    private double getDistanceFromCentre(int i) {
+        double distFromSensor;
         int halfNumSensors = (numSensors+1)/2;
         System.out.println(halfNumSensors);
-        if (i<=halfNumSensors) {
+        if (i<halfNumSensors) {
             System.out.println("It was on the left!");
             distFromSensor = (halfNumSensors-i);
-
+            distFromSensor = (distFromSensor*distanceBtSensors);
             return distFromSensor;
         } else {
             System.out.println("It was on the right!");
-            distFromSensor = halfNumSensors-i;
-            System.out.println(distFromSensor);
+            distFromSensor = (halfNumSensors-i)-1;
+            distFromSensor =  (distFromSensor * distanceBtSensors);
             return distFromSensor /**= -1*/;
         }
 
