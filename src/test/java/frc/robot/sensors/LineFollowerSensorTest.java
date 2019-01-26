@@ -90,15 +90,15 @@ public class LineFollowerSensorTest {
         LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 50, 10, 0.5, 8);
         i2cBus.setBuffer(new byte[]{22,26,32,31,33,41,58,64});
         LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
-        assertEquals(Math.atan2(1.75, 10), sensorReading.lineAngle, 0.001);
+        assertEquals(Math.atan2(-1.75, 10), sensorReading.lineAngle, 0.001);
     }
 
     // Try it with different number of sensors
     @Test
     public void getSensorReadingMoreSensorsTest() {
         LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 50, 10, 0.5, 10);
-        i2cBus.setBuffer(new byte[]{22,26,32,31,33,41,58,64,70});
+        i2cBus.setBuffer(new byte[]{22,24,26,32,31,33,41,58,64,70});
         LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
-        assertEquals(Math.atan2(1.25, 10), sensorReading.lineAngle, 0.001);
+        assertEquals(Math.atan2(-2.25, 10), sensorReading.lineAngle, 0.001);
     }
 }
