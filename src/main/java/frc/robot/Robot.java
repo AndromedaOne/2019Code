@@ -38,7 +38,6 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
   public static LineFollowerSensorArray lineFollowerSensorArray;
-  protected static Config conf = ConfigFactory.load();
 
   /**
    * This config should live on the robot and have hardware- specific configs.
