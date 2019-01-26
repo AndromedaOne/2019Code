@@ -8,11 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.CallLineFollowerController;
-import frc.robot.utilities.ButtonsEnumerated;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -56,13 +51,12 @@ public class OI {
   // Controllers
   protected Joystick driveStick = new Joystick(0);
 
-  public Joystick getDriveStick(){
+  public Joystick getDriveStick() {
     return driveStick;
   }
-  
-  public static OI getInstance(){
+
+  public static OI getInstance() {
     return instance;
   }
 
 }
-
