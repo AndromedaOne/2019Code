@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    lineSensor.disable();
   }
 
   @Override
@@ -115,6 +116,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    lineSensor.setEnabled();
     m_autonomousCommand = m_chooser.getSelected();
 
     /*
@@ -136,7 +138,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-    lineSensor.readData();
   }
 
   @Override
