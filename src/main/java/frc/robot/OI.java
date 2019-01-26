@@ -44,7 +44,7 @@ public class OI {
 
   private static OI instance = new OI();
 
-  private OI(){
+  private OI() {
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
   }
 
