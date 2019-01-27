@@ -19,9 +19,4 @@ public class RealLimitSwitchSensor extends LimitSwitchSensor {
         return limitSwitch.get();
     }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-
-    }
-
 }

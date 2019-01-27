@@ -33,22 +33,4 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     this.setName(sensorName);
   }
 
-  public class EncoderDoubleSupplier implements DoubleSupplier {
-
-    @Override
-    public double getAsDouble() {
-      return getDistanceTicks();
-    }
-
-  }
-
-  public class EncoderDoubleConsumer implements DoubleConsumer {
-
-    @Override
-    public void accept(double arg0) {
-      return;
-    }
-
-  }
-
 }

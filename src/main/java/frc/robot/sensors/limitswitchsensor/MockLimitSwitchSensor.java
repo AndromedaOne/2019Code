@@ -15,9 +15,4 @@ public class MockLimitSwitchSensor extends LimitSwitchSensor {
         System.out.println("The Limit Switch named: " + sensorNameParam + 
         " does not exist so it cannot be added to smart Dashboard");
     }
-
-	@Override
-	public void initSendable(SendableBuilder builder) {
-		
-	}
 }

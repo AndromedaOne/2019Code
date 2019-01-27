@@ -29,6 +29,10 @@ public abstract class SensorBase implements Sendable {
     subsystemName = subsystem;
   }
 
+  /**
+   * sets the subsystem name and sensor name to the parameters that are passed 
+   * in to ensure that a sensor has a name when it appears on live window.
+   */
   public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam){
     subsystemName = subsystemNameParam;
     sensorName = sensorNameParam;
