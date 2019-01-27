@@ -22,6 +22,9 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.MockIntake;
+import frc.robot.subsystems.intake.RealIntake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,7 +35,9 @@ import frc.robot.subsystems.drivetrain.RealDriveTrain;
  */
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
+  public static Intake intake;
   public static Joystick driveController;
+  public static Joystick operatorController;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -77,7 +82,15 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake drivetrain");
       driveTrain = new MockDriveTrain();
     }
+    if (conf.hasPath("subsystems.intake")) {
+      System.out.println("Using real intake");
+      intake = new RealIntake();
+    } else {
+      System.out.println("Using fake intake");
+      intake = new MockIntake();
+    }
     driveController = new Joystick(0);
+    operatorController = new Joystick(1);
 
     System.out.println("This is " + getName() + ".");
 
