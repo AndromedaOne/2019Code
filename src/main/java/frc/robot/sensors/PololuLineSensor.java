@@ -11,6 +11,8 @@ import java.nio.ByteBuffer;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * Add your docs here.
@@ -35,11 +37,31 @@ public class PololuLineSensor {
     }
 
     private static class ReadDataThread extends Thread {
+
+        private long timeAccumulated = 0;
+        private final int timesAveraged = 50;
+
         public synchronized void run() {
+            int i = 0;
             while (true) {
                 if (enabled) {
                     byte[] buffer = new byte[2 * NUM_SENSORS];
+                    Instant startTime = Instant.now();
                     i2c.readOnly(buffer, 2 * NUM_SENSORS);
+                    Instant endTime = Instant.now();
+                    Duration timeElapsed = Duration.between(startTime, endTime);
+                    timeAccumulated += timeElapsed.toMillis();
+                    if(i < timesAveraged) {
+                        System.out.println(timeElapsed.toMillis());
+                        ++i;
+                    } else {
+                        System.out.println("Average Time : " + 
+                        timeAccumulated / (timesAveraged + 1));
+                        timeAccumulated = 0;
+                        i = 0;
+                    }
+
+                    
                     for (int sensorNumber = 0; sensorNumber < NUM_SENSORS; ++sensorNumber) {
                         int b = 0;
                         for (int count = 0; count < 2; ++count) {
@@ -53,7 +75,7 @@ public class PololuLineSensor {
                     }
                     System.out.println();
                 }
-                Timer.delay(0.03);
+                Timer.delay(0.02);
             }
         }
     }

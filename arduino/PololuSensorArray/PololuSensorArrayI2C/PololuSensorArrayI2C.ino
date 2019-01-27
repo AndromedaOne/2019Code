@@ -15,7 +15,7 @@
 #include <QTRSensors.h>
 
 const int NUM_SENSORS = 8;
-const int TIMEOUT = 2500;  // waits for 2500 microseconds for sensor outputs to go low
+const int TIMEOUT = 2000;  // waits for 2500 microseconds for sensor outputs to go low
 const int EMITTER_PIN = 2;
 bool requested = false;
 
@@ -46,13 +46,13 @@ void loop() {
 
 // function that executes whenever data is requested by master
 // this function is registered as an event, see setup()
-volatile int sensorValue = 0;
+int sensorValue = 0;
 
 void requestEvent() {
   for (int sensorNumber = 0; sensorNumber < NUM_SENSORS; ++sensorNumber) {
+    sensorValue = sensorValues[sensorNumber];
     Serial.print(sensorValues[sensorNumber]);
     Serial.print('\t');
-    sensorValue = sensorValues[sensorNumber];
     for (int i = 1; i >= 0; --i) {
       byte b = sensorValue >> (i * 8) & 0xFF;
       Wire.write(b);
