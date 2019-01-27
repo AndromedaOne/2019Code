@@ -1,5 +1,6 @@
 package frc.robot.closedloopcontrollers;
 
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
@@ -17,7 +18,7 @@ public class DrivetrainUltrasonicPIDController {
   private double outputRange = 1;
   private double absoluteTolerance;
   private double _setpoint;
-  private PIDConfiguration pidConfiguration;
+  private PIDConfiguration pidConfiguration = new PIDConfiguration();
   private final double p = 0;
   private final double i = 0;
   private final double d = 0;
@@ -26,14 +27,12 @@ public class DrivetrainUltrasonicPIDController {
     ultrasonic = ultrasonicParam;
     trace = Trace.getInstance();
     ultrasonic.putOnLiveWindow("Drivetrain", "Ultrasonic");
-
+    ultrasonicPIDOut = new UltrasonicPIDOut();
+    setPIDConfiguration(pidConfiguration);
+    ultrasonicPID = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, pidConfiguration);
   }
 
   private class UltrasonicPIDOut implements PIDOutput {
-
-    public UltrasonicPIDOut(double maxAllowableDelta) {
-      _maxAllowableDelta = maxAllowableDelta;
-    }
 
     @Override
     public void pidWrite(double output) {
@@ -55,10 +54,32 @@ public class DrivetrainUltrasonicPIDController {
   }
 
   public void setSetpoint(double setpoint) {
-
+    ultrasonicPID.setSetpoint(setpoint);
   }
 
-  public PIDMultiton getUltrasonicPiD() {
-    return ultrasonicPID;
+  public void enable() {
+    ultrasonicPID.enable();
+  }
+
+  public void reset() {
+    ultrasonicPID.reset();
+  }
+
+  public void stop() {
+    ultrasonicPID.stop();
+  }
+
+  public boolean isDone() {
+    return ultrasonicPID.isDone();
+  }
+
+  private void setPIDConfiguration(PIDConfiguration pidConfiguration) {
+    pidConfiguration.setP(p);
+    pidConfiguration.setI(i);
+    pidConfiguration.setD(d);
+    pidConfiguration.setAbsoluteTolerance(absoluteTolerance);
+    pidConfiguration.setMaximumOutput(outputRange);
+    pidConfiguration.setMinimumOutput(-outputRange);
+    pidConfiguration.setLiveWindowName("DriveTrain");
   }
 }

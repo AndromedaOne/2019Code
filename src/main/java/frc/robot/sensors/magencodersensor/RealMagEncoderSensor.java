@@ -12,12 +12,8 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
   private WPI_TalonSRX talonSpeedController;
   private static final double TICKSTOINCHES = 0.0;
 
-  public RealMagEncoderSensor(WPI_TalonSRX talon) throws noTalonException {
+  public RealMagEncoderSensor(WPI_TalonSRX talon) {
     talonSpeedController = talon;
-    if (talon == null) {
-      System.out.println("The Talon is Null!!!!!!!");
-      throw new noTalonException();
-    }
     talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     talon.setSensorPhase(true); /* keep sensor and motor in phase */
   }
@@ -35,12 +31,6 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     super.putOnLiveWindow(subsystemNameParam, sensorNameParam);
     LiveWindow.add(this);
     this.setName(sensorName);
-  }
-
-  public class noTalonException extends Exception {
-
-    private static final long serialVersionUID = 1L;
-
   }
 
   public class EncoderDoubleSupplier implements DoubleSupplier {

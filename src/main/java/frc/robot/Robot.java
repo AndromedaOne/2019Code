@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.commands.*;
+import frc.robot.sensors.magencodersensor.MagEncoderSensor;
+import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
+import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
@@ -35,6 +38,7 @@ public class Robot extends TimedRobot {
   public static DriveTrain drivetrain;
   public static Joystick driveController;
   public static DrivetrainEncoderPIDController encoderPID;
+  public static MagEncoderSensor drivetrainLeftRearEncoder;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -75,10 +79,18 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.drivetrain")) {
       System.out.println("Using real drivetrain");
       drivetrain = new RealDriveTrain();
+      if (conf.hasPath("subsystems.drivetrainSensors")) {
+        drivetrainLeftRearEncoder = new RealMagEncoderSensor
+        (drivetrain.getLeftRearTalon());
+      }else {
+        drivetrainLeftRearEncoder = new MockMagEncoderSensor();
+      }
     } else {
       System.out.println("Using fake drivetrain");
       drivetrain = new MockDriveTrain();
+      drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
+
     driveController = new Joystick(0);
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     System.out.println("This is " + getName() + ".");

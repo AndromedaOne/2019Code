@@ -5,7 +5,6 @@ import frc.robot.Robot;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
-import frc.robot.sensors.magencodersensor.RealMagEncoderSensor.noTalonException;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 
@@ -27,14 +26,7 @@ public class DrivetrainEncoderPIDController {
   // I did not add an F variable because we have yet to use it
 
   private DrivetrainEncoderPIDController() {
-    try {
-      encoder = new RealMagEncoderSensor(Robot.drivetrain.getLeftRearTalon());
-      System.out.println("Created A real Encoder sensor");
-    } catch (noTalonException a) {
-
-      encoder = new MockMagEncoderSensor();
-      System.out.println("Created A mock Encoder sensor");
-    }
+    encoder = Robot.drivetrainLeftRearEncoder;
     trace = Trace.getInstance();
     encoder.putOnLiveWindow("DriveTrain", "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut(_maxAllowableDelta);
@@ -64,10 +56,6 @@ public class DrivetrainEncoderPIDController {
       instance = new DrivetrainEncoderPIDController();
     }
     return instance;
-  }
-
-  public PIDMultiton getEncoderPID() {
-    return encoderPID;
   }
 
   /**
