@@ -12,26 +12,25 @@ public abstract class UltrasonicSensor extends SensorBase implements PIDSource {
    */
   public abstract double getDistanceInches();
 
-  
   @Override
   /**
-   * Sets the distance in inches returned by the ultrasonic and passes it to a 
-   * PID Controller
+   * Sets the distance in inches returned by the ultrasonic and passes it to a PID
+   * Controller
    */
   public double pidGet() {
     return getDistanceInches();
   }
 
-   
   @Override
-  /** 
+  /**
    * Does not do anything
    */
-  public void setPIDSourceType(PIDSourceType pidSource) {}
+  public void setPIDSourceType(PIDSourceType pidSource) {
+  }
 
   @Override
   /**
-   * @return kDisplacement because that is what we use for all of our PID 
+   * @return kDisplacement because that is what we use for all of our PID
    * Controllers
    */
   public PIDSourceType getPIDSourceType() {
@@ -40,7 +39,7 @@ public abstract class UltrasonicSensor extends SensorBase implements PIDSource {
 
   @Override
   /**
-   * passes the method for getting the distance in inches to the livewindow and 
+   * passes the method for getting the distance in inches to the livewindow and
    * gives the livewindow some parameters to allow it to work.
    */
   public void initSendable(SendableBuilder builder) {

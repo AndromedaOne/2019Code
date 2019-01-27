@@ -80,27 +80,43 @@ public class PIDMultiton {
 
   }
 
-  private PIDConfiguration gitConfig() {
-    return config;
-  }
-
+  /**
+   * Sets the setpoint for pidController
+   */
   public void setSetpoint(double setpoint) {
-    pidController.setSetpoint(setpoint + name.source.pidGet());
+    pidController.setSetpoint(setpoint);
   }
 
+  /**
+   * Enables the pidController
+   */
   public void enable() {
     pidController.enable();
   }
 
+  /**
+   * Resets the pidController
+   */
   public void reset() {
     pidController.reset();
   }
 
-  public void stop() {
+  /**
+   * Stops the pidController
+   */
+  public void disable() {
     pidController.disable();
   }
 
-  public boolean isDone() {
+  /**
+   * @return true if the pidController is on target
+   */
+  public boolean onTarget() {
     return pidController.onTarget();
   }
+
+  private PIDConfiguration gitConfig() {
+    return config;
+  }
+
 }

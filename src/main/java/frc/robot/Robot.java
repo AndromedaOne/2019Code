@@ -80,9 +80,8 @@ public class Robot extends TimedRobot {
       System.out.println("Using real drivetrain");
       drivetrain = new RealDriveTrain();
       if (conf.hasPath("subsystems.drivetrainSensors")) {
-        drivetrainLeftRearEncoder = new RealMagEncoderSensor
-        (drivetrain.getLeftRearTalon());
-      }else {
+        drivetrainLeftRearEncoder = new RealMagEncoderSensor(drivetrain.getLeftRearTalon());
+      } else {
         drivetrainLeftRearEncoder = new MockMagEncoderSensor();
       }
     } else {
@@ -90,7 +89,7 @@ public class Robot extends TimedRobot {
       drivetrain = new MockDriveTrain();
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
-    
+
     driveController = new Joystick(0);
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     System.out.println("This is " + getName() + ".");

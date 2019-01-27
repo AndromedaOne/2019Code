@@ -26,7 +26,7 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
   }
 
   @Override
-   /** 
+  /**
    * Does not do anything
    */
   public void setPIDSourceType(PIDSourceType pidSource) {
@@ -35,7 +35,7 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
 
   @Override
   /**
-   * @return kDisplacement because that is what we use for all of our PID 
+   * @return kDisplacement because that is what we use for all of our PID
    * Controllers
    */
   public PIDSourceType getPIDSourceType() {
@@ -44,7 +44,7 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
 
   @Override
   /**
-   * passes the method for getting the distance in ticks to the livewindow and 
+   * passes the method for getting the distance in ticks to the livewindow and
    * gives the livewindow some parameters to allow it to work.
    */
   public void initSendable(SendableBuilder builder) {

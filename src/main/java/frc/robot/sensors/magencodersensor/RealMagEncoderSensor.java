@@ -1,8 +1,5 @@
 package frc.robot.sensors.magencodersensor;
 
-import java.util.function.DoubleConsumer;
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 

@@ -55,6 +55,7 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
     LiveWindow.add(this);
     this.setName(sensorName);
   }
+
   @Override
   public void setPIDSourceType(PIDSourceType pidSource) {
 

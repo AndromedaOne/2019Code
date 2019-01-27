@@ -23,14 +23,14 @@ public class MoveUsingEncoderPID extends Command {
   }
 
   public boolean isFinished() {
-    return drivetrainEncoder.isDone();
+    return drivetrainEncoder.onTarget();
   }
 
   public void end() {
-    drivetrainEncoder.stop();
+    drivetrainEncoder.disable();
   }
 
   public void interrupt() {
-    drivetrainEncoder.stop();
+    drivetrainEncoder.disable();
   }
 }
