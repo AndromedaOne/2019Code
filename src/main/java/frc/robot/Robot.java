@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.drivetrain")) {
       System.out.println("Using real drivetrain");
       drivetrain = new RealDriveTrain();
-      if (conf.hasPath("subsystems.drivetrainSensors")) {
+      if (conf.hasPath("subsystems.drivetrainEncoders")) {
         drivetrainLeftRearEncoder = new RealMagEncoderSensor(drivetrain.getLeftRearTalon());
       } else {
         drivetrainLeftRearEncoder = new MockMagEncoderSensor();
