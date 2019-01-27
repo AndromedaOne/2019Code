@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Sendable;
 
-public abstract class SensorBase implements PIDSource, Sendable {
+public abstract class SensorBase implements Sendable {
 
   protected String subsystemName;
   protected String sensorName;
@@ -29,16 +29,9 @@ public abstract class SensorBase implements PIDSource, Sendable {
     subsystemName = subsystem;
   }
 
-  @Override
-  public void setPIDSourceType(PIDSourceType pidSource) {
-
+  public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam){
+    subsystemName = subsystemNameParam;
+    sensorName = sensorNameParam;
   }
-
-  @Override
-  public PIDSourceType getPIDSourceType() {
-    return PIDSourceType.kDisplacement;
-  }
-
-  public abstract void putOnSmartDashboard(String subsystemNameParam, String sensorNameParam);
 
 }

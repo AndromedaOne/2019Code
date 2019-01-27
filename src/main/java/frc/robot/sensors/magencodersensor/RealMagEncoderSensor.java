@@ -31,9 +31,8 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     return ticks;
   }
 
-  public void putOnSmartDashboard(String subsystemNameParam, String sensorNameParam) {
-    subsystemName = subsystemNameParam;
-    sensorName = sensorNameParam;
+  public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+    super.putOnLiveWindow(subsystemNameParam, sensorNameParam);
     LiveWindow.add(this);
     this.setName(sensorName);
   }

@@ -25,7 +25,7 @@ public class DrivetrainUltrasonicPIDController {
   public DrivetrainUltrasonicPIDController(UltrasonicSensor ultrasonicParam) {
     ultrasonic = ultrasonicParam;
     trace = Trace.getInstance();
-    ultrasonic.putOnSmartDashboard("Drivetrain", "Ultrasonic");
+    ultrasonic.putOnLiveWindow("Drivetrain", "Ultrasonic");
 
   }
 

@@ -3,9 +3,13 @@ package frc.robot.sensors;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
-public class NavXGyroSensor {
+public class NavXGyroSensor extends SensorBase implements PIDSource {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   static NavXGyroSensor instance = new NavXGyroSensor();
   private double initialAngleReading = 0.0;
@@ -37,9 +41,33 @@ public class NavXGyroSensor {
     return gyro.getAngle() - initialAngleReading;
   }
 
-  public double getClosedLoopSrc() {
-    return getZAngle();
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Counter");
+    // This needs to be value in order to work; Value is a magical string that
+    // allows this counter to appear on Live Window.
+    builder.addDoubleProperty("Value", this::getZAngle, null);
+  }
 
+  @Override
+  public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+    super.putOnLiveWindow(subsystemNameParam, sensorNameParam);
+    LiveWindow.add(this);
+    this.setName(sensorName);
+  }
+  @Override
+  public void setPIDSourceType(PIDSourceType pidSource) {
+
+  }
+
+  @Override
+  public PIDSourceType getPIDSourceType() {
+    return PIDSourceType.kDisplacement;
+  }
+
+  @Override
+  public double pidGet() {
+    return getZAngle();
   }
 
 }

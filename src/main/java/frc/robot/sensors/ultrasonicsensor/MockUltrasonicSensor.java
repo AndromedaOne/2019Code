@@ -8,9 +8,8 @@ public class MockUltrasonicSensor extends UltrasonicSensor {
   }
 
   @Override
-  public void putOnSmartDashboard(String subsystemNameParam, String sensorNameParam) {
-    subsystemName = subsystemNameParam;
-    sensorName = sensorNameParam;
+  public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+    super.putOnLiveWindow(subsystemNameParam, sensorNameParam);
     System.out
         .println("The Ultrasonic named: " + sensorNameParam + " does not exist so it cannot be added to Live Window");
   }

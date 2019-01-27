@@ -36,7 +36,7 @@ public class DrivetrainEncoderPIDController {
       System.out.println("Created A mock Encoder sensor");
     }
     trace = Trace.getInstance();
-    encoder.putOnSmartDashboard("DriveTrain", "LeftRearEncoder");
+    encoder.putOnLiveWindow("DriveTrain", "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut(_maxAllowableDelta);
     pidConfiguration = new PIDConfiguration();
     setPIDConfiguration(pidConfiguration);
