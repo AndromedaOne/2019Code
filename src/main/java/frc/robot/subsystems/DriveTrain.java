@@ -139,7 +139,8 @@ public class DriveTrain extends Subsystem {
     private void printMeasurements(String side, WPI_TalonSRX _talon, double targetVelocity, boolean doneMeasuring) {
         /* Get Talon/Victor's current output percentage */
 		double motorOutput = _talon.getMotorOutputPercent(); 
-		
+        
+        targetVelocity = targetVelocity * 4096 / 600 * kMaxRPM;
         /* Prepare line to print */
         _sb.append(side);
 		_sb.append("\tout:");
