@@ -3,7 +3,7 @@ package frc.robot.sensors.ultrasonicsensor;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-public abstract class RealUltrasonicSensor extends UltrasonicSensor {
+public class RealUltrasonicSensor extends UltrasonicSensor {
   private Ultrasonic ultrasonic;
 
   protected String subsystemName;

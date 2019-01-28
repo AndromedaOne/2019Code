@@ -19,10 +19,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.commands.*;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
+import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
+import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
+import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
@@ -38,7 +42,11 @@ public class Robot extends TimedRobot {
   public static DriveTrain drivetrain;
   public static Joystick driveController;
   public static DrivetrainEncoderPIDController encoderPID;
+  public static DrivetrainUltrasonicPIDController ultrasonicPID;
+  public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
+  public static UltrasonicSensor drivetrainFrontUltrasonic;
+
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -79,7 +87,7 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.drivetrain")) {
       System.out.println("Using real drivetrain");
       drivetrain = new RealDriveTrain();
-      if (conf.hasPath("subsystems.drivetrainEncoders")) {
+      if (conf.hasPath("sensors.drivetrainEncoders")) {
         drivetrainLeftRearEncoder = new RealMagEncoderSensor(drivetrain.getLeftRearTalon());
       } else {
         drivetrainLeftRearEncoder = new MockMagEncoderSensor();
@@ -89,9 +97,19 @@ public class Robot extends TimedRobot {
       drivetrain = new MockDriveTrain();
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
+    if (conf.hasPath("sensors.drivetrainFrontUltrasonic")) {
+      int ping = getConfig().getConfig("sensors").getInt
+      ("drivetrainFrontUltrasonicPing");
+      int echo = getConfig().getConfig("sensors").getInt
+      ("drivetrainFrontUltrasonicEcho");
+      drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
+    }else {
+      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
+    }
 
     driveController = new Joystick(0);
     encoderPID = DrivetrainEncoderPIDController.getInstance();
+    ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
 
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());

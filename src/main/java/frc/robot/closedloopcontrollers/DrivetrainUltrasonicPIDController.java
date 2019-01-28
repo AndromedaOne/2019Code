@@ -18,13 +18,13 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
    * trace, and pidConfiguration variables. Also creates the ultrasonicPID from
    * the PIDMultiton class.
    */
-  public DrivetrainUltrasonicPIDController(UltrasonicSensor ultrasonicParam) {
+  public DrivetrainUltrasonicPIDController() {
     super.absoluteTolerance = 3;
     super.p = 0;
     super.i = 0;
     super.d = 0;
 
-    ultrasonic = ultrasonicParam;
+    ultrasonic = Robot.drivetrainFrontUltrasonic;
     super.trace = Trace.getInstance();
     ultrasonic.putSensorOnLiveWindow("Drivetrain", "Ultrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
@@ -53,11 +53,11 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
    * 
    * @return instance
    */
-  public static DrivetrainUltrasonicPIDController getInstance(UltrasonicSensor sensor) {
+  public static DrivetrainUltrasonicPIDController getInstance() {
     System.out.println(" ---Asking for Instance --- ");
     if (instance == null) {
       System.out.println("Creating new Drivetrain Ultrasonic PID Controller");
-      instance = new DrivetrainUltrasonicPIDController(sensor);
+      instance = new DrivetrainUltrasonicPIDController();
     }
     return instance;
   }
