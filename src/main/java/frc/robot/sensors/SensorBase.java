@@ -1,39 +1,87 @@
 package frc.robot.sensors;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
-public abstract class SensorBase implements Sendable {
+public abstract class SensorBase {
 
-  protected String subsystemName;
-  protected String sensorName;
+  public abstract void putSensorOnLiveWindow(String subsystemNameParam, 
+  String sensorNameParam);
 
-  @Override
-  public String getName() {
-    return sensorName;
+  protected void putReadingOnLiveWindow(String subsystem, String readingName, 
+  DoubleSupplier doubleSupplier) {
+    Sendable sendable = new Sendable() {
+
+      @Override
+      public String getName() {
+        return readingName;
+      }
+
+      @Override
+      public void setName(String name) {
+        
+      }
+
+      @Override
+      public String getSubsystem() {
+        return subsystem;
+      }
+
+      @Override
+      public void setSubsystem(String subsystem) {
+
+      }
+
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Counter");
+        // This needs to be value in order to work; Value is a magical string 
+        // that allows this counter to appear on Live Window.
+        builder.addDoubleProperty("Value", doubleSupplier, null);
+      }
+
+    };
+    LiveWindow.add(sendable);
   }
 
-  @Override
-  public void setName(String name) {
-    sensorName = name;
-  }
+  protected void putReadingOnLiveWindow(String subsystem, String readingName, 
+  BooleanSupplier booleanSupplier) {
+    Sendable sendable = new Sendable() {
 
-  @Override
-  public String getSubsystem() {
-    return subsystemName;
-  }
+      @Override
+      public String getName() {
+        return readingName;
+      }
 
-  @Override
-  public void setSubsystem(String subsystem) {
-    subsystemName = subsystem;
-  }
+      @Override
+      public void setName(String name) {
+        
+      }
 
-  /**
-   * sets the subsystem name and sensor name to the parameters that are passed in
-   * to ensure that a sensor has a name when it appears on live window.
-   */
-  public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-    subsystemName = subsystemNameParam;
-    sensorName = sensorNameParam;
+      @Override
+      public String getSubsystem() {
+        return subsystem;
+      }
+
+      @Override
+      public void setSubsystem(String subsystem) {
+
+      }
+
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Digital Input");
+        // This needs to be value in order to work; Value is a magical string 
+        // that allows this Digital Input to appear on Live Window.
+        builder.addBooleanProperty("Value", booleanSupplier, null);
+      }
+
+    };
+    LiveWindow.add(sendable);
   }
 
 }

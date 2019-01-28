@@ -37,16 +37,4 @@ public abstract class UltrasonicSensor extends SensorBase implements PIDSource {
     return PIDSourceType.kDisplacement;
   }
 
-  @Override
-  /**
-   * passes the method for getting the distance in inches to the livewindow and
-   * gives the livewindow some parameters to allow it to work.
-   */
-  public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("Counter");
-    // This needs to be value in order to work; Value is a magical string that
-    // allows this counter to appear on Live Window.
-    builder.addDoubleProperty("Value", this::getDistanceInches, null);
-  }
-
 }

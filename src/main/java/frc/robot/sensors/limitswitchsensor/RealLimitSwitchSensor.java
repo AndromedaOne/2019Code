@@ -18,4 +18,9 @@ public class RealLimitSwitchSensor extends LimitSwitchSensor {
     return limitSwitch.get();
   }
 
+  @Override
+  public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+    super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "IsAtLimit:", 
+    this::isAtLimit);
+  }
 }

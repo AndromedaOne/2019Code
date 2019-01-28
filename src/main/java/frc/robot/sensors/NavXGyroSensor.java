@@ -42,18 +42,9 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   }
 
   @Override
-  public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("Counter");
-    // This needs to be value in order to work; Value is a magical string that
-    // allows this counter to appear on Live Window.
-    builder.addDoubleProperty("Value", this::getZAngle, null);
-  }
-
-  @Override
-  public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-    super.putOnLiveWindow(subsystemNameParam, sensorNameParam);
-    LiveWindow.add(this);
-    this.setName(sensorName);
+  public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+    super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "ZAngle:", 
+    this::getZAngle);
   }
 
   @Override

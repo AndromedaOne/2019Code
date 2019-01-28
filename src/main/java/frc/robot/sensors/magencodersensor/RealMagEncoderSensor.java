@@ -24,10 +24,10 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     return ticks;
   }
 
-  public void putOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-    super.putOnLiveWindow(subsystemNameParam, sensorNameParam);
-    LiveWindow.add(this);
-    this.setName(sensorName);
+  @Override
+  public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+    super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "Ticks:", 
+    this::getDistanceTicks);
   }
 
 }
