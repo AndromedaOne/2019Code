@@ -8,6 +8,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.I2C;
+import java.io.File;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,9 +20,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utilities.I2CBusDriver;
 import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.subsystems.drivetrain.MockDriveTrain;
+import frc.robot.subsystems.drivetrain.RealDriveTrain;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -33,18 +40,49 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
   public static LineFollowerSensorArray lineFollowerSensorArray;
-  protected static Config conf = ConfigFactory.load();
+  /**
+   * This config should live on the robot and have hardware- specific configs.
+   */
+  private static Config environmentalConfig = ConfigFactory.parseFile(new File("/home/lvuser/robot.conf"));
+
+  /**
+   * This config lives in the jar and has hardware-independent configs.
+   */
+  private static Config defaultConfig = ConfigFactory.parseResources("application.conf");
+
+  /**
+   * Combined config
+   */
+  protected static Config conf = environmentalConfig.withFallback(defaultConfig).resolve();
+
+  /**
+   * Get the robot's config
+   * 
+   * @return the config
+   */
+  public static Config getConfig() {
+    return conf;
+  }
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
   @Override
   public void robotInit() {
-    driveTrain = new DriveTrain();
+
+    System.out.println("Here is my config: " + conf);
+
+    if (conf.hasPath("subsystems.drivetrain")) {
+      System.out.println("Using real drivetrain");
+      driveTrain = new RealDriveTrain();
+    } else {
+      System.out.println("Using fake drivetrain");
+      driveTrain = new MockDriveTrain();
+    }
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
@@ -55,21 +93,22 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
   }
 
   /**
-   * This function is called once each time the robot enters Disabled mode.
-   * You can use it to reset any subsystem information you want to clear when
-   * the robot is disabled.
+   * This function is called once each time the robot enters Disabled mode. You
+   * can use it to reset any subsystem information you want to clear when the
+   * robot is disabled.
    */
   @Override
   public void disabledInit() {
@@ -82,24 +121,25 @@ public class Robot extends TimedRobot {
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString code to get the auto name from the text box below the Gyro
+   * between different autonomous modes using the dashboard. The sendable chooser
+   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+   * remove all of the chooser code and uncomment the getString code to get the
+   * auto name from the text box below the Gyro
    *
-   * <p>You can add additional auto modes by adding additional commands to the
-   * chooser code above (like the commented example) or additional comparisons
-   * to the switch structure below with additional strings and commands.
+   * <p>
+   * You can add additional auto modes by adding additional commands to the
+   * chooser code above (like the commented example) or additional comparisons to
+   * the switch structure below with additional strings and commands.
    */
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
 
     /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector",
-     * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-     * = new MyAutoCommand(); break; case "Default Auto": default:
-     * autonomousCommand = new ExampleCommand(); break; }
+     * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
+     * switch(autoSelected) { case "My Auto": autonomousCommand = new
+     * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
+     * ExampleCommand(); break; }
      */
 
     // schedule the autonomous command (example)
@@ -142,15 +182,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-
   /**
    * Get the robot name (set in the config)
    */
-  public static String getName(){
+  public static String getName() {
     return conf.getString("robot.name");
   }
 
-  public static Config getConfig() {
-    return conf;
-  }
 }
