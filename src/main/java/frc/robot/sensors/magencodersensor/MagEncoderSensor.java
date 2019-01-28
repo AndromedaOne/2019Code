@@ -19,7 +19,7 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
 
   @Override
   /**
-   * gets the distance in ticks to pass to a PID controller
+   * Gets the distance in ticks to pass to a PID controller
    */
   public double pidGet() {
     return getDistanceTicks();

@@ -14,7 +14,7 @@ public abstract class UltrasonicSensor extends SensorBase implements PIDSource {
 
   @Override
   /**
-   * Sets the distance in inches returned by the ultrasonic and passes it to a PID
+   * Gets the distance in inches returned by the ultrasonic and passes it to a PID
    * Controller
    */
   public double pidGet() {

@@ -9,9 +9,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 public abstract class SensorBase {
 
+  /**
+   * This method will put readings from the sensor on Live Window.
+   * In order to fill out this method add the following line as many times as 
+   * needed:
+   *  super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + 
+   * "NameOfMeasurement:", this::methodForGettingMeasurement);
+   */
   public abstract void putSensorOnLiveWindow(String subsystemNameParam, 
   String sensorNameParam);
 
+  /**
+   * Puts the double supplier on live window with the name "readingName" in the 
+   * subsystem specified
+   * @param subsystem
+   * @param readingName
+   * @param doubleSupplier
+   */
   protected void putReadingOnLiveWindow(String subsystem, String readingName, 
   DoubleSupplier doubleSupplier) {
     Sendable sendable = new Sendable() {
@@ -48,6 +62,13 @@ public abstract class SensorBase {
     LiveWindow.add(sendable);
   }
 
+  /**
+   * Puts the boolean supplier on live window with the name "readingName" in the 
+   * subsystem specified
+   * @param subsystem
+   * @param readingName
+   * @param booleanSupplier
+   */
   protected void putReadingOnLiveWindow(String subsystem, String readingName, 
   BooleanSupplier booleanSupplier) {
     Sendable sendable = new Sendable() {

@@ -26,7 +26,7 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
 
     ultrasonic = ultrasonicParam;
     super.trace = Trace.getInstance();
-    ultrasonic.putOnLiveWindow("Drivetrain", "Ultrasonic");
+    ultrasonic.putSensorOnLiveWindow("Drivetrain", "Ultrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
     super.setPIDConfiguration(pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, pidConfiguration);

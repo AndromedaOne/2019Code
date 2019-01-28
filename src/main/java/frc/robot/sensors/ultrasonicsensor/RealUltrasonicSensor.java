@@ -4,17 +4,23 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public abstract class RealUltrasonicSensor extends UltrasonicSensor {
-  private Ultrasonic ultraSonic;
+  private Ultrasonic ultrasonic;
 
   protected String subsystemName;
   protected String sensorName;
 
+  /**
+   * Creates the ultrasonic with the ping and echo ports passed in
+   * @param ping
+   * @param echo
+   */
   public RealUltrasonicSensor(int ping, int echo) {
-    ultraSonic = new Ultrasonic(ping, echo);
+    ultrasonic = new Ultrasonic(ping, echo);
   }
 
+  @Override
   public double getDistanceInches() {
-    return ultraSonic.getRangeInches();
+    return ultrasonic.getRangeInches();
   }
 
   @Override
