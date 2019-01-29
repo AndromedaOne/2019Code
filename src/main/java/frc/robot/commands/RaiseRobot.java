@@ -17,8 +17,8 @@ public class RaiseRobot extends Command {
 
     public void execute() {
 
-        double angleY = gyro.getYAngle();
-        double angleX = gyro.getXAngle();
+        double angleY = gyro.getYAngle() - initialYValue;
+        double angleX = gyro.getXAngle() - initialXValue;
 
         //Left Front Solenoid
         if((angleY < 0) || (angleX < 0)) {
