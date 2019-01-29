@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.SPI;
 public class NavXGyroSensor implements PIDLoopable {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   static NavXGyroSensor instance = new NavXGyroSensor();
-  private double initialAngleReading = 0.0;
+  private double initialZAngleReading = 0.0;
+  private double initialXAngleReading = 0.0;
+  private double initialYAngleReading = 0.0;
   boolean angleReadingSet = false;
 
   private NavXGyroSensor() {
@@ -34,7 +36,15 @@ public class NavXGyroSensor implements PIDLoopable {
   }
 
   public double getZAngle() {
-    return gyro.getAngle() - initialAngleReading;
+    return gyro.getAngle() - initialZAngleReading;
+  }
+
+  public double getXAngle(){
+    return gyro.getPitch() - initialXAngleReading;
+  }
+  
+  public double getYAngle() {
+    return gyro.getRoll() - initialYAngleReading;
   }
 
   public double getClosedLoopSrc() {
@@ -44,8 +54,10 @@ public class NavXGyroSensor implements PIDLoopable {
 
   @Override
   public void reset() {
-    initialAngleReading = getZAngle();
-    System.out.println("Initial angle set to: " + initialAngleReading);
+    initialZAngleReading = getZAngle();
+    initialXAngleReading = getXAngle();
+    initialYAngleReading = getYAngle();
+    System.out.println("Initial angle set to: " + initialZAngleReading);
     angleReadingSet = true;
 
   }

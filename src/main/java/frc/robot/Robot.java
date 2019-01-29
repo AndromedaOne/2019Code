@@ -19,9 +19,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
+import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,7 +35,9 @@ import frc.robot.subsystems.drivetrain.RealDriveTrain;
  */
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
+  private static PneumaticStilts pneumaticStilts;
   public static Joystick driveController;
+  private static NavXGyroSensor gyro;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -77,6 +82,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake drivetrain");
       driveTrain = new MockDriveTrain();
     }
+    pneumaticStilts = new RealPneumaticStilts();
     driveController = new Joystick(0);
 
     System.out.println("This is " + getName() + ".");
@@ -128,6 +134,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
+    gyro = NavXGyroSensor.getInstance();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -148,6 +155,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+    System.out.println("X: " + gyro.getXAngle() + "\t" + "Y: " + gyro.getYAngle());
   }
 
   @Override

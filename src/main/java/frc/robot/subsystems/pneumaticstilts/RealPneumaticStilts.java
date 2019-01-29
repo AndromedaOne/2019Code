@@ -9,7 +9,7 @@ public class RealPneumaticStilts extends PneumaticStilts {
     private static DoubleSolenoid rearLeftSolenoid;
     private static DoubleSolenoid rearRightSolenoid;
 
-    private RealPneumaticStilts() {
+    public RealPneumaticStilts() {
         frontLeftSolenoid = new DoubleSolenoid(0, 0, 1);
         frontRightSolenoid = new DoubleSolenoid(0, 2, 3);
         rearLeftSolenoid = new DoubleSolenoid(0, 4, 5);
