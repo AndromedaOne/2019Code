@@ -3,6 +3,8 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
@@ -19,6 +21,7 @@ public class RealDriveTrain extends DriveTrain {
   public static WPI_TalonSRX driveTrainRightTalon4;
   public static SpeedControllerGroup driveTrainRightSpeedController;
   public static DifferentialDrive differentialDrive;
+  public static DoubleSolenoid shifterSolenoid;
 
   @Override
   public void initDefaultCommand() {
@@ -32,6 +35,9 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightTalon4 = new WPI_TalonSRX(driveConf.getInt("rightTalon4"));
     driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightTalon3, driveTrainRightTalon4);
     differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
+
+    // Gear Shift Solenoid
+    shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"), driveConf.getInt("pneumatics.backwardsChannel"));  
 
 
   }
