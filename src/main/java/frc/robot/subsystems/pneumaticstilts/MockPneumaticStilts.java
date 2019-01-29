@@ -33,4 +33,24 @@ public class MockPneumaticStilts extends PneumaticStilts {
     public void stopRearRight() {
         System.out.println("Stopped Rear Right Stilt Solenoid");
     }
+
+    @Override
+    public void retractFrontLeft() {
+        System.out.println("Retracting Front Left Stilt Solenoid");
+    }
+
+    @Override
+    public void retractFrontRight() {
+        System.out.println("Retracting Front Right Stilt Solenoid");
+    }
+
+    @Override
+    public void retractRearLeft() {
+        System.out.println("Retracting Rear Left Stilt Solenoid");
+    }
+
+    @Override
+    public void retractRearRight() {
+        System.out.println("Retracting Rear Right Stilt Solenoid");
+    }
 }

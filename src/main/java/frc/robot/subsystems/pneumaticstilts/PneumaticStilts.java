@@ -28,5 +28,13 @@ public abstract class PneumaticStilts extends Subsystem {
 
     public abstract void stopRearRight();
 
+    public abstract void retractFrontLeft();
+
+    public abstract void retractFrontRight();
+
+    public abstract void retractRearLeft();
+
+    public abstract void retractRearRight();
+
 
 }
