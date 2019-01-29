@@ -17,9 +17,16 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
    * creates the encoderPID from the PIDMultiton class.
    */
   private DrivetrainEncoderPIDController() {
+    super.absoluteTolerance = 3;
+    super.p = 0;
+    super.i = 0;
+    super.d = 0;
+    super.subsytemName = "EncoderPIDHeader";
+    super.pidName = "EncoderPID";
+
     encoder = Robot.drivetrainLeftRearEncoder;
     super.trace = Trace.getInstance();
-    encoder.putSensorOnLiveWindow("DriveTrain", "LeftRearEncoder");
+    encoder.putSensorOnLiveWindow(super.subsytemName, "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut();
     pidConfiguration = new PIDConfiguration();
     super.setPIDConfiguration(pidConfiguration);

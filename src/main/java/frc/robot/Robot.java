@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.GyroPIDController;
 import frc.robot.commands.*;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
@@ -98,15 +99,18 @@ public class Robot extends TimedRobot {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
     if (conf.hasPath("sensors.drivetrainFrontUltrasonic")) {
-      int ping = getConfig().getConfig("sensors").getInt
-      ("drivetrainFrontUltrasonicPing");
-      int echo = getConfig().getConfig("sensors").getInt
-      ("drivetrainFrontUltrasonicEcho");
+      int ping = 0;// getConfig().getConfig("sensors").getInt
+      //("drivetrainFrontUltrasonicPing"); 
+      int echo = 1;//getConfig().getConfig("sensors").getInt
+      //("drivetrainFrontUltrasonicEcho");
       drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
     }else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
+  
+    gyroPID = new GyroPIDController();
 
+    
     driveController = new Joystick(0);
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();

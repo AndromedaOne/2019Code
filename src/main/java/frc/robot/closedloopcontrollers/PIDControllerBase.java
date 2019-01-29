@@ -12,6 +12,8 @@ public class PIDControllerBase {
   protected double p = 0;
   protected double i = 0;
   protected double d = 0;
+  protected String subsytemName;
+  protected String pidName;
 
   /**
    * Sets the setpoint for pidController
@@ -60,6 +62,7 @@ public class PIDControllerBase {
     pidConfiguration.setAbsoluteTolerance(absoluteTolerance);
     pidConfiguration.setMaximumOutput(outputRange);
     pidConfiguration.setMinimumOutput(-outputRange);
-    pidConfiguration.setLiveWindowName("DriveTrain");
+    pidConfiguration.setLiveWindowName(subsytemName);
+    pidConfiguration.setPIDName(pidName);
   }
 }

@@ -60,6 +60,7 @@ public abstract class SensorBase {
 
     };
     LiveWindow.add(sendable);
+
   }
 
   /**

@@ -75,9 +75,9 @@ public class PIDMultiton {
 
     pidController.setAbsoluteTolerance(config.getAbsoluteTolerance());
 
+    pidController.setName(config.getLiveWindowName(), config.getPIDName());
     LiveWindow.add(pidController);
-    pidController.setName(config.getLiveWindowName(), "Encoder");
-
+  
   }
 
   /**

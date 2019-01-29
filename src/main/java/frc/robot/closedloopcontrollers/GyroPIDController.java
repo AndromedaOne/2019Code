@@ -22,11 +22,13 @@ public class GyroPIDController extends PIDControllerBase {
         super.p = 0;
         super.i = 0;
         super.d = 0;
+        super.subsytemName = "GyroPIDHeader";
+        super.pidName = "GyroPID";
 
         navXGyroSensor = NavXGyroSensor.getInstance();
         super.trace = Trace.getInstance();
         gyroPIDOut = new GyroPIDOut();
-        navXGyroSensor.putSensorOnLiveWindow("Drivetrain", "Gyro");
+        navXGyroSensor.putSensorOnLiveWindow(super.subsytemName, "Gyro");
         super.setPIDConfiguration(pidConfiguration);
         super.pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, pidConfiguration);
     }

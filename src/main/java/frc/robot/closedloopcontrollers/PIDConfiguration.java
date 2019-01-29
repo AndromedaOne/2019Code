@@ -70,4 +70,14 @@ public class PIDConfiguration {
   public void setLiveWindowName(String liveWindowNameParam) {
     liveWindowName = liveWindowNameParam;
   }
+
+  private String pidName;
+  
+  public String getPIDName(){
+    return pidName;
+  }
+
+  public void setPIDName(String pidNameParam){
+    pidName = pidNameParam;
+  }
 }
