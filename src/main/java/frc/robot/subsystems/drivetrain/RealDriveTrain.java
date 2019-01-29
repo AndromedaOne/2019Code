@@ -12,26 +12,28 @@ import frc.robot.commands.TeleOpDrive;
  *
  */
 public class RealDriveTrain extends DriveTrain {
-  public static WPI_TalonSRX driveTrainLeftFrontTalon;
-  public static WPI_TalonSRX driveTrainLeftRearTalon;
+  public static WPI_TalonSRX driveTrainLeftTalon1;
+  public static WPI_TalonSRX driveTrainLeftTalon2;
   public static SpeedControllerGroup driveTrainLeftSpeedController;
-  public static WPI_TalonSRX driveTrainRightFrontTalon;
-  public static WPI_TalonSRX driveTrainRightRearTalon;
+  public static WPI_TalonSRX driveTrainRightTalon3;
+  public static WPI_TalonSRX driveTrainRightTalon4;
   public static SpeedControllerGroup driveTrainRightSpeedController;
   public static DifferentialDrive differentialDrive;
 
   @Override
   public void initDefaultCommand() {
     Config conf = Robot.getConfig();
-    Config driveConf = conf.getConfig("ports.can");
+    Config driveConf = conf.getConfig("ports.driveTrain");
     setDefaultCommand(new TeleOpDrive());
-    driveTrainLeftFrontTalon = new WPI_TalonSRX(driveConf.getInt("leftFrontTalon"));
-    driveTrainLeftRearTalon = new WPI_TalonSRX(driveConf.getInt("leftRearTalon"));
-    driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftFrontTalon, driveTrainLeftRearTalon);
-    driveTrainRightFrontTalon = new WPI_TalonSRX(driveConf.getInt("rightFrontTalon"));
-    driveTrainRightRearTalon = new WPI_TalonSRX(driveConf.getInt("rightRearTalon"));
-    driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightFrontTalon, driveTrainRightRearTalon);
+    driveTrainLeftTalon1 = new WPI_TalonSRX(driveConf.getInt("leftTalon1"));
+    driveTrainLeftTalon2 = new WPI_TalonSRX(driveConf.getInt("leftTalon2"));
+    driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftTalon1, driveTrainLeftTalon2);
+    driveTrainRightTalon3 = new WPI_TalonSRX(driveConf.getInt("rightTalon3"));
+    driveTrainRightTalon4 = new WPI_TalonSRX(driveConf.getInt("rightTalon4"));
+    driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightTalon3, driveTrainRightTalon4);
     differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
+
+
   }
 
   @Override
