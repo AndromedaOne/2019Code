@@ -32,11 +32,12 @@ public class TeleOpDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Joystick drivecontroller = Robot.driveController;
-    double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(drivecontroller);
+    Joystick driveController = Robot.driveController;
+    
+    double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
 
-    double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(drivecontroller);
-    Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
+    double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
+    Robot.driveTrain.move(forwardBackwardStickValue * mod, -rotateStickValue * mod);
 
     // 48 on slowmodedelaycounter is about a second
     if (m_slowmodedelaycounter > 12 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
