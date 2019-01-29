@@ -54,4 +54,12 @@ public class RealDriveTrain extends DriveTrain {
     differentialDrive.stopMotor();
   }
 
+  public void shiftToLowGear() {
+    shifterSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void shiftToHighGear() {
+    shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+
 }

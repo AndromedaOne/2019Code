@@ -17,4 +17,16 @@ public class MockDriveTrain extends DriveTrain {
     System.out.println("DriveTrain Stop");
   }
 
+  @Override
+  public void shiftToLowGear() {
+
+  }
+
+  @Override
+  public void shiftToHighGear() {
+
+  }
+
+ 
+
 }
