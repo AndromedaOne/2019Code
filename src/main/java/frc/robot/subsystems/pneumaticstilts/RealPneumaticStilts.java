@@ -4,47 +4,109 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class RealPneumaticStilts extends PneumaticStilts {
 
-    private static DoubleSolenoid frontLeftSolenoid;
-    private static DoubleSolenoid frontRightSolenoid;
-    private static DoubleSolenoid rearLeftSolenoid;
-    private static DoubleSolenoid rearRightSolenoid;
+    private class StiltLeg {
+        private RetractorStates currentState;
+        private long currentDelayTime;
+        private long currentHoldTime;
+        private DoubleSolenoid solenoid;
+        
 
-    public RealPneumaticStilts() {
-        frontLeftSolenoid = new DoubleSolenoid(0, 0, 1);
-        frontRightSolenoid = new DoubleSolenoid(0, 2, 3);
-        rearLeftSolenoid = new DoubleSolenoid(0, 4, 5);
-        rearRightSolenoid = new DoubleSolenoid(0, 6, 7);
+        StiltLeg(DoubleSolenoid mySolenoid) {
+            solenoid = mySolenoid;
+        }
+        public RetractorStates getCurrentState() {
+            return currentState;
+        }
+        public void setCurrentState(RetractorStates newState) {
+            currentState = newState;
+        }
+        public long getCurrentDelayTime() {
+            return currentDelayTime;
+        }
+        public void setCurrentDelayTime(long newDelayTime) {
+            currentDelayTime = newDelayTime;
+        }
+        public long getCurrentHoldTime() {
+            return currentHoldTime;
+        }
+        public void setCurrentHoldTime(long newHoldTime) {
+            currentHoldTime = newHoldTime;
+        }
+        public void extendLeg() {
+            solenoid.set(DoubleSolenoid.Value.kForward);
+        }
+        public void retractLeg() {
+            solenoid.set(DoubleSolenoid.Value.kReverse);
+        }
+        public void stopLeg() {
+            solenoid.set(DoubleSolenoid.Value.kOff);
+        }
     }
 
-    public void extendFrontLeft() {
-        frontLeftSolenoid.set(DoubleSolenoid.Value.kForward);
+    private static StiltLeg frontLeftStiltLeg;
+    private static StiltLeg frontRightStiltLeg;
+    private static StiltLeg rearLeftStiltLeg;
+    private static StiltLeg rearRightStiltLeg;
+
+    	// Duty Cycle on solenoid is 5 times a second
+	private final long kDelayTime = 201;
+	private final long kHoldTime = 200;
+
+	enum RetractorStates {
+		Stop,
+		BeginMovingUp,
+		Moving,
+		BeginMovingDown,
+		MovingDown,
+		InchingDelay
     }
 
-    public void extendFrontRight() {
-        frontRightSolenoid.set(DoubleSolenoid.Value.kForward);
+    private RealPneumaticStilts() {
+
+        frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 0, 1));
+        frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 2, 3));
+        rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 4, 5));
+        rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7));
     }
 
-    public void extendRearLeft() {
-        rearLeftSolenoid.set(DoubleSolenoid.Value.kForward);
-    }
-
-    public void extendRearRight() {
-        rearRightSolenoid.set(DoubleSolenoid.Value.kForward);
-    }
-
-    public void stopFrontLeft() {
-        frontLeftSolenoid.set(DoubleSolenoid.Value.kOff);
-    }
-
-    public void stopFrontRight() {
-        frontRightSolenoid.set(DoubleSolenoid.Value.kOff);
-    }
-
-    public void stopRearLeft() {
-        rearLeftSolenoid.set(DoubleSolenoid.Value.kOff);
-    }
-
-    public void stopRearRight() {
-        rearRightSolenoid.set(DoubleSolenoid.Value.kOff);
+    public void move(double speed, StiltLeg leg) {
+        System.out.println("Current State = " + leg.getCurrentState());
+			long currentTime = System.currentTimeMillis();
+			switch (leg.getCurrentState()) {
+			case Stop:
+				leg.stopLeg();
+				if(speed > 0) {
+					leg.setCurrentState(RetractorStates.BeginMovingUp);
+				}
+				if(speed < 0) {
+                    leg.setCurrentState(RetractorStates.BeginMovingDown);	
+                }
+				break;
+			case BeginMovingUp:
+				leg.setCurrentDelayTime((long) (currentTime + kDelayTime / speed));
+				leg.setCurrentHoldTime(currentTime + kHoldTime);
+				leg.retractLeg();
+				leg.setCurrentState(RetractorStates.Moving);
+				break;
+			case Moving:
+				if(currentTime > leg.getCurrentHoldTime()) {
+					leg.stopLeg();
+					leg.setCurrentState(RetractorStates.InchingDelay);
+				}
+				break;
+			case BeginMovingDown:
+				leg.setCurrentDelayTime((long) (currentTime + kDelayTime / -speed));
+				leg.setCurrentHoldTime(currentTime + kHoldTime);
+				leg.extendLeg();
+				leg.setCurrentState(RetractorStates.Moving);
+				break;
+			case InchingDelay: 
+				if(currentTime > leg.getCurrentDelayTime()) {
+					leg.setCurrentState(RetractorStates.Stop);
+				}
+				break;
+			default: 
+				leg.setCurrentState(RetractorStates.Stop);
+			}
     }
 }
