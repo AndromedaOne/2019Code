@@ -109,24 +109,4 @@ public class RealPneumaticStilts extends PneumaticStilts {
 				leg.setCurrentState(RetractorStates.Stop);
 			}
     }
-
-    @Override
-    public void retractFrontLeft() {
-        frontLeftSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    @Override
-    public void retractFrontRight() {
-        frontRightSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    @Override
-    public void retractRearLeft() {
-        rearLeftSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    @Override
-    public void retractRearRight() {
-        rearRightSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
 }
