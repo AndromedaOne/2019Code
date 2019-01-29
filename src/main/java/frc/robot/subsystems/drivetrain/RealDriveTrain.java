@@ -55,11 +55,11 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void shiftToLowGear() {
-    shifterSolenoid.set(DoubleSolenoid.Value.kForward);
+    shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void shiftToHighGear() {
-    shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
+    shifterSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
 }
