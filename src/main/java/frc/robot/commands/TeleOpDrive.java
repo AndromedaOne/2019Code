@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -15,6 +16,8 @@ public class TeleOpDrive extends Command {
   private int m_slowmodedelaycounter;
   private boolean slowMoEnabled;
   private double mod;
+  private boolean shifterHigh = false;
+  private int shifterDelayCounter = 0;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -33,11 +36,25 @@ public class TeleOpDrive extends Command {
   @Override
   protected void execute() {
     Joystick driveController = Robot.driveController;
-    
+
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24) {
+      shifterDelayCounter = 0;
+      if (shifterHigh) {
+        Robot.driveTrain.shiftToLowGear();
+        shifterHigh = false;
+      } else {
+        Robot.driveTrain.shiftToHighGear();
+        shifterHigh = true;
+      }      
+    }
+
+    shifterDelayCounter++;
     double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
 
     double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
-    Robot.driveTrain.move(forwardBackwardStickValue * mod, -rotateStickValue * mod);
+    if (shifterDelayCounter >= 24) {
+      Robot.driveTrain.move(forwardBackwardStickValue * mod, -rotateStickValue * mod);
+    }
 
     // 48 on slowmodedelaycounter is about a second
     if (m_slowmodedelaycounter > 12 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
