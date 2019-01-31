@@ -48,27 +48,11 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
     }
 
     /**
-     * Takes a value between -1 and 1 and sets the percent output of the 
-     * topExtendableArmAndWristTalon to that value
+     * @param hatchOrCargo Whether or not the robot is carrying a hatch panel or a cargo ball
+     * @param armLevel the level to raise the arm to
      */
-    public void moveTopExtendableArmAndWristTalon(double value) {
-        topExtendableArmAndWristTalon.set(ControlMode.PercentOutput, value);
-    }
+    public void goToHeight(EnumHatchOrCargo hatchOrCargo, EnumArmLevel armLevel) {
 
-    /**
-     * Takes a value between -1 and 1 and sets the percent output of the 
-     * bottomExtendableArmAndWristTalon to that value
-     */
-    public void moveBottomExtendableArmAndWristTalon(double value) {
-        bottomExtendableArmAndWristTalon.set(ControlMode.PercentOutput, value);
-    }
-
-    /**
-     * Takes a value between -1 and 1 and sets the percent output of the 
-     * shoulderJointTalon to that value
-     */
-    public void moveShoulderJointTalon(double value) {
-        shoulderJointTalon.set(ControlMode.PercentOutput, value);
     }
 
 }
