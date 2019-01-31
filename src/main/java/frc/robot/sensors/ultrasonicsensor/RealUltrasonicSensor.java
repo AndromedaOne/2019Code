@@ -9,6 +9,7 @@ public class RealUltrasonicSensor extends UltrasonicSensor {
   protected String subsystemName;
   protected String sensorName;
 
+
   /**
    * Creates the ultrasonic with the ping and echo ports passed in
    * @param ping
@@ -16,6 +17,8 @@ public class RealUltrasonicSensor extends UltrasonicSensor {
    */
   public RealUltrasonicSensor(int ping, int echo) {
     ultrasonic = new Ultrasonic(ping, echo);
+    ultrasonic.setEnabled(true);
+    ultrasonic.setAutomaticMode(true);
   }
 
   @Override
