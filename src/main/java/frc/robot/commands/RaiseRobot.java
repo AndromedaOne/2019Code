@@ -2,12 +2,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.sensors.NavXGyroSensor;
+import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
+import frc.robot.Robot;
 
 public class RaiseRobot extends Command {
 
     private NavXGyroSensor gyro = NavXGyroSensor.getInstance();
+    private PneumaticStilts pneumaticStilts = Robot.getPneumaticStilts();
     private double initialXValue = 0;
     private double initialYValue = 0;
+    private double frontLeftError = 0;
+    private double frontRightError = 0;
+    private double rearLeftError = 0;
+    private double rearRightError = 0;
     private double p = 0;
 
     public void initialize() {
@@ -20,25 +27,29 @@ public class RaiseRobot extends Command {
         double angleY = gyro.getYAngle() - initialYValue;
         double angleX = gyro.getXAngle() - initialXValue;
 
-        //Left Front Solenoid
+        //Left Front Leg
         if((angleY < 0) || (angleX < 0)) {
-            error = p * (Math.abs(angleY) + Math.abs(angleX));
+            frontLeftError =  1 - (p * (Math.abs(angleY) + Math.abs(angleX)));
         }
 
-        // Left Rear Solenoid
+        // Left Rear Leg
         if((angleY > 0 ) || (angleX < 0)) {
-            error = p * (angleY + Math.abs(angleX));
+            rearLeftError = 1 - (p * (angleY + Math.abs(angleX)));
         }
 
-        // Right Front Solenoid
+        // Right Front Leg
         if ((angleY < 0) || (angleX > 0)) {
-            error = p * (Math.abs(angleY) + angleX);
+            frontRightError = 1 - (p * (Math.abs(angleY) + angleX));
         }
 
-        // Right Rear Solenoid
+        // Right Rear Leg
         if ((angleY > 0) || (angleX > 0)) {
-            error = p * (angleY + angleX);
+            rearRightError = 1 - (p * (angleY + angleX));
         }
+
+        pneumaticStilts.move(frontLeftError, frontRightError,
+        rearLeftError, rearRightError);
+
     }
 
     

@@ -63,6 +63,10 @@ public class Robot extends TimedRobot {
     return conf;
   }
 
+  public static PneumaticStilts getPneumaticStilts() {
+    return pneumaticStilts;
+  }
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
