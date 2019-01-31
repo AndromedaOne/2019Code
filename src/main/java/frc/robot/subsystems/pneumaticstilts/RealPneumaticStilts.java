@@ -34,7 +34,7 @@ public class RealPneumaticStilts extends PneumaticStilts {
             solenoid.set(DoubleSolenoid.Value.kForward);
         }
 
-        public void move(double speed) {
+        public void stabilizedMove(double speed) {
             System.out.println("Current State = " + currentState);
             long currentTime = System.currentTimeMillis();
             switch (currentState) {
@@ -82,7 +82,7 @@ public class RealPneumaticStilts extends PneumaticStilts {
     private static StiltLeg rearLeftStiltLeg;
     private static StiltLeg rearRightStiltLeg;
 
-    private RealPneumaticStilts() {
+    public RealPneumaticStilts() {
 
         frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 0, 1));
         frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 2, 3));
@@ -90,13 +90,13 @@ public class RealPneumaticStilts extends PneumaticStilts {
         rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7));
     }
 
-    public void move(double frontLeftLeg, double frontRightLeg, 
+    public void stabilizedMove(double frontLeftLeg, double frontRightLeg, 
         double rearLeftLeg, double rearRightLeg)
     {
-        frontLeftStiltLeg.move(frontLeftLeg);
-        frontRightStiltLeg.move(frontRightLeg);
-        rearLeftStiltLeg.move(rearLeftLeg);
-        rearRightStiltLeg.move(rearRightLeg);
+        frontLeftStiltLeg.stabilizedMove(frontLeftLeg);
+        frontRightStiltLeg.stabilizedMove(frontRightLeg);
+        rearLeftStiltLeg.stabilizedMove(rearLeftLeg);
+        rearRightStiltLeg.stabilizedMove(rearRightLeg);
     }
 
     public void stopAllLegs()
@@ -106,4 +106,58 @@ public class RealPneumaticStilts extends PneumaticStilts {
         rearLeftStiltLeg.stopLeg();
         rearRightStiltLeg.stopLeg();
     }
+
+    public void extendFrontLeft() {
+        frontLeftStiltLeg.extendLeg();
+    }
+
+    public void extendFrontRight() {
+        frontRightStiltLeg.extendLeg();
+    }
+
+    public void extendRearLeft() {
+        rearLeftStiltLeg.extendLeg();
+    }
+
+    public void extendRearRight() {
+        rearRightStiltLeg.extendLeg();
+    }
+
+    public void stopFrontLeft() {
+        frontLeftStiltLeg.stopLeg();
+    }
+
+    public void stopFrontRight() {
+        frontRightStiltLeg.stopLeg();
+    }
+
+    public void stopRearLeft() {
+        rearLeftStiltLeg.stopLeg();
+    }
+
+    public void stopRearRight() {
+        rearRightStiltLeg.stopLeg();
+    }
+
+    @Override
+    public void retractFrontLeft() {
+        frontLeftStiltLeg.retractLeg();
+    }
+
+    @Override
+    public void retractFrontRight() {
+        frontRightStiltLeg.retractLeg();
+    }
+
+    @Override
+    public void retractRearLeft() {
+        rearLeftStiltLeg.retractLeg();
+    }
+
+    @Override
+    public void retractRearRight() {
+        rearRightStiltLeg.retractLeg();
+    }
+
+
 }

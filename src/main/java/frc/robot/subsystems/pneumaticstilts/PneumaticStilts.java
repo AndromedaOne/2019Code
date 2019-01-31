@@ -12,9 +12,33 @@ public abstract class PneumaticStilts extends Subsystem {
        // setDefaultCommand(new RaiseRobot());
     }
     
-    public abstract void move(double frontLeftLeg, double frontRightLeg, 
+    public abstract void stabilizedMove(double frontLeftLeg, double frontRightLeg, 
     double rearLeftLeg, double rearRightLeg);
 
     public abstract void stopAllLegs();
+
+    public abstract void extendFrontLeft();
+
+    public abstract void extendFrontRight();
+
+    public abstract void extendRearLeft();
+
+    public abstract void extendRearRight();
+
+    public abstract void stopFrontLeft();
+
+    public abstract void stopFrontRight();
+
+    public abstract void stopRearLeft();
+
+    public abstract void stopRearRight();
+
+    public abstract void retractFrontLeft();
+
+    public abstract void retractFrontRight();
+
+    public abstract void retractRearLeft();
+
+    public abstract void retractRearRight();
 
 }
