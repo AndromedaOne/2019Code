@@ -2,7 +2,6 @@ package frc.robot.sensors.ultrasonicsensor;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.sensors.SensorBase;
 
 public abstract class UltrasonicSensor extends SensorBase implements PIDSource {

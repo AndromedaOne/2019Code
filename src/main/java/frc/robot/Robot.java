@@ -90,7 +90,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    
     System.out.println("Here is my config: " + conf);
 
     if (conf.hasPath("subsystems.drivetrain")) {
@@ -110,24 +109,22 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.extendablearmandwrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
-    }
-    else{
+    } else {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
-    } 
+    }
     if (conf.hasPath("sensors.drivetrainFrontUltrasonic")) {
       int ping = 0;// getConfig().getConfig("sensors").getInt
-      //("drivetrainFrontUltrasonicPing"); 
-      int echo = 1;//getConfig().getConfig("sensors").getInt
-      //("drivetrainFrontUltrasonicEcho");
+      // ("drivetrainFrontUltrasonicPing");
+      int echo = 1;// getConfig().getConfig("sensors").getInt
+      // ("drivetrainFrontUltrasonicEcho");
       drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
-    }else {
+    } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
-  
+
     gyroPID = new GyroPIDController();
 
-    
     driveController = new Joystick(0);
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
@@ -137,7 +134,7 @@ public class Robot extends TimedRobot {
     lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 100);
 
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
-    //chooser.addOption("My Auto", new MyAutoCommand());
+    // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
   }
 

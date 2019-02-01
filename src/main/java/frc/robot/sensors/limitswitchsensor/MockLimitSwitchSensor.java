@@ -9,7 +9,6 @@ public class MockLimitSwitchSensor extends LimitSwitchSensor {
 
   @Override
   public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-    System.out.println("Cannot put the sensor named: " + sensorNameParam +
-    "on live window because it does not exist");
+    System.out.println("Cannot put the sensor named: " + sensorNameParam + "on live window because it does not exist");
   }
 }
