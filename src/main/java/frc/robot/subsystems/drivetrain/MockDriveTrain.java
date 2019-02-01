@@ -1,22 +1,27 @@
 package frc.robot.subsystems.drivetrain;
 
-public class MockDriveTrain extends DriveTrain
-{
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-    @Override
-    protected void initDefaultCommand() {
-        System.out.println("DriveTrain initDefaultCommand");
-    }
+public class MockDriveTrain extends DriveTrain {
 
-    @Override
-    public void move(double forwardBackSpeed, double rotateAmount) {
-        System.out.println("Moving at" + forwardBackSpeed/100 + 
-        "% and rotating at"+ rotateAmount/100 + "%");
-    }
+  @Override
+  protected void initDefaultCommand() {
+    System.out.println("DriveTrain initDefaultCommand");
+  }
 
-    @Override
-    public void stop() {
-        System.out.println("DriveTrain Stop");
-    }
+  @Override
+  public void move(double forwardBackSpeed, double rotateAmount) {
+    System.out.println("Moving at" + forwardBackSpeed / 100 + "% and rotating at" + rotateAmount / 100 + "%");
+  }
+
+  @Override
+  public void stop() {
+    System.out.println("DriveTrain Stop");
+  }
+
+  @Override
+  public WPI_TalonSRX getLeftRearTalon() {
+    return null;
+  }
 
 }
