@@ -12,6 +12,7 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -52,7 +53,8 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
-
+  public static LineFollowerSensorArray lineFollowerSensorArray;
+  public static ExtendableArmAndWrist extendableArmAndWrist;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -104,10 +106,6 @@ public class Robot extends TimedRobot {
       drivetrain = new MockDriveTrain();
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
-    else{
-      System.out.println("Using fake drivetrain");
-      driveTrain=new MockDriveTrain();
-    } 
 
     if (conf.hasPath("subsystems.extendablearmandwrist")) {
       System.out.println("Using real extendablearmandwrist");

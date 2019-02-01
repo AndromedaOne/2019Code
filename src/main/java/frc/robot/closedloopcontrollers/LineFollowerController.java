@@ -54,6 +54,11 @@ public class LineFollowerController implements ClosedLoopControllerBase {
         return false;
     }
 
+    @Override
+    public void enable(double setpoint) {
+
+    }
+
 
     
 }

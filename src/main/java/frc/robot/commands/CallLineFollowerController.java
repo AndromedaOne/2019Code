@@ -12,8 +12,8 @@ public class CallLineFollowerController extends Command {
     private int counter = 0;
 
     public CallLineFollowerController() {
-        controller = new LineFollowerController(Robot.driveTrain, Robot.lineFollowerSensorArray);
-        requires(Robot.driveTrain);
+        controller = new LineFollowerController(Robot.drivetrain, Robot.lineFollowerSensorArray);
+        requires(Robot.drivetrain);
 
     }
     @Override
