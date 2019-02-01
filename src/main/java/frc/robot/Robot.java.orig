@@ -10,12 +10,16 @@ package frc.robot;
 <<<<<<< HEAD
 import edu.wpi.first.wpilibj.I2C;
 =======
+>>>>>>> origin/PololuLineSensor
 import java.io.File;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
->>>>>>> master
+<<<<<<< HEAD
+=======
+import edu.wpi.first.wpilibj.I2C;
+>>>>>>> origin/PololuLineSensor
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -24,17 +28,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 <<<<<<< HEAD
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utilities.I2CBusDriver;
 import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.subsystems.drivetrain.MockDriveTrain;
+import frc.robot.subsystems.drivetrain.RealDriveTrain;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 =======
+import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
->>>>>>> master
+import frc.robot.utilities.I2CBusDriver;
+>>>>>>> origin/PololuLineSensor
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -46,11 +55,11 @@ import frc.robot.subsystems.drivetrain.RealDriveTrain;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
-<<<<<<< HEAD
   public static LineFollowerSensorArray lineFollowerSensorArray;
-  protected static Config conf = ConfigFactory.load();
+<<<<<<< HEAD
 =======
 
+>>>>>>> origin/PololuLineSensor
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
@@ -74,7 +83,6 @@ public class Robot extends TimedRobot {
   public static Config getConfig() {
     return conf;
   }
->>>>>>> master
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -96,17 +104,15 @@ public class Robot extends TimedRobot {
       driveTrain = new MockDriveTrain();
     }
     driveController = new Joystick(0);
-<<<<<<< HEAD
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
+<<<<<<< HEAD
     lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 160);
 =======
-
-    System.out.println("This is " + getName() + ".");
-
->>>>>>> master
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10, 0.5, 8 /* TODO: Change these! */);
+>>>>>>> origin/PololuLineSensor
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
-    //chooser.addOption("My Auto", new MyAutoCommand());
+    // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
   }
 
