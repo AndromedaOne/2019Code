@@ -99,10 +99,8 @@ public class Robot extends TimedRobot {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
     if (conf.hasPath("sensors.drivetrainFrontUltrasonic")) {
-      int ping = 0;// getConfig().getConfig("sensors").getInt
-      //("drivetrainFrontUltrasonicPing"); 
-      int echo = 1;//getConfig().getConfig("sensors").getInt
-      //("drivetrainFrontUltrasonicEcho");
+      int ping = conf.getInt("sensors.drivetrainFrontUltrasonic.ping");
+      int echo = conf.getInt("sensors.drivetrainFrontUltrasonic.echo");
       drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
     }else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
