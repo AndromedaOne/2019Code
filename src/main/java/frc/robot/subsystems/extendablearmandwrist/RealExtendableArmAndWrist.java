@@ -52,24 +52,24 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
    * @param armLevel the level to raise the arm to
    */
 
-    @Override
-    public void goToHeight(EnumHatchOrCargo hatchOrCargo, EnumArmLevel armLevel) {
+  @Override
+  public void goToHeight(EnumHatchOrCargo hatchOrCargo, EnumArmLevel armLevel) {
 
-    }
+  }
 
-    @Override
-    public void stow() {
- 
-    }
+  @Override
+  public void stow() {
 
-    //TODO: Fill these out
-    /**
-     * @param forwardBackSpeed
-     * @param rotateAmount
-     */
-    @Override
-    public void move(double forwardBackSpeed, double rotateAmount){
+  }
+
+  // TODO: Fill these out
+  /**
+   * @param forwardBackSpeed
+   * @param rotateAmount
+   */
+  @Override
+  public void move(double forwardBackSpeed, double rotateAmount) {
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
-    }
-    
+  }
+
 }
