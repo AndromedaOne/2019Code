@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
-import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -45,7 +44,7 @@ public class TeleOpDrive extends Command {
       } else {
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
-      }      
+      }
     }
 
     shifterDelayCounter++;

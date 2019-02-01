@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
@@ -37,8 +36,8 @@ public class RealDriveTrain extends DriveTrain {
     differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
 
     // Gear Shift Solenoid
-    shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"), driveConf.getInt("pneumatics.backwardsChannel"));  
-
+    shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
+        driveConf.getInt("pneumatics.backwardsChannel"));
 
   }
 

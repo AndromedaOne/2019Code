@@ -8,29 +8,31 @@ public class LineFollowerController implements ClosedLoopControllerBase {
   private DriveTrain driveTrain;
   private LineFollowerSensorArray sensor;
   private final double kMinimumLineAngle = Math.toRadians(10);
-    private final double kForwardSpeed = .39;
-    private final double kRotateAmount = .6; //all constants are currently placeholders
+  private final double kForwardSpeed = .39;
+  private final double kRotateAmount = .6; // all constants are currently placeholders
 
   public LineFollowerController(DriveTrain driveTrain1, LineFollowerSensorArray lineFollowerSensorArray) {
     driveTrain = driveTrain1;
     sensor = lineFollowerSensorArray;
 
   }
-    private int debugCounter = 9;
-    private LineFollowerSensorArray.LineFollowArraySensorReading v;
+
+  private int debugCounter = 9;
+  private LineFollowerSensorArray.LineFollowArraySensorReading v;
+
   public void run() {
-        LineFollowerSensorArray.LineFollowArraySensorReading v = sensor.getSensorReading();
-        if(v.lineFound = true) {
-            return;
-        }
-        debugCounter++;
-        if (debugCounter == 10) {
-            v = sensor.getSensorReading();
-            debugCounter = 0;
-        }
-        SmartDashboard.putBoolean("IsLineFound", v.lineFound);
-        SmartDashboard.putNumber("Angle", v.lineAngle);
-        if (v.lineFound) {
+    LineFollowerSensorArray.LineFollowArraySensorReading v = sensor.getSensorReading();
+    if (v.lineFound = true) {
+      return;
+    }
+    debugCounter++;
+    if (debugCounter == 10) {
+      v = sensor.getSensorReading();
+      debugCounter = 0;
+    }
+    SmartDashboard.putBoolean("IsLineFound", v.lineFound);
+    SmartDashboard.putNumber("Angle", v.lineAngle);
+    if (v.lineFound) {
       // System.out.println("I FOUND A LINE!! :D");
       if (v.lineAngle <= -kMinimumLineAngle) {
         driveTrain.move(kForwardSpeed, kRotateAmount);

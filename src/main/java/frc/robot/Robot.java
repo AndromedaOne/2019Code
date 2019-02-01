@@ -20,11 +20,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.sensors.LineFollowerSensorArray;
-import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -83,7 +84,9 @@ public class Robot extends TimedRobot {
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 160);
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 160, 12, 2, 8);
+    // Distance between sensors, number of sensors and distance to sensor are all
+    // placeholders.
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
