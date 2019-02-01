@@ -52,4 +52,14 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
 
   }
 
+    @Override
+    public void goToHeight() {
+
+    }
+
+    @Override
+    public void stow() {
+
+    }
+
 }

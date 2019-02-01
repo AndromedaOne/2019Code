@@ -12,4 +12,8 @@ public abstract class ExtendableArmAndWrist extends Subsystem {
     // need to create a default command and add it here
   }
 
+  public abstract void goToHeight();
+
+  public abstract void stow();
+
 }
