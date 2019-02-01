@@ -8,6 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.*;
+import frc.robot.utilities.ButtonsEnumerated;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -42,20 +46,28 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-  private static OI instance = new OI();
+  // Drive Controller and Buttons
+  Joystick driveController;
 
-  private OI() {
+  // Subsystem Controller and Buttons
+  Joystick subsystemController;
+  JoystickButton raiseRobotButton;
+
+  public OI() {
+    driveController = new Joystick(0);
+    subsystemController = new Joystick(1);
+    raiseRobotButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
+
+    raiseRobotButton.whenPressed(new RaiseRobot());
+
+    SmartDashboard.putData("Raise Front Left", new RaiseFrontLeft());
+    SmartDashboard.putData("Raise Front Right", new RaiseFrontRight());
+    SmartDashboard.putData("Raise Rear Left", new RaiseRearLeft());
+    SmartDashboard.putData("Raise Rear Right", new RaiseRearRight());
   }
 
-  // Controllers
-  protected Joystick driveStick = new Joystick(0);
-
-  public Joystick getDriveStick() {
-    return driveStick;
-  }
-
-  public static OI getInstance() {
-    return instance;
+  public Joystick getDriveController() {
+    return driveController;
   }
 
 }

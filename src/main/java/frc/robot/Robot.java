@@ -12,7 +12,6 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,9 +34,9 @@ import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
  */
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
-  private static PneumaticStilts pneumaticStilts;
-  public static Joystick driveController;
-  private static NavXGyroSensor gyro;
+  public static PneumaticStilts pneumaticStilts;
+  public static NavXGyroSensor gyro;
+  public static OI oi;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -63,10 +62,6 @@ public class Robot extends TimedRobot {
     return conf;
   }
 
-  public static PneumaticStilts getPneumaticStilts() {
-    return pneumaticStilts;
-  }
-
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -87,13 +82,13 @@ public class Robot extends TimedRobot {
       driveTrain = new MockDriveTrain();
     }
     pneumaticStilts = new RealPneumaticStilts();
-    driveController = new Joystick(0);
 
     System.out.println("This is " + getName() + ".");
 
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+    oi = new OI();
   }
 
   /**
@@ -116,6 +111,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    pneumaticStilts.stopAllLegs();
   }
 
   @Override

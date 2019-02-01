@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
@@ -32,14 +31,14 @@ public class TeleOpDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Joystick drivecontroller = Robot.driveController;
+    Joystick drivecontroller = Robot.oi.getDriveController();
     double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(drivecontroller);
 
     double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(drivecontroller);
     Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
 
     // 48 on slowmodedelaycounter is about a second
-    if (m_slowmodedelaycounter > 12 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
+    if (m_slowmodedelaycounter > 12 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(Robot.oi.getDriveController())) {
       m_slowmodedelaycounter = 0;
       if (!slowMoEnabled) {
         mod = 0.6;

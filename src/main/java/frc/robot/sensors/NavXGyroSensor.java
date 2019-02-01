@@ -39,10 +39,10 @@ public class NavXGyroSensor implements PIDLoopable {
     return gyro.getAngle() - initialZAngleReading;
   }
 
-  public double getXAngle(){
+  public double getXAngle() {
     return gyro.getPitch() - initialXAngleReading;
   }
-  
+
   public double getYAngle() {
     return gyro.getRoll() - initialYAngleReading;
   }
