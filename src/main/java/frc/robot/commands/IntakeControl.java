@@ -21,7 +21,7 @@ public class IntakeControl extends Command{
     @Override
     protected void execute(){
         Joystick intakeController = Robot.operatorController;
-        boolean upDButtonPressed = ButtonsEnumerated.
+      //  boolean upDButtonPressed = ButtonsEnumerated.
     }
 
    

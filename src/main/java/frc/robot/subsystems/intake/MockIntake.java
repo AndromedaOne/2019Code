@@ -10,12 +10,23 @@ public class MockIntake extends Intake{
     }
 
     @Override
-    public void moveIntakeArm(double speed) {
-        System.out.println("trying to move intake arm at " + speed);
+    public void moveToStartPosition() {
+        System.out.println("trying to move intake arm to start position"); 
+    }
+    
+    @Override
+    public void moveToCargoPosition() {
+        System.out.println("trying to move intake arm to cargo position");
+    }
+
+    @Override
+    public void moveToEndgamePosition() {
+        System.out.println("trying to move intake arm to endgame position");
     }
 
     @Override
     protected void initDefaultCommand() {
 	
     }
+
 }
