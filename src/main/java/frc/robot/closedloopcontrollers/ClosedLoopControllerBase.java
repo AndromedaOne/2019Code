@@ -1,15 +1,15 @@
 package frc.robot.closedloopcontrollers;
 
-public interface ClosedLoopControllerBase{
+public interface ClosedLoopControllerBase {
 
-    public void run();
+  public void run();
 
-    public void reset();
+  public void reset();
 
-    public void stop();
+  public void stop();
 
-    public void initialize();
+  public void initialize();
 
-    public boolean isDone();
+  public boolean isDone();
 
 }
