@@ -77,7 +77,7 @@ public class PIDMultiton {
 
     pidController.setName(config.getLiveWindowName(), config.getPIDName());
     LiveWindow.add(pidController);
-  
+
   }
 
   /**

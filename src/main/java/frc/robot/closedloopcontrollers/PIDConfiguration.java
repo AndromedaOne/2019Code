@@ -72,12 +72,12 @@ public class PIDConfiguration {
   }
 
   private String pidName;
-  
-  public String getPIDName(){
+
+  public String getPIDName() {
     return pidName;
   }
 
-  public void setPIDName(String pidNameParam){
+  public void setPIDName(String pidNameParam) {
     pidName = pidNameParam;
   }
 }
