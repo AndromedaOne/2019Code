@@ -48,6 +48,7 @@ import frc.robot.utilities.I2CBusDriver;
 public class Robot extends TimedRobot {
   public static DriveTrain drivetrain;
   public static Joystick driveController;
+  public static Joystick armController;
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
@@ -126,6 +127,7 @@ public class Robot extends TimedRobot {
     gyroPID = new GyroPIDController();
 
     driveController = new Joystick(0);
+    armController = new Joystick(1);
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
