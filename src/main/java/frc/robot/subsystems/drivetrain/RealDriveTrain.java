@@ -22,6 +22,8 @@ public class RealDriveTrain extends DriveTrain {
   public static SpeedControllerGroup driveTrainRightSpeedController;
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
+  private boolean shifterPresentFlag = false;
+  public boolean getShifterPresentFlag(){return shifterPresentFlag;}
 
   @Override
   public void initDefaultCommand() {
@@ -37,8 +39,11 @@ public class RealDriveTrain extends DriveTrain {
     differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
 
     // Gear Shift Solenoid
-    shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"), driveConf.getInt("pneumatics.backwardsChannel"));  
-
+    if(Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
+      shifterPresentFlag = true;
+      shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"), driveConf.getInt("pneumatics.backwardsChannel"));  
+    }
+    
 
   }
 

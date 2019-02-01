@@ -27,6 +27,9 @@ public class MockDriveTrain extends DriveTrain {
 
   }
 
- 
+  @Override
+  public boolean getShifterPresentFlag() {
+    return false;
+  }
 
 }

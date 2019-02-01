@@ -37,7 +37,7 @@ public class TeleOpDrive extends Command {
   protected void execute() {
     Joystick driveController = Robot.driveController;
 
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24 && Robot.driveTrain.getShifterPresentFlag()) {
       shifterDelayCounter = 0;
       if (shifterHigh) {
         Robot.driveTrain.shiftToLowGear();
