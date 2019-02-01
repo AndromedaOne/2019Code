@@ -15,4 +15,8 @@ public abstract class DriveTrain extends Subsystem {
 
   public abstract void stop();
 
+  public abstract void shiftToLowGear();
+
+  public abstract void shiftToHighGear();
+
 }
