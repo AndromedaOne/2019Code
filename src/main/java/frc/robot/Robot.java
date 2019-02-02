@@ -23,7 +23,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
-import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.commands.*;
+import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
+import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
@@ -50,7 +53,7 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
-  public static LineFollowerSensorArray lineFollowerSensorArray;
+  public static BaseLineFollowerSensor lineFollowerSensorArray;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -130,6 +133,17 @@ public class Robot extends TimedRobot {
     camera0.setFPS(10);
     camera1.setResolution(320, 240);
     camera1.setFPS(10);
+
+    if (conf.hasPath("sensors.lineFollowSensor")) {
+      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+          senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+          senseConf.getInt("numSensors"));
+    } else {
+      lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
+    }
+    m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
+    // chooser.addOption("My Auto", new MyAutoCommand());
+    // SmartDashboard.putData("Auto mode", m_chooser);
   }
 
   /**
