@@ -12,16 +12,18 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
+import frc.robot.sensors.LineFollowerSensorArray;
 import frc.robot.commands.*;
 import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
@@ -120,6 +122,18 @@ public class Robot extends TimedRobot {
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
 
+    Config senseConf = conf.getConfig("sensors.lineFollowSensor");
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+        senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+        senseConf.getInt("numSensors"));
+
+    // Camera Code
+    UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+    UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+    camera0.setResolution(320, 240);
+    camera0.setFPS(10);
+    camera1.setResolution(320, 240);
+    camera1.setFPS(10);
     if (conf.hasPath("sensors.lineFollowSensor")) {
       Config senseConf = conf.getConfig("sensors.lineFollowSensor");
       lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt ("detectionThreshold"),
