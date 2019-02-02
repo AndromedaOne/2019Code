@@ -8,8 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
+import frc.robot.commands.MoveUsingEncoderPID;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -47,6 +49,8 @@ public class OI {
   private static OI instance = new OI();
 
   private OI() {
+    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
+    testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
   }
 
