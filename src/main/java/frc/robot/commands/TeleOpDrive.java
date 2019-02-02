@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
-import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -37,7 +36,8 @@ public class TeleOpDrive extends Command {
   protected void execute() {
     Joystick driveController = Robot.driveController;
 
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24 && Robot.driveTrain.getShifterPresentFlag()) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24
+        && Robot.driveTrain.getShifterPresentFlag()) {
       shifterDelayCounter = 0;
       if (shifterHigh) {
         Robot.driveTrain.shiftToLowGear();
@@ -45,7 +45,7 @@ public class TeleOpDrive extends Command {
       } else {
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
-      }      
+      }
     }
 
     shifterDelayCounter++;

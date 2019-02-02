@@ -12,14 +12,14 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.drivetrain.DriveTrain;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.cscore.UsbCamera;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
 
@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 
     System.out.println("This is " + getName() + ".");
 
-    //Camera Code 
+    // Camera Code
     UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
     UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
     camera0.setResolution(320, 240);
