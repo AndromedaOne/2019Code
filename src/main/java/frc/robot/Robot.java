@@ -23,7 +23,7 @@ import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
 import frc.robot.commands.*;
-import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;

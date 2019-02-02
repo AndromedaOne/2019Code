@@ -1,6 +1,6 @@
 package frc.robot.closedloopcontrollers;
 
-import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 
 public class LineFollowerController implements ClosedLoopControllerBase {

@@ -1,4 +1,4 @@
-package frc.robot.sensors;
+package frc.robot.sensors.linefollowersensor;
 
 /*
 Potential Test Cases
@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import frc.robot.sensors.LineFollowerSensorArray.*;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray.*;
 import frc.robot.utilities.*;
 
 public class LineFollowerSensorTest {
