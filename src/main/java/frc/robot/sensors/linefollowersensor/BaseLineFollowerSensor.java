@@ -1,6 +1,6 @@
 package frc.robot.sensors.linefollowersensor;
 
-import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray.LineFollowArraySensorReading;
+import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
 
 public abstract class BaseLineFollowerSensor {
 

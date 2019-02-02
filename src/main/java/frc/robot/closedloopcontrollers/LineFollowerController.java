@@ -1,5 +1,6 @@
 package frc.robot.closedloopcontrollers;
 
+import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 
@@ -17,7 +18,7 @@ public class LineFollowerController implements ClosedLoopControllerBase {
   }
 
   public void run() {
-    LineFollowerSensorArray.LineFollowArraySensorReading v = sensor.getSensorReading();
+    LineFollowArraySensorReading v = sensor.getSensorReading();
     if (v.lineFound = true) {
       // System.out.println("I FOUND A LINE!! :D");
       if (v.lineAngle <= -kMinimumLineAngle) {
