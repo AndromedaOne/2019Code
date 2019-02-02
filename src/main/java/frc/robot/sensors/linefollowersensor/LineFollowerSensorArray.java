@@ -134,9 +134,6 @@ public class LineFollowerSensorArray extends BaseLineFollowerSensor {
 
   }
 
-  public class LineFollowArraySensorReading {
-    public boolean lineFound;
-    public double lineAngle;
-  }
+
 
 }
