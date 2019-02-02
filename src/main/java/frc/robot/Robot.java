@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
@@ -134,9 +133,9 @@ public class Robot extends TimedRobot {
     camera0.setFPS(10);
     camera1.setResolution(320, 240);
     camera1.setFPS(10);
-    
+
     if (conf.hasPath("sensors.lineFollowSensor")) {
-      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt ("detectionThreshold"),
+      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
           senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
           senseConf.getInt("numSensors"));
     } else {
@@ -144,7 +143,7 @@ public class Robot extends TimedRobot {
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
-    //SmartDashboard.putData("Auto mode", m_chooser);
+    // SmartDashboard.putData("Auto mode", m_chooser);
   }
 
   /**
