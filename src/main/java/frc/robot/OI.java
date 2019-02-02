@@ -8,6 +8,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.CallLineFollowerController;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -45,6 +47,7 @@ public class OI {
   private static OI instance = new OI();
 
   private OI() {
+    SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
   }
 
   // Controllers

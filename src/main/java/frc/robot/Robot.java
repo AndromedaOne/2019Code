@@ -12,6 +12,7 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -19,9 +20,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.sensors.LineFollowerSensorArray;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,6 +36,7 @@ import frc.robot.subsystems.drivetrain.RealDriveTrain;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+  public static LineFollowerSensorArray lineFollowerSensorArray;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -78,8 +82,11 @@ public class Robot extends TimedRobot {
       driveTrain = new MockDriveTrain();
     }
     driveController = new Joystick(0);
+    I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
+    I2C sunfounderbus = sunfounderdevice.getBus();
 
-    System.out.println("This is " + getName() + ".");
+    Config senseConf = conf.getConfig("sensors.lineFollowSensor");
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"), senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"), senseConf.getInt("numSensors"));
 
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
