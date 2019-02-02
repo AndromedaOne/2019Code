@@ -12,8 +12,8 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   private class StiltLeg {
     // Duty Cycle on solenoid is 5 times a second
-    private final long kDelayTime = 201;
-    private final long kHoldTime = 200;
+    private final long kDelayTime = 100;
+    private final long kHoldTime = 40;
 
     private RetractorStates currentState = RetractorStates.Stop;
     private long currentDelayTime = 0;
