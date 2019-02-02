@@ -53,7 +53,7 @@ public class TeleOpDrive extends Command {
 
     double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
     if (shifterDelayCounter >= 24) {
-      Robot.driveTrain.move(forwardBackwardStickValue * mod, -rotateStickValue * mod);
+      Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
     }
 
     // 48 on slowmodedelaycounter is about a second

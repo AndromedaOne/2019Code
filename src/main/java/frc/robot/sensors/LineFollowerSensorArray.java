@@ -5,33 +5,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LineFollowerSensorArray {
   private I2C mI2cBus;
-  private byte[] buffer = new byte[16];
-  // Distance to sensor array in centimetres
-  private double mDistanceToSensor = 10;
+  private byte[] buffer;
+  // Default Distance to sensor array in centimetres
+  private double distanceToSensor;
   // Distance between sensors in centimetres
-  private double mDistanceBtSensors = 0.5;
+  private double distanceBtSensors;
   private int detectionThreshold;
+  private int numSensors;
 
   /**
-   * Takes same parameters as I2CBusDriver() and passes it along to said
-   * constructor
-   * 
    * @param i2cBus A prebuilt I2C bus
+   * @param detectionThreshold The minimum level required for activation of the
+   * sensor
+   * @param distanceToSensor The distance from the centre of turning to the sensor
+   * @param distanceBtSensors The distance between each sensor
+   * @param numSensors the number of sensors in the array
    * @author Owen Salter
    */
-  public LineFollowerSensorArray(I2C i2cBus, int detectionThreshold) {
+  public LineFollowerSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor, double distanceBtSensors,
+      int numSensors) {
     mI2cBus = i2cBus;
     this.detectionThreshold = detectionThreshold;
-  }
-
-  /**
-   * Sets the buffer of values to 0. Not much else to say or do here. It's boring.
-   * Move along.
-   */
-  public void reset() {
-    for (int i = 0; i < buffer.length; i++) {
-      buffer[i] = 0;
-    }
+    this.distanceToSensor = distanceToSensor;
+    this.distanceBtSensors = distanceBtSensors;
+    this.numSensors = numSensors;
+    this.buffer = new byte[(numSensors * 2)];
   }
 
   /**
@@ -43,7 +41,8 @@ public class LineFollowerSensorArray {
     boolean[] boolBuf = new boolean[buffer.length / 2];
     double[] dValues = new double[buffer.length / 2];
 
-    mI2cBus.readOnly(buffer, 16);
+    mI2cBus.readOnly(buffer, (numSensors * 2) - 1);
+    // Step through each even-numbered element in the array
     for (int i = 0; i < buffer.length / 2; i++) {
       if (buffer[i * 2] >= 0) {
         dValues[i] = buffer[i * 2];
@@ -54,8 +53,9 @@ public class LineFollowerSensorArray {
     }
 
     SmartDashboard.putNumberArray("LineFollowArray", dValues);
+    // Check for whether the line is found
     for (int i = 0; i < dValues.length; i++) {
-      if (dValues[i] >= 19) {
+      if (dValues[i] >= detectionThreshold) {
         boolBuf[i] = true;
       } else {
         boolBuf[i] = false;
@@ -75,19 +75,20 @@ public class LineFollowerSensorArray {
      * Need to: - figure out adj from DistanceToSensor - get hyp from adj and op -
      * use hyp to calculate angle - return angle
      */
-    boolean[] boolBuf = new boolean[buffer.length / 2];
+    boolean[] boolBuf = new boolean[(this.numSensors / 2) + 1];
     int senseCount = 0;
-    int adj1;
+    double adj1 = 0;
 
     boolBuf = isThereLine();
+    // Get the adjacent for the angles
     for (int i = 0; i < boolBuf.length; i++) {
       if (boolBuf[i] == true) {
+        adj1 = getAdjacent(i);
         senseCount++;
       }
     }
-    adj1 = (int) mDistanceBtSensors * senseCount;
-    double angle = Math.toRadians(Math.acos(mDistanceToSensor / adj1));
 
+    double angle = Math.atan2(adj1, distanceToSensor);
     LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
     sensorReading.lineAngle = angle;
 
@@ -97,6 +98,40 @@ public class LineFollowerSensorArray {
       sensorReading.lineFound = false;
     }
     return sensorReading;
+  }
+
+  private double getAdjacent(int i) {
+    double distFromSensor = getDistanceFromCentre(i);
+    double tempAdj = 0;
+    if (distFromSensor >= 0) {
+      tempAdj = (distFromSensor) - (distanceBtSensors / 2);
+    } else {
+      tempAdj = (distFromSensor) + (distanceBtSensors / 2);
+    }
+    return tempAdj;
+  }
+
+  /**
+   * Gets the distance from the centre of the sensor (assuming 0 is the leftmost
+   * sensor and there are an even number of sensors)
+   */
+  private double getDistanceFromCentre(int i) {
+    double distFromSensor;
+    // Get the number of sensors on each side of the center
+    int halfNumSensors = (numSensors + 1) / 2;
+    // If it's on the left...
+    if (i < halfNumSensors) {
+      distFromSensor = (halfNumSensors - i);
+      distFromSensor = (distFromSensor * distanceBtSensors);
+      return distFromSensor;
+      // If it's on the right...
+    } else {
+      distFromSensor = (halfNumSensors - i) - 1;
+      distFromSensor = (distFromSensor * distanceBtSensors);
+      return distFromSensor /** = -1 */
+      ;
+    }
+
   }
 
   public class LineFollowArraySensorReading {
