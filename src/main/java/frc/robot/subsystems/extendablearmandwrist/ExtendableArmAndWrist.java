@@ -20,6 +20,8 @@ public abstract class ExtendableArmAndWrist extends Subsystem {
 
   public abstract void move(double forwardBackSpeed, double rotateAmount);
 
+  public abstract boolean moveIsDone();
+
   public abstract void shoulderRotate(double rotateAmount);
 
 }

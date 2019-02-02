@@ -10,8 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.subsystems.extendablearmandwrist.EnumArmLevel;
+import frc.robot.subsystems.extendablearmandwrist.EnumHatchOrCargo;
+import frc.robot.utilities.ButtonsEnumerated;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -52,13 +56,27 @@ public class OI {
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
     testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+
+    ButtonsEnumerated.ABUTTON.getJoystickButton(armStick)
+        .whenPressed(new AutoMoveArm(EnumArmLevel.RLOW, EnumHatchOrCargo.CARGO));
+    ButtonsEnumerated.BBUTTON.getJoystickButton(armStick)
+        .whenPressed(new AutoMoveArm(EnumArmLevel.RLOW, EnumHatchOrCargo.CARGO));
+    ButtonsEnumerated.XBUTTON.getJoystickButton(armStick)
+        .whenPressed(new AutoMoveArm(EnumArmLevel.RMED, EnumHatchOrCargo.CARGO));
+    ButtonsEnumerated.YBUTTON.getJoystickButton(armStick)
+        .whenPressed(new AutoMoveArm(EnumArmLevel.RHIGH, EnumHatchOrCargo.CARGO));
   }
 
   // Controllers
   protected Joystick driveStick = new Joystick(0);
+  protected Joystick armStick = new Joystick(1);
 
   public Joystick getDriveStick() {
     return driveStick;
+  }
+
+  public Joystick getArmStick() {
+    return armStick;
   }
 
   public static OI getInstance() {

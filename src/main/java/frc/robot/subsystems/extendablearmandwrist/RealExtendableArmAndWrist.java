@@ -78,4 +78,9 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
     shoulderJointTalon.set(ControlMode.PercentOutput, rotateAmount);
   }
 
+  @Override
+  public boolean moveIsDone() {
+    return false;
+  }
+
 }
