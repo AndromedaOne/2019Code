@@ -24,6 +24,7 @@ import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
+import frc.robot.telemetries.Trace;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -112,6 +113,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     pneumaticStilts.stopAllLegs();
+    Trace.getInstance().flushTraceFiles();
   }
 
   @Override

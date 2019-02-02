@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -222,6 +223,7 @@ public class Trace {
       }
       traceEntry.getFile().write(line);
       traceEntry.getFile().newLine();
+      System.out.println("Trace");
     } catch (IOException e) {
       System.err.println(e.getMessage());
       e.printStackTrace();

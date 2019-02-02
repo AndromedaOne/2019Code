@@ -11,9 +11,8 @@ public class RealPneumaticStilts extends PneumaticStilts {
   }
 
   private class StiltLeg {
-    // Duty Cycle on solenoid is 5 times a second
-    private final long kDelayTime = 100;
-    private final long kHoldTime = 40;
+    private final long kDelayTime = 1000;
+    private final long kHoldTime = 10;
 
     private RetractorStates currentState = RetractorStates.Stop;
     private long currentDelayTime = 0;
@@ -96,10 +95,6 @@ public class RealPneumaticStilts extends PneumaticStilts {
   }
 
   public void stabilizedMove(double frontLeftLeg, double frontRightLeg, double rearLeftLeg, double rearRightLeg) {
-
-    Trace.getInstance().addTrace(true, "Pneumatic Stilts", new TracePair("Front Left Leg", frontLeftLeg),
-        new TracePair("Front Right Leg", frontRightLeg), new TracePair("Rear Left Leg", rearLeftLeg),
-        new TracePair("Rear Right Leg", rearRightLeg));
 
     frontLeftStiltLeg.stabilizedMove(frontLeftLeg);
     frontRightStiltLeg.stabilizedMove(frontRightLeg);
