@@ -12,17 +12,17 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
-import frc.robot.commands.*;
 import frc.robot.sensors.LineFollowerSensorArray;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
@@ -123,9 +123,13 @@ public class Robot extends TimedRobot {
         senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
         senseConf.getInt("numSensors"));
 
-    m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    // Camera Code
+    UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+    UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+    camera0.setResolution(320, 240);
+    camera0.setFPS(10);
+    camera1.setResolution(320, 240);
+    camera1.setFPS(10);
   }
 
   /**
