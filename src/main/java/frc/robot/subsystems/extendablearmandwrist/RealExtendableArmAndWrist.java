@@ -6,7 +6,6 @@ import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
-import frc.robot.commands.TeleopArm;
 
 public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   private static RealExtendableArmAndWrist instance;
@@ -77,11 +76,6 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   @Override
   public void shoulderRotate(double rotateAmount) {
     shoulderJointTalon.set(ControlMode.PercentOutput, rotateAmount);
-  }
-
-  @Override
-  protected void initDefaultCommand() {
-    setDefaultCommand(new TeleopArm());
   }
 
 }
