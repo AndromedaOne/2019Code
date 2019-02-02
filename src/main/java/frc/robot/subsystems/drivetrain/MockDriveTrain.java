@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 public class MockDriveTrain extends DriveTrain {
 
   @Override
@@ -18,6 +20,10 @@ public class MockDriveTrain extends DriveTrain {
   }
 
   @Override
+  public WPI_TalonSRX getLeftRearTalon() {
+    return null;
+  }
+
   public void shiftToLowGear() {
 
   }
@@ -27,4 +33,8 @@ public class MockDriveTrain extends DriveTrain {
 
   }
 
+  @Override
+  public boolean getShifterPresentFlag() {
+    return false;
+  }
 }

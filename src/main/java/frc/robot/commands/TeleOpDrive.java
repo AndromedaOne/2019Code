@@ -36,8 +36,8 @@ public class TeleOpDrive extends Command {
   protected void execute() {
     Joystick driveController = Robot.driveController;
 
-
-
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24
+        && Robot.driveTrain.getShifterPresentFlag()) {
     shifterDelayCounter++;
     double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
 
@@ -58,6 +58,7 @@ public class TeleOpDrive extends Command {
         }
       }
     } else {
+      Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
       // 48 on slowmodedelaycounter is about a second
       if (m_slowmodedelaycounter > 12 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
         m_slowmodedelaycounter = 0;
@@ -85,6 +86,7 @@ public class TeleOpDrive extends Command {
   @Override
   protected void end() {
     Robot.driveTrain.stop();
+
   }
 
   // Called when another command which requires one or more of the same

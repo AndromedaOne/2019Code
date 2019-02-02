@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.I2C;
 
 public class I2CBusDriver {
   private I2C i2cBus;
-  private int mAddress;
 
   /**
    * Creates a new I2C bus with specified parameters
@@ -14,7 +13,6 @@ public class I2CBusDriver {
    * @author Owen Salter
    */
   public I2CBusDriver(boolean isOnboard, int address) {
-    mAddress = address;
     if (isOnboard) {
       i2cBus = new I2C(I2C.Port.kOnboard, address);
     } else {

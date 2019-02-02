@@ -12,16 +12,24 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
+import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.GyroPIDController;
 import frc.robot.sensors.LineFollowerSensorArray;
-import frc.robot.subsystems.*;
+import frc.robot.sensors.magencodersensor.MagEncoderSensor;
+import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
+import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
+import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
+import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
+import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
@@ -37,6 +45,11 @@ import frc.robot.utilities.I2CBusDriver;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Joystick driveController;
+  public static DrivetrainEncoderPIDController encoderPID;
+  public static DrivetrainUltrasonicPIDController ultrasonicPID;
+  public static GyroPIDController gyroPID;
+  public static MagEncoderSensor drivetrainLeftRearEncoder;
+  public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static LineFollowerSensorArray lineFollowerSensorArray;
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -77,19 +90,46 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
+      if (conf.hasPath("sensors.drivetrainEncoders")) {
+        drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon());
+      } else {
+        drivetrainLeftRearEncoder = new MockMagEncoderSensor();
+      }
     } else {
       System.out.println("Using fake drivetrain");
       driveTrain = new MockDriveTrain();
+      drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
+    if (conf.hasPath("sensors.drivetrainFrontUltrasonic")) {
+      int ping = conf.getInt("sensors.drivetrainFrontUltrasonic.ping");
+      int echo = conf.getInt("sensors.drivetrainFrontUltrasonic.echo");
+      drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
+    } else {
+      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
+    }
+
+    gyroPID = new GyroPIDController();
+
+    encoderPID = DrivetrainEncoderPIDController.getInstance();
+    ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
+    System.out.println("This is " + getName() + ".");
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 160, 12, 2, 8);
-    // Distance between sensors, number of sensors and distance to sensor are all
-    // placeholders.
-    m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10, 0.5, 8 /* TODO: Change these! */);
+
+    Config senseConf = conf.getConfig("sensors.lineFollowSensor");
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+        senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+        senseConf.getInt("numSensors"));
+
+    // Camera Code
+    UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+    UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+    camera0.setResolution(320, 240);
+    camera0.setFPS(10);
+    camera1.setResolution(320, 240);
+    camera1.setFPS(10);
   }
 
   /**
