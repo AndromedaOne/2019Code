@@ -26,6 +26,9 @@ public class TeleopArm extends Command {
     double actualRotateVal = (cosPi4 * rotateValue) - (sinPi4 * armWristValue);
 
     extendableArmAndWrist.move(actualArmWristVal, actualRotateVal);
+    double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
+    extendableArmAndWrist.shoulderRotate(shoulderRotateValue);
+
   }
 
   @Override

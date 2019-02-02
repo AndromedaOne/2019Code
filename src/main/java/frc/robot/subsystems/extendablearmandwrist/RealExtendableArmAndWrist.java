@@ -1,5 +1,6 @@
 package frc.robot.subsystems.extendablearmandwrist;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
@@ -70,6 +71,11 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   @Override
   public void move(double forwardBackSpeed, double rotateAmount) {
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
+  }
+
+  @Override
+  public void shoulderRotate(double rotateAmount) {
+    shoulderJointTalon.set(ControlMode.PercentOutput, rotateAmount);
   }
 
 }
