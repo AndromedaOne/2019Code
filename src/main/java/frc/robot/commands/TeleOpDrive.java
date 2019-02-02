@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
-import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -20,7 +19,7 @@ public class TeleOpDrive extends Command {
   private int shifterDelayCounter = 0;
 
   public TeleOpDrive() {
-    requires(Robot.drivetrain);
+    requires(Robot.driveTrain);
   }
 
   // Called just before this Command runs the first time
@@ -37,15 +36,16 @@ public class TeleOpDrive extends Command {
   protected void execute() {
     Joystick driveController = Robot.driveController;
 
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24 && Robot.drivetrain.getShifterPresentFlag()) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24
+        && Robot.driveTrain.getShifterPresentFlag()) {
       shifterDelayCounter = 0;
       if (shifterHigh) {
-        Robot.drivetrain.shiftToLowGear();
+        Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
       } else {
-        Robot.drivetrain.shiftToHighGear();
+        Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
-      }      
+      }
     }
 
     shifterDelayCounter++;
@@ -53,7 +53,7 @@ public class TeleOpDrive extends Command {
 
     double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
     if (shifterDelayCounter >= 24) {
-      Robot.drivetrain.move(forwardBackwardStickValue * mod, -rotateStickValue * mod);
+      Robot.driveTrain.move(forwardBackwardStickValue * mod, -rotateStickValue * mod);
     }
 
     // 48 on slowmodedelaycounter is about a second
@@ -81,7 +81,7 @@ public class TeleOpDrive extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.drivetrain.stop();
+    Robot.driveTrain.stop();
   }
 
   // Called when another command which requires one or more of the same

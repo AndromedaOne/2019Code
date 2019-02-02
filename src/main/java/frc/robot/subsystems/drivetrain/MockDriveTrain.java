@@ -1,7 +1,5 @@
 package frc.robot.subsystems.drivetrain;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 public class MockDriveTrain extends DriveTrain {
 
   @Override
