@@ -63,7 +63,7 @@ public class RealDriveTrain extends DriveTrain {
 
   @Override
   public WPI_TalonSRX getLeftRearTalon() {
-    return driveTrainLeftTalon2;
+    return driveTrainLeftTalon1;
   }
 
   public void shiftToLowGear() {
