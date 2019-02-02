@@ -1,6 +1,7 @@
 package frc.robot.subsystems.extendablearmandwrist;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.commands.TeleopArm;
 
 public abstract class ExtendableArmAndWrist extends Subsystem {
 
@@ -10,6 +11,7 @@ public abstract class ExtendableArmAndWrist extends Subsystem {
   @Override
   protected void initDefaultCommand() {
     // need to create a default command and add it here
+    setDefaultCommand(new TeleopArm());
   }
 
   public abstract void goToHeight(EnumHatchOrCargo hatchOrCargo, EnumArmLevel armLevel);
