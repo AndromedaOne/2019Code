@@ -23,8 +23,8 @@ public class TeleopArm extends Command {
     double rotateValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(armController);
 
     if (Math.abs(armWristValue) > 0.01 || Math.abs(rotateValue) > 0.01) {
-      double actualArmWristVal = (sinPi4 * rotateValue) + (cosPi4 * armWristValue);
-      double actualRotateVal = (cosPi4 * rotateValue) - (sinPi4 * armWristValue);
+      double actualArmWristVal = rotateValue;
+      double actualRotateVal = -armWristValue;
       extendableArmAndWrist.move(actualArmWristVal, actualRotateVal);
     }
 
