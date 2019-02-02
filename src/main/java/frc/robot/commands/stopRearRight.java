@@ -5,13 +5,13 @@ import frc.robot.Robot;
 
 public class StopRearRight extends Command {
 
-    public void initialize() {
-        Robot.pneumaticStilts.stopRearRight();
-    }
+  public void initialize() {
+    Robot.pneumaticStilts.stopRearRight();
+  }
 
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
 
 }

@@ -5,13 +5,13 @@ import frc.robot.Robot;
 
 public class RetractRearLeft extends Command {
 
-    public void initialize() {
-        Robot.pneumaticStilts.retractRearLeft();
-    }
+  public void initialize() {
+    Robot.pneumaticStilts.retractRearLeft();
+  }
 
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
 
 }

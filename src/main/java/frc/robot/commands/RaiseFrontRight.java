@@ -5,13 +5,13 @@ import frc.robot.Robot;
 
 public class RaiseFrontRight extends Command {
 
-    public void initialize() {
-        Robot.pneumaticStilts.extendFrontRight();
-    }
+  public void initialize() {
+    Robot.pneumaticStilts.extendFrontRight();
+  }
 
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
 
 }

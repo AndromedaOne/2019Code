@@ -5,13 +5,13 @@ import frc.robot.Robot;
 
 public class StopFrontLeft extends Command {
 
-    public void initialize() {
-        Robot.pneumaticStilts.stopFrontLeft();
-    }
+  public void initialize() {
+    Robot.pneumaticStilts.stopFrontLeft();
+  }
 
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
 
 }

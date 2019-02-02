@@ -29,15 +29,15 @@ public class RealPneumaticStilts extends PneumaticStilts {
     }
 
     public void retractLeg() {
-      solenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    public void extendLeg() {
       solenoid.set(DoubleSolenoid.Value.kForward);
     }
 
+    public void extendLeg() {
+      solenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+
     public void stabilizedMove(double speed) {
-      System.out.println("Current State = " + currentState);
+      System.out.println(currentState + "  " + currentDelayTime + "  " + currentHoldTime);
       long currentTime = System.currentTimeMillis();
       switch (currentState) {
       case Stop:
@@ -52,7 +52,7 @@ public class RealPneumaticStilts extends PneumaticStilts {
       case BeginMovingUp:
         currentDelayTime = (long) (currentTime + kDelayTime / speed);
         currentHoldTime = currentTime + kHoldTime;
-        retractLeg();
+        extendLeg();
         currentState = RetractorStates.Moving;
         break;
       case Moving:
@@ -64,7 +64,7 @@ public class RealPneumaticStilts extends PneumaticStilts {
       case BeginMovingDown:
         currentDelayTime = (long) (currentTime + kDelayTime / -speed);
         currentHoldTime = currentTime + kHoldTime;
-        extendLeg();
+        retractLeg();
         currentState = RetractorStates.Moving;
         break;
       case InchingDelay:
@@ -93,13 +93,10 @@ public class RealPneumaticStilts extends PneumaticStilts {
     stopAllLegs();
   }
 
-  public void stabilizedMove(double frontLeftLeg, double frontRightLeg,
-    double rearLeftLeg, double rearRightLeg) {
+  public void stabilizedMove(double frontLeftLeg, double frontRightLeg, double rearLeftLeg, double rearRightLeg) {
 
-    Trace.getInstance().addTrace(false, "Pneumatic Stilts",
-        new TracePair("Front Left Leg", frontLeftLeg),
-        new TracePair("Front Right Leg", frontRightLeg),
-        new TracePair("Rear Left Leg", rearLeftLeg),
+    Trace.getInstance().addTrace(true, "Pneumatic Stilts", new TracePair("Front Left Leg", frontLeftLeg),
+        new TracePair("Front Right Leg", frontRightLeg), new TracePair("Rear Left Leg", rearLeftLeg),
         new TracePair("Rear Right Leg", rearRightLeg));
 
     frontLeftStiltLeg.stabilizedMove(frontLeftLeg);

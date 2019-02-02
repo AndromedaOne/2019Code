@@ -60,10 +60,10 @@ public class OI {
 
     raiseRobotButton.whenPressed(new RaiseRobot());
 
-    SmartDashboard.putData("Raise Front Left", new RaiseFrontLeft());
-    SmartDashboard.putData("Raise Front Right", new RaiseFrontRight());
-    SmartDashboard.putData("Raise Rear Left", new RaiseRearLeft());
-    SmartDashboard.putData("Raise Rear Right", new RaiseRearRight());
+    SmartDashboard.putData("Extend Front Left", new RaiseFrontLeft());
+    SmartDashboard.putData("Extend Front Right", new RaiseFrontRight());
+    SmartDashboard.putData("Extend Rear Left", new RaiseRearLeft());
+    SmartDashboard.putData("Extend Rear Right", new RaiseRearRight());
     SmartDashboard.putData("Stop Front Left", new StopFrontLeft());
     SmartDashboard.putData("Stop Front Right", new StopFrontRight());
     SmartDashboard.putData("Stop Rear Left", new StopRearLeft());
@@ -72,6 +72,7 @@ public class OI {
     SmartDashboard.putData("Retract Front Right", new RetractFrontRight());
     SmartDashboard.putData("Retract Rear Left", new RetractRearLeft());
     SmartDashboard.putData("Retract Rear Right", new RetractRearRight());
+    SmartDashboard.putData("Retract All", new RetractAll());
   }
 
   public Joystick getDriveController() {
