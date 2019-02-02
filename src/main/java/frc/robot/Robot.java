@@ -20,10 +20,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
-import frc.robot.sensors.LineFollowerSensorArray;
 import frc.robot.commands.*;
 import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
@@ -135,7 +135,6 @@ public class Robot extends TimedRobot {
     camera1.setResolution(320, 240);
     camera1.setFPS(10);
     if (conf.hasPath("sensors.lineFollowSensor")) {
-      Config senseConf = conf.getConfig("sensors.lineFollowSensor");
       lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt ("detectionThreshold"),
           senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
           senseConf.getInt("numSensors"));
@@ -144,7 +143,7 @@ public class Robot extends TimedRobot {
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    //SmartDashboard.putData("Auto mode", m_chooser);
   }
 
   /**
