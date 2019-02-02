@@ -36,9 +36,10 @@ public class RealDriveTrain extends DriveTrain {
     differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
 
     // Gear Shift Solenoid
+    if (driveConf.hasPath("pneumatics")) {
     shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
         driveConf.getInt("pneumatics.backwardsChannel"));
-
+    }
   }
 
   @Override
