@@ -3,7 +3,7 @@ package frc.robot.sensors.linefollowersensor;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class LineFollowerSensorArray {
+public class LineFollowerSensorArray extends BaseLineFollowerSensor {
   private I2C mI2cBus;
   private byte[] buffer;
   // Default Distance to sensor array in centimetres
