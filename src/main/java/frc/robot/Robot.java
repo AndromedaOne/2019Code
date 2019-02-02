@@ -86,7 +86,9 @@ public class Robot extends TimedRobot {
     I2C sunfounderbus = sunfounderdevice.getBus();
 
     Config senseConf = conf.getConfig("sensors.lineFollowSensor");
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"), senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"), senseConf.getInt("numSensors"));
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+        senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+        senseConf.getInt("numSensors"));
 
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
