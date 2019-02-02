@@ -74,6 +74,7 @@ public class TeleOpDrive extends Command {
       }
       m_slowmodedelaycounter++;
   }
+}
   }
 
   // Make this return true when this Command no longer needs to run execute()

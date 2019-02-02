@@ -4,8 +4,7 @@ import edu.wpi.first.wpilibj.I2C;
 
 public class PololuSensorArray extends LineFollowerSensorArray {
 
-  public PololuSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor, double distanceBtSensors,
-      int numSensors) {
+/**
    * @param i2cBus A prebuilt I2C bus
    * @param detectionThreshold The minimum threshold for detecting a line
    * @param distanceToSensor The distance to the middle of the sensor from the
