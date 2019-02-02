@@ -4,8 +4,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.PIDConfiguration;
+import frc.robot.closedloopcontrollers.PIDMultiton;
 
 public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   private static RealExtendableArmAndWrist instance;
@@ -13,6 +17,11 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   private WPI_TalonSRX topExtendableArmAndWristTalon;
   private WPI_TalonSRX bottomExtendableArmAndWristTalon;
   protected DifferentialDrive differentialDrive;
+  // TODO: Add real encoders
+  private PIDSource topArmAndWristEncoder = null;
+  private PIDSource bottomArmAndWristEncoder = null;
+  private PIDMultiton topArmPid;
+  private PIDMultiton bottomArmPid;
 
   public WPI_TalonSRX getShoulderJointTalon() {
     return shoulderJointTalon;
@@ -35,6 +44,44 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
     topExtendableArmAndWristTalon = new WPI_TalonSRX(armConf.getInt("topExtendableArmAndWristTalon"));
     bottomExtendableArmAndWristTalon = new WPI_TalonSRX(armConf.getInt("bottomExtendableArmAndWristTalon"));
     differentialDrive = new DifferentialDrive(topExtendableArmAndWristTalon, bottomExtendableArmAndWristTalon);
+    topArmAndWristEncoder = new PIDSource() {
+
+      @Override
+      public void setPIDSourceType(PIDSourceType pidSource) {
+
+      }
+
+      @Override
+      public double pidGet() {
+        return 0;
+      }
+
+      @Override
+      public PIDSourceType getPIDSourceType() {
+        return null;
+      }
+    };
+    bottomArmAndWristEncoder = new PIDSource() {
+
+      @Override
+      public void setPIDSourceType(PIDSourceType pidSource) {
+
+      }
+
+      @Override
+      public double pidGet() {
+        return 0;
+      }
+
+      @Override
+      public PIDSourceType getPIDSourceType() {
+        return null;
+      }
+    };
+    topArmPid = PIDMultiton.getInstance(topArmAndWristEncoder, topExtendableArmAndWristTalon, new PIDConfiguration());
+    bottomArmPid = PIDMultiton.getInstance(bottomArmAndWristEncoder, bottomExtendableArmAndWristTalon,
+        new PIDConfiguration());
+
   }
 
   /**
@@ -55,7 +102,12 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
 
   @Override
   public void goToHeight(EnumHatchOrCargo hatchOrCargo, EnumArmLevel armLevel) {
-
+    double topSetPoint = 0; // TODO Ugly if/then statement
+    double bottomSetPoint = 0;
+    topArmPid.setSetpoint(topSetPoint);
+    bottomArmPid.setSetpoint(bottomSetPoint);
+    topArmPid.enable();
+    bottomArmPid.enable();
   }
 
   @Override
@@ -80,7 +132,7 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
 
   @Override
   public boolean moveIsDone() {
-    return false;
+    return topArmPid.onTarget() && bottomArmPid.onTarget();
   }
 
 }
