@@ -24,4 +24,18 @@ public class MockDriveTrain extends DriveTrain {
     return null;
   }
 
+  public void shiftToLowGear() {
+
+  }
+
+  @Override
+  public void shiftToHighGear() {
+
+  }
+
+  @Override
+  public boolean getShifterPresentFlag() {
+    return false;
+  }
+
 }
