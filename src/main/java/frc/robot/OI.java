@@ -64,6 +64,14 @@ public class OI {
     SmartDashboard.putData("Raise Front Right", new RaiseFrontRight());
     SmartDashboard.putData("Raise Rear Left", new RaiseRearLeft());
     SmartDashboard.putData("Raise Rear Right", new RaiseRearRight());
+    SmartDashboard.putData("Stop Front Left", new StopFrontLeft());
+    SmartDashboard.putData("Stop Front Right", new StopFrontRight());
+    SmartDashboard.putData("Stop Rear Left", new StopRearLeft());
+    SmartDashboard.putData("Stop Rear Right", new StopRearRight());
+    SmartDashboard.putData("Retract Front Left", new RetractFrontLeft());
+    SmartDashboard.putData("Retract Front Right", new RetractFrontRight());
+    SmartDashboard.putData("Retract Rear Left", new RetractRearLeft());
+    SmartDashboard.putData("Retract Rear Right", new RetractRearRight());
   }
 
   public Joystick getDriveController() {

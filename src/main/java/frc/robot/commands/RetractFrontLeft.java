@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class StopRearRight extends Command {
+public class RetractFrontLeft extends Command {
 
     public void initialize() {
-        Robot.pneumaticStilts.stopRearRight();
+        Robot.pneumaticStilts.retractFrontLeft();
     }
 
     @Override

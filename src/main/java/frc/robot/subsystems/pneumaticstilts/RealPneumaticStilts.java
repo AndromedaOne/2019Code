@@ -1,6 +1,8 @@
 package frc.robot.subsystems.pneumaticstilts;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 public class RealPneumaticStilts extends PneumaticStilts {
 
@@ -91,7 +93,15 @@ public class RealPneumaticStilts extends PneumaticStilts {
     stopAllLegs();
   }
 
-  public void stabilizedMove(double frontLeftLeg, double frontRightLeg, double rearLeftLeg, double rearRightLeg) {
+  public void stabilizedMove(double frontLeftLeg, double frontRightLeg,
+    double rearLeftLeg, double rearRightLeg) {
+
+    Trace.getInstance().addTrace(false, "Pneumatic Stilts",
+        new TracePair("Front Left Leg", frontLeftLeg),
+        new TracePair("Front Right Leg", frontRightLeg),
+        new TracePair("Rear Left Leg", rearLeftLeg),
+        new TracePair("Rear Right Leg", rearRightLeg));
+
     frontLeftStiltLeg.stabilizedMove(frontLeftLeg);
     frontRightStiltLeg.stabilizedMove(frontRightLeg);
     rearLeftStiltLeg.stabilizedMove(rearLeftLeg);
