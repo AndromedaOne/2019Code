@@ -23,4 +23,9 @@ public class MockExtendableArmAndWrist extends ExtendableArmAndWrist {
     System.out.println("MockExtendableArmAndWrist.shoulderRotate:rotateAmount: " + rotateAmount);
   }
 
+  @Override
+  protected void initDefaultCommand() {
+
+  }
+
 }
