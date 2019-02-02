@@ -19,9 +19,11 @@ public class RealPneumaticStilts extends PneumaticStilts {
     private long currentDelayTime = 0;
     private long currentHoldTime = 0;
     private DoubleSolenoid solenoid;
+    private String stiltLegID;
 
-    StiltLeg(DoubleSolenoid mySolenoid) {
+    StiltLeg(DoubleSolenoid mySolenoid, String myStiltLegID) {
       solenoid = mySolenoid;
+      stiltLegID = myStiltLegID;
     }
 
     public void stopLeg() {
@@ -37,7 +39,7 @@ public class RealPneumaticStilts extends PneumaticStilts {
     }
 
     public void stabilizedMove(double speed) {
-      System.out.println(currentState + "  " + currentDelayTime + "  " + currentHoldTime);
+      System.out.println(stiltLegID + " " + currentState + "  " + currentDelayTime + "  " + currentHoldTime);
       long currentTime = System.currentTimeMillis();
       switch (currentState) {
       case Stop:
@@ -86,10 +88,10 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   public RealPneumaticStilts() {
 
-    frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 0, 1));
-    frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 2, 3));
-    rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 4, 5));
-    rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7));
+    frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 0, 1), "FL");
+    frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 2, 3), "FR");
+    rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 4, 5), "RL");
+    rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7), "RR");
     stopAllLegs();
   }
 
