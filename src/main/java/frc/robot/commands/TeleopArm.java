@@ -22,13 +22,16 @@ public class TeleopArm extends Command {
     double armWristValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
     double rotateValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(armController);
 
-    double actualArmWristVal = (sinPi4 * rotateValue) + (cosPi4 * armWristValue);
-    double actualRotateVal = (cosPi4 * rotateValue) - (sinPi4 * armWristValue);
+    if (armWristValue > 0.01 || rotateValue > 0.01) {
+      double actualArmWristVal = (sinPi4 * rotateValue) + (cosPi4 * armWristValue);
+      double actualRotateVal = (cosPi4 * rotateValue) - (sinPi4 * armWristValue);
+      extendableArmAndWrist.move(actualArmWristVal, actualRotateVal);
+    }
 
-    extendableArmAndWrist.move(actualArmWristVal, actualRotateVal);
     double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
-    extendableArmAndWrist.shoulderRotate(shoulderRotateValue);
-
+    if (shoulderRotateValue > 0.01) {
+      extendableArmAndWrist.shoulderRotate(shoulderRotateValue);
+    }
   }
 
   @Override
