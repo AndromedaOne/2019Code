@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
 
     Config senseConf = conf.getConfig("sensors.lineFollowSensor");
     lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"), senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"), senseConf.getInt("numSensors"));
-    
+
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -174,7 +174,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    System.out.println(lineFollowerSensorArray.getSensorReading().lineFound);
   }
 
   /**
