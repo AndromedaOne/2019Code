@@ -134,6 +134,7 @@ public class Robot extends TimedRobot {
     camera0.setFPS(10);
     camera1.setResolution(320, 240);
     camera1.setFPS(10);
+    
     if (conf.hasPath("sensors.lineFollowSensor")) {
       lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt ("detectionThreshold"),
           senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
