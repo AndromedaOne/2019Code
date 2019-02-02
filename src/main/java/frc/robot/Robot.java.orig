@@ -33,10 +33,13 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
-import frc.robot.utilities.I2CBusDriver;
+<<<<<<< HEAD
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+=======
+import frc.robot.utilities.I2CBusDriver;
+>>>>>>> master
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -49,13 +52,16 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
   public static Intake intake;
   public static Joystick driveController;
+<<<<<<< HEAD
   public static Joystick operatorController;
+=======
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static LineFollowerSensorArray lineFollowerSensorArray;
+>>>>>>> master
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -113,6 +119,7 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
+<<<<<<< HEAD
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
@@ -120,7 +127,10 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake intake");
       intake = new MockIntake();
     }
+    driveController = new Joystick(0);
     operatorController = new Joystick(1);
+=======
+>>>>>>> master
 
     gyroPID = new GyroPIDController();
 
