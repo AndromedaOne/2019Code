@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 
 public class MoveUsingEncoderPID extends Command {
 

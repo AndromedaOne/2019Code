@@ -20,9 +20,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
-import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
-import frc.robot.closedloopcontrollers.GyroPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.LineFollowerSensorArray;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
@@ -37,6 +37,10 @@ import frc.robot.utilities.I2CBusDriver;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.sensors.anglesensor.*;
+import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -46,16 +50,20 @@ import frc.robot.subsystems.intake.RealIntake;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static DriveTrain driveTrain;
-  public static Intake intake;
   public static Joystick driveController;
   public static Joystick operatorController;
-  public static DrivetrainEncoderPIDController encoderPID;
-  public static DrivetrainUltrasonicPIDController ultrasonicPID;
-  public static GyroPIDController gyroPID;
+
+  public static DriveTrain driveTrain;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static LineFollowerSensorArray lineFollowerSensorArray;
+  public static DrivetrainEncoderPIDController encoderPID;
+  public static DrivetrainUltrasonicPIDController ultrasonicPID;
+  public static GyroPIDController gyroPID;
+  
+  public static Intake intake;
+  public static AngleSensor intakeAngleSensor;
+  public static LimitSwitchSensor intakeStowedSwitch;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -120,9 +128,26 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake intake");
       intake = new MockIntake();
     }
+    if(conf.hasPath("sensors.intakeAngleSensor")){
+      System.out.println("Using real intakeAngleSensor");
+      intakeAngleSensor = new RealAngleSensor();
+    } else {
+      System.out.println("Using mock intakeAngleSensor");
+      intakeAngleSensor = new MockAngleSensor();
+    }
+
+    if(conf.hasPath("sensors.intakeStowedSwitch")){
+      System.out.println("Using real intakeStowedSwitch");
+      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
+      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, false);
+    } else {
+      System.out.println("Using mock intakeStowedSwitch");
+      intakeStowedSwitch = new MockLimitSwitchSensor();
+    }
+
     operatorController = new Joystick(1);
 
-    gyroPID = new GyroPIDController();
+    gyroPID = GyroPIDController.getInstance();
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();

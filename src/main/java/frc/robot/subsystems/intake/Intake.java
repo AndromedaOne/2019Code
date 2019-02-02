@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public abstract class Intake extends Subsystem {
     public abstract void rollIntake(double speed);
 
-    public abstract void moveToStartPosition();
-    public abstract void moveToCargoPosition();
-    public abstract void moveToEndgamePosition();
+    public abstract void moveIntake(double speed);
 }
 

@@ -1,4 +1,4 @@
-package frc.robot.closedloopcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers;
 
 public class PIDConfiguration {
   private double p;
