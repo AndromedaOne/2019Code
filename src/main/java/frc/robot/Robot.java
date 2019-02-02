@@ -48,7 +48,6 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
 
-
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
@@ -102,13 +101,12 @@ public class Robot extends TimedRobot {
       int ping = conf.getInt("sensors.drivetrainFrontUltrasonic.ping");
       int echo = conf.getInt("sensors.drivetrainFrontUltrasonic.echo");
       drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
-    }else {
+    } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
-  
+
     gyroPID = new GyroPIDController();
 
-    
     driveController = new Joystick(0);
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();

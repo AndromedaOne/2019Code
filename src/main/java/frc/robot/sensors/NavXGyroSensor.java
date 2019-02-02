@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 public class NavXGyroSensor extends SensorBase implements PIDSource {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
@@ -16,7 +14,7 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   boolean angleReadingSet = false;
 
   /**
-   * Trys creating the gyro and if it can not then it reports an error to the 
+   * Trys creating the gyro and if it can not then it reports an error to the
    * DriveStation.
    */
   private NavXGyroSensor() {
@@ -39,6 +37,7 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
 
   /**
    * Gets the instance of the NavXGyroSensor.
+   * 
    * @return instance
    */
   public static NavXGyroSensor getInstance() {
@@ -47,6 +46,7 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
 
   /**
    * Gets the Z angle and supbracts the initial angle member variable from it.
+   * 
    * @return gyro.getAngle() - initialAngleReading
    */
   public double getZAngle() {
@@ -55,8 +55,7 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
 
   @Override
   public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-    super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "ZAngle:", 
-    this::getZAngle);
+    super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "ZAngle:", this::getZAngle);
   }
 
   @Override

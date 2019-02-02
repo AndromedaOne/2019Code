@@ -10,24 +10,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 public abstract class SensorBase {
 
   /**
-   * This method will put readings from the sensor on Live Window.
-   * In order to fill out this method add the following line as many times as 
-   * needed:
-   *  super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + 
+   * This method will put readings from the sensor on Live Window. In order to
+   * fill out this method add the following line as many times as needed:
+   * super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam +
    * "NameOfMeasurement:", this::methodForGettingMeasurement);
    */
-  public abstract void putSensorOnLiveWindow(String subsystemNameParam, 
-  String sensorNameParam);
+  public abstract void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam);
 
   /**
-   * Puts the double supplier on live window with the name "readingName" in the 
+   * Puts the double supplier on live window with the name "readingName" in the
    * subsystem specified
+   * 
    * @param subsystem
    * @param readingName
    * @param doubleSupplier
    */
-  protected void putReadingOnLiveWindow(String subsystem, String readingName, 
-  DoubleSupplier doubleSupplier) {
+  protected void putReadingOnLiveWindow(String subsystem, String readingName, DoubleSupplier doubleSupplier) {
     Sendable sendable = new Sendable() {
 
       @Override
@@ -37,7 +35,7 @@ public abstract class SensorBase {
 
       @Override
       public void setName(String name) {
-        
+
       }
 
       @Override
@@ -53,7 +51,7 @@ public abstract class SensorBase {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Counter");
-        // This needs to be value in order to work; Value is a magical string 
+        // This needs to be value in order to work; Value is a magical string
         // that allows this counter to appear on Live Window.
         builder.addDoubleProperty("Value", doubleSupplier, null);
       }
@@ -64,14 +62,14 @@ public abstract class SensorBase {
   }
 
   /**
-   * Puts the boolean supplier on live window with the name "readingName" in the 
+   * Puts the boolean supplier on live window with the name "readingName" in the
    * subsystem specified
+   * 
    * @param subsystem
    * @param readingName
    * @param booleanSupplier
    */
-  protected void putReadingOnLiveWindow(String subsystem, String readingName, 
-  BooleanSupplier booleanSupplier) {
+  protected void putReadingOnLiveWindow(String subsystem, String readingName, BooleanSupplier booleanSupplier) {
     Sendable sendable = new Sendable() {
 
       @Override
@@ -81,7 +79,7 @@ public abstract class SensorBase {
 
       @Override
       public void setName(String name) {
-        
+
       }
 
       @Override
@@ -97,7 +95,7 @@ public abstract class SensorBase {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Digital Input");
-        // This needs to be value in order to work; Value is a magical string 
+        // This needs to be value in order to work; Value is a magical string
         // that allows this Digital Input to appear on Live Window.
         builder.addBooleanProperty("Value", booleanSupplier, null);
       }
