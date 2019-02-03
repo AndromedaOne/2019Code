@@ -76,12 +76,12 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
 
   }
 
-  @Override
-  /**
-   * initialZAngleReading = getZAngle(); initialXAngleReading = getXAngle();
-   * initialYAngleReading = getYAngle(); System.out.println("Initial angle set to:
-   * " + initialZAngleReading);
-   * 
+  public void reset() {
+   initialZAngleReading = getZAngle(); initialXAngleReading = getXAngle();
+   initialYAngleReading = getYAngle(); System.out.println("Initial angle set to: " + 
+   initialZAngleReading);
+  }
+   /**
    * @return kDisplacement because that is what we use for all of our PID
    * Controllers
    */
