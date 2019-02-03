@@ -1,22 +1,15 @@
 package frc.robot.subsystems.pneumaticstilts;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
 public class RealPneumaticStilts extends PneumaticStilts {
 
-  enum RetractorStates {
-    Stop, BeginMovingUp, Moving, BeginMovingDown, MovingDown, InchingDelay
-  }
+  public static StiltLeg frontLeftStiltLeg;
+  public static StiltLeg frontRightStiltLeg;
+  public static StiltLeg rearLeftStiltLeg;
+  public static StiltLeg rearRightStiltLeg;
 
-  public class StiltLeg {
-    private final long kDelayTime = 1000;
-    private final long kHoldTime = 10;
-
-    private RetractorStates currentState = RetractorStates.Stop;
-    public long currentDelayTime = 0;
-    private long currentHoldTime = 0;
+  private class StiltLeg {
     private DoubleSolenoid solenoid;
     private String stiltLegID;
 
@@ -35,56 +28,6 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
     public void extendLeg() {
       solenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    public void stabilizedMove(double speed) {
-      System.out.println(stiltLegID + " " + currentState + "  " + currentDelayTime + "  " + currentHoldTime);
-      long currentTime = System.currentTimeMillis();
-      switch (currentState) {
-      case Stop:
-        stopLeg();
-        if (speed > 0) {
-          currentState = RetractorStates.BeginMovingUp;
-        }
-        if (speed < 0) {
-          currentState = RetractorStates.BeginMovingDown;
-        }
-        break;
-      case BeginMovingUp:
-        if (speed != 0) {
-          currentDelayTime = (long) (currentTime + kDelayTime / speed);
-        } else {
-          currentDelayTime = Long.MAX_VALUE;
-        }
-        currentHoldTime = currentTime + kHoldTime;
-        extendLeg();
-        currentState = RetractorStates.Moving;
-        break;
-      case Moving:
-        if (currentTime > currentHoldTime) {
-          stopLeg();
-          currentState = RetractorStates.InchingDelay;
-        }
-        break;
-      case BeginMovingDown:
-        if (speed != 0) {
-          currentDelayTime = (long) (currentTime + kDelayTime / -speed);
-        } else {
-          currentDelayTime = Long.MAX_VALUE;
-        }
-        currentHoldTime = currentTime + kHoldTime;
-        retractLeg();
-        currentState = RetractorStates.Moving;
-        break;
-      case InchingDelay:
-        if (currentTime > currentDelayTime) {
-          currentState = RetractorStates.Stop;
-        }
-        break;
-      default:
-        currentState = RetractorStates.Stop;
-      }
-
     }
 
   }
@@ -119,19 +62,6 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   public StiltLeg getRearRightLeg() {
     return rearRightStiltLeg;
-  }
-
-  public void stabilizedMove(double frontLeftLeg, double frontRightLeg, double rearLeftLeg, double rearRightLeg) {
-
-    frontLeftStiltLeg.stabilizedMove(frontLeftLeg);
-    frontRightStiltLeg.stabilizedMove(frontRightLeg);
-    rearLeftStiltLeg.stabilizedMove(rearLeftLeg);
-    rearRightStiltLeg.stabilizedMove(rearRightLeg);
-    Trace.getInstance().addTrace(true, "Stiltlegs",
-        new TracePair("frontLeft", (double) frontLeftStiltLeg.currentDelayTime),
-        new TracePair("frontRight", (double) frontRightStiltLeg.currentDelayTime),
-        new TracePair("rearLeft", (double) rearLeftStiltLeg.currentDelayTime),
-        new TracePair("rearRight", (double) rearRightStiltLeg.currentDelayTime));
   }
 
   public void stopAllLegs() {

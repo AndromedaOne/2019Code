@@ -48,9 +48,6 @@ public class RaiseRobot extends Command {
 
   private double calculateError(double x, double y) {
     double error = 1 - (p * (x + y));
-    /*
-     * if(error > 1) { error = 1; } if (error < 0) { error = 0; }
-     */
     return error;
   }
 
@@ -60,33 +57,16 @@ public class RaiseRobot extends Command {
     double angleX = gyro.getXAngle() - initialXValue;
     frontLeftError = rearLeftError = frontRightError = rearRightError = 1;
 
-    // Left Front Leg
-    // if ((angleY < 0) || (angleX < 0)) {
     frontLeftError = calculateError(-angleX, -angleY);
-    // }
-
-    // Left Rear Leg
-    // if ((angleY > 0) || (angleX < 0)) {
     rearLeftError = calculateError(-angleX, angleY);
-    // }
-
-    // Right Front Leg
-    // if ((angleY < 0) || (angleX > 0)) {
     frontRightError = calculateError(angleX, -angleY);
-    // }
-
-    // Right Rear Leg
-    // if ((angleY > 0) || (angleX > 0)) {
     rearRightError = calculateError(angleX, angleY);
-    // }
 
     Trace.getInstance().addTrace(true, "PneumaticStilts", new TracePair("Angle X", angleX),
         new TracePair("Angle Y", angleY), new TracePair("Front Left Leg", frontLeftError),
         new TracePair("Front Right Leg", frontRightError), new TracePair("Rear Left Leg", rearLeftError),
         new TracePair("Rear Right Leg", rearRightError), new TracePair("kPulseTime", (double) kPulseTime));
 
-    // pneumaticStilts.stabilizedMove(frontLeftError, frontRightError,
-    // rearLeftError, rearRightError);
     long time = System.currentTimeMillis();
     switch (stiltsStates) {
     case CALCULATING:
