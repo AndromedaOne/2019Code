@@ -4,12 +4,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.utilities.POVDirectionNames;
 
 
 public class IntakeControl extends Command{
 
-    
-    public IntakeControl(){
+    static IntakePositionsEnum intakePositionsEnum = IntakePositionsEnum.STOWED;
+    private POVDirectionNames
+    public IntakeControl(POVDirectionNames povDirectionNamesParam){
         requires(Robot.intake);
     }
    
@@ -21,7 +23,6 @@ public class IntakeControl extends Command{
     @Override
     protected void execute(){
         Joystick intakeController = Robot.operatorController;
-      //  boolean upDButtonPressed = ButtonsEnumerated.
     }
 
    

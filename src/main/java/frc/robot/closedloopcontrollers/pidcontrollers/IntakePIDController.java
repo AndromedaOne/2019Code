@@ -6,9 +6,8 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveIntakeSafely;
-import frc.robot.closedloopcontrollers.MoveIntakeSafely.IsAtLimitException;
 import frc.robot.sensors.anglesensor.AngleSensor;
-
+import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor.IsAtLimitException;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 
