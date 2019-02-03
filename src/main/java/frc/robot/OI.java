@@ -10,8 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.CallLineFollowerController;
-import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.commands.*;
+import frc.robot.utilities.ButtonsEnumerated;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -46,23 +46,52 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-  private static OI instance = new OI();
+  // Drive Controller and Buttons
+  Joystick driveController;
 
-  private OI() {
-    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
-    testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
-    SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+  // Subsystem Controller and Buttons
+  Joystick subsystemController;
+  JoystickButton raiseRobotButton;
+  JoystickButton raiseLeftFront;
+  JoystickButton raiseRightFront;
+  JoystickButton raiseLeftRear;
+  JoystickButton raiseRightRear;
+
+  public OI() {
+    driveController = new Joystick(0);
+    subsystemController = new Joystick(1);
+    raiseRobotButton = new JoystickButton(subsystemController, ButtonsEnumerated.LEFTBUMPERBUTTON.getValue());
+    raiseRobotButton.whenPressed(new RaiseRobot());
+
+    raiseLeftFront = new JoystickButton(subsystemController, ButtonsEnumerated.YBUTTON.getValue());
+    raiseLeftFront.whenPressed(new PulseLeg(Robot.pneumaticStilts.frontLeftStiltLeg));
+
+    raiseRightFront = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
+    raiseRightFront.whenPressed(new PulseLeg(Robot.pneumaticStilts.frontRightStiltLeg));
+
+    raiseRightRear = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
+    raiseRightRear.whenPressed(new PulseLeg(Robot.pneumaticStilts.rearRightStiltLeg));
+
+    raiseLeftRear = new JoystickButton(subsystemController, ButtonsEnumerated.XBUTTON.getValue());
+    raiseLeftRear.whenPressed(new PulseLeg(Robot.pneumaticStilts.rearLeftStiltLeg));
+
+    SmartDashboard.putData("Extend Front Left", new RaiseFrontLeft());
+    SmartDashboard.putData("Extend Front Right", new RaiseFrontRight());
+    SmartDashboard.putData("Extend Rear Left", new RaiseRearLeft());
+    SmartDashboard.putData("Extend Rear Right", new RaiseRearRight());
+    SmartDashboard.putData("Stop Front Left", new StopFrontLeft());
+    SmartDashboard.putData("Stop Front Right", new StopFrontRight());
+    SmartDashboard.putData("Stop Rear Left", new StopRearLeft());
+    SmartDashboard.putData("Stop Rear Right", new StopRearRight());
+    SmartDashboard.putData("Retract Front Left", new RetractFrontLeft());
+    SmartDashboard.putData("Retract Front Right", new RetractFrontRight());
+    SmartDashboard.putData("Retract Rear Left", new RetractRearLeft());
+    SmartDashboard.putData("Retract Rear Right", new RetractRearRight());
+    SmartDashboard.putData("Retract All", new RetractAll());
   }
 
-  // Controllers
-  protected Joystick driveStick = new Joystick(0);
-
-  public Joystick getDriveStick() {
-    return driveStick;
-  }
-
-  public static OI getInstance() {
-    return instance;
+  public Joystick getDriveController() {
+    return driveController;
   }
 
 }

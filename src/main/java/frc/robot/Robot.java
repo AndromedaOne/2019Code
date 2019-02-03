@@ -15,7 +15,6 @@ import com.typesafe.config.ConfigFactory;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -24,6 +23,7 @@ import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
 import frc.robot.commands.*;
+import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
 import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
@@ -36,6 +36,9 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
+import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.I2CBusDriver;
 
 /**
@@ -47,7 +50,9 @@ import frc.robot.utilities.I2CBusDriver;
  */
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
-  public static Joystick driveController;
+  public static PneumaticStilts pneumaticStilts;
+  public static NavXGyroSensor gyro;
+  public static OI oi;
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
@@ -111,13 +116,13 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
+    pneumaticStilts = new RealPneumaticStilts();
 
     gyroPID = new GyroPIDController();
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
-    driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
 
@@ -144,6 +149,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
+    oi = new OI();
   }
 
   /**
@@ -166,6 +172,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    pneumaticStilts.stopAllLegs();
+    Trace.getInstance().flushTraceFiles();
   }
 
   @Override
@@ -188,6 +196,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
+    gyro = NavXGyroSensor.getInstance();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -208,6 +217,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+    System.out.println("X: " + gyro.getXAngle() + "\t" + "Y: " + gyro.getYAngle());
   }
 
   @Override

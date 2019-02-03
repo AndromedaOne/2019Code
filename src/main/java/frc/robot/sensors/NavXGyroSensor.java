@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.SPI;
 public class NavXGyroSensor extends SensorBase implements PIDSource {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   static NavXGyroSensor instance = new NavXGyroSensor();
-  private double initialAngleReading = 0.0;
+  private double initialZAngleReading = 0.0;
+  private double initialXAngleReading = 0.0;
+  private double initialYAngleReading = 0.0;
   boolean angleReadingSet = false;
 
   /**
@@ -50,7 +52,15 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
    * @return gyro.getAngle() - initialAngleReading
    */
   public double getZAngle() {
-    return gyro.getAngle() - initialAngleReading;
+    return gyro.getAngle() - initialZAngleReading;
+  }
+
+  public double getXAngle() {
+    return gyro.getPitch() - initialXAngleReading;
+  }
+
+  public double getYAngle() {
+    return gyro.getRoll() - initialYAngleReading;
   }
 
   @Override
@@ -68,6 +78,10 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
 
   @Override
   /**
+   * initialZAngleReading = getZAngle(); initialXAngleReading = getXAngle();
+   * initialYAngleReading = getYAngle(); System.out.println("Initial angle set to:
+   * " + initialZAngleReading);
+   * 
    * @return kDisplacement because that is what we use for all of our PID
    * Controllers
    */
