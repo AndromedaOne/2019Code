@@ -8,4 +8,6 @@ public abstract class Claw extends Subsystem {
     public abstract void closeClaw();
 
     public abstract void runIntake(double intakeSpeed);
+
+    public abstract void stopIntake();
 }
