@@ -6,7 +6,7 @@ import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts.StiltLeg;
 public class PulseLeg extends Command {
 
     private long initTime = 0;
-    private long kHoldTime = 20;
+    private long kHoldTime = 10;
     private long currentHoldTime = 0;
     private StiltLeg currentLeg;
     private boolean done = false;
@@ -16,15 +16,20 @@ public class PulseLeg extends Command {
     }
 
     public void initialize() {
+        
         initTime  = System.currentTimeMillis();
         currentHoldTime = initTime + kHoldTime;
+        System.out.println("initTime: " + initTime);
         currentLeg.extendLeg();
+        done = false;
     }
 
     public void execute() {
         long time = System.currentTimeMillis();
-        if(currentHoldTime > time) {
+        System.out.println("time: " + time);
+        if(currentHoldTime < time) {
             currentLeg.stopLeg();
+            System.out.println("Stopping");
             done = true;
         }
     }

@@ -223,7 +223,6 @@ public class Trace {
       }
       traceEntry.getFile().write(line);
       traceEntry.getFile().newLine();
-      System.out.println("Trace");
     } catch (IOException e) {
       System.err.println(e.getMessage());
       e.printStackTrace();

@@ -1,11 +1,16 @@
 package frc.robot.subsystems.pneumaticstilts;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts.StiltLeg;
 
 /**
  * The pneumatic climber subsystem for the robot
  */
 public abstract class PneumaticStilts extends Subsystem {
+  public static StiltLeg frontLeftStiltLeg;
+  public static StiltLeg frontRightStiltLeg;
+  public static StiltLeg rearLeftStiltLeg;
+  public static StiltLeg rearRightStiltLeg;
 
   public void initDefaultCommand() {
     // setDefaultCommand(new RaiseRobot());
