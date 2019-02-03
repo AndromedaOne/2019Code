@@ -53,6 +53,7 @@ public abstract class SensorBase {
         builder.setSmartDashboardType("Counter");
         // This needs to be value in order to work; Value is a magical string
         // that allows this counter to appear on Live Window.
+        // WPILib are the people who decided on these magical strings...
         builder.addDoubleProperty("Value", doubleSupplier, null);
       }
 
@@ -97,6 +98,7 @@ public abstract class SensorBase {
         builder.setSmartDashboardType("Digital Input");
         // This needs to be value in order to work; Value is a magical string
         // that allows this Digital Input to appear on Live Window.
+        // WPILib are the people who decided on these magical strings...
         builder.addBooleanProperty("Value", booleanSupplier, null);
       }
 

@@ -1,8 +1,12 @@
 package frc.robot.closedloopcontrollers;
 
+<<<<<<< HEAD
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.sensors.LineFollowerSensorArray;
+=======
 import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
+>>>>>>> origin/master
 import frc.robot.subsystems.drivetrain.DriveTrain;
 
 public class LineFollowerController implements ClosedLoopControllerBase {

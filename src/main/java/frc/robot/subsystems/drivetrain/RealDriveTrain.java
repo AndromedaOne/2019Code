@@ -60,7 +60,6 @@ public class RealDriveTrain extends DriveTrain {
     differentialDrive.stopMotor();
   }
 
-  @Override
   public WPI_TalonSRX getLeftRearTalon() {
     return driveTrainLeftTalon1;
   }

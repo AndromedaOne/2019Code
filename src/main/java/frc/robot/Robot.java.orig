@@ -53,7 +53,12 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
+<<<<<<< HEAD
+  public static LineFollowerSensorArray lineFollowerSensorArray;
+=======
   public static BaseLineFollowerSensor lineFollowerSensorArray;
+
+>>>>>>> origin/master
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
