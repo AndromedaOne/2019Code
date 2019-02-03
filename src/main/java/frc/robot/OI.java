@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -52,14 +53,23 @@ public class OI {
   // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
+  JoystickButton raiseLeftFront;
+  JoystickButton raiseRightFront;
+  JoystickButton raiseLeftRear;
+  JoystickButton raiseRightRear;
+
 
   public OI() {
     driveController = new Joystick(0);
     subsystemController = new Joystick(1);
-    raiseRobotButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
-
+    raiseRobotButton = new JoystickButton(subsystemController, ButtonsEnumerated.LEFTBUMPERBUTTON.getValue());
     raiseRobotButton.whenPressed(new RaiseRobot());
 
+    raiseLeftFront = new JoystickButton(subsystemController, ButtonsEnumerated.YBUTTON.getValue());
+    raiseLeftFront.whenPressed(new PulseLeg(Robot.pneumaticStilts.get));
+
+
+    
     SmartDashboard.putData("Extend Front Left", new RaiseFrontLeft());
     SmartDashboard.putData("Extend Front Right", new RaiseFrontRight());
     SmartDashboard.putData("Extend Rear Left", new RaiseRearLeft());

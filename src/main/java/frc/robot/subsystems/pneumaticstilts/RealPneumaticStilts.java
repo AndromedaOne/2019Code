@@ -1,8 +1,6 @@
 package frc.robot.subsystems.pneumaticstilts;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
 public class RealPneumaticStilts extends PneumaticStilts {
 
@@ -10,7 +8,7 @@ public class RealPneumaticStilts extends PneumaticStilts {
     Stop, BeginMovingUp, Moving, BeginMovingDown, MovingDown, InchingDelay
   }
 
-  private class StiltLeg {
+  public class StiltLeg {
     private final long kDelayTime = 1000;
     private final long kHoldTime = 10;
 
@@ -92,6 +90,22 @@ public class RealPneumaticStilts extends PneumaticStilts {
     rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 4, 5), "RL");
     rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7), "RR");
     stopAllLegs();
+  }
+
+  public StiltLeg getFrontLeftLeg(){
+    return frontLeftStiltLeg;
+  }
+
+  public StiltLeg getFrontRightLeg() {
+    return frontRightStiltLeg;
+  }
+
+  public StiltLeg getRearLeftLeg() {
+    return rearLeftStiltLeg;
+  }
+
+  public StiltLeg getRearRightLeg() {
+    return rearRightStiltLeg;
   }
 
   public void stabilizedMove(double frontLeftLeg, double frontRightLeg, double rearLeftLeg, double rearRightLeg) {
