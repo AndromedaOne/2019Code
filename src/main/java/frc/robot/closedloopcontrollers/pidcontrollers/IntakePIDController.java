@@ -54,7 +54,7 @@ public class IntakePIDController extends PIDControllerBase {
         }        
     }
 
-    public IntakePIDController getInstance() {
+    public static IntakePIDController getInstance() {
         System.out.println(" --- Asking for Instance --- ");
         if (instance == null) {
             System.out.println("Creating new Intake PID Controller");
