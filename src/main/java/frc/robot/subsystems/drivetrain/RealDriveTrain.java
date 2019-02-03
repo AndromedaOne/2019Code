@@ -13,11 +13,11 @@ import frc.robot.commands.TeleOpDrive;
  *
  */
 public class RealDriveTrain extends DriveTrain {
-  public static WPI_TalonSRX driveTrainLeftTalon1;
-  public static WPI_TalonSRX driveTrainLeftTalon2;
+  public static WPI_TalonSRX driveTrainLeftMaster;
+  public static WPI_TalonSRX driveTrainLeftSlave;
   public static SpeedControllerGroup driveTrainLeftSpeedController;
-  public static WPI_TalonSRX driveTrainRightTalon3;
-  public static WPI_TalonSRX driveTrainRightTalon4;
+  public static WPI_TalonSRX driveTrainRightMaster;
+  public static WPI_TalonSRX driveTrainRightSlave;
   public static SpeedControllerGroup driveTrainRightSpeedController;
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
@@ -32,12 +32,12 @@ public class RealDriveTrain extends DriveTrain {
     Config conf = Robot.getConfig();
     Config driveConf = conf.getConfig("ports.driveTrain");
     setDefaultCommand(new TeleOpDrive());
-    driveTrainLeftTalon1 = new WPI_TalonSRX(driveConf.getInt("leftTalon1"));
-    driveTrainLeftTalon2 = new WPI_TalonSRX(driveConf.getInt("leftTalon2"));
-    driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftTalon1, driveTrainLeftTalon2);
-    driveTrainRightTalon3 = new WPI_TalonSRX(driveConf.getInt("rightTalon3"));
-    driveTrainRightTalon4 = new WPI_TalonSRX(driveConf.getInt("rightTalon4"));
-    driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightTalon3, driveTrainRightTalon4);
+    driveTrainLeftMaster = new WPI_TalonSRX(driveConf.getInt("leftMaster"));
+    driveTrainLeftSlave = new WPI_TalonSRX(driveConf.getInt("leftSlave"));
+    driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftMaster, driveTrainLeftSlave);
+    driveTrainRightMaster = new WPI_TalonSRX(driveConf.getInt("rightMaster"));
+    driveTrainRightSlave = new WPI_TalonSRX(driveConf.getInt("rightSlave"));
+    driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightMaster, driveTrainRightSlave);
     differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
 
     // Gear Shift Solenoid
@@ -61,7 +61,7 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public WPI_TalonSRX getLeftRearTalon() {
-    return driveTrainLeftTalon1;
+    return driveTrainLeftMaster;
   }
 
   public void shiftToLowGear() {
