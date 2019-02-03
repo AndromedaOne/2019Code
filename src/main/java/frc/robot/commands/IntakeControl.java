@@ -10,13 +10,23 @@ import frc.robot.utilities.POVDirectionNames;
 public class IntakeControl extends Command{
 
     static IntakePositionsEnum intakePositionsEnum = IntakePositionsEnum.STOWED;
-    private POVDirectionNames
+    private POVDirectionNames povDirectionName;
     public IntakeControl(POVDirectionNames povDirectionNamesParam){
+        povDirectionName = povDirectionNamesParam;
         requires(Robot.intake);
     }
    
     @Override
     protected void initialize(){
+        switch(povDirectionName) {
+            case NORTH:
+                // do something
+            
+            case SOUTH:
+                // do something else
+            
+            
+        }
 
     }
 
