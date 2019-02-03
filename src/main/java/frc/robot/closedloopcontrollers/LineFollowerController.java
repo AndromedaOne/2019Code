@@ -3,6 +3,7 @@ package frc.robot.closedloopcontrollers;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 
 public class LineFollowerController implements ClosedLoopControllerBase {
@@ -19,7 +20,7 @@ public class LineFollowerController implements ClosedLoopControllerBase {
   }
 
   private int debugCounter = 9;
-  private LineFollowerSensorArray.LineFollowArraySensorReading v;
+  private LineFollowArraySensorReading v;
 
   public void run() {
     LineFollowArraySensorReading v = sensor.getSensorReading();
