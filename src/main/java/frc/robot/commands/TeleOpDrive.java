@@ -38,44 +38,38 @@ public class TeleOpDrive extends Command {
 
     if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24
         && Robot.driveTrain.getShifterPresentFlag()) {
-      shifterDelayCounter++;
-      double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
-
-      double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
-      if (shifterDelayCounter >= 24) {
-        Robot.driveTrain.move(forwardBackwardStickValue * mod, -rotateStickValue * mod);
-      }
-
-      if (Robot.getConfig().hasPath("pneumatics")) {
-        if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24) {
-          shifterDelayCounter = 0;
-          if (shifterHigh) {
-            Robot.driveTrain.shiftToLowGear();
-            shifterHigh = false;
-          } else {
-            Robot.driveTrain.shiftToHighGear();
-            shifterHigh = true;
-          }
-        }
+      shifterDelayCounter = 0;
+      if (shifterHigh) {
+        Robot.driveTrain.shiftToLowGear();
+        shifterHigh = false;
       } else {
-        Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
-        // 48 on slowmodedelaycounter is about a second
-        if (m_slowmodedelaycounter > 12
-            && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
-          m_slowmodedelaycounter = 0;
-          if (!slowMoEnabled) {
-            mod = 0.6;
-            slowMoEnabled = true;
-            System.out.println("Slow Mode IS enabled!");
-          } else {
-            mod = 1;
-            slowMoEnabled = false;
-            System.out.println("SLOW MODE HAS ENDED!");
-          }
-        }
-        m_slowmodedelaycounter++;
+        Robot.driveTrain.shiftToHighGear();
+        shifterHigh = true;
       }
     }
+
+    shifterDelayCounter++;
+    double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
+
+    double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
+    if (shifterDelayCounter >= 24) {
+      Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
+    }
+
+    // 48 on slowmodedelaycounter is about a second
+    if (m_slowmodedelaycounter > 12 && ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
+      m_slowmodedelaycounter = 0;
+      if (!slowMoEnabled) {
+        mod = 0.6;
+        slowMoEnabled = true;
+        System.out.println("Slow Mode IS enabled!");
+      } else {
+        mod = 1;
+        slowMoEnabled = false;
+        System.out.println("SLOW MODE HAS ENDED!");
+      }
+    }
+    m_slowmodedelaycounter++;
   }
 
   // Make this return true when this Command no longer needs to run execute()
