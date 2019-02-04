@@ -15,14 +15,4 @@ public class MockClaw extends Claw {
     public void closeClaw() {
         System.out.println("Closing Claw");
     }
-
-    public void runIntake(double intakeSpeed) {
-        System.out.println("Running Claw intake at speed : " + intakeSpeed);
-    }
-
-    
-    public void stopIntake() {
-        System.out.println("Stopping Claw intake.");
-    }
-
 }
