@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake;
 
 public class MockIntake extends Intake {
+  protected IntakeArmPositionsEnum position = IntakeArmPositionsEnum.UNKNOWN;
 
   @Override
   public void rollIntake(double speed) {
@@ -19,12 +20,13 @@ public class MockIntake extends Intake {
 
   @Override
   public IntakeArmPositionsEnum getCurrentIntakeArmPosition() {
-    return null;
+    return position;
   }
 
   @Override
   public void setCurrentIntakeArmPosition(IntakeArmPositionsEnum position) {
-
+    this.position = position;
+    System.out.println("Setting Position to " + position);
   }
 
 }

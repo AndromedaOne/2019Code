@@ -23,10 +23,16 @@ public class IntakeArmControl extends Command {
   private static double groundPositionSetPoint;
   static {
     Config conf = Robot.getConfig();
-    Config intakeConf = conf.getConfig("subsystems.intake");
-    stowedPositionSetPoint = 0;
-    cargoPositionSetPoint = intakeConf.getDouble("CargoPositionSetpoint");
-    groundPositionSetPoint = intakeConf.getDouble("GroundPositionSetPoint");
+    if (conf.hasPath("subsystems.intake")) {
+      Config intakeConf = conf.getConfig("subsystems.intake");
+      stowedPositionSetPoint = 0;
+      cargoPositionSetPoint = intakeConf.getDouble("CargoPositionSetpoint");
+      groundPositionSetPoint = intakeConf.getDouble("GroundPositionSetPoint");
+    } else {
+      stowedPositionSetPoint = 0;
+      cargoPositionSetPoint = 7;
+      groundPositionSetPoint = 6;
+    }
   }
 
   /**
