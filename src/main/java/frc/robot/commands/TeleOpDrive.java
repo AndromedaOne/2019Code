@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
-import frc.robot.subsystems.drivetrain.DriveTrain;
-import frc.robot.subsystems.drivetrain.RealDriveTrain;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -46,7 +44,7 @@ public class TeleOpDrive extends Command {
         && Robot.driveTrain.getShifterPresentFlag()) {
       shifterDelayCounter = 0;
       Robot.driveTrain.changeControlMode(NeutralMode.Coast);
-      Robot.driveTrain.move(0,0);
+      Robot.driveTrain.move(0, 0);
       if (shifterHigh) {
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
@@ -65,7 +63,7 @@ public class TeleOpDrive extends Command {
     if (shifterDelayCounter >= delay) {
       Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
     } else {
-      Robot.driveTrain.move(0,0);
+      Robot.driveTrain.move(0, 0);
     }
 
     if (shifterDelayCounter == delay) {
