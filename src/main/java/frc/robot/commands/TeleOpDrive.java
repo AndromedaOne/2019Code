@@ -17,6 +17,8 @@ public class TeleOpDrive extends Command {
   private double mod;
   private boolean shifterHigh = false;
   private int shifterDelayCounter = 0;
+  private int delay = 300;
+  private boolean timeToShift;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -36,9 +38,12 @@ public class TeleOpDrive extends Command {
   protected void execute() {
     Joystick driveController = Robot.driveController;
 
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= 24
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= delay
         && Robot.driveTrain.getShifterPresentFlag()) {
       shifterDelayCounter = 0;
+      timeToShift = true;
+    }
+    if (timeToShift && shifterDelayCounter == 0.5*delay) {
       if (shifterHigh) {
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
@@ -46,14 +51,18 @@ public class TeleOpDrive extends Command {
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
       }
+      timeToShift = false;
     }
 
     shifterDelayCounter++;
+    System.out.println(shifterDelayCounter);
     double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
 
     double rotateStickValue = -EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
-    if (shifterDelayCounter >= 24) {
+    if (shifterDelayCounter >= delay) {
       Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
+    } else {
+      Robot.driveTrain.move(0,0);
     }
 
     // 48 on slowmodedelaycounter is about a second
