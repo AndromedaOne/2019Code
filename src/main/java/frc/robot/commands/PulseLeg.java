@@ -1,17 +1,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts.StiltLeg;
 
 public class PulseLeg extends Command {
 
+  public enum stiltLeg {
+    FRONTRIGHT, FRONTLEFT, REARLEFT, REARRIGHT
+  }
+
+  private stiltLeg currentLeg = stiltLeg.FRONTLEFT;
   private long initTime = 0;
   private long kHoldTime = 10;
   private long currentHoldTime = 0;
-  private StiltLeg currentLeg;
   private boolean done = false;
 
-  public PulseLeg(StiltLeg leg) {
+  public PulseLeg(stiltLeg leg) {
     currentLeg = leg;
   }
 
