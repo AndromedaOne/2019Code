@@ -22,11 +22,19 @@ public class PIDControllerBase {
     pidMultiton.setSetpoint(setpoint);
   }
 
+  public void setRelativeSetpoint(double delta) {
+    pidMultiton.setRelativeSetpoint(delta);
+  }
+
   /**
    * Enables the pidController
    */
   public void enable() {
     pidMultiton.enable();
+  }
+
+  public boolean isEnabled() {
+    return pidMultiton.isEnabled();
   }
 
   /**

@@ -3,7 +3,6 @@ package frc.robot.subsystems.intake;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
 
 /* TODO 
@@ -12,33 +11,46 @@ import frc.robot.Robot;
 * find actual values for CARGOPOSITION and ENDGAMEPOSITION
 */
 public class RealIntake extends Intake {
-    public static WPI_TalonSRX rollerTalon;
-    public static WPI_TalonSRX intakeArmTalon;
-    private int intakeDownDirection;
-   
+  public static WPI_TalonSRX rollerTalon;
+  public static WPI_TalonSRX intakeArmTalon;
+  private int intakeDownDirection;
+  private IntakeArmPositionsEnum currentIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
 
-    public RealIntake() {
-        Config conf = Robot.getConfig();
-        Config intakeConf = conf.getConfig("port.can");
-        rollerTalon = new WPI_TalonSRX(intakeConf.getInt("rollerTalon"));
-        intakeArmTalon = new WPI_TalonSRX(intakeConf.getInt("intakeArm"));
-        intakeDownDirection = intakeConf.getInt("intakeDownDirection");
-    }
+  public RealIntake() {
+    Config conf = Robot.getConfig();
 
-    @Override
-    public void rollIntake(double speed) {
-        rollerTalon.set(speed);
+    // TODO: only put ports in port config and put intake config in subsystem block
+    Config intakeConf = conf.getConfig("port.can");
+    rollerTalon = new WPI_TalonSRX(intakeConf.getInt("rollerTalon"));
+    intakeArmTalon = new WPI_TalonSRX(intakeConf.getInt("intakeArm"));
+    intakeDownDirection = intakeConf.getInt("intakeDownDirection");
+  }
 
-    }
-    
-    @Override
-    public void moveIntake(double speed) {
-        intakeArmTalon.set(speed*intakeDownDirection);
-    }
+  @Override
+  public void rollIntake(double speed) {
+    rollerTalon.set(speed);
 
-    @Override
-    protected void initDefaultCommand() {
+  }
 
-    }
+  @Override
+  public void moveIntakeArm(double speed) {
+    intakeArmTalon.set(speed * intakeDownDirection);
+  }
+
+  @Override
+  protected void initDefaultCommand() {
+
+  }
+
+  @Override
+  public IntakeArmPositionsEnum getCurrentIntakeArmPosition() {
+    return currentIntakePosition;
+
+  }
+
+  @Override
+  public void setCurrentIntakeArmPosition(IntakeArmPositionsEnum position) {
+    currentIntakePosition = position;
+  }
 
 }

@@ -24,6 +24,10 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.sensors.anglesensor.*;
+import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
@@ -33,14 +37,10 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
-import frc.robot.utilities.I2CBusDriver;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
-import frc.robot.sensors.anglesensor.*;
-import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
-import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
-import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
+import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
-  
+
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake intake");
       intake = new MockIntake();
     }
-    if(conf.hasPath("sensors.intakeAngleSensor")){
+    if (conf.hasPath("sensors.intakeAngleSensor")) {
       System.out.println("Using real intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor();
     } else {
@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
       intakeAngleSensor = new MockAngleSensor();
     }
 
-    if(conf.hasPath("sensors.intakeStowedSwitch")){
+    if (conf.hasPath("sensors.intakeStowedSwitch")) {
       System.out.println("Using real intakeStowedSwitch");
       int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
       intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, false);

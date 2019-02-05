@@ -15,7 +15,7 @@ public class MoveUsingEncoderPID extends Command {
 
   public void initialize() {
     System.out.println(" -- Called! -- ");
-    drivetrainEncoder.setSetpoint(_setpoint);
+    drivetrainEncoder.setRelativeSetpoint(_setpoint);
     drivetrainEncoder.enable();
   }
 

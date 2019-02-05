@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
-import frc.robot.commands.IntakeControl;
-import frc.robot.commands.IntakeControl.MoveIntakeArmDirection;
+import frc.robot.commands.IntakeArmControl;
+import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -51,24 +51,23 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
 
   private static OI instance = new OI();
- 
+
   private POVButton intakeUp;
   private POVButton intakeDown;
-
 
   private OI() {
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
     testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
-    
+
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
- 
+
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
-    intakeUp.whenPressed(new IntakeControl(MoveIntakeArmDirection.UP));
-    SmartDashboard.putData("MoveIntakeUp", new IntakeControl(MoveIntakeArmDirection.UP));
+    intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
+    SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
 
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
-    intakeDown.whenPressed(new IntakeControl(MoveIntakeArmDirection.DOWN));
-    SmartDashboard.putData("MoveIntakeDown", new IntakeControl(MoveIntakeArmDirection.DOWN));
+    intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
   }
 
   // Controllers
