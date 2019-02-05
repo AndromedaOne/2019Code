@@ -27,12 +27,12 @@ public class RealDriveTrain extends DriveTrain {
 
   private final int kTimeoutMs = 30;
   /* 100% throttle corresponds to 3600 RPM */
-  private final double kMaxRPM = 3600;
+  private final double kMaxSpeed = 3600;
   /*
    * Implement math according to section 12.4.2 of the TALON SRX Software
    * Reference manual Rev 1.22
    */
-  private final double kF = 1023 / kMaxRPM;
+  private final double kF = 1023 / kMaxSpeed;
   private final double kP = 0;
   private final double kI = 0;
   private final double kD = 0;
@@ -43,7 +43,6 @@ public class RealDriveTrain extends DriveTrain {
 
     ArbitraryModeWPI_TalonSRX(int deviceNumber) {
       super(deviceNumber);
-      System.out.println("HELLO HELLO HELLO from ArbitraryModeWPI_TalonSRX for device " + deviceNumber);
     }
 
     public void setControlMode(ControlMode controlMode) {
@@ -54,7 +53,6 @@ public class RealDriveTrain extends DriveTrain {
     public void set(double speed) {
       this.speed = speed;
       set(controlMode, speed);
-      System.out.println("controlMode = " + controlMode);
       feed();
     }
 
@@ -77,7 +75,7 @@ public class RealDriveTrain extends DriveTrain {
   public void setVelocityMode() {
     setVelocityMode(driveTrainLeftMaster);
     setVelocityMode(driveTrainRightMaster);
-    differentialDrive.setMaxOutput(kMaxRPM * 4096 / 600);
+    differentialDrive.setMaxOutput(kMaxSpeed);
   }
 
   private void setVelocityMode(ArbitraryModeWPI_TalonSRX talon) {
@@ -89,7 +87,6 @@ public class RealDriveTrain extends DriveTrain {
   // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
   // and
   private ArbitraryModeWPI_TalonSRX initTalonMaster(Config driveConf, String motorName) {
-    System.out.println("About to create ArbitraryModeWPI_TalonSRX for device ID " + driveConf.getInt(motorName));
     ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(driveConf.getInt(motorName));
     /* Factory Default all hardware to prevent unexpected behaviour */
     _talon.configFactoryDefault();
@@ -127,23 +124,26 @@ public class RealDriveTrain extends DriveTrain {
 
   @Override
   public void initDefaultCommand() {
+
     Config conf = Robot.getConfig();
     Config driveConf = conf.getConfig("ports.driveTrain");
     setDefaultCommand(new TeleOpDrive());
-    driveTrainLeftMaster = new ArbitraryModeWPI_TalonSRX(driveConf.getInt("leftMaster"));
-    driveTrainLeftSlave = new WPI_TalonSRX(driveConf.getInt("leftSlave"));
-    driveTrainLeftSpeedController = new SpeedControllerGroup(driveTrainLeftMaster, driveTrainLeftSlave);
-    driveTrainRightMaster = new ArbitraryModeWPI_TalonSRX(driveConf.getInt("rightMaster"));
-    driveTrainRightSlave = new WPI_TalonSRX(driveConf.getInt("rightSlave"));
-    driveTrainRightSpeedController = new SpeedControllerGroup(driveTrainRightMaster, driveTrainRightSlave);
-    differentialDrive = new DifferentialDrive(driveTrainLeftSpeedController, driveTrainRightSpeedController);
+    driveTrainLeftMaster = initTalonMaster(driveConf, "leftMaster");
+    driveTrainLeftSlave = initTalonSlave(driveConf, "leftSlave", driveTrainLeftMaster);
+    driveTrainRightMaster = initTalonMaster(driveConf, "rightMaster");
+    driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster);
+    differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
+    /* For testing only try this in velocity mode */
+    setVelocityMode();
 
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
       shifterPresentFlag = true;
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
-    }
+      }
+      
+      setVelocityMode();
   }
 
   @Override
@@ -152,7 +152,7 @@ public class RealDriveTrain extends DriveTrain {
 
   public void move(double forwardBackSpeed, double rotateAmount) {
     printMeasurements("Left ", driveTrainLeftMaster, forwardBackSpeed, false);
-    printMeasurements("Right", driveTrainRightMaster, forwardBackSpeed, true);
+    printMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
   }
 
@@ -164,7 +164,7 @@ public class RealDriveTrain extends DriveTrain {
     /* Get Talon/Victor's current output percentage */
     double motorOutput = _talon.getMotorOutputPercent();
 
-    targetVelocity = targetVelocity * 4096 / 600 * kMaxRPM;
+    targetVelocity = targetVelocity * kMaxSpeed;
     /* Prepare line to print */
     _sb.append(side);
     _sb.append("\tout:");
