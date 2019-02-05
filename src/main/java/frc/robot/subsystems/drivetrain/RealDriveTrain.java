@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
@@ -71,6 +72,14 @@ public class RealDriveTrain extends DriveTrain {
 
   public void shiftToHighGear() {
     shifterSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  @Override
+  public void changeControlMode(NeutralMode mode) {
+    driveTrainLeftTalon1.setNeutralMode(mode);
+    driveTrainLeftTalon2.setNeutralMode(mode);
+    driveTrainRightTalon3.setNeutralMode(mode);
+    driveTrainRightTalon4.setNeutralMode(mode);
   }
 
 }

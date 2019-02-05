@@ -1,9 +1,13 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.drivetrain.RealDriveTrain;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -41,9 +45,8 @@ public class TeleOpDrive extends Command {
     if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && shifterDelayCounter >= delay
         && Robot.driveTrain.getShifterPresentFlag()) {
       shifterDelayCounter = 0;
-      timeToShift = true;
-    }
-    if (timeToShift && shifterDelayCounter == 0.5*delay) {
+      Robot.driveTrain.changeControlMode(NeutralMode.Coast);
+      Robot.driveTrain.move(0,0);
       if (shifterHigh) {
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
@@ -51,7 +54,6 @@ public class TeleOpDrive extends Command {
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
       }
-      timeToShift = false;
     }
 
     shifterDelayCounter++;
@@ -60,6 +62,7 @@ public class TeleOpDrive extends Command {
 
     double rotateStickValue = -EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
     if (shifterDelayCounter >= delay) {
+      Robot.driveTrain.changeControlMode(NeutralMode.Brake);
       Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
     } else {
       Robot.driveTrain.move(0,0);
