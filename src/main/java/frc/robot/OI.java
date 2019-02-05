@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.utilities.ButtonsEnumerated;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -46,12 +47,27 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
+    // Drive Controller and Buttons
+    Joystick driveController;
+
+    // Subsystem Controller and Buttons
+    Joystick subsystemController;
+    JoystickButton raiseRobotButton;
+  
+
   private static OI instance = new OI();
+
+  JoystickButton openClawButton;
+  JoystickButton closeClawButton;
 
   private OI() {
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
     testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+    // Claw buttons are temp until I figure out the D-Pad
+    openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
+    closeClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
+
   }
 
   // Controllers
