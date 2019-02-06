@@ -127,12 +127,16 @@ public class Robot extends TimedRobot {
         senseConf.getInt("numSensors"));
 
     // Camera Code
-    UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
-    UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
-    camera0.setResolution(320, 240);
-    camera0.setFPS(10);
-    camera1.setResolution(320, 240);
-    camera1.setFPS(10);
+    if (conf.hasPath("cameras")) {
+      Config cameraConf = conf.getConfig("cameras");
+
+      UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera0"));
+      UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera1"));
+      camera0.setResolution(320, 240);
+      camera0.setFPS(10);
+      camera1.setResolution(320, 240);
+      camera1.setFPS(10);
+    }
 
     if (conf.hasPath("sensors.lineFollowSensor")) {
       lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
