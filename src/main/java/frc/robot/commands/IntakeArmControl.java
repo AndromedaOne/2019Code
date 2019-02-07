@@ -18,18 +18,15 @@ public class IntakeArmControl extends Command {
   private MoveIntakeArmDirection directionToMove;
   private IntakeArmPositionsEnum nextIntakePosition;
 
-  private static double stowedPositionSetPoint;
   private static double cargoPositionSetPoint;
   private static double groundPositionSetPoint;
   static {
     Config conf = Robot.getConfig();
     if (conf.hasPath("subsystems.intake")) {
       Config intakeConf = conf.getConfig("subsystems.intake");
-      stowedPositionSetPoint = 0;
       cargoPositionSetPoint = intakeConf.getDouble("CargoPositionSetpoint");
       groundPositionSetPoint = intakeConf.getDouble("GroundPositionSetPoint");
     } else {
-      stowedPositionSetPoint = 0;
       cargoPositionSetPoint = 7;
       groundPositionSetPoint = 6;
     }
@@ -66,20 +63,20 @@ public class IntakeArmControl extends Command {
   private void setUpSetPoint() {
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
-      intakePositionsPID.setRelativeSetpoint(0);
+      intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setRelativeSetpoint(-cargoPositionSetPoint);
+      intakePositionsPID.setSetpoint(-cargoPositionSetPoint);
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
       break;
     case GROUNDHEIGHT:
-      intakePositionsPID.setRelativeSetpoint(cargoPositionSetPoint - groundPositionSetPoint);
+      intakePositionsPID.setSetpoint(cargoPositionSetPoint - groundPositionSetPoint);
       nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
       break;
     case UNKNOWN:
       // TODO: Don't move
-      intakePositionsPID.setRelativeSetpoint(0);
+      intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
       break;
     }
@@ -91,20 +88,20 @@ public class IntakeArmControl extends Command {
   private void setDownSetpoint() {
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
-      intakePositionsPID.setRelativeSetpoint(cargoPositionSetPoint);
+      intakePositionsPID.setSetpoint(cargoPositionSetPoint);
       nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setRelativeSetpoint(groundPositionSetPoint - cargoPositionSetPoint);
+      intakePositionsPID.setSetpoint(groundPositionSetPoint - cargoPositionSetPoint);
       nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
       break;
     case GROUNDHEIGHT:
-      intakePositionsPID.setRelativeSetpoint(0);
+      intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
       break;
     case UNKNOWN:
       // TODO: Don't move
-      intakePositionsPID.setRelativeSetpoint(0);
+      intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
       break;
     }

@@ -13,7 +13,6 @@ public class IntakePIDController extends PIDControllerBase {
   private static IntakePIDController instance;
   private IntakePIDOut intakePIDOut;
   private AngleSensor intakeAngleSensor;
-  private MoveIntakeSafely moveIntakeSafely;
 
   private IntakePIDController() {
     super.absoluteTolerance = 3;
@@ -28,7 +27,6 @@ public class IntakePIDController extends PIDControllerBase {
     intakeAngleSensor.putSensorOnLiveWindow(super.subsytemName, "Intake");
     intakePIDOut = new IntakePIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
-    moveIntakeSafely = new MoveIntakeSafely();
     super.pidMultiton = PIDMultiton.getInstance(intakeAngleSensor, intakePIDOut, super.pidConfiguration);
     intakePIDOut.setContainer(super.pidMultiton);
   }
@@ -45,7 +43,7 @@ public class IntakePIDController extends PIDControllerBase {
       trace.addTrace(true, "Intake PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
           new TracePair("Angle", intakeAngleSensor.pidGet()));
       try {
-        moveIntakeSafely.moveIntake(output);
+        MoveIntakeSafely.moveIntake(output);
       } catch (IsAtLimitException e) {
         System.out.println("The Intake PID loop is driving into the limit switch!");
         container.disable();

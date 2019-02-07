@@ -2,12 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
+import frc.robot.closedloopcontrollers.MoveIntakeSafely;
+import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor.IsAtLimitException;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
 
 public class StowIntakeArm extends Command {
 
-  private IntakePIDController intakePositionsPID = IntakePIDController.getInstance();
+  private double speed = 0.5;
+  private boolean isFinishedFlag = false;
 
   /**
    * Construct an intake control command to make the intake arm go up or down
@@ -21,26 +23,27 @@ public class StowIntakeArm extends Command {
 
   @Override
   protected void initialize() {
-    intakePositionsPID.setSetpoint(Double.NEGATIVE_INFINITY);
-    intakePositionsPID.enable();
   }
 
   @Override
   protected void execute() {
+    try {
+      // This will throw an exception when the limitswitch is hit and resets the
+      // angle sensor
+      MoveIntakeSafely.moveIntake(speed);
+    } catch (IsAtLimitException e) {
+      isFinishedFlag = true;
+    }
   }
 
   @Override
   protected boolean isFinished() {
-    return !intakePositionsPID.isEnabled();
-
+    return isFinishedFlag;
   }
 
   @Override
   protected void end() {
-    if (!intakePositionsPID.isEnabled()) {
-      Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.STOWED);
-    }
-    intakePositionsPID.disable();
+    Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.STOWED);
   }
 
   @Override

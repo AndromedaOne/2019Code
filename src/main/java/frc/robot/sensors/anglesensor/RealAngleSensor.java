@@ -1,16 +1,23 @@
 package frc.robot.sensors.anglesensor;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+
 public class RealAngleSensor extends AngleSensor {
+  private AnalogInput angleSensor;
+  private double initialPosition;
+
+  public RealAngleSensor(int port) {
+    angleSensor = new AnalogInput(port);
+  }
 
   @Override
   public double getAngle() {
-    // This needs to be filled in correctly later
-    return 0;
+    return angleSensor.getVoltage() - initialPosition;
   }
 
   @Override
   public void reset() {
-    // This needs to be filled in correctly later
+    initialPosition = angleSensor.getVoltage();
   }
 
   @Override

@@ -130,7 +130,8 @@ public class Robot extends TimedRobot {
     }
     if (conf.hasPath("sensors.intakeAngleSensor")) {
       System.out.println("Using real intakeAngleSensor");
-      intakeAngleSensor = new RealAngleSensor();
+      int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
+      intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
