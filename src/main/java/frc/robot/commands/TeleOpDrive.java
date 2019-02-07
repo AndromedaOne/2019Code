@@ -55,7 +55,6 @@ public class TeleOpDrive extends Command {
     }
 
     shifterDelayCounter++;
-    System.out.println(shifterDelayCounter);
     double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
 
     double rotateStickValue = -EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
