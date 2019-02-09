@@ -16,10 +16,10 @@ import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
-import frc.robot.utilities.POVDirectionNames;
 import frc.robot.subsystems.extendablearmandwrist.EnumArmLevel;
 import frc.robot.subsystems.extendablearmandwrist.EnumHatchOrCargo;
 import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.utilities.POVDirectionNames;
 
 /**
  * This class is the glue that binds the controls on the physical operator

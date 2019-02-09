@@ -42,12 +42,12 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.MockIntake;
-import frc.robot.subsystems.intake.RealIntake;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
 import frc.robot.subsystems.extendablearmandwrist.MockExtendableArmAndWrist;
 import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.MockIntake;
+import frc.robot.subsystems.intake.RealIntake;
 import frc.robot.utilities.I2CBusDriver;
 
 /**
