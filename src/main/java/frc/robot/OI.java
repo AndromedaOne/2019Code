@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.commands.PulseLeg.stiltLeg;
 import frc.robot.utilities.ButtonsEnumerated;
 
 /**
@@ -60,20 +61,20 @@ public class OI {
   public OI() {
     driveController = new Joystick(0);
     subsystemController = new Joystick(1);
-    raiseRobotButton = new JoystickButton(subsystemController, ButtonsEnumerated.LEFTBUMPERBUTTON.getValue());
+    raiseRobotButton = new JoystickButton(driveController, ButtonsEnumerated.LEFTBUMPERBUTTON.getValue());
     raiseRobotButton.whenPressed(new RaiseRobot());
 
-    raiseLeftFront = new JoystickButton(subsystemController, ButtonsEnumerated.YBUTTON.getValue());
-    raiseLeftFront.whenPressed(new PulseLeg(Robot.pneumaticStilts.frontLeftStiltLeg));
+    raiseLeftFront = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
+    raiseLeftFront.whenPressed(new PulseLeg(stiltLeg.FRONTLEFT));
 
-    raiseRightFront = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
-    raiseRightFront.whenPressed(new PulseLeg(Robot.pneumaticStilts.frontRightStiltLeg));
+    raiseRightFront = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
+    raiseRightFront.whenPressed(new PulseLeg(stiltLeg.FRONTRIGHT));
 
-    raiseRightRear = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
-    raiseRightRear.whenPressed(new PulseLeg(Robot.pneumaticStilts.rearRightStiltLeg));
+    raiseRightRear = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
+    raiseRightRear.whenPressed(new PulseLeg(stiltLeg.REARRIGHT));
 
-    raiseLeftRear = new JoystickButton(subsystemController, ButtonsEnumerated.XBUTTON.getValue());
-    raiseLeftRear.whenPressed(new PulseLeg(Robot.pneumaticStilts.rearLeftStiltLeg));
+    raiseLeftRear = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
+    raiseLeftRear.whenPressed(new PulseLeg(stiltLeg.REARLEFT));
 
     SmartDashboard.putData("Extend Front Left", new RaiseFrontLeft());
     SmartDashboard.putData("Extend Front Right", new RaiseFrontRight());

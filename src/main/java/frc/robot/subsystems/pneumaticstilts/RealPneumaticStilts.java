@@ -48,22 +48,6 @@ public class RealPneumaticStilts extends PneumaticStilts {
     stopAllLegs();
   }
 
-  public StiltLeg getFrontLeftLeg() {
-    return frontLeftStiltLeg;
-  }
-
-  public StiltLeg getFrontRightLeg() {
-    return frontRightStiltLeg;
-  }
-
-  public StiltLeg getRearLeftLeg() {
-    return rearLeftStiltLeg;
-  }
-
-  public StiltLeg getRearRightLeg() {
-    return rearRightStiltLeg;
-  }
-
   public void stopAllLegs() {
     frontLeftStiltLeg.stopLeg();
     frontRightStiltLeg.stopLeg();
