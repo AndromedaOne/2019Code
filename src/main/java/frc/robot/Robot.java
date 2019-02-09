@@ -57,7 +57,6 @@ import frc.robot.utilities.I2CBusDriver;
  */
 public class Robot extends TimedRobot {
   public static Compressor compressor;
-  public static Compressor compressor;
   public static Joystick driveController;
   public static Joystick operatorController;
 
