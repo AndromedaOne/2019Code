@@ -25,12 +25,12 @@ public class TeleopArm extends Command {
     if (Math.abs(armWristValue) > 0.01 || Math.abs(rotateValue) > 0.01) {
       double actualArmWristVal = rotateValue;
       double actualRotateVal = -armWristValue;
-      extendableArmAndWrist.move(actualArmWristVal, actualRotateVal);
+      // extendableArmAndWrist.moveArmWrist(actualArmWristVal, actualRotateVal,);
     }
 
     double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
     if (Math.abs(shoulderRotateValue) > 0.01) {
-      extendableArmAndWrist.shoulderRotate(shoulderRotateValue);
+      // extendableArmAndWrist.shoulderRotate(shoulderRotateValue);
     }
   }
 

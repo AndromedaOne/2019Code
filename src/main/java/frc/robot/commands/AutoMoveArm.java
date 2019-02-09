@@ -17,12 +17,13 @@ public class AutoMoveArm extends Command {
 
   @Override
   protected void initialize() {
-    Robot.extendableArmAndWrist.goToHeight(hatchOrCargo, level);
+    // Robot.extendableArmAndWrist.goToHeight(hatchOrCargo, level);
   }
 
   @Override
   protected boolean isFinished() {
-    return Robot.extendableArmAndWrist.moveIsDone();
+    // return Robot.extendableArmAndWrist.moveIsDone();
+    return true;
   }
 
 }

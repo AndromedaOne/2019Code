@@ -14,14 +14,6 @@ public abstract class ExtendableArmAndWrist extends Subsystem {
     setDefaultCommand(new TeleopArm());
   }
 
-  public abstract void goToHeight(EnumHatchOrCargo hatchOrCargo, EnumArmLevel armLevel);
-
-  public abstract void stow();
-
-  public abstract void move(double forwardBackSpeed, double rotateAmount);
-
-  public abstract boolean moveIsDone();
-
-  public abstract void shoulderRotate(double rotateAmount);
+  public abstract void moveArmWrist(double extensionSpeed, double wristRotSpeed, double shoulderRotSpeed);
 
 }

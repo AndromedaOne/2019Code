@@ -5,10 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.pidcontrollers.PIDConfiguration;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 
 public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
@@ -44,43 +42,6 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
     topExtendableArmAndWristTalon = new WPI_TalonSRX(armConf.getInt("topExtendableArmAndWristTalon"));
     bottomExtendableArmAndWristTalon = new WPI_TalonSRX(armConf.getInt("bottomExtendableArmAndWristTalon"));
     differentialDrive = new DifferentialDrive(topExtendableArmAndWristTalon, bottomExtendableArmAndWristTalon);
-    topArmAndWristEncoder = new PIDSource() {
-
-      @Override
-      public void setPIDSourceType(PIDSourceType pidSource) {
-
-      }
-
-      @Override
-      public double pidGet() {
-        return 0;
-      }
-
-      @Override
-      public PIDSourceType getPIDSourceType() {
-        return null;
-      }
-    };
-    bottomArmAndWristEncoder = new PIDSource() {
-
-      @Override
-      public void setPIDSourceType(PIDSourceType pidSource) {
-
-      }
-
-      @Override
-      public double pidGet() {
-        return 0;
-      }
-
-      @Override
-      public PIDSourceType getPIDSourceType() {
-        return null;
-      }
-    };
-    topArmPid = PIDMultiton.getInstance(topArmAndWristEncoder, topExtendableArmAndWristTalon, new PIDConfiguration());
-    bottomArmPid = PIDMultiton.getInstance(bottomArmAndWristEncoder, bottomExtendableArmAndWristTalon,
-        new PIDConfiguration());
 
   }
 
@@ -94,45 +55,10 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
     return instance;
   }
 
-  /**
-   * @param hatchOrCargo Whether or not the robot is carrying a hatch panel or a
-   * cargo ball
-   * @param armLevel the level to raise the arm to
-   */
-
   @Override
-  public void goToHeight(EnumHatchOrCargo hatchOrCargo, EnumArmLevel armLevel) {
-    double topSetPoint = 0; // TODO Ugly if/then statement
-    double bottomSetPoint = 0;
-    topArmPid.setSetpoint(topSetPoint);
-    bottomArmPid.setSetpoint(bottomSetPoint);
-    topArmPid.enable();
-    bottomArmPid.enable();
-  }
-
-  @Override
-  public void stow() {
-
-  }
-
-  // TODO: Fill these out
-  /**
-   * @param forwardBackSpeed
-   * @param rotateAmount
-   */
-  @Override
-  public void move(double forwardBackSpeed, double rotateAmount) {
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
-  }
-
-  @Override
-  public void shoulderRotate(double rotateAmount) {
-    shoulderJointTalon.set(ControlMode.PercentOutput, rotateAmount);
-  }
-
-  @Override
-  public boolean moveIsDone() {
-    return topArmPid.onTarget() && bottomArmPid.onTarget();
+  public void moveArmWrist(double extensionSpeed, double wristRotSpeed, double shoulderRotSpeed) {
+    differentialDrive.arcadeDrive(extensionSpeed, wristRotSpeed);
+    shoulderJointTalon.set(ControlMode.Velocity, shoulderRotSpeed);
   }
 
 }
