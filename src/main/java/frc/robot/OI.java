@@ -73,13 +73,13 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    ButtonsEnumerated.ABUTTON.getJoystickButton(armStick)
+    ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController)
         .whenPressed(new AutoMoveArm(EnumArmLevel.RLOW, EnumHatchOrCargo.CARGO));
-    ButtonsEnumerated.BBUTTON.getJoystickButton(armStick)
+    ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController)
         .whenPressed(new AutoMoveArm(EnumArmLevel.RLOW, EnumHatchOrCargo.CARGO));
-    ButtonsEnumerated.XBUTTON.getJoystickButton(armStick)
+    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController)
         .whenPressed(new AutoMoveArm(EnumArmLevel.RMED, EnumHatchOrCargo.CARGO));
-    ButtonsEnumerated.YBUTTON.getJoystickButton(armStick)
+    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController)
         .whenPressed(new AutoMoveArm(EnumArmLevel.RHIGH, EnumHatchOrCargo.CARGO));
   }
 

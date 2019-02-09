@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
 
   public static DriveTrain driveTrain;
   public static ExtendableArmAndWrist extendableArmAndWrist;
-  public static Joystick driveController;
   public static Joystick armController;
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;

@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.PIDConfiguration;
-import frc.robot.closedloopcontrollers.PIDMultiton;
+import frc.robot.closedloopcontrollers.pidcontrollers.PIDConfiguration;
+import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 
 public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   private static RealExtendableArmAndWrist instance;
