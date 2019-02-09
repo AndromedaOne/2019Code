@@ -20,6 +20,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.GyroPIDController;
+import frc.robot.commands.*;
+import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
+import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
@@ -60,6 +67,9 @@ public class Robot extends TimedRobot {
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
+  public static MagEncoderSensor drivetrainLeftRearEncoder;
+  public static UltrasonicSensor drivetrainFrontUltrasonic;
+  public static BaseLineFollowerSensor lineFollowerSensorArray;
 
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
@@ -163,12 +173,27 @@ public class Robot extends TimedRobot {
         senseConf.getInt("numSensors"));
 
     // Camera Code
-    UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
-    UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
-    camera0.setResolution(320, 240);
-    camera0.setFPS(10);
-    camera1.setResolution(320, 240);
-    camera1.setFPS(10);
+    if (conf.hasPath("cameras")) {
+      Config cameraConf = conf.getConfig("cameras");
+
+      UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera0"));
+      UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera1"));
+      camera0.setResolution(320, 240);
+      camera0.setFPS(10);
+      camera1.setResolution(320, 240);
+      camera1.setFPS(10);
+    }
+
+    if (conf.hasPath("sensors.lineFollowSensor")) {
+      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+          senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+          senseConf.getInt("numSensors"));
+    } else {
+      lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
+    }
+    m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
+    // chooser.addOption("My Auto", new MyAutoCommand());
+    // SmartDashboard.putData("Auto mode", m_chooser);
   }
 
   /**
