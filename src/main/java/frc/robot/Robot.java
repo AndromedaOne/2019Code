@@ -75,6 +75,9 @@ public class Robot extends TimedRobot {
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
 
+  public static MagEncoderSensor armExtensionEncoder1;
+  public static MagEncoderSensor armExtensionEncoder2;
+  public static MagEncoderSensor armRotateEncoder1;
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
@@ -114,9 +117,16 @@ public class Robot extends TimedRobot {
     driveController = new Joystick(0);
     armController = new Joystick(1);
 
-    if (conf.hasPath("subsystems.extendablearmandwrist")) {
+    if (conf.hasPath("subsystems.armAndWrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
+      RealExtendableArmAndWrist rExtendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
+
+      armExtensionEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getTopExtendableArmAndWristTalon());
+
+      armExtensionEncoder2 = new RealMagEncoderSensor(rExtendableArmAndWrist.getBottomExtendableArmAndWristTalon());
+
+      armRotateEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getShoulderJointTalon());
     } else {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
@@ -203,6 +213,7 @@ public class Robot extends TimedRobot {
     } else {
       lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
     }
+
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);

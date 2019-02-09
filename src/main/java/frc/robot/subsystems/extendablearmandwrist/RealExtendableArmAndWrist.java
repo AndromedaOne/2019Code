@@ -11,9 +11,9 @@ import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 
 public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   private static RealExtendableArmAndWrist instance;
-  private WPI_TalonSRX shoulderJointTalon;
-  private WPI_TalonSRX topExtendableArmAndWristTalon;
-  private WPI_TalonSRX bottomExtendableArmAndWristTalon;
+  public final WPI_TalonSRX shoulderJointTalon;
+  public final WPI_TalonSRX topExtendableArmAndWristTalon;
+  public final WPI_TalonSRX bottomExtendableArmAndWristTalon;
   protected DifferentialDrive differentialDrive;
   // TODO: Add real encoders
   private PIDSource topArmAndWristEncoder = null;

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -22,21 +23,28 @@ public class TeleopArm extends Command {
     double armWristValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
     double rotateValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(armController);
 
-    if (Math.abs(armWristValue) > 0.01 || Math.abs(rotateValue) > 0.01) {
-      double actualArmWristVal = rotateValue;
-      double actualRotateVal = -armWristValue;
-      // extendableArmAndWrist.moveArmWrist(actualArmWristVal, actualRotateVal,);
-    }
-
+    double actualArmWristVal = rotateValue;
+    double actualRotateVal = -armWristValue;
     double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
-    if (Math.abs(shoulderRotateValue) > 0.01) {
-      // extendableArmAndWrist.shoulderRotate(shoulderRotateValue);
+    if (Math.abs(shoulderRotateValue) < 0.01) {
+      shoulderRotateValue = 0.0;
     }
+    MoveArmAndWristSafely.moveArmWristShoulder(actualArmWristVal, actualRotateVal, shoulderRotateValue);
   }
 
   @Override
   protected boolean isFinished() {
     return false;
+  }
+
+  @Override
+  protected void interrupted() {
+
+  }
+
+  @Override
+  protected void end() {
+
   }
 
 }
