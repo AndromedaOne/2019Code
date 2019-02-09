@@ -9,9 +9,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
+import frc.robot.commands.IntakeArmControl;
+import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.utilities.POVDirectionNames;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -48,17 +52,34 @@ public class OI {
 
   private static OI instance = new OI();
 
+  private POVButton intakeUp;
+  private POVButton intakeDown;
+
   private OI() {
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
     testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
+
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+
+    intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
+    intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
+    SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
+
+    intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
+    intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
   }
 
   // Controllers
-  protected Joystick driveStick = new Joystick(0);
+  protected Joystick driveStick = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick operatorController = Robot.operatorController;
 
   public Joystick getDriveStick() {
     return driveStick;
+  }
+
+  public Joystick getOperatorStick() {
+    return operatorController;
   }
 
   public static OI getInstance() {

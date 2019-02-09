@@ -1,4 +1,4 @@
-package frc.robot.closedloopcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
@@ -29,8 +29,8 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     encoder.putSensorOnLiveWindow(super.subsytemName, "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut();
     pidConfiguration = new PIDConfiguration();
-    super.setPIDConfiguration(pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(encoder, encoderPIDOut, pidConfiguration);
+    super.setPIDConfiguration(super.pidConfiguration);
+    super.pidMultiton = PIDMultiton.getInstance(encoder, encoderPIDOut, super.pidConfiguration);
   }
 
   private class EncoderPIDOut implements PIDOutput {
@@ -41,7 +41,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     @Override
     public void pidWrite(double output) {
       trace.addTrace(true, "Encoder Drivetrain", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("EncoderTicks", encoder.getDistanceTicks()));
+          new TracePair("EncoderTicks", encoder.pidGet()));
       Robot.driveTrain.move(output, 0);
     }
   }

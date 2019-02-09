@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 
 public class MoveUsingEncoderPID extends Command {
 
@@ -15,7 +15,7 @@ public class MoveUsingEncoderPID extends Command {
 
   public void initialize() {
     System.out.println(" -- Called! -- ");
-    drivetrainEncoder.setSetpoint(_setpoint);
+    drivetrainEncoder.setRelativeSetpoint(_setpoint);
     drivetrainEncoder.enable();
   }
 
