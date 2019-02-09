@@ -36,6 +36,7 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.I2CBusDriver;
 
 /**
@@ -170,6 +171,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    Trace.getInstance().flushTraceFiles();
   }
 
   @Override

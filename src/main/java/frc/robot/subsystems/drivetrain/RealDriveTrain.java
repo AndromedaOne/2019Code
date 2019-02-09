@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 /**
  *
@@ -141,9 +143,9 @@ public class RealDriveTrain extends DriveTrain {
       shifterPresentFlag = true;
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
-      }
-      
-      setVelocityMode();
+    }
+
+    setVelocityMode();
   }
 
   @Override
@@ -190,6 +192,11 @@ public class RealDriveTrain extends DriveTrain {
     } else {
       _sb.append("\n");
     }
+    Trace.getInstance().addTrace(true, "VCMeasure",
+        new TracePair("Percent", (double) motorOutput * 100),
+        new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(0)),
+        new TracePair("Error", (double) _talon.getClosedLoopError(0)),
+        new TracePair("Target", (double) targetVelocity));
   }
 
   public void stop() {
