@@ -14,6 +14,7 @@ import com.typesafe.config.ConfigFactory;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -47,6 +48,7 @@ import frc.robot.utilities.I2CBusDriver;
  */
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain;
+  public static Compressor compressor;
   public static Joystick driveController;
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;
@@ -111,7 +113,7 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
-
+    compressor = new Compressor();
     gyroPID = new GyroPIDController();
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
