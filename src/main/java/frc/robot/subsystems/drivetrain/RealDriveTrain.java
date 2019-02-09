@@ -45,7 +45,7 @@ public class RealDriveTrain extends DriveTrain {
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
       shifterPresentFlag = true;
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
-          driveConf.getInt("pneumatics.backwardsChannel"));
+          driveConf.getInt("pneumatics.backwardChannel"));
     }
 
   }
