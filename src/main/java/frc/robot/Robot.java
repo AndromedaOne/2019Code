@@ -12,18 +12,27 @@ import java.io.File;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
-import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
-import frc.robot.closedloopcontrollers.GyroPIDController;
-import frc.robot.commands.*;
-import frc.robot.sensors.LineFollowerSensorArray;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.commands.TeleOpDrive;
+import frc.robot.sensors.anglesensor.AngleSensor;
+import frc.robot.sensors.anglesensor.MockAngleSensor;
+import frc.robot.sensors.anglesensor.RealAngleSensor;
+import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
+import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
+import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
@@ -33,6 +42,9 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.MockIntake;
+import frc.robot.subsystems.intake.RealIntake;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
 import frc.robot.subsystems.extendablearmandwrist.MockExtendableArmAndWrist;
 import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
@@ -46,6 +58,9 @@ import frc.robot.utilities.I2CBusDriver;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static Joystick driveController;
+  public static Joystick operatorController;
+
   public static DriveTrain driveTrain;
   public static ExtendableArmAndWrist extendableArmAndWrist;
   public static Joystick driveController;
@@ -55,7 +70,11 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
-  public static LineFollowerSensorArray lineFollowerSensorArray;
+  public static BaseLineFollowerSensor lineFollowerSensorArray;
+
+  public static Intake intake;
+  public static AngleSensor intakeAngleSensor;
+  public static LimitSwitchSensor intakeStowedSwitch;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -125,8 +144,34 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
+    if (conf.hasPath("subsystems.intake")) {
+      System.out.println("Using real intake");
+      intake = new RealIntake();
+    } else {
+      System.out.println("Using fake intake");
+      intake = new MockIntake();
+    }
+    if (conf.hasPath("sensors.intakeAngleSensor")) {
+      System.out.println("Using real intakeAngleSensor");
+      int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
+      intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
+    } else {
+      System.out.println("Using mock intakeAngleSensor");
+      intakeAngleSensor = new MockAngleSensor();
+    }
 
-    gyroPID = new GyroPIDController();
+    if (conf.hasPath("sensors.intakeStowedSwitch")) {
+      System.out.println("Using real intakeStowedSwitch");
+      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
+      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, false);
+    } else {
+      System.out.println("Using mock intakeStowedSwitch");
+      intakeStowedSwitch = new MockLimitSwitchSensor();
+    }
+
+    operatorController = new Joystick(1);
+
+    gyroPID = GyroPIDController.getInstance();
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
@@ -140,9 +185,28 @@ public class Robot extends TimedRobot {
         senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
         senseConf.getInt("numSensors"));
 
+    // Camera Code
+    if (conf.hasPath("cameras")) {
+      Config cameraConf = conf.getConfig("cameras");
+
+      UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera0"));
+      UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera1"));
+      camera0.setResolution(320, 240);
+      camera0.setFPS(10);
+      camera1.setResolution(320, 240);
+      camera1.setFPS(10);
+    }
+
+    if (conf.hasPath("sensors.lineFollowSensor")) {
+      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+          senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+          senseConf.getInt("numSensors"));
+    } else {
+      lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
+    }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    // SmartDashboard.putData("Auto mode", m_chooser);
   }
 
   /**

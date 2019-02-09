@@ -9,10 +9,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.CallLineFollowerController;
+import frc.robot.commands.IntakeArmControl;
+import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.utilities.POVDirectionNames;
 import frc.robot.subsystems.extendablearmandwrist.EnumArmLevel;
 import frc.robot.subsystems.extendablearmandwrist.EnumHatchOrCargo;
 import frc.robot.utilities.ButtonsEnumerated;
@@ -52,10 +56,22 @@ public class OI {
 
   private static OI instance = new OI();
 
+  private POVButton intakeUp;
+  private POVButton intakeDown;
+
   private OI() {
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
     testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
+
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+
+    intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
+    intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
+    SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
+
+    intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
+    intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
     ButtonsEnumerated.ABUTTON.getJoystickButton(armStick)
         .whenPressed(new AutoMoveArm(EnumArmLevel.RLOW, EnumHatchOrCargo.CARGO));
@@ -68,15 +84,15 @@ public class OI {
   }
 
   // Controllers
-  protected Joystick driveStick = new Joystick(0);
-  protected Joystick armStick = new Joystick(1);
+  protected Joystick driveStick = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick operatorController = Robot.operatorController;
 
   public Joystick getDriveStick() {
     return driveStick;
   }
 
-  public Joystick getArmStick() {
-    return armStick;
+  public Joystick getOperatorStick() {
+    return operatorController;
   }
 
   public static OI getInstance() {
