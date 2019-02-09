@@ -39,12 +39,12 @@ public class TeleopArm extends Command {
 
   @Override
   protected void interrupted() {
-
+    end();
   }
 
   @Override
   protected void end() {
-
+    MoveArmAndWristSafely.moveArmWristShoulder(0, 0, 0);
   }
 
 }
