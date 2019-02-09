@@ -36,7 +36,7 @@ public class RaiseRobot extends Command {
   private StiltsStates stiltsStates = StiltsStates.CALCULATING;
   private StiltPulsed previousStiltPulsed = StiltPulsed.ALLFOUR;
   private long initTime;
-  private long originalPulseTime = 2;
+  private long originalPulseTime = 100;
   private long kPulseTime = originalPulseTime;
   private long kWaitTime = 100;
   private long currentPulseTime = 0;

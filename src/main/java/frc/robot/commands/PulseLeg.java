@@ -6,7 +6,7 @@ import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts.StiltLeg;
 public class PulseLeg extends Command {
 
     private long initTime = 0;
-    private long kHoldTime = 10;
+    private long kHoldTime = 40;
     private long currentHoldTime = 0;
     private StiltLeg currentLeg;
     private boolean done = false;
