@@ -57,6 +57,7 @@ import frc.robot.utilities.I2CBusDriver;
  */
 public class Robot extends TimedRobot {
   public static Compressor compressor;
+  public static Compressor compressor;
   public static Joystick driveController;
   public static Joystick operatorController;
 
@@ -128,7 +129,7 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
-    compressor = new Compressor();
+    compressor =  new Compressor();
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
@@ -152,7 +153,6 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock intakeStowedSwitch");
       intakeStowedSwitch = new MockLimitSwitchSensor();
     }
-
     operatorController = new Joystick(1);
 
     gyroPID = GyroPIDController.getInstance();
