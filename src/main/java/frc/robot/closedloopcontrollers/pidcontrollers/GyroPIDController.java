@@ -1,4 +1,4 @@
-package frc.robot.closedloopcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
@@ -17,7 +17,7 @@ public class GyroPIDController extends PIDControllerBase {
    * trace, and pidConfiguration variables. Also creates the gyroPID from the
    * PIDMultiton class.
    */
-  public GyroPIDController() {
+  private GyroPIDController() {
     super.absoluteTolerance = 3;
     super.p = 0;
     super.i = 0;
@@ -29,8 +29,8 @@ public class GyroPIDController extends PIDControllerBase {
     super.trace = Trace.getInstance();
     gyroPIDOut = new GyroPIDOut();
     navXGyroSensor.putSensorOnLiveWindow(super.subsytemName, "Gyro");
-    super.setPIDConfiguration(pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, pidConfiguration);
+    super.setPIDConfiguration(super.pidConfiguration);
+    super.pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, super.pidConfiguration);
   }
 
   private class GyroPIDOut implements PIDOutput {
@@ -42,7 +42,7 @@ public class GyroPIDController extends PIDControllerBase {
     @Override
     public void pidWrite(double output) {
       trace.addTrace(true, "Ultrasonic Drivetrain", new TracePair("Output", output),
-          new TracePair("Setpoint", _setpoint), new TracePair("DistanceInches", navXGyroSensor.getZAngle()));
+          new TracePair("Setpoint", _setpoint), new TracePair("DistanceInches", navXGyroSensor.pidGet()));
 
       Robot.driveTrain.move(0, output);
     }
