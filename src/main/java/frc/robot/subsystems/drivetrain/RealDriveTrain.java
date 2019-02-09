@@ -33,9 +33,10 @@ public class RealDriveTrain extends DriveTrain {
   /*
    * Implement math according to section 12.4.2 of the TALON SRX Software
    * Reference manual Rev 1.22
+   * Also inspired by https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#motion-magic-position-velocity-current-closed-loop-closed-loop
    */
   private final double kF = 1023 / kMaxSpeed;
-  private final double kP = 0;
+  private final double kP = (.1 * 1023) / 170; //Measured an error of ~170 on 2/9/19
   private final double kI = 0;
   private final double kD = 0;
 
@@ -153,7 +154,7 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void move(double forwardBackSpeed, double rotateAmount) {
-    printMeasurements("Left ", driveTrainLeftMaster, forwardBackSpeed, false);
+    printMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
     printMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
   }
@@ -192,7 +193,7 @@ public class RealDriveTrain extends DriveTrain {
     } else {
       _sb.append("\n");
     }
-    Trace.getInstance().addTrace(true, "VCMeasure",
+    Trace.getInstance().addTrace(true, "VCMeasure" + side,
         new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(0)),
         new TracePair("Error", (double) _talon.getClosedLoopError(0)),
