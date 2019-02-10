@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -22,6 +23,8 @@ public abstract class DriveTrain extends Subsystem {
   public abstract void shiftToLowGear();
 
   public abstract void shiftToHighGear();
+
+  public abstract void changeControlMode(NeutralMode mode);
 
   public abstract WPI_TalonSRX getLeftRearTalon();
 }

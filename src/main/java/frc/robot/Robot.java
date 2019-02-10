@@ -14,6 +14,7 @@ import com.typesafe.config.ConfigFactory;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -58,6 +59,7 @@ import frc.robot.utilities.I2CBusDriver;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static Compressor compressor;
   public static Joystick driveController;
   public static Joystick operatorController;
 
@@ -153,6 +155,7 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
+    compressor =  new Compressor();
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
@@ -168,7 +171,6 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
     }
-
     if (conf.hasPath("sensors.intakeStowedSwitch")) {
       System.out.println("Using real intakeStowedSwitch");
       int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
@@ -177,7 +179,6 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock intakeStowedSwitch");
       intakeStowedSwitch = new MockLimitSwitchSensor();
     }
-
     operatorController = new Joystick(1);
 
     gyroPID = GyroPIDController.getInstance();
