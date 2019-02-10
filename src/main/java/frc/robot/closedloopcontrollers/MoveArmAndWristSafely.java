@@ -23,35 +23,25 @@ public class MoveArmAndWristSafely {
         Robot.armExtensionEncoder2.getDistanceTicks());
     double shoulderRotDeg = getShoulderRotDeg(Robot.armRotateEncoder1.getDistanceTicks());
 
-    if (isMovementSafe(extensionIn, wristRotDeg, shoulderRotDeg, extensionValue, wristRotValue, shoulderRotValue)) {
-      Robot.extendableArmAndWrist.moveArmWrist(extensionValue, wristRotValue, shoulderRotValue);
-    }
   }
 
-  public static boolean isMovementSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg,
-      double extensionValue, double wristRotValue, double shoulderRotValue) {
+  public boolean isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg) {
 
-    boolean wristRotatingClockwise = isWristRotatingClockwise(wristRotValue);
-    boolean shoulderRotatingClockwise = isShoulderRotatingClockwise(shoulderRotValue);
-    boolean armRetracting = isArmRetracting(extensionValue);
-
-    if ((shoulderRotDeg > 180 && shoulderRotatingClockwise) || (shoulderRotDeg < -180 && !shoulderRotatingClockwise)
-        || (extensionIn < 0 && !armRetracting) || (extensionIn > maxExtension && armRetracting)
-        || (wristRotDeg > maxWristRot && wristRotatingClockwise)
-        || (wristRotDeg < -maxWristRot && !wristRotatingClockwise)) {
+    if (shoulderRotDeg > 180 || shoulderRotDeg < -180 || extensionIn < 0 || extensionIn > maxExtension
+        || wristRotDeg > maxWristRot || wristRotDeg < -maxWristRot) {
       return false;
-    } else if ((shoulderRotDeg > 150 || shoulderRotDeg < -150) && (extensionIn > maxExtension - 1 && !armRetracting)) {
+    } else if (shoulderRotDeg < -150 && extensionIn > maxExtension - 1) {
       return false;
-    } else if ((extensionIn < 10 && !armRetracting) && shoulderRotDeg > 53 && shoulderRotDeg < 127) {
+    } else if (shoulderRotDeg > 150 && extensionIn > maxExtension - 1) {
       return false;
-    } else if ((extensionIn < 10 && !armRetracting) && shoulderRotDeg < -53 && shoulderRotDeg > -127) {
+    } else if (extensionIn < 10 && shoulderRotDeg > 53 && shoulderRotDeg < 127) {
+      return false;
+    } else if (extensionIn < 10 && shoulderRotDeg < -53 && shoulderRotDeg > -127) {
       return false;
     } else if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtension - 1) {
-      if ((extensionIn > 13 || armRetracting) && (wristRotDeg < -90 || !wristRotatingClockwise) && shoulderRotDeg > 0
-          && shoulderRotDeg < 15) {
+      if (extensionIn > 13 && wristRotDeg < -90 && shoulderRotDeg > 0 && shoulderRotDeg < 15) {
         return true;
-      } else if ((extensionIn > 13 || armRetracting) && (wristRotDeg > 90 || wristRotatingClockwise)
-          && shoulderRotDeg < 0 && shoulderRotDeg > -15) {
+      } else if (extensionIn > 13 && wristRotDeg > 90 && shoulderRotDeg < 0 && shoulderRotDeg > -15) {
         return true;
       } else {
         return false;
