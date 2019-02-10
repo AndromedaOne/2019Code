@@ -7,9 +7,19 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 
 public class LowHatch extends CommandGroup {
 
-  public LowHatch() {
-    addSequential(new RotateWrist(-95.5));
-    addSequential(new RotateShoulder(4));
-    addSequential(new ExtendArm(11.88));
+  public LowHatch(boolean positiveShoulder, boolean sameSidePlacement) {
+    double directionFactor = positiveShoulder?1:-1;
+    
+    if(sameSidePlacement){
+      addSequential(new RotateWrist(-95.5 * directionFactor));
+      addSequential(new ExtendArm(11.88));
+      addSequential(new RotateShoulder(4 * directionFactor));
+
+    }else{
+      addSequential(new ExtendArm(20));
+      addSequential(new RotateWrist(-95.5 * -directionFactor));
+      addSequential(new ExtendArm(11.88));
+      addSequential(new RotateShoulder(4 * -directionFactor));
+    }
   }
 }
