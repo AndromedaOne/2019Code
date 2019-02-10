@@ -19,7 +19,7 @@ public class GyroPIDController extends PIDControllerBase {
    */
   private GyroPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0;
+    super.p = 0.01;
     super.i = 0;
     super.d = 0;
     super.subsytemName = "GyroPIDHeader";
@@ -41,10 +41,10 @@ public class GyroPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Ultrasonic Drivetrain", new TracePair("Output", output),
-          new TracePair("Setpoint", _setpoint), new TracePair("DistanceInches", navXGyroSensor.pidGet()));
+      trace.addTrace(true, "GyroPID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
+          new TracePair("CurrentAngle", navXGyroSensor.pidGet()));
 
-      Robot.gyroCorrectMove.moveUsingGyro(0, output, false, false);
+      Robot.gyroCorrectMove.moveUsingGyro(0, -output, false, false);
     }
 
   }
@@ -55,9 +55,9 @@ public class GyroPIDController extends PIDControllerBase {
    * @return instance
    */
   public static GyroPIDController getInstance() {
-    System.out.println(" ---Asking for Instance --- ");
+    System.out.println(" ---Asking for Gyro PID Instance --- ");
     if (instance == null) {
-      System.out.println("Creating new Drivetrain Gyro PID Controller");
+      System.out.println("Creating new Gyro PID Controller");
       instance = new GyroPIDController();
     }
     return instance;

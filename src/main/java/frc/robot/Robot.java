@@ -48,6 +48,7 @@ import frc.robot.subsystems.drivetrain.RealDriveTrain;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.I2CBusDriver;
 
 /**
@@ -206,6 +207,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    // This is for constant tracing
+    NavXGyroSensor.getInstance().getZAngle();
   }
 
   /**
@@ -215,6 +218,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    Trace.getInstance().flushTraceFiles();
   }
 
   @Override

@@ -15,6 +15,8 @@ import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.commands.TurnToCompassHeading;
+import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
 /**
@@ -54,12 +56,25 @@ public class OI {
 
   private POVButton intakeUp;
   private POVButton intakeDown;
+  private JoystickButton turnToNorth;
+  private JoystickButton turnToEast;
+  private JoystickButton turnToSouth;
+  private JoystickButton turnToWest;
 
   private OI() {
-    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
+    JoystickButton testEncoder = new JoystickButton(driveController, 6);
     testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
 
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+
+    turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
+    turnToNorth.whenPressed(new TurnToCompassHeading(0));
+    turnToEast = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
+    turnToEast.whenPressed(new TurnToCompassHeading(90));
+    turnToSouth = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
+    turnToSouth.whenPressed(new TurnToCompassHeading(180));
+    turnToWest = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
+    turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
@@ -71,11 +86,11 @@ public class OI {
   }
 
   // Controllers
-  protected Joystick driveStick = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick driveController = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController = Robot.operatorController;
 
   public Joystick getDriveStick() {
-    return driveStick;
+    return driveController;
   }
 
   public Joystick getOperatorStick() {
