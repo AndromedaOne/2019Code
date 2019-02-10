@@ -33,6 +33,9 @@ import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
+import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.claw.MockClaw;
+import frc.robot.subsystems.claw.RealClaw;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
@@ -54,6 +57,7 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
+  public static Claw claw;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -140,6 +144,13 @@ public class Robot extends TimedRobot {
           senseConf.getInt("numSensors"));
     } else {
       lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
+    }
+
+    // Check for existance of claw subsystem
+    if (conf.hasPath("ports.claw")) {
+      claw = new RealClaw();
+    } else {
+      claw = new MockClaw();
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
