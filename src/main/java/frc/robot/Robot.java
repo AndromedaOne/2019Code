@@ -30,6 +30,8 @@ import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
 import frc.robot.sensors.anglesensor.MockAngleSensor;
 import frc.robot.sensors.anglesensor.RealAngleSensor;
+import frc.robot.sensors.infrareddistancesensor.InfraredDistanceSensor;
+import frc.robot.sensors.infrareddistancesensor.RealInfraredDistanceSensor;
 import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
@@ -42,6 +44,9 @@ import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
+import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.claw.MockClaw;
+import frc.robot.subsystems.claw.RealClaw;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
@@ -69,10 +74,13 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
+  public static Claw claw;
   public static MoveDrivetrainGyroCorrect gyroCorrectMove;
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
+
+  public static InfraredDistanceSensor clawInfraredSensor;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -190,6 +198,14 @@ public class Robot extends TimedRobot {
     } else {
       lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
     }
+
+    // Check for existance of claw subsystem
+    if (conf.hasPath("ports.claw")) {
+      claw = new RealClaw();
+      clawInfraredSensor = new RealInfraredDistanceSensor(conf.getInt("ports.claw.infrared.port"));
+    } else {
+      claw = new MockClaw();
+    }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
@@ -290,6 +306,8 @@ public class Robot extends TimedRobot {
 
   /**
    * Get the robot name (set in the config)
+   * 
+   * @return Name of the robot according to the configuration
    */
   public static String getName() {
     return conf.getString("robot.name");

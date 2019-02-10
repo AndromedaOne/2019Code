@@ -85,6 +85,8 @@ public class PIDMultiton {
 
   /**
    * Sets the setpoint for pidController
+   * 
+   * @param setpoint Target point
    */
   public void setSetpoint(double setpoint) {
     pidController.setSetpoint(setpoint);
