@@ -1,4 +1,4 @@
-package frc.robot.closedloopcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
@@ -18,7 +18,7 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
    * trace, and pidConfiguration variables. Also creates the ultrasonicPID from
    * the PIDMultiton class.
    */
-  public DrivetrainUltrasonicPIDController() {
+  private DrivetrainUltrasonicPIDController() {
     super.absoluteTolerance = 3;
     super.p = 0;
     super.i = 0;
@@ -30,8 +30,8 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
     super.trace = Trace.getInstance();
     ultrasonic.putSensorOnLiveWindow(super.subsytemName, "Ultrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
-    super.setPIDConfiguration(pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, pidConfiguration);
+    super.setPIDConfiguration(super.pidConfiguration);
+    super.pidMultiton = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, super.pidConfiguration);
   }
 
   private class UltrasonicPIDOut implements PIDOutput {
@@ -43,9 +43,9 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
     @Override
     public void pidWrite(double output) {
       trace.addTrace(true, "Ultrasonic Drivetrain", new TracePair("Output", output),
-          new TracePair("Setpoint", _setpoint), new TracePair("DistanceInches", ultrasonic.getDistanceInches()));
+          new TracePair("Setpoint", _setpoint), new TracePair("DistanceInches", ultrasonic.pidGet()));
 
-      Robot.driveTrain.move(-output, 0);
+      Robot.gyroCorrectMove.moveUsingGyro(-output, 0, false, false);
     }
 
   }

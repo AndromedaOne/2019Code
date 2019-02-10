@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
@@ -8,6 +9,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 /**
  *
@@ -53,8 +56,10 @@ public class RealDriveTrain extends DriveTrain {
   public void periodic() {
   }
 
-  public void move(double forwardBackSpeed, double rotateAmount) {
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
+  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
+    Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
+        new TracePair("Rotate", rotateAmount));
+    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
   public void stop() {
@@ -71,6 +76,14 @@ public class RealDriveTrain extends DriveTrain {
 
   public void shiftToHighGear() {
     shifterSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  @Override
+  public void changeControlMode(NeutralMode mode) {
+    driveTrainLeftTalon1.setNeutralMode(mode);
+    driveTrainLeftTalon2.setNeutralMode(mode);
+    driveTrainRightTalon3.setNeutralMode(mode);
+    driveTrainRightTalon4.setNeutralMode(mode);
   }
 
 }

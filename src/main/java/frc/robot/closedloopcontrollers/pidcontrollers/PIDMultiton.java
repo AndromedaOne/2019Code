@@ -1,4 +1,4 @@
-package frc.robot.closedloopcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +75,9 @@ public class PIDMultiton {
 
     pidController.setAbsoluteTolerance(config.getAbsoluteTolerance());
 
+    if (config.getLiveWindowName() == config.getPIDName()) {
+      config.setLiveWindowName(config.getLiveWindowName() + "Header");
+    }
     pidController.setName(config.getLiveWindowName(), config.getPIDName());
     LiveWindow.add(pidController);
 
@@ -90,10 +93,23 @@ public class PIDMultiton {
   }
 
   /**
+   * Sets current setpoint to currentsetpoint + delta
+   * 
+   * @param delta
+   */
+  public void setRelativeSetpoint(double delta) {
+    pidController.setSetpoint(pidController.getSetpoint() + delta);
+  }
+
+  /**
    * Enables the pidController
    */
   public void enable() {
     pidController.enable();
+  }
+
+  public boolean isEnabled() {
+    return pidController.isEnabled();
   }
 
   /**

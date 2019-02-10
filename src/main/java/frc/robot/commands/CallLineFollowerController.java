@@ -13,7 +13,7 @@ public class CallLineFollowerController extends Command {
   private int counter = 0;
 
   public CallLineFollowerController() {
-    controller = new LineFollowerController(Robot.driveTrain, Robot.lineFollowerSensorArray);
+    controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.lineFollowerSensorArray);
     requires(Robot.driveTrain);
 
   }

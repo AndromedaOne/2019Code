@@ -14,12 +14,25 @@ import com.typesafe.config.ConfigFactory;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.commands.TeleOpDrive;
+import frc.robot.sensors.NavXGyroSensor;
+import frc.robot.sensors.anglesensor.AngleSensor;
+import frc.robot.sensors.anglesensor.MockAngleSensor;
+import frc.robot.sensors.anglesensor.RealAngleSensor;
+import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
+import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
 import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
@@ -41,6 +54,9 @@ import frc.robot.subsystems.claw.RealClaw;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.MockIntake;
+import frc.robot.subsystems.intake.RealIntake;
 import frc.robot.utilities.I2CBusDriver;
 
 /**
@@ -51,8 +67,11 @@ import frc.robot.utilities.I2CBusDriver;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static DriveTrain driveTrain;
+  public static Compressor compressor;
   public static Joystick driveController;
+  public static Joystick operatorController;
+
+  public static DriveTrain driveTrain;
   public static DrivetrainEncoderPIDController encoderPID;
   public static DrivetrainUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
@@ -60,6 +79,10 @@ public class Robot extends TimedRobot {
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
   public static Claw claw;
+  public static MoveDrivetrainGyroCorrect gyroCorrectMove;
+  public static Intake intake;
+  public static AngleSensor intakeAngleSensor;
+  public static LimitSwitchSensor intakeStowedSwitch;
 
   public static InfraredDistanceSensor clawInfraredSensor;
 
@@ -119,8 +142,34 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
+    compressor = new Compressor();
+    if (conf.hasPath("subsystems.intake")) {
+      System.out.println("Using real intake");
+      intake = new RealIntake();
+    } else {
+      System.out.println("Using fake intake");
+      intake = new MockIntake();
+    }
+    if (conf.hasPath("sensors.intakeAngleSensor")) {
+      System.out.println("Using real intakeAngleSensor");
+      int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
+      intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
+    } else {
+      System.out.println("Using mock intakeAngleSensor");
+      intakeAngleSensor = new MockAngleSensor();
+    }
+    if (conf.hasPath("sensors.intakeStowedSwitch")) {
+      System.out.println("Using real intakeStowedSwitch");
+      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
+      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, false);
+    } else {
+      System.out.println("Using mock intakeStowedSwitch");
+      intakeStowedSwitch = new MockLimitSwitchSensor();
+    }
+    operatorController = new Joystick(1);
 
-    gyroPID = new GyroPIDController();
+    gyroPID = GyroPIDController.getInstance();
+    gyroCorrectMove = new MoveDrivetrainGyroCorrect(NavXGyroSensor.getInstance(), driveTrain);
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
@@ -135,12 +184,16 @@ public class Robot extends TimedRobot {
         senseConf.getInt("numSensors"));
 
     // Camera Code
-    UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(0);
-    UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(1);
-    camera0.setResolution(320, 240);
-    camera0.setFPS(10);
-    camera1.setResolution(320, 240);
-    camera1.setFPS(10);
+    if (conf.hasPath("cameras")) {
+      Config cameraConf = conf.getConfig("cameras");
+
+      UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera0"));
+      UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera1"));
+      camera0.setResolution(320, 240);
+      camera0.setFPS(10);
+      camera1.setResolution(320, 240);
+      camera1.setFPS(10);
+    }
 
     if (conf.hasPath("sensors.lineFollowSensor")) {
       lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
@@ -203,6 +256,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
 
     /*
@@ -235,6 +289,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    gyroCorrectMove.setCurrentAngle();
   }
 
   /**
