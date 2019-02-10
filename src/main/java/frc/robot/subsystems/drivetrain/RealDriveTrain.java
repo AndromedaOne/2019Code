@@ -33,11 +33,12 @@ public class RealDriveTrain extends DriveTrain {
   private final double kMaxSpeed = 3600;
   /*
    * Implement math according to section 12.4.2 of the TALON SRX Software
-   * Reference manual Rev 1.22
-   * Also inspired by https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#motion-magic-position-velocity-current-closed-loop-closed-loop
+   * Reference manual Rev 1.22 Also inspired by
+   * https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#
+   * motion-magic-position-velocity-current-closed-loop-closed-loop
    */
   private final double kF = 1023 / kMaxSpeed;
-  private final double kP = 0 * (.1 * 1023) / 170; //Measured an error of ~170 on 2/9/19
+  private final double kP = 0 * (.1 * 1023) / 170; // Measured an error of ~170 on 2/9/19
   private final double kI = 0;
   private final double kD = 0;
 
@@ -194,8 +195,7 @@ public class RealDriveTrain extends DriveTrain {
     } else {
       _sb.append("\n");
     }
-    Trace.getInstance().addTrace(true, "VCMeasure" + side,
-        new TracePair("Percent", (double) motorOutput * 100),
+    Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(0)),
         new TracePair("Error", (double) _talon.getClosedLoopError(0)),
         new TracePair("Target", (double) targetVelocity));
@@ -223,9 +223,9 @@ public class RealDriveTrain extends DriveTrain {
 
   @Override
   public void changeControlMode(NeutralMode mode) {
-    driveTrainLeftTalon1.setNeutralMode(mode);
-    driveTrainLeftTalon2.setNeutralMode(mode);
-    driveTrainRightTalon3.setNeutralMode(mode);
-    driveTrainRightTalon4.setNeutralMode(mode);
+    driveTrainLeftMaster.setNeutralMode(mode);
+    driveTrainLeftSlave.setNeutralMode(mode);
+    driveTrainRightMaster.setNeutralMode(mode);
+    driveTrainRightSlave.setNeutralMode(mode);
   }
 }

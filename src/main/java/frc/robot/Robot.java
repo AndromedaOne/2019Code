@@ -43,10 +43,10 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
-import frc.robot.telemetries.Trace;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.I2CBusDriver;
 
 /**
@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
-    compressor =  new Compressor();
+    compressor = new Compressor();
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
