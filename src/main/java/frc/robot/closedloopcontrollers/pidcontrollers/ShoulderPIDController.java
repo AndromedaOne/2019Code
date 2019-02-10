@@ -38,7 +38,7 @@ public class ShoulderPIDController extends PIDControllerBase {
     public void pidWrite(double output) {
       trace.addTrace(true, "Shoulder PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
           new TracePair("Angle", shoulderEncoder.pidGet()));
-      MoveArmAndWristSafely.moveArmWristShoulder(0, 0, output);
+      MoveArmAndWristSafely.move(0, 0, output);
     }
   }
 

@@ -10,7 +10,7 @@ public class MoveArmAndWristSafely {
    * @param wristRotValue
    * @param shoulderRotValue
    */
-  public static void moveArmWristShoulder(double extensionValue, double wristRotValue, double shoulderRotValue) {
+  public static void move(double extensionValue, double wristRotValue, double shoulderRotValue) {
 
   }
 

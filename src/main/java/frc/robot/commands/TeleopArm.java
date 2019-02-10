@@ -29,7 +29,7 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    MoveArmAndWristSafely.moveArmWristShoulder(actualArmWristVal, actualRotateVal, shoulderRotateValue);
+    MoveArmAndWristSafely.move(actualArmWristVal, actualRotateVal, shoulderRotateValue);
   }
 
   @Override
@@ -44,7 +44,7 @@ public class TeleopArm extends Command {
 
   @Override
   protected void end() {
-    MoveArmAndWristSafely.moveArmWristShoulder(0, 0, 0);
+    MoveArmAndWristSafely.move(0, 0, 0);
   }
 
 }

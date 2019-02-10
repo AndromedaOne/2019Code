@@ -48,7 +48,7 @@ public class ArmPIDController extends PIDControllerBase {
     public void pidWrite(double output) {
       trace.addTrace(true, "Arm PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
           new TracePair("Extension 1", armPIDSource.pidGet()));
-      MoveArmAndWristSafely.moveArmWristShoulder(output, 0, 0);
+      MoveArmAndWristSafely.move(output, 0, 0);
     }
   }
 
