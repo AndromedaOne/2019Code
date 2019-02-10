@@ -183,7 +183,7 @@ public class RealDriveTrain extends DriveTrain {
     _sb.append("\terr:");
     _sb.append(_talon.getClosedLoopError(0));
     _sb.append("\ttrg:");
-    _sb.append(targetVelocity);
+    _sb.append(_talon.getClosedLoopTarget(0));
     /* Print built string every 10 loops */
     if (doneMeasuring) {
       if (++_loops >= 10) {
@@ -198,7 +198,7 @@ public class RealDriveTrain extends DriveTrain {
     Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(0)),
         new TracePair("Error", (double) _talon.getClosedLoopError(0)),
-        new TracePair("Target", (double) targetVelocity));
+        new TracePair("Target", (double) _talon.getClosedLoopTarget(0)));
   }
 
   public void stop() {

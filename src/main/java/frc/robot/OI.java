@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
+import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
 /**
@@ -54,6 +56,7 @@ public class OI {
 
   private POVButton intakeUp;
   private POVButton intakeDown;
+  private JoystickButton driveForward;
 
   private OI() {
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
@@ -68,6 +71,9 @@ public class OI {
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+
+    driveForward = new JoystickButton(driveStick, 4);
+    driveForward.whileHeld(new DriveForward());
   }
 
   // Controllers
