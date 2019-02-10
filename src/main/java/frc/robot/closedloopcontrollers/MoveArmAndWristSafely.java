@@ -5,8 +5,8 @@ import frc.robot.exceptions.ArmOutOfBoundsException;
 
 public class MoveArmAndWristSafely {
 
-  private static final int maxWristRot = 1000;
-  private static final int maxExtension = 1000;
+  private static final int maxWristRotDegrees = 1000;
+  private static final int maxExtensionInches = 1000;
 
   private static final double SHOULDERTICKSTODEGRESS = 1.0;
   private static final double EXTENSIONTICKSTOINCHES = 1.0;
@@ -24,11 +24,15 @@ public class MoveArmAndWristSafely {
    * @throws ArmOutOfBoundsException
    */
   public static void move(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity) throws ArmOutOfBoundsException {
-    double extensionIn = getExtensionIn(Robot.armExtensionEncoder1.getDistanceTicks(),
-        Robot.armExtensionEncoder2.getDistanceTicks());
-    double wristRotDeg = getWristRotDegrees(Robot.armRotateEncoder1.getDistanceTicks(),
-        Robot.armExtensionEncoder2.getDistanceTicks());
-    double shoulderRotDeg = getShoulderRotDeg(Robot.armRotateEncoder1.getDistanceTicks());
+    double armExtensionEncoder1Ticks = Robot.armExtensionEncoder1.getDistanceTicks();
+    double armExtensionEncoder2Ticks = Robot.armExtensionEncoder2.getDistanceTicks();
+    double shoulderTicks = Robot.armRotateEncoder1.getDistanceTicks();
+
+    double extensionIn = getExtensionIn(armExtensionEncoder1Ticks,
+    armExtensionEncoder2Ticks);
+    double wristRotDeg = getWristRotDegrees(armExtensionEncoder1Ticks,
+    armExtensionEncoder2Ticks);
+    double shoulderRotDeg = getShoulderRotDeg(shoulderTicks);
 
     double deltaExtension = extensionVelocity * extensionVelocityConversion * deltaTime;
     double deltaWristRot = wristRotVelocity * wristRotVelocityConversion * deltaTime;
@@ -38,27 +42,62 @@ public class MoveArmAndWristSafely {
       throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot);
     }
     
-    if(Robot.fullyExtendedArmLimitSwitch.isAtLimit()) {
-      
+    if(Robot.wristLimitSwitchUp.isAtLimit()) {
+      wristRotDeg = maxWristRotDegrees;
+      double topEncoderPosition = (extensionIn/EXTENSIONTICKSTOINCHES) + (maxWristRotDegrees/WRISTTICKSTODEGREES)/2;
+      double bottomEncoderPosition = (extensionIn/EXTENSIONTICKSTOINCHES) - (maxWristRotDegrees/WRISTTICKSTODEGREES)/2;
+      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
+      if(wristRotVelocity > 0) {
+        wristRotVelocity = 0;
+      }
+    }else if(Robot.wristLimitSwitchDown.isAtLimit()) {
+      wristRotDeg = -maxWristRotDegrees;
+      double topEncoderPosition = (extensionIn/EXTENSIONTICKSTOINCHES) - (maxWristRotDegrees/WRISTTICKSTODEGREES)/2;
+      double bottomEncoderPosition = (extensionIn/EXTENSIONTICKSTOINCHES) + (maxWristRotDegrees/WRISTTICKSTODEGREES)/2;
+      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
+      if(wristRotVelocity < 0) {
+        wristRotVelocity = 0;
+      }
     }
+
+    if(Robot.fullyExtendedArmLimitSwitch.isAtLimit()) {
+      extensionIn = 0;
+      double topEncoderPosition = (wristRotDeg/WRISTTICKSTODEGREES)/2;
+      double bottomEncoderPosition = -(wristRotDeg/WRISTTICKSTODEGREES)/2;
+      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
+      if (extensionVelocity > 0) {
+        extensionVelocity = 0;
+      }
+    }else if(Robot.fullyRetractedArmLimitSwitch.isAtLimit()) {
+      extensionIn = maxExtensionInches;
+      double topEncoderPosition = (wristRotDeg/WRISTTICKSTODEGREES)/2 + maxExtensionInches/EXTENSIONTICKSTOINCHES;
+      double bottomEncoderPosition = -(wristRotDeg/WRISTTICKSTODEGREES)/2 + maxExtensionInches/EXTENSIONTICKSTOINCHES;
+      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
+      if (extensionVelocity > 0) {
+        extensionVelocity = 0;
+      }
 
     Robot.extendableArmAndWrist.moveArmWrist(extensionVelocity, wristRotVelocity, shoulderRotVelocity);
   }
 
   public static boolean isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg) {
 
-    if (shoulderRotDeg > 180 || shoulderRotDeg < -180 || extensionIn < 0 || extensionIn > maxExtension
-        || wristRotDeg > maxWristRot || wristRotDeg < -maxWristRot) {
+    if (shoulderRotDeg > 180 || shoulderRotDeg < -180 || extensionIn < 0 || extensionIn > maxExtensionInches
+        || wristRotDeg > maxWristRotDegrees || wristRotDeg < -maxWristRotDegrees) {
       return false;
-    } else if (shoulderRotDeg < -150 && extensionIn > maxExtension - 1) {
+    } else if (shoulderRotDeg < -150 && extensionIn > maxExtensionInches - 1) {
       return false;
-    } else if (shoulderRotDeg > 150 && extensionIn > maxExtension - 1) {
+    } else if (shoulderRotDeg > 150 && extensionIn > maxExtensionInches - 1) {
       return false;
     } else if (extensionIn < 10 && shoulderRotDeg > 53 && shoulderRotDeg < 127) {
       return false;
     } else if (extensionIn < 10 && shoulderRotDeg < -53 && shoulderRotDeg > -127) {
       return false;
-    } else if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtension - 1) {
+    } else if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtensionInches - 1) {
       if (extensionIn > 13 && wristRotDeg < -90 && shoulderRotDeg > 0 && shoulderRotDeg < 15) {
         return true;
       } else if (extensionIn > 13 && wristRotDeg > 90 && shoulderRotDeg < 0 && shoulderRotDeg > -15) {
@@ -69,18 +108,6 @@ public class MoveArmAndWristSafely {
     } else {
       return true;
     }
-  }
-
-  private static boolean isWristRotatingClockwise(double value) {
-    return value > 0;
-  }
-
-  private static boolean isShoulderRotatingClockwise(double value) {
-    return value > 0;
-  }
-
-  private static boolean isArmRetracting(double value) {
-    return value > 0;
   }
 
   public static double getExtensionIn(double topEncoderTicks, double bottomEncoderTicks) {
