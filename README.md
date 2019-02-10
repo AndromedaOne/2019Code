@@ -4,7 +4,7 @@
 # After merging master onto your branch, you *must* run `gradlew spotlessApply` to allow for your branch to build.
 
 # Configuration Documentation
-//TODO: Chris or Dana fill this out
+***Please do not SSH into the robot as admin or create files as admin!***
 
 ## Overall Format
 The configuration this year is quite similar to JSON, with a few major differences
