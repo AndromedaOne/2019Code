@@ -15,8 +15,8 @@ import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
-import frc.robot.utilities.POVDirectionNames;
 import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.utilities.POVDirectionNames;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -74,7 +74,6 @@ public class OI {
     // Claw buttons are temp until I figure out the D-Pad
     openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
     closeClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
-
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
