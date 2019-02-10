@@ -5,7 +5,7 @@ import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 
-public class LineFollowerController implements ClosedLoopControllerBase {
+public class LineFollowerController {
   private DriveTrain driveTrain;
   private BaseLineFollowerSensor sensor;
   private final double kMinimumLineAngle = Math.toRadians(10);
@@ -65,7 +65,6 @@ public class LineFollowerController implements ClosedLoopControllerBase {
     return false;
   }
 
-  @Override
   public void enable(double setpoint) {
 
   }
