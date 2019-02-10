@@ -11,19 +11,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.AutoMoveArm;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
 import frc.robot.groupcommands.armwristcommands.AButtonArmCommand;
 import frc.robot.groupcommands.armwristcommands.BButtonArmCommand;
-import frc.robot.groupcommands.armwristcommands.LoadingStation;
-import frc.robot.groupcommands.armwristcommands.RocketShipLowCargo;
 import frc.robot.groupcommands.armwristcommands.XButtonArmCommand;
 import frc.robot.groupcommands.armwristcommands.YButtonArmCommand;
-import frc.robot.subsystems.extendablearmandwrist.EnumArmLevel;
-import frc.robot.subsystems.extendablearmandwrist.EnumHatchOrCargo;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -94,10 +89,8 @@ public class OI {
 
     ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new AButtonArmCommand());
     ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new BButtonArmCommand());
-    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController)
-        .whenPressed(new XButtonArmCommand());
-    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController)
-        .whenPressed(new YButtonArmCommand());
+    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new XButtonArmCommand());
+    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(new YButtonArmCommand());
 
   }
 
