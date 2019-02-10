@@ -8,17 +8,17 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 public class LoadingStation extends CommandGroup {
 
   public LoadingStation(boolean positiveShoulder, boolean sameSidePlacement) {
-    double directionFactor = positiveShoulder?1:-1;
-    
-    if(sameSidePlacement){
-      addSequential(new RotateWrist(122.11*directionFactor));
+    double directionFactor = positiveShoulder ? 1 : -1;
+
+    if (sameSidePlacement) {
+      addSequential(new RotateWrist(122.11 * directionFactor));
       addSequential(new ExtendArm(26.75));
-      addSequential(new RotateShoulder(11.75*directionFactor));
-    }else {
+      addSequential(new RotateShoulder(11.75 * directionFactor));
+    } else {
       addSequential(new ExtendArm(20.0));
-      addSequential(new RotateWrist(122.11*-directionFactor));
+      addSequential(new RotateWrist(122.11 * -directionFactor));
       addSequential(new ExtendArm(26.75));
-      addSequential(new RotateShoulder(11.75*-directionFactor));
+      addSequential(new RotateShoulder(11.75 * -directionFactor));
     }
   }
 }

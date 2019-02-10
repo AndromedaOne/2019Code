@@ -8,8 +8,8 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 public class IntakeReady extends CommandGroup {
 
   public IntakeReady(boolean positiveShoulder) {
-    
-    if(!positiveShoulder){
+
+    if (!positiveShoulder) {
       addSequential(new ExtendArm(20.56));
       addSequential(new RotateWrist(-90));
       addSequential(new RotateShoulder(-10.67));

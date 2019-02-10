@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
@@ -79,7 +80,10 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
+
   public static Claw claw;
+  public static DriveClawMotorsSafely driveClawMotorsSafely;
+
   public static MoveDrivetrainGyroCorrect gyroCorrectMove;
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
@@ -271,6 +275,7 @@ public class Robot extends TimedRobot {
     } else {
       claw = new MockClaw();
     }
+    driveClawMotorsSafely = new DriveClawMotorsSafely();
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
