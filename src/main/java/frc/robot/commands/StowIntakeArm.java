@@ -11,12 +11,6 @@ public class StowIntakeArm extends Command {
   private double speed = 0.5;
   private boolean isFinishedFlag = false;
 
-  /**
-   * Construct an intake control command to make the intake arm go up or down
-   * 
-   * @param directionToMove - MoveIntakeArmDirection.UP or
-   * MoveIntakeArmDirection.DOWN
-   */
   public StowIntakeArm() {
     requires(Robot.intake);
   }
