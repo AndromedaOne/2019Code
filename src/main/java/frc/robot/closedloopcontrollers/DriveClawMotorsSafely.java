@@ -5,10 +5,14 @@ import com.typesafe.config.Config;
 import frc.robot.Robot;
 import frc.robot.sensors.infrareddistancesensor.InfraredDistanceSensor;
 
+/**
+ * Drives the claw motors safely
+ */
 public class DriveClawMotorsSafely {
 
   static Config conf;
   static InfraredDistanceSensor iSensor;
+  public static boolean hasBall = false;
 
   /**
    * Drives the claw intake motors safely per the specifications
@@ -22,6 +26,10 @@ public class DriveClawMotorsSafely {
     int threshold = conf.getInt("ports.claw.infrared.threshold");
     if (iSensor.getInfraredDistance() >= threshold) {
       Robot.claw.driveIntakeMotors(speed);
+      hasBall = true;
+    } else {
+      Robot.claw.stop();
+      hasBall = false;
     }
 
   }
