@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class MockDriveTrain extends DriveTrain {
@@ -36,6 +37,11 @@ public class MockDriveTrain extends DriveTrain {
   @Override
   public boolean getShifterPresentFlag() {
     return false;
+  }
+
+  @Override
+  public void changeControlMode(NeutralMode mode) {
+    System.out.println("Changed mode to: " + mode.toString());
   }
 
 }
