@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 /**
  *
@@ -45,7 +47,7 @@ public class RealDriveTrain extends DriveTrain {
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
       shifterPresentFlag = true;
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
-          driveConf.getInt("pneumatics.backwardChannel"));
+          driveConf.getInt("pneumatics.backwardsChannel"));
     }
 
   }
@@ -55,6 +57,8 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
+    Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
+        new TracePair("Rotate", rotateAmount));
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 

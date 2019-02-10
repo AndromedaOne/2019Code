@@ -20,34 +20,52 @@ public class MoveDrivetrainGyroCorrect {
   }
 
   public void setCurrentAngle() {
-      savedAngle = navX.getZAngle();
+    savedAngle = navX.getZAngle();
   }
 
   public void stop() {
-    System.out.println(" - Stopping - ");
     moveUsingGyro(0, 0, false, false);
   }
 
+  /**
+   * This moves the robot and corrects for any rotation using the gyro
+   * 
+   * @param useDelay The delay will delay how long the gyro will wait to correct
+   * after turning this allows the robot to drift naturally as you turn
+   */
   public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs) {
     moveUsingGyro(forwardBackward, rotation, useDelay, useSquaredInputs, navX.getCompassHeading());
   }
 
+  /**
+   * This moves the robot and corrects for any rotation using the gyro
+   * 
+   * @param useDelay The delay will delay how long the gyro will wait to correct
+   * after turning this allows the robot to drift naturally as you turn
+   * @param heading Setting a heading will allow you to set what angle the robot
+   * will correct to. This is useful in auto after the robot turns you can tell it
+   * to correct to the heading it should have turn to.
+   */
   public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs,
       double heading) {
 
     double robotDeltaAngle = navX.getCompassHeading() - heading;
     double robotAngle = navX.getZAngle() + robotDeltaAngle;
 
+    /*
+     * If we aren't rotating or our delay time is higher than our set Delay do not
+     * use gyro correct This allows the robot to rotate naturally after we turn
+     */
     if ((rotation != 0) || (useDelay && !(currentDelay > kDelay))) {
-        gyroCorrect = false;
-        savedAngle = robotAngle;
-        currentDelay++;
+      gyroCorrect = false;
+      savedAngle = robotAngle;
+      currentDelay++;
     } else {
       gyroCorrect = true;
     }
 
     if (rotation != 0) {
-        currentDelay = 0;
+      currentDelay = 0;
     }
 
     if (gyroCorrect) {
