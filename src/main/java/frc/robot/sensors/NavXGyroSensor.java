@@ -54,12 +54,11 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   }
 
   /**
-   * Returns the current compass heading of the robot 
-   * Between 0 - 360
+   * Returns the current compass heading of the robot Between 0 - 360
    */
   public double getCompassHeading() {
     double correctedAngle = getZAngle() % 360;
-    if(correctedAngle < 0) {
+    if (correctedAngle < 0) {
       correctedAngle += 360;
     }
     return correctedAngle;

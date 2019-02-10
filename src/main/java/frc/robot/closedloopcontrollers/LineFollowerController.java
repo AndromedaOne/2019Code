@@ -2,17 +2,17 @@ package frc.robot.closedloopcontrollers;
 
 import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
-import frc.robot.subsystems.drivetrain.DriveTrain;
 
 public class LineFollowerController {
-  private DriveTrain driveTrain;
+  private MoveDrivetrainGyroCorrect gyroCorrectMove;
   private BaseLineFollowerSensor sensor;
   private final double kMinimumLineAngle = Math.toRadians(10);
   private final double kForwardSpeed = .1;
   private final double kRotateAmount = .1; // all constants are currently placeholders
 
-  public LineFollowerController(DriveTrain driveTrain1, BaseLineFollowerSensor lineFollowerSensorArray) {
-    driveTrain = driveTrain1;
+  public LineFollowerController(MoveDrivetrainGyroCorrect theGyroCorrectMove,
+      BaseLineFollowerSensor lineFollowerSensorArray) {
+    gyroCorrectMove = theGyroCorrectMove;
     sensor = lineFollowerSensorArray;
 
   }
@@ -22,15 +22,15 @@ public class LineFollowerController {
     if (v.lineFound = true) {
       // System.out.println("I FOUND A LINE!! :D");
       if (v.lineAngle <= -kMinimumLineAngle) {
-        driveTrain.move(kForwardSpeed, kRotateAmount);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateAmount, false, false);
       } else if (v.lineAngle >= kMinimumLineAngle) {
-        driveTrain.move(kForwardSpeed, -kRotateAmount);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, -kRotateAmount, false, false);
       } else {
-        driveTrain.move(kForwardSpeed, 0);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, false, false);
       }
     } else {
       System.out.println("Line Not Found! :c");
-      driveTrain.move(0, 0);
+      gyroCorrectMove.stop();
     }
 
   }
@@ -40,7 +40,7 @@ public class LineFollowerController {
   }
 
   public void stop() {
-    driveTrain.stop();
+    gyroCorrectMove.stop();
 
   }
 

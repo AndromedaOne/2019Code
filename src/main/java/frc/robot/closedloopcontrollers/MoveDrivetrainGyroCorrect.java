@@ -5,56 +5,57 @@ import frc.robot.subsystems.drivetrain.DriveTrain;
 
 public class MoveDrivetrainGyroCorrect {
 
-    private NavXGyroSensor navX;
-    private DriveTrain driveTrain;
-    private double savedAngle = 0;
-    private double newForwardBackwardStickValue = 0;
-    private double newRotateStickValue = 0;
+  private NavXGyroSensor navX;
+  private DriveTrain driveTrain;
+  private double savedAngle = 0;
+  private double newRotateValue = 0;
+  private boolean gyroCorrect = false;
+  private double currentDelay = 0;
+  private static final double kDelay = 25;
+  private static final double kProportion = 0.05;
 
-    public MoveDrivetrainGyroCorrect(NavXGyroSensor theNavX, DriveTrain theDriveTrain) {
-        navX = theNavX;
-        driveTrain = theDriveTrain;
+  public MoveDrivetrainGyroCorrect(NavXGyroSensor theNavX, DriveTrain theDriveTrain) {
+    navX = theNavX;
+    driveTrain = theDriveTrain;
+  }
+
+  public void setCurrentAngle() {
+      savedAngle = navX.getZAngle();
+  }
+
+  public void stop() {
+    System.out.println(" - Stopping - ");
+    moveUsingGyro(0, 0, false, false);
+  }
+
+  public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs) {
+    moveUsingGyro(forwardBackward, rotation, useDelay, useSquaredInputs, navX.getCompassHeading());
+  }
+
+  public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs,
+      double heading) {
+
+    double robotDeltaAngle = navX.getCompassHeading() - heading;
+    double robotAngle = navX.getZAngle() + robotDeltaAngle;
+
+    if ((rotation != 0) || (useDelay && !(currentDelay > kDelay))) {
+        gyroCorrect = false;
+        savedAngle = robotAngle;
+        currentDelay++;
+    } else {
+      gyroCorrect = true;
     }
 
-    public void moveUsingGyro(double forwardBackward, double rotation,
-     boolean useDelay, boolean useSquareInputs, double heading) {
-
-        double robotDeltaAngle = navX.getCompassHeading() - heading;
-        double robotAngle = navX.getZAngle() + robotDeltaAngle;
-        double correctionEquation = savedAngle - robotAngle;
-        if (!useDelay) {
-			newForwardBackwardStickValue = forwardBackward;
-			newRotateStickValue = correctionEquation;
-
-
-		} else if (forwardBackward == 0 && rotation == 0) {
-
-			savedAngle = robotAngle;
-			newForwardBackwardStickValue = 0;
-			newRotateStickValue = 0;
-		} else if (rotation != 0) {
-			courseCorrectionDelay = 0;
-
-			savedAngle = robotAngle;
-			newForwardBackwardStickValue = forwardBackward;
-			newRotateStickValue = rotation;
-		} else if (courseCorrectionDelay > 25) {
-			// disable correction for half a second after releasing the turn stick, to allow
-			// the driver
-			// to let the machine drift naturally, and not correct back to the gyro reading
-			// from
-			// the instant the driver released the turn stick.
-
-			// reassign the correctionEquation to the latest direction that we've been "free
-			correctionEquation = (savedAngle - robotAngle)*kProportion;
-			newForwardBackwardStickValue = forwardBackward;
-			newRotateStickValue = correctionEquation;
-
-		} else {
-			// should all cases fail, just drive normally
-			newForwardBackwardStickValue = forwardBackwardStickValue * mod;
-			newRotateStickValue = rotateStickValue;
-		}
-
+    if (rotation != 0) {
+        currentDelay = 0;
     }
+
+    if (gyroCorrect) {
+      double correctionEquation = (robotAngle - savedAngle) * kProportion;
+      newRotateValue = correctionEquation;
+    } else {
+      newRotateValue = rotation;
+    }
+    driveTrain.move(forwardBackward, newRotateValue, useSquaredInputs);
+  }
 }

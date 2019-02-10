@@ -42,7 +42,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     public void pidWrite(double output) {
       trace.addTrace(true, "Encoder Drivetrain", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
           new TracePair("EncoderTicks", encoder.pidGet()));
-      Robot.driveTrain.move(output, 0);
+      Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
   }
 

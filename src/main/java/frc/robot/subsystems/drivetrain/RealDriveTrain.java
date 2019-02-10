@@ -54,8 +54,8 @@ public class RealDriveTrain extends DriveTrain {
   public void periodic() {
   }
 
-  public void move(double forwardBackSpeed, double rotateAmount) {
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
+  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
+    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
   public void stop() {
