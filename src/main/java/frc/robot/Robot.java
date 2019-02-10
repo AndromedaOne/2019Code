@@ -254,6 +254,7 @@ public class Robot extends TimedRobot {
 
   /**
    * Get the robot name (set in the config)
+   * @return Name of the robot according to the configuration
    */
   public static String getName() {
     return conf.getString("robot.name");

@@ -17,6 +17,7 @@ public class PIDControllerBase {
 
   /**
    * Sets the setpoint for pidController
+   * @param setpoint Target to go to
    */
   public void setSetpoint(double setpoint) {
     pidMultiton.setSetpoint(setpoint);
@@ -54,6 +55,7 @@ public class PIDControllerBase {
    * takes a pidConfiguration and sets all of its member variables to that of
    * DrivetrainUltrasonicPIDController It sets: p,i,d, absoluteTolerace,
    * maxOutput, minOutput, and liveWindowName
+   * @param pidConfiguration The configuration to use
    */
   protected void setPIDConfiguration(PIDConfiguration pidConfiguration) {
     pidConfiguration.setP(p);
