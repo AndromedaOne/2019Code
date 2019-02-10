@@ -24,6 +24,8 @@ import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.GyroPIDController;
 import frc.robot.commands.*;
+import frc.robot.sensors.infrareddistancesensor.InfraredDistanceSensor;
+import frc.robot.sensors.infrareddistancesensor.RealInfraredDistanceSensor;
 import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
 import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
@@ -58,6 +60,8 @@ public class Robot extends TimedRobot {
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
   public static Claw claw;
+
+  public static InfraredDistanceSensor clawInfraredSensor;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -149,6 +153,7 @@ public class Robot extends TimedRobot {
     // Check for existance of claw subsystem
     if (conf.hasPath("ports.claw")) {
       claw = new RealClaw();
+      clawInfraredSensor = new RealInfraredDistanceSensor(conf.getInt("ports.claw.infrared.port"));
     } else {
       claw = new MockClaw();
     }

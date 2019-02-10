@@ -4,8 +4,6 @@ import com.typesafe.config.Config;
 
 import frc.robot.Robot;
 import frc.robot.sensors.infrareddistancesensor.InfraredDistanceSensor;
-import frc.robot.sensors.infrareddistancesensor.MockInfraredDistanceSensor;
-import frc.robot.sensors.infrareddistancesensor.RealInfraredDistanceSensor;
 
 public class DriveClawMotorsSafely {
 
@@ -19,11 +17,7 @@ public class DriveClawMotorsSafely {
    */
   public static void DriveClawMotors(double speed) {
     conf = Robot.getConfig();
-    if (conf.hasPath("ports.claw.infrared")) {
-      iSensor = new RealInfraredDistanceSensor(conf.getInt("ports.claw.infrared.port"));
-    } else {
-      iSensor = new MockInfraredDistanceSensor();
-    }
+    iSensor = Robot.clawInfraredSensor;
 
     int threshold = conf.getInt("ports.claw.infrared.threshold");
     if (iSensor.getInfraredDistance() >= threshold) {
