@@ -7,11 +7,6 @@ import frc.robot.sensors.SensorBase;
 public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
 
   /**
-   * @return the distance in inches that the MagEncoder has traveled
-   */
-  public abstract double getDistanceInches();
-
-  /**
    * @return the distance in ticks that the MagEncoder has traveled
    */
   public abstract double getDistanceTicks();
@@ -40,5 +35,7 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
   public PIDSourceType getPIDSourceType() {
     return PIDSourceType.kDisplacement;
   }
+
+  public abstract void reset();
 
 }
