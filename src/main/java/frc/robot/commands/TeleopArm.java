@@ -34,7 +34,7 @@ public class TeleopArm extends Command {
       MoveArmAndWristSafely.move(actualArmWristVal, actualRotateVal, shoulderRotateValue);
     } catch (ArmOutOfBoundsException e) {
       System.out.println(e.getMessage());
-	}
+    }
   }
 
   @Override

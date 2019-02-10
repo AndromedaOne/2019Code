@@ -21,13 +21,17 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
 import frc.robot.sensors.anglesensor.MockAngleSensor;
 import frc.robot.sensors.anglesensor.RealAngleSensor;
+import frc.robot.sensors.infrareddistancesensor.InfraredDistanceSensor;
+import frc.robot.sensors.infrareddistancesensor.RealInfraredDistanceSensor;
 import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
@@ -40,6 +44,9 @@ import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
+import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.claw.MockClaw;
+import frc.robot.subsystems.claw.RealClaw;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
@@ -72,10 +79,13 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
-
+  public static Claw claw;
+  public static MoveDrivetrainGyroCorrect gyroCorrectMove;
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
+
+  public static InfraredDistanceSensor clawInfraredSensor;
 
   public static MagEncoderSensor armExtensionEncoder1;
   public static MagEncoderSensor armExtensionEncoder2;
@@ -216,10 +226,11 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock wristLimitSwitchDown");
       wristLimitSwitchDown = new MockLimitSwitchSensor();
     }
-    
+
     operatorController = new Joystick(1);
 
     gyroPID = GyroPIDController.getInstance();
+    gyroCorrectMove = new MoveDrivetrainGyroCorrect(NavXGyroSensor.getInstance(), driveTrain);
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
@@ -253,6 +264,13 @@ public class Robot extends TimedRobot {
       lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
     }
 
+    // Check for existance of claw subsystem
+    if (conf.hasPath("ports.claw")) {
+      claw = new RealClaw();
+      clawInfraredSensor = new RealInfraredDistanceSensor(conf.getInt("ports.claw.infrared.port"));
+    } else {
+      claw = new MockClaw();
+    }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
@@ -299,6 +317,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
 
     /*
@@ -331,6 +350,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    gyroCorrectMove.setCurrentAngle();
   }
 
   /**
@@ -350,6 +371,8 @@ public class Robot extends TimedRobot {
 
   /**
    * Get the robot name (set in the config)
+   * 
+   * @return Name of the robot according to the configuration
    */
   public static String getName() {
     return conf.getString("robot.name");

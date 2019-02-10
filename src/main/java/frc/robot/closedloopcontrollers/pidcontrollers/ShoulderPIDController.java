@@ -42,9 +42,9 @@ public class ShoulderPIDController extends PIDControllerBase {
       try {
         MoveArmAndWristSafely.move(0, 0, output);
       } catch (ArmOutOfBoundsException e) {
-          System.out.println(e.getMessage());
-          container.disable();
-	}
+        System.out.println(e.getMessage());
+        container.disable();
+      }
     }
   }
 

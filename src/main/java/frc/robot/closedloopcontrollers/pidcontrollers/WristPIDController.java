@@ -56,7 +56,7 @@ public class WristPIDController extends PIDControllerBase {
       } catch (ArmOutOfBoundsException e) {
         System.out.println(e.getMessage());
         container.disable();
-	}
+      }
     }
   }
 

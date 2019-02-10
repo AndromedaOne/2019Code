@@ -11,8 +11,8 @@ public class RealUltrasonicSensor extends UltrasonicSensor {
   /**
    * Creates the ultrasonic with the ping and echo ports passed in
    * 
-   * @param ping
-   * @param echo
+   * @param ping Port for the ping
+   * @param echo Port for the echo
    */
   public RealUltrasonicSensor(int ping, int echo) {
     ultrasonic = new Ultrasonic(ping, echo);
