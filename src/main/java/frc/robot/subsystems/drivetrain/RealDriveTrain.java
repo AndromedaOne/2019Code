@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 /**
  *
@@ -54,8 +56,10 @@ public class RealDriveTrain extends DriveTrain {
   public void periodic() {
   }
 
-  public void move(double forwardBackSpeed, double rotateAmount) {
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
+  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
+    Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
+        new TracePair("Rotate", rotateAmount));
+    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
   public void stop() {

@@ -49,7 +49,7 @@ public class TeleOpDrive extends Command {
       shifterDelayCounter = 0;
       shiftButtonPressed = true;
       Robot.driveTrain.changeControlMode(NeutralMode.Coast);
-      Robot.driveTrain.move(0, 0);
+      Robot.gyroCorrectMove.stop();
       if (shifterHigh) {
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
@@ -70,9 +70,9 @@ public class TeleOpDrive extends Command {
     double rotateStickValue = -EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
 
     if (shifterDelayCounter >= delay) {
-      Robot.driveTrain.move(forwardBackwardStickValue * mod, rotateStickValue * mod);
+      Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
     } else {
-      Robot.driveTrain.move(0, 0);
+      Robot.gyroCorrectMove.stop();
     }
 
     if (shifterDelayCounter == delay) {

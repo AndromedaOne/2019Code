@@ -21,10 +21,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
 import frc.robot.sensors.anglesensor.MockAngleSensor;
 import frc.robot.sensors.anglesensor.RealAngleSensor;
@@ -67,7 +69,7 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
-
+  public static MoveDrivetrainGyroCorrect gyroCorrectMove;
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
@@ -155,6 +157,7 @@ public class Robot extends TimedRobot {
     operatorController = new Joystick(1);
 
     gyroPID = GyroPIDController.getInstance();
+    gyroCorrectMove = new MoveDrivetrainGyroCorrect(NavXGyroSensor.getInstance(), driveTrain);
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
@@ -233,6 +236,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
 
     /*
@@ -265,6 +269,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    gyroCorrectMove.setCurrentAngle();
   }
 
   /**
