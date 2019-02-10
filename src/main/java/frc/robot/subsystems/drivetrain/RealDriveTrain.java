@@ -36,7 +36,7 @@ public class RealDriveTrain extends DriveTrain {
    * Also inspired by https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#motion-magic-position-velocity-current-closed-loop-closed-loop
    */
   private final double kF = 1023 / kMaxSpeed;
-  private final double kP = (.1 * 1023) / 170; //Measured an error of ~170 on 2/9/19
+  private final double kP = 0 * (.1 * 1023) / 170; //Measured an error of ~170 on 2/9/19
   private final double kI = 0;
   private final double kD = 0;
 
