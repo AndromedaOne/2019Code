@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Victor;
 import frc.robot.Robot;
 
-public abstract class RealClaw extends Claw {
+public class RealClaw extends Claw {
     VictorSPX leftGripperSPX;
     VictorSPX rightGripperSPX;
 
