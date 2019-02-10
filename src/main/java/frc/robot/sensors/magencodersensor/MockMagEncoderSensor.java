@@ -18,4 +18,9 @@ public class MockMagEncoderSensor extends MagEncoderSensor {
     System.out.println("Trying to reset the encoder sensor");
   }
 
+  @Override
+  public void resetTo(double value) {
+    System.out.println("Trying to reset the encoder to: " + value);
+  }
+
 }

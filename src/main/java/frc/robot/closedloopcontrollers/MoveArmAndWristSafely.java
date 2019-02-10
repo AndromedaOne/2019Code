@@ -39,7 +39,7 @@ public class MoveArmAndWristSafely {
     }
     
     if(Robot.fullyExtendedArmLimitSwitch.isAtLimit()) {
-    
+      
     }
 
     Robot.extendableArmAndWrist.moveArmWrist(extensionVelocity, wristRotVelocity, shoulderRotVelocity);

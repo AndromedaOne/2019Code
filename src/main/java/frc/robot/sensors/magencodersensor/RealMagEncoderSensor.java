@@ -36,4 +36,9 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     initialPosition = talonSpeedController.getSelectedSensorPosition();
   }
 
+  @Override
+  public void resetTo(double value) {
+    initialPosition = value;
+  }
+
 }

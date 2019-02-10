@@ -41,6 +41,9 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
    */
   public abstract void reset();
 
+  /**
+   * sets the initial value to the value specified
+   */
   public abstract void resetTo(double value);
 
 }
