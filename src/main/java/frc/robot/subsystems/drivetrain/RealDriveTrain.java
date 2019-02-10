@@ -155,10 +155,10 @@ public class RealDriveTrain extends DriveTrain {
   public void periodic() {
   }
 
-  public void move(double forwardBackSpeed, double rotateAmount) {
-    printMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
-    printMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount);
+  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
+    Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
+        new TracePair("Rotate", rotateAmount));
+    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
   /* String for output */

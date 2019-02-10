@@ -52,17 +52,30 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
+  // Drive Controller and Buttons
+  Joystick driveController;
+
+  // Subsystem Controller and Buttons
+  Joystick subsystemController;
+  JoystickButton raiseRobotButton;
+
   private static OI instance = new OI();
 
   private POVButton intakeUp;
   private POVButton intakeDown;
   private JoystickButton driveForward;
 
+  JoystickButton openClawButton;
+  JoystickButton closeClawButton;
+
   private OI() {
     JoystickButton testEncoder = new JoystickButton(driveStick, 6);
     testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
 
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+    // Claw buttons are temp until I figure out the D-Pad
+    openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
+    closeClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
