@@ -47,13 +47,12 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-    // Drive Controller and Buttons
-    Joystick driveController;
+  // Drive Controller and Buttons
+  Joystick driveController;
 
-    // Subsystem Controller and Buttons
-    Joystick subsystemController;
-    JoystickButton raiseRobotButton;
-  
+  // Subsystem Controller and Buttons
+  Joystick subsystemController;
+  JoystickButton raiseRobotButton;
 
   private static OI instance = new OI();
 
