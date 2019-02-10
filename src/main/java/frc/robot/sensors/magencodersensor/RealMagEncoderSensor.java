@@ -12,7 +12,7 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
    * talon's feedback sensor to be a Mag Encoder and sets the sensor Phase to be
    * true.
    * 
-   * @param talon Talon object to attach encoder to 
+   * @param talon Talon object to attach encoder to
    */
   public RealMagEncoderSensor(WPI_TalonSRX talon) {
     talonSpeedController = talon;
