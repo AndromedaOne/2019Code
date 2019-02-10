@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
-    compressor =  new Compressor();
+    compressor = new Compressor();
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
