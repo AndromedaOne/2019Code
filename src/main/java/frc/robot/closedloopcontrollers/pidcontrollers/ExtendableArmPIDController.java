@@ -9,15 +9,15 @@ import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 
-public class ArmPIDController extends PIDControllerBase {
+public class ExtendableArmPIDController extends PIDControllerBase {
 
-  private static ArmPIDController instance;
+  private static ExtendableArmPIDController instance;
   private static ArmPIDOut armPIDOut;
   private static ArmPIDSource armPIDSource;
   private final MagEncoderSensor armEncoder1;
   private final MagEncoderSensor armEncoder2;
 
-  private ArmPIDController() {
+  private ExtendableArmPIDController() {
     super.absoluteTolerance = 3;
     super.p = 0;
     super.i = 0;
@@ -52,11 +52,11 @@ public class ArmPIDController extends PIDControllerBase {
     }
   }
 
-  public static ArmPIDController getInstance() {
+  public static ExtendableArmPIDController getInstance() {
     System.out.println(" --- Asking for Instance --- ");
     if (instance == null) {
       System.out.println("Creating new Intake PID Controller");
-      instance = new ArmPIDController();
+      instance = new ExtendableArmPIDController();
     }
     return instance;
   }

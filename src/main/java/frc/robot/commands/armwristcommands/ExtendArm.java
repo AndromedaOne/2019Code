@@ -2,7 +2,7 @@ package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.pidcontrollers.ArmPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 
 public class ExtendArm extends Command {
 
@@ -14,8 +14,8 @@ public class ExtendArm extends Command {
   }
 
   protected void execute() {
-    ArmPIDController.getInstance().setSetpoint(encTicks);
-    ArmPIDController.getInstance().enable();
+    ExtendableArmPIDController.getInstance().setSetpoint(encTicks);
+    ExtendableArmPIDController.getInstance().enable();
   }
 
   @Override
@@ -24,12 +24,12 @@ public class ExtendArm extends Command {
   }
 
   protected void end() {
-    ArmPIDController.getInstance().disable();
+    ExtendableArmPIDController.getInstance().disable();
   }
 
   @Override
   protected boolean isFinished() {
-    return !ArmPIDController.getInstance().isEnabled();
+    return !ExtendableArmPIDController.getInstance().isEnabled();
   }
 
 }
