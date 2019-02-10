@@ -80,6 +80,11 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor armExtensionEncoder1;
   public static MagEncoderSensor armExtensionEncoder2;
   public static MagEncoderSensor armRotateEncoder1;
+  public static LimitSwitchSensor fullyRetractedArmLimitSwitch;
+  public static LimitSwitchSensor fullyExtendedArmLimitSwitch;
+  public static LimitSwitchSensor wristLimitSwitchUp;
+  public static LimitSwitchSensor wristLimitSwitchDown;
+
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
@@ -179,6 +184,39 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock intakeStowedSwitch");
       intakeStowedSwitch = new MockLimitSwitchSensor();
     }
+    if (conf.hasPath("sensors.fullyRetractedArmLimitSwitch")) {
+      System.out.println("Using real fullyRetractedArmLimitSwitch");
+      int fullyRetractedArmLimitSwitchPort = conf.getInt("sensors.fullyRetractedArmLimitSwitch.port");
+      fullyRetractedArmLimitSwitch = new RealLimitSwitchSensor(fullyRetractedArmLimitSwitchPort, false);
+    } else {
+      System.out.println("Using mock fullyRetractedArmLimitSwitch");
+      fullyRetractedArmLimitSwitch = new MockLimitSwitchSensor();
+    }
+    if (conf.hasPath("sensors.fullyExtendedArmLimitSwitch")) {
+      System.out.println("Using real fullyExtendedArmLimitSwitch");
+      int fullyExtendedArmLimitSwitchPort = conf.getInt("sensors.fullyExtendedArmLimitSwitch.port");
+      fullyExtendedArmLimitSwitch = new RealLimitSwitchSensor(fullyExtendedArmLimitSwitchPort, false);
+    } else {
+      System.out.println("Using mock fullyExtendedArmLimitSwitch");
+      fullyExtendedArmLimitSwitch = new MockLimitSwitchSensor();
+    }
+    if (conf.hasPath("sensors.wristLimitSwitchUp")) {
+      System.out.println("Using real wristLimitSwitchUp");
+      int wristLimitSwitchUpPort = conf.getInt("sensors.wristLimitSwitchUp.port");
+      wristLimitSwitchUp = new RealLimitSwitchSensor(wristLimitSwitchUpPort, false);
+    } else {
+      System.out.println("Using mock wristLimitSwitchUp");
+      wristLimitSwitchUp = new MockLimitSwitchSensor();
+    }
+    if (conf.hasPath("sensors.wristLimitSwitchDown")) {
+      System.out.println("Using real wristLimitSwitchDown");
+      int wristLimitSwitchDownPort = conf.getInt("sensors.wristLimitSwitchDown.port");
+      wristLimitSwitchDown = new RealLimitSwitchSensor(wristLimitSwitchDownPort, false);
+    } else {
+      System.out.println("Using mock wristLimitSwitchDown");
+      wristLimitSwitchDown = new MockLimitSwitchSensor();
+    }
+    
     operatorController = new Joystick(1);
 
     gyroPID = GyroPIDController.getInstance();

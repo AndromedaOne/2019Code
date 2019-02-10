@@ -36,6 +36,11 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
     return PIDSourceType.kDisplacement;
   }
 
+  /**
+   * sets the initial value to the current value
+   */
   public abstract void reset();
+
+  public abstract void resetTo(double value);
 
 }

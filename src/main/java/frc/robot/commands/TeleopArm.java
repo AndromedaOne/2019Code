@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
+import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -29,7 +30,11 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    MoveArmAndWristSafely.move(actualArmWristVal, actualRotateVal, shoulderRotateValue);
+    try {
+      MoveArmAndWristSafely.move(actualArmWristVal, actualRotateVal, shoulderRotateValue);
+    } catch (ArmOutOfBoundsException e) {
+      System.out.println(e.getMessage());
+	}
   }
 
   @Override
@@ -44,7 +49,11 @@ public class TeleopArm extends Command {
 
   @Override
   protected void end() {
-    MoveArmAndWristSafely.move(0, 0, 0);
+    try {
+      MoveArmAndWristSafely.move(0, 0, 0);
+    } catch (ArmOutOfBoundsException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
 }

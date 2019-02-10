@@ -2,6 +2,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
+import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -38,7 +39,12 @@ public class ShoulderPIDController extends PIDControllerBase {
     public void pidWrite(double output) {
       trace.addTrace(true, "Shoulder PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
           new TracePair("Angle", shoulderEncoder.pidGet()));
-      MoveArmAndWristSafely.move(0, 0, output);
+      try {
+        MoveArmAndWristSafely.move(0, 0, output);
+      } catch (ArmOutOfBoundsException e) {
+          System.out.println(e.getMessage());
+          container.disable();
+	}
     }
   }
 

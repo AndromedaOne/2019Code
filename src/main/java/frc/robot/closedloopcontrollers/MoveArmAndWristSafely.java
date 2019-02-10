@@ -1,6 +1,7 @@
 package frc.robot.closedloopcontrollers;
 
 import frc.robot.Robot;
+import frc.robot.exceptions.ArmOutOfBoundsException;
 
 public class MoveArmAndWristSafely {
 
@@ -11,21 +12,40 @@ public class MoveArmAndWristSafely {
   private static final double EXTENSIONTICKSTOINCHES = 1.0;
   private static final double WRISTTICKSTODEGREES = 1.0;
 
+  private static final double extensionVelocityConversion = 1.0;
+  private static final double wristRotVelocityConversion = 1.0;
+  private static final double shoulderRotVelocityConversion = 1.0;
+  private static final double deltaTime = 1.0;
+
   /**
-   * @param extensionValue
-   * @param wristRotValue
-   * @param shoulderRotValue
+   * @param extensionVelocity
+   * @param wristRotVelocity
+   * @param shoulderRotVelocity
+   * @throws ArmOutOfBoundsException
    */
-  public static void move(double extensionValue, double wristRotValue, double shoulderRotValue) {
+  public static void move(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity) throws ArmOutOfBoundsException {
     double extensionIn = getExtensionIn(Robot.armExtensionEncoder1.getDistanceTicks(),
         Robot.armExtensionEncoder2.getDistanceTicks());
     double wristRotDeg = getWristRotDegrees(Robot.armRotateEncoder1.getDistanceTicks(),
         Robot.armExtensionEncoder2.getDistanceTicks());
     double shoulderRotDeg = getShoulderRotDeg(Robot.armRotateEncoder1.getDistanceTicks());
 
+    double deltaExtension = extensionVelocity * extensionVelocityConversion * deltaTime;
+    double deltaWristRot = wristRotVelocity * wristRotVelocityConversion * deltaTime;
+    double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
+
+    if (!isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot)){
+      throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot);
+    }
+    
+    if(Robot.fullyExtendedArmLimitSwitch.isAtLimit()) {
+    
+    }
+
+    Robot.extendableArmAndWrist.moveArmWrist(extensionVelocity, wristRotVelocity, shoulderRotVelocity);
   }
 
-  public boolean isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg) {
+  public static boolean isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg) {
 
     if (shoulderRotDeg > 180 || shoulderRotDeg < -180 || extensionIn < 0 || extensionIn > maxExtension
         || wristRotDeg > maxWristRot || wristRotDeg < -maxWristRot) {
