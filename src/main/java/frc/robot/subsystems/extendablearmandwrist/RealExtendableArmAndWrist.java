@@ -15,7 +15,6 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   protected DifferentialDrive differentialDrive;
   // TODO: Add real encoders
 
-
   public WPI_TalonSRX getShoulderJointTalon() {
     return shoulderJointTalon;
   }
