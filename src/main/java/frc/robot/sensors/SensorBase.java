@@ -14,6 +14,9 @@ public abstract class SensorBase {
    * fill out this method add the following line as many times as needed:
    * super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam +
    * "NameOfMeasurement:", this::methodForGettingMeasurement);
+   * 
+   * @param subsystemNameParam Name of the subsystem to put on livewindow
+   * @param sensorNameParam Name of the sensor to put on LiveWindow
    */
   public abstract void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam);
 

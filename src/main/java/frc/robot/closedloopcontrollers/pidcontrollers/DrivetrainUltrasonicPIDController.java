@@ -45,7 +45,7 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
       trace.addTrace(true, "Ultrasonic Drivetrain", new TracePair("Output", output),
           new TracePair("Setpoint", _setpoint), new TracePair("DistanceInches", ultrasonic.pidGet()));
 
-      Robot.driveTrain.move(-output, 0);
+      Robot.gyroCorrectMove.moveUsingGyro(-output, 0, false, false);
     }
 
   }
