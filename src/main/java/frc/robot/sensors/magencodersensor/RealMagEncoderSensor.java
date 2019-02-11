@@ -38,7 +38,8 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
 
   @Override
   public void resetTo(double value) {
-    initialPosition = value;
+    double error = value - getDistanceTicks();
+    initialPosition -= error;
   }
 
 }
