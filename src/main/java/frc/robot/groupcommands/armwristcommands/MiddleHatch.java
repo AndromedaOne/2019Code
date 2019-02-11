@@ -19,7 +19,7 @@ public class MiddleHatch extends CommandGroup {
 
       addSequential(new RotateWrist(57 * -directionFactor));
       addSequential(new ExtendArm(25.234));
-      addSequential(new RotateShoulder(-147* -directionFactor));
+      addSequential(new RotateShoulder(-147 * -directionFactor));
     }
   }
 }
