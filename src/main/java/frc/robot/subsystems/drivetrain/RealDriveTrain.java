@@ -42,6 +42,14 @@ public class RealDriveTrain extends DriveTrain {
   private final double kI = 0;
   private final double kD = 0;
 
+  /** Specialization of WPI_TalonSRX
+   * 
+   * The WPI_TalonSRX class implements a set() method to set the speed of the TalonSRX.
+   * Unfortunately, that method <i>always</i> drives the motor in PercentOutput mode.
+   * We need to be able drive the motor in Velocity mode to use the closed loop
+   * velocity mode.  So we extend WPI_TalonSRX and provide our own set() method which
+   * allows us to set the control mode (via the newly added setControlMode() method.)
+   */
   class ArbitraryModeWPI_TalonSRX extends WPI_TalonSRX {
     private ControlMode controlMode = ControlMode.PercentOutput;
     private double speed;
@@ -50,6 +58,10 @@ public class RealDriveTrain extends DriveTrain {
       super(deviceNumber);
     }
 
+    /**
+     * Set the control mode to be used when driving the motor
+     * @param controlMode Typically ControlMode.PercentOutput or ControlMode.Velocity
+     */
     public void setControlMode(ControlMode controlMode) {
       this.controlMode = controlMode;
     }
