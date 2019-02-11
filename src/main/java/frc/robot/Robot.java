@@ -82,7 +82,6 @@ public class Robot extends TimedRobot {
   public static BaseLineFollowerSensor lineFollowerSensorArray;
 
   public static Claw claw;
-  public static DriveClawMotorsSafely driveClawMotorsSafely;
 
   public static MoveDrivetrainGyroCorrect gyroCorrectMove;
   public static Intake intake;
@@ -275,7 +274,6 @@ public class Robot extends TimedRobot {
     } else {
       claw = new MockClaw();
     }
-    driveClawMotorsSafely = new DriveClawMotorsSafely();
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);

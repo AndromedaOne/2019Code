@@ -2,6 +2,7 @@ package frc.robot.groupcommands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.utilities.ButtonsEnumerated;
 
 public class XButtonArmCommand extends CommandGroup {
@@ -9,7 +10,7 @@ public class XButtonArmCommand extends CommandGroup {
     boolean positiveShoulder = Robot.armRotateEncoder1.getDistanceTicks() > 0;
     boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
         Robot.operatorController);
-    if (Robot.driveClawMotorsSafely.hasBall) {
+    if (DriveClawMotorsSafely.hasBall) {
       // middle cargo
     } else {
       // middle height
