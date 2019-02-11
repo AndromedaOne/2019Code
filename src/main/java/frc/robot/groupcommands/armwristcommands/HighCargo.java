@@ -5,7 +5,7 @@ import frc.robot.commands.armwristcommands.*;
 
 public class HighCargo extends CommandGroup {
   public HighCargo(boolean positiveShoulder, boolean sameSidePlacement) {
-    double directionFactor = positiveShoulder ? 1 : -1;
+    double directionFactor = positiveShoulder ? -1 : 1;
     if (sameSidePlacement) {
       addSequential(new RotateWrist(56.58 * directionFactor));
       addSequential(new ExtendArm(0));

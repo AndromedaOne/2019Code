@@ -8,7 +8,7 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 public class RocketShipLowCargo extends CommandGroup {
 
   public RocketShipLowCargo(boolean positiveShoulder, boolean sameSidePlacement) {
-    double directionFactor = positiveShoulder ? 1 : -1;
+    double directionFactor = positiveShoulder ? -1 : 1;
 
     if (sameSidePlacement) {
       addSequential(new RotateWrist(-91.12 * directionFactor));
