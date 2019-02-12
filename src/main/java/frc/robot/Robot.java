@@ -146,6 +146,7 @@ public class Robot extends TimedRobot {
       armExtensionEncoder2 = new RealMagEncoderSensor(rExtendableArmAndWrist.getBottomExtendableArmAndWristTalon());
 
       armRotateEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getShoulderJointTalon());
+      armRotateEncoder1.resetTo(157.35);
     } else {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
