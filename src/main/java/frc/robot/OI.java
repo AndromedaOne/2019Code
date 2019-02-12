@@ -8,10 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
+import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
@@ -62,6 +64,7 @@ public class OI {
 
   private POVButton intakeUp;
   private POVButton intakeDown;
+  private Button driveForward;
 
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
@@ -82,6 +85,9 @@ public class OI {
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+
+    driveForward = new POVButton(driveStick, POVDirectionNames.SOUTH.getValue());
+    driveForward.whileHeld(new DriveForward());
   }
 
   // Controllers

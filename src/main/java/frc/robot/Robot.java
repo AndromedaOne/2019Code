@@ -53,6 +53,7 @@ import frc.robot.subsystems.drivetrain.RealDriveTrain;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.I2CBusDriver;
 
 /**
@@ -173,6 +174,7 @@ public class Robot extends TimedRobot {
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
+    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10, 0.5, 8 /* TODO: Change these! */);
 
     Config senseConf = conf.getConfig("sensors.lineFollowSensor");
     lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
@@ -231,6 +233,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    Trace.getInstance().flushTraceFiles();
   }
 
   @Override
