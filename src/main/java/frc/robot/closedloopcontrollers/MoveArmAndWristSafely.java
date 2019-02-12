@@ -8,9 +8,9 @@ public class MoveArmAndWristSafely {
   private static final int maxWristRotDegrees = 1000;
   private static final int maxExtensionInches = 1000;
 
-  private static final double SHOULDERTICKSTODEGRESS = 1.0;
-  private static final double EXTENSIONTICKSTOINCHES = 1.0;
-  private static final double WRISTTICKSTODEGREES = 1.0;
+  public static final double SHOULDERTICKSTODEGRESS = 1.0;
+  public static final double EXTENSIONTICKSTOINCHES = 1.0;
+  public static final double WRISTTICKSTODEGREES = 1.0;
 
   private static final double extensionVelocityConversion = 1.0;
   private static final double wristRotVelocityConversion = 1.0;

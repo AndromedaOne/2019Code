@@ -2,14 +2,15 @@ package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 
 public class ExtendArm extends Command {
 
   private double encTicks;
 
-  public ExtendArm(double encTicks) {
-    this.encTicks = encTicks;
+  public ExtendArm(double inchesExtension) {
+    this.encTicks = inchesExtension/MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES;
     requires(Robot.extendableArmAndWrist);
   }
 

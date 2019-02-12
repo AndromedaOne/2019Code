@@ -15,10 +15,10 @@ import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
-import frc.robot.groupcommands.armwristcommands.AButtonArmCommand;
-import frc.robot.groupcommands.armwristcommands.BButtonArmCommand;
-import frc.robot.groupcommands.armwristcommands.XButtonArmCommand;
-import frc.robot.groupcommands.armwristcommands.YButtonArmCommand;
+import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.MiddleGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
+import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -87,10 +87,10 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new AButtonArmCommand());
-    ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new BButtonArmCommand());
-    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new XButtonArmCommand());
-    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(new YButtonArmCommand());
+    ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
+    ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new CargoShipAndLoadingCommand());
+    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new MiddleGamePieceArmCommand());
+    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(new HighGamePieceArmCommand());
 
   }
 

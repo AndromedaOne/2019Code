@@ -2,6 +2,7 @@ package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 
 public class RotateShoulder extends Command {
@@ -9,9 +10,9 @@ public class RotateShoulder extends Command {
   private double encTicks;
   ShoulderPIDController sPidController;
 
-  public RotateShoulder(double encTicks) {
+  public RotateShoulder(double angle) {
     requires(Robot.extendableArmAndWrist);
-    this.encTicks = encTicks;
+    this.encTicks = angle/MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS;
     sPidController = ShoulderPIDController.getInstance();
   }
 

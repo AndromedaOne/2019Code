@@ -5,15 +5,15 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.utilities.ButtonsEnumerated;
 
-public class BButtonArmCommand extends CommandGroup {
-  public BButtonArmCommand() {
+public class LowGamePieceArmCommand extends CommandGroup {
+  public LowGamePieceArmCommand() {
     boolean positiveShoulder = Robot.armRotateEncoder1.getDistanceTicks() > 0;
     boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
         Robot.operatorController);
     if (DriveClawMotorsSafely.hasBall) {
-      addSequential(new CargoShipCargo(positiveShoulder, sameSidePlacement));
+      addSequential(new RocketShipLowCargo(positiveShoulder, sameSidePlacement));
     } else {
-      addSequential(new LoadingStation(positiveShoulder, sameSidePlacement));
+      addSequential(new LowHatch(positiveShoulder, sameSidePlacement));
     }
   }
 }
