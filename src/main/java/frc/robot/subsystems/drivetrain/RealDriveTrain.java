@@ -59,7 +59,7 @@ public class RealDriveTrain extends DriveTrain {
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
     Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
         new TracePair("Rotate", rotateAmount));
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
+    differentialDrive.arcadeDrive(forwardBackSpeed, -rotateAmount, squaredInputs);
   }
 
   public void stop() {
