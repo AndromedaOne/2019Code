@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,7 +64,7 @@ public class OI {
 
   private POVButton intakeUp;
   private POVButton intakeDown;
-  private JoystickButton driveForward;
+  private Button driveForward;
 
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
@@ -85,7 +86,7 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    driveForward = new JoystickButton(driveStick, 4);
+    driveForward = new POVButton(driveStick, POVDirectionNames.SOUTH.getValue());
     driveForward.whileHeld(new DriveForward());
   }
 

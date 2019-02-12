@@ -28,6 +28,10 @@ public class RealDriveTrain extends DriveTrain {
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
 
+  public boolean getShifterPresentFlag() {
+    return shifterPresentFlag;
+  }
+
   private final int kTimeoutMs = 30;
   /* 100% throttle corresponds to 3600 RPM */
   private final double kMaxSpeedLowGear = 13500;
@@ -42,13 +46,15 @@ public class RealDriveTrain extends DriveTrain {
   private final double kI = 0;
   private final double kD = 0;
 
-  /** Specialization of WPI_TalonSRX
+  /**
+   * Specialization of WPI_TalonSRX
    * 
-   * The WPI_TalonSRX class implements a set() method to set the speed of the TalonSRX.
-   * Unfortunately, that method <i>always</i> drives the motor in PercentOutput mode.
-   * We need to be able drive the motor in Velocity mode to use the closed loop
-   * velocity mode.  So we extend WPI_TalonSRX and provide our own set() method which
-   * allows us to set the control mode (via the newly added setControlMode() method.)
+   * The WPI_TalonSRX class implements a set() method to set the speed of the
+   * TalonSRX. Unfortunately, that method <i>always</i> drives the motor in
+   * PercentOutput mode. We need to be able drive the motor in Velocity mode to
+   * use the closed loop velocity mode. So we extend WPI_TalonSRX and provide our
+   * own set() method which allows us to set the control mode (via the newly added
+   * setControlMode() method.)
    */
   class ArbitraryModeWPI_TalonSRX extends WPI_TalonSRX {
     private ControlMode controlMode = ControlMode.PercentOutput;
@@ -60,7 +66,9 @@ public class RealDriveTrain extends DriveTrain {
 
     /**
      * Set the control mode to be used when driving the motor
-     * @param controlMode Typically ControlMode.PercentOutput or ControlMode.Velocity
+     * 
+     * @param controlMode Typically ControlMode.PercentOutput or
+     * ControlMode.Velocity
      */
     public void setControlMode(ControlMode controlMode) {
       this.controlMode = controlMode;
@@ -116,8 +124,9 @@ public class RealDriveTrain extends DriveTrain {
     /**
      * Phase sensor accordingly. Positive Sensor Reading should match Green
      * (blinking) Leds on Talon
-
-    /* Config the peak and nominal outputs */
+     * 
+     * /* Config the peak and nominal outputs
+     */
     _talon.configNominalOutputForward(0, kTimeoutMs);
     _talon.configNominalOutputReverse(0, kTimeoutMs);
     _talon.configPeakOutputForward(1, kTimeoutMs);
@@ -147,11 +156,12 @@ public class RealDriveTrain extends DriveTrain {
     Config driveConf = conf.getConfig("ports.driveTrain");
     setDefaultCommand(new TeleOpDrive());
     driveTrainLeftMaster = initTalonMaster(driveConf, "left");
-    driveTrainLeftSlave = initTalonSlave(driveConf, "leftSlave", driveTrainLeftMaster, driveConf.getBoolean("leftSideInverted"));
+    driveTrainLeftSlave = initTalonSlave(driveConf, "leftSlave", driveTrainLeftMaster,
+        driveConf.getBoolean("leftSideInverted"));
     driveTrainRightMaster = initTalonMaster(driveConf, "right");
-    driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster, driveConf.getBoolean("rightSideInverted"));
+    driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
+        driveConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
-    /* For testing only try this in velocity mode */
     setVelocityMode();
 
     // Gear Shift Solenoid
@@ -160,8 +170,6 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
-
-    setVelocityMode();
   }
 
   @Override
@@ -171,8 +179,8 @@ public class RealDriveTrain extends DriveTrain {
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
     Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
         new TracePair("Rotate", rotateAmount));
-    printMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
-    printMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
+    logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
+    logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
@@ -180,36 +188,10 @@ public class RealDriveTrain extends DriveTrain {
   StringBuilder _sb = new StringBuilder();
   int _loops = 0;
 
-  private void printMeasurements(String side, WPI_TalonSRX _talon, double targetVelocity, boolean doneMeasuring) {
+  private void logMeasurements(String side, WPI_TalonSRX _talon, double targetVelocity, boolean doneMeasuring) {
     /* Get Talon/Victor's current output percentage */
     double motorOutput = _talon.getMotorOutputPercent();
 
-    targetVelocity = targetVelocity * kMaxSpeedLowGear;
-    /* Prepare line to print */
-    _sb.append(side);
-    _sb.append("\tout:");
-    /* Cast to int to remove decimal places */
-    _sb.append((int) (motorOutput * 100));
-    _sb.append("%"); // Percent
-    _sb.append("\tspd:");
-    _sb.append(_talon.getSelectedSensorVelocity(0));
-    _sb.append("u"); // Native units
-    /* Append more signals to print when in speed mode. */
-    _sb.append("\terr:");
-    _sb.append(_talon.getClosedLoopError(0));
-    _sb.append("\ttrg:");
-    _sb.append(_talon.getClosedLoopTarget(0));
-    /* Print built string every 10 loops */
-    if (doneMeasuring) {
-      if (++_loops >= 10) {
-        _loops = 0;
-        System.out.println(_sb.toString());
-      }
-      /* Reset built string */
-      _sb.setLength(0);
-    } else {
-      _sb.append("\n");
-    }
     Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(0)),
         new TracePair("Error", (double) _talon.getClosedLoopError(0)),
@@ -218,10 +200,6 @@ public class RealDriveTrain extends DriveTrain {
 
   public void stop() {
     differentialDrive.stopMotor();
-  }
-
-  public boolean getShifterPresentFlag() {
-    return shifterPresentFlag;
   }
 
   public WPI_TalonSRX getLeftRearTalon() {
