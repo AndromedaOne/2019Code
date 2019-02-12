@@ -92,6 +92,9 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
   private double m_error;
   private double m_result;
 
+  private int numberOfSamples = 0;
+  private int onTargetSamples = 0;
+
   private PIDSource m_origSource;
   private LinearDigitalFilter m_filter;
 
@@ -143,13 +146,23 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
   public class AbsoluteTolerance implements Tolerance {
     private final double m_value;
 
+    public AbsoluteTolerance(double value, int sampleNumber) {
+        this(value);
+        numberOfSamples = sampleNumber;
+    }
+
     AbsoluteTolerance(double value) {
       m_value = value;
     }
 
     @Override
     public boolean onTarget() {
-      return Math.abs(getError()) < m_value;
+        if(Math.abs(getError()) < m_value) {
+            ++onTargetSamples;
+        } else {
+            onTargetSamples = 0;
+        }
+      return (numberOfSamples < onTargetSamples);
     }
   }
 
@@ -713,10 +726,10 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
    * @param absvalue absolute error which is tolerable in the units of the input
    * object
    */
-  public void setAbsoluteTolerance(double absvalue) {
+  public void setAbsoluteTolerance(double absvalue, int sampleNumber) {
     m_thisMutex.lock();
     try {
-      m_tolerance = new AbsoluteTolerance(absvalue);
+      m_tolerance = new AbsoluteTolerance(absvalue, sampleNumber);
     } finally {
       m_thisMutex.unlock();
     }

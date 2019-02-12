@@ -72,7 +72,7 @@ public class PIDMultiton {
     pidController = new PIDController4905(config.getP(), config.getI(), config.getD(), name.source, name.output);
     pidController.setOutputRange(config.getMinimumOutput(), config.getMaximumOutput());
 
-    pidController.setAbsoluteTolerance(config.getAbsoluteTolerance());
+    pidController.setAbsoluteTolerance(config.getAbsoluteTolerance(), 6);
 
     if (config.getLiveWindowName() == config.getPIDName()) {
       config.setLiveWindowName(config.getLiveWindowName() + "Header");
@@ -86,6 +86,7 @@ public class PIDMultiton {
    * Sets the setpoint for pidController
    */
   public void setSetpoint(double setpoint) {
+    pidController.setAbsoluteTolerance(config.getAbsoluteTolerance(), 6);
     pidController.setSetpoint(setpoint);
   }
 
