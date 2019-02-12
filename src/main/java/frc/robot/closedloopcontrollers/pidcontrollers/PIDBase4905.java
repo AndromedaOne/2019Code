@@ -92,6 +92,8 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
   private double m_error;
   private double m_result;
 
+  private double m_integralWindupPercent = 1.0;
+
   private PIDSource m_origSource;
   private LinearDigitalFilter m_filter;
 
@@ -164,7 +166,8 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
    * @param output The PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDBase4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output) {
+  public PIDBase4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output,
+      double integralWindupPercent) {
     super(false);
     requireNonNull(source, "Null PIDSource was given");
     requireNonNull(output, "Null PIDOutput was given");
@@ -176,6 +179,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
     m_I = Ki;
     m_D = Kd;
     m_F = Kf;
+    m_integralWindupPercent = integralWindupPercent;
 
     // Save original source
     m_origSource = source;
@@ -202,8 +206,9 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
    * @param output the PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDBase4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output) {
-    this(Kp, Ki, Kd, 0.0, source, output);
+  public PIDBase4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output,
+      double integralWindupPercent) {
+    this(Kp, Ki, Kd, 0.0, source, output, integralWindupPercent);
   }
 
   /**
@@ -272,7 +277,12 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
         result = P * totalError + D * error + feedForward;
       } else {
         if (I != 0) {
-          totalError = clamp(totalError + error, minimumOutput / I, maximumOutput / I);
+          if (((P * error) > (maximumOutput * m_integralWindupPercent))
+              || ((P * error) < (minimumOutput * m_integralWindupPercent))) {
+            totalError = 0;
+          } else {
+            totalError = clamp(totalError + error, minimumOutput / I, maximumOutput / I);
+          }
         }
 
         result = P * error + I * totalError + D * (error - prevError) + feedForward;

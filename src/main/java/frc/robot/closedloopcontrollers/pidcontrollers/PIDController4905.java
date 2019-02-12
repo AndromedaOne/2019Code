@@ -44,7 +44,7 @@ public class PIDController4905 extends PIDBase4905 implements Controller {
   @SuppressWarnings("ParameterName")
   public PIDController4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output,
       double period) {
-    super(Kp, Ki, Kd, Kf, source, output);
+    super(Kp, Ki, Kd, Kf, source, output, 0.25);
     m_controlLoop.startPeriodic(period);
   }
 
