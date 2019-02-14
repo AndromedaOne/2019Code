@@ -3,7 +3,7 @@ package frc.robot.sensors.magencodersensor;
 public class MockMagEncoderSensor extends MagEncoderSensor {
 
   @Override
-  public double getDistanceTicks() {
+  public double getDistance() {
     return 0;
   }
 

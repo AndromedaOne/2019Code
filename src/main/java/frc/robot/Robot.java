@@ -152,7 +152,7 @@ public class Robot extends TimedRobot {
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
     if (conf.hasPath("sensors.drivetrainEncoders")) {
-      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon());
+        drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), 1);
     } else {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
