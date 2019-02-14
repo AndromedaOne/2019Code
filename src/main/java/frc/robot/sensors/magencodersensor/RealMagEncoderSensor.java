@@ -25,7 +25,7 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
   @Override
   public double getDistance() {
     double ticks = talonSpeedController.getSelectedSensorPosition();
-    return ticks*ticksToUnitsConversion - initialPosition;
+    return ticks * ticksToUnitsConversion - initialPosition;
   }
 
   @Override
