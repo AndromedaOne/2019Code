@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.sensors.SensorBase;
 
 public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
-  
+
   /**
    * @return the distance in ticks that the MagEncoder has traveled
    */
