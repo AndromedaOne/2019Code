@@ -6,8 +6,8 @@ import frc.robot.commands.armwristcommands.RotateShoulder;
 import frc.robot.commands.armwristcommands.RotateWrist;
 
 public class HighHatch extends CommandGroup {
-  public HighHatch(boolean positiveShoulder, boolean sameSidePlacement) {
-    double directionFactor = positiveShoulder ? -1 : 1;
+  public HighHatch(boolean positiveWrist, boolean sameSidePlacement) {
+    double directionFactor = positiveWrist ? -1 : 1;
     if (sameSidePlacement) {
       addSequential(new RotateWrist(89.39 * directionFactor));
       addSequential(new ExtendArm(0));

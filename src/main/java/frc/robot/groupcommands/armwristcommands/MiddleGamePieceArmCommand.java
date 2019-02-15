@@ -7,13 +7,13 @@ import frc.robot.utilities.ButtonsEnumerated;
 
 public class MiddleGamePieceArmCommand extends CommandGroup {
   public MiddleGamePieceArmCommand() {
-    boolean positiveShoulder = Robot.armRotateEncoder1.getDistanceTicks() > 0;
+    boolean positiveWrist = Robot.armRotateEncoder1.getDistanceTicks() > 0;
     boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
         Robot.operatorController);
     if (DriveClawMotorsSafely.hasBall) {
-      addSequential(new MiddleCargo(positiveShoulder, sameSidePlacement));
+      addSequential(new MiddleCargo(positiveWrist, sameSidePlacement));
     } else {
-      addSequential(new MiddleHatch(positiveShoulder, sameSidePlacement));
+      addSequential(new MiddleHatch(positiveWrist, sameSidePlacement));
     }
   }
 }

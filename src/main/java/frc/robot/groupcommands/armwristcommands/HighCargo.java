@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.armwristcommands.*;
 
 public class HighCargo extends CommandGroup {
-  public HighCargo(boolean positiveShoulder, boolean sameSidePlacement) {
-    double directionFactor = positiveShoulder ? -1 : 1;
+  public HighCargo(boolean positiveWrist, boolean sameSidePlacement) {
+    double directionFactor = positiveWrist ? -1 : 1;
     if (sameSidePlacement) {
       addSequential(new RotateWrist(56.58 * directionFactor));
       addSequential(new ExtendArm(0));

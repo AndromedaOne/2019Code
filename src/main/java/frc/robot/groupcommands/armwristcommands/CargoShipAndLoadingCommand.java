@@ -7,13 +7,13 @@ import frc.robot.utilities.ButtonsEnumerated;
 
 public class CargoShipAndLoadingCommand extends CommandGroup {
   public CargoShipAndLoadingCommand() {
-    boolean positiveShoulder = Robot.armRotateEncoder1.getDistanceTicks() > 0;
+    boolean positiveWrist = Robot.positiveWrist();
     boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
         Robot.operatorController);
     if (DriveClawMotorsSafely.hasBall) {
-      addSequential(new CargoShipCargo(positiveShoulder, sameSidePlacement));
+      addSequential(new CargoShipCargo(positiveWrist, sameSidePlacement));
     } else {
-      addSequential(new LoadingStation(positiveShoulder, sameSidePlacement));
+      addSequential(new LoadingStation(positiveWrist, sameSidePlacement));
     }
   }
 }

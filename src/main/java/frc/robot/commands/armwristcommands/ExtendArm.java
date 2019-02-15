@@ -10,7 +10,7 @@ public class ExtendArm extends Command {
   private double encTicks;
 
   public ExtendArm(double inchesExtension) {
-    this.encTicks = inchesExtension/MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES;
+    this.encTicks = inchesExtension / MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES;
     requires(Robot.extendableArmAndWrist);
   }
 

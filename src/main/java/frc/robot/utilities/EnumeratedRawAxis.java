@@ -18,6 +18,7 @@ public enum EnumeratedRawAxis {
 
   public double getRawAxis(Joystick gamepad) {
     return gamepad.getRawAxis(getValue());
+
   }
 
   public boolean pressedBeyond(Joystick gamepad, double threshold) {

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
@@ -146,7 +147,13 @@ public class Robot extends TimedRobot {
       armExtensionEncoder2 = new RealMagEncoderSensor(rExtendableArmAndWrist.getBottomExtendableArmAndWristTalon());
 
       armRotateEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getShoulderJointTalon());
-      armRotateEncoder1.resetTo(157.35);
+      armRotateEncoder1.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
+      double initialWristPos = -7;
+      double initialArmExtension = 99;
+      armExtensionEncoder1.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
+          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      armExtensionEncoder2.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
+          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
@@ -381,4 +388,7 @@ public class Robot extends TimedRobot {
     return conf.getString("robot.name");
   }
 
+  public static boolean positiveWrist() {
+    return false;
+  }
 }

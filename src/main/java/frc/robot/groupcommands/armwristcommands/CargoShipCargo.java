@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.armwristcommands.*;
 
 public class CargoShipCargo extends CommandGroup {
-  public CargoShipCargo(boolean positiveShoulder, boolean sameSidePlacement) {
-    double directionFactor = positiveShoulder ? 1 : -1;
+  public CargoShipCargo(boolean positiveWrist, boolean sameSidePlacement) {
+    double directionFactor = positiveWrist ? 1 : -1;
 
     if (sameSidePlacement) {
       addSequential(new RotateWrist(-98.59 * directionFactor));

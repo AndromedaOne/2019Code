@@ -42,50 +42,39 @@ public class MoveArmAndWristSafely {
           shoulderRotDeg + deltaShoulderRot);
     }
 
-    if (Robot.wristLimitSwitchUp.isAtLimit()) {
-      wristRotDeg = maxWristRotDegrees;
-      double topEncoderPosition = (extensionIn / EXTENSIONTICKSTOINCHES)
-          + (maxWristRotDegrees / WRISTTICKSTODEGREES) / 2;
-      double bottomEncoderPosition = (extensionIn / EXTENSIONTICKSTOINCHES)
-          - (maxWristRotDegrees / WRISTTICKSTODEGREES) / 2;
-      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
-      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
-      if (wristRotVelocity > 0) {
-        wristRotVelocity = 0;
-      }
-    } else if (Robot.wristLimitSwitchDown.isAtLimit()) {
-      wristRotDeg = -maxWristRotDegrees;
-      double topEncoderPosition = (extensionIn / EXTENSIONTICKSTOINCHES)
-          - (maxWristRotDegrees / WRISTTICKSTODEGREES) / 2;
-      double bottomEncoderPosition = (extensionIn / EXTENSIONTICKSTOINCHES)
-          + (maxWristRotDegrees / WRISTTICKSTODEGREES) / 2;
-      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
-      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
-      if (wristRotVelocity < 0) {
-        wristRotVelocity = 0;
-      }
-    }
-
-    if (Robot.fullyExtendedArmLimitSwitch.isAtLimit()) {
-      extensionIn = 0;
-      double topEncoderPosition = (wristRotDeg / WRISTTICKSTODEGREES) / 2;
-      double bottomEncoderPosition = -(wristRotDeg / WRISTTICKSTODEGREES) / 2;
-      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
-      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
-      if (extensionVelocity > 0) {
-        extensionVelocity = 0;
-      }
-    } else if (Robot.fullyRetractedArmLimitSwitch.isAtLimit()) {
-      extensionIn = maxExtensionInches;
-      double topEncoderPosition = (wristRotDeg / WRISTTICKSTODEGREES) / 2 + maxExtensionInches / EXTENSIONTICKSTOINCHES;
-      double bottomEncoderPosition = -(wristRotDeg / WRISTTICKSTODEGREES) / 2
-          + maxExtensionInches / EXTENSIONTICKSTOINCHES;
-      Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
-      Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
-      if (extensionVelocity > 0) {
-        extensionVelocity = 0;
-      }
-    }
+    /*
+     * if (Robot.wristLimitSwitchUp.isAtLimit()) { wristRotDeg = maxWristRotDegrees;
+     * double topEncoderPosition = (extensionIn / EXTENSIONTICKSTOINCHES) +
+     * (maxWristRotDegrees / WRISTTICKSTODEGREES) / 2; double bottomEncoderPosition
+     * = (extensionIn / EXTENSIONTICKSTOINCHES) - (maxWristRotDegrees /
+     * WRISTTICKSTODEGREES) / 2;
+     * Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+     * Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition); if
+     * (wristRotVelocity > 0) { wristRotVelocity = 0; } } else if
+     * (Robot.wristLimitSwitchDown.isAtLimit()) { wristRotDeg = -maxWristRotDegrees;
+     * double topEncoderPosition = (extensionIn / EXTENSIONTICKSTOINCHES) -
+     * (maxWristRotDegrees / WRISTTICKSTODEGREES) / 2; double bottomEncoderPosition
+     * = (extensionIn / EXTENSIONTICKSTOINCHES) + (maxWristRotDegrees /
+     * WRISTTICKSTODEGREES) / 2;
+     * Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+     * Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition); if
+     * (wristRotVelocity < 0) { wristRotVelocity = 0; } }
+     * 
+     * if (Robot.fullyExtendedArmLimitSwitch.isAtLimit()) { extensionIn = 0; double
+     * topEncoderPosition = (wristRotDeg / WRISTTICKSTODEGREES) / 2; double
+     * bottomEncoderPosition = -(wristRotDeg / WRISTTICKSTODEGREES) / 2;
+     * Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+     * Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition); if
+     * (extensionVelocity > 0) { extensionVelocity = 0; } } else if
+     * (Robot.fullyRetractedArmLimitSwitch.isAtLimit()) { extensionIn =
+     * maxExtensionInches; double topEncoderPosition = (wristRotDeg /
+     * WRISTTICKSTODEGREES) / 2 + maxExtensionInches / EXTENSIONTICKSTOINCHES;
+     * double bottomEncoderPosition = -(wristRotDeg / WRISTTICKSTODEGREES) / 2 +
+     * maxExtensionInches / EXTENSIONTICKSTOINCHES;
+     * Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
+     * Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition); if
+     * (extensionVelocity > 0) { extensionVelocity = 0; } }
+     */
     Robot.extendableArmAndWrist.moveArmWrist(extensionVelocity, wristRotVelocity, shoulderRotVelocity);
   }
 

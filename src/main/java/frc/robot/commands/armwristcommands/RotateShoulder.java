@@ -12,7 +12,7 @@ public class RotateShoulder extends Command {
 
   public RotateShoulder(double angle) {
     requires(Robot.extendableArmAndWrist);
-    this.encTicks = angle/MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS;
+    this.encTicks = angle / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS;
     sPidController = ShoulderPIDController.getInstance();
   }
 

@@ -15,10 +15,11 @@ import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingEncoderPID;
-import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
-import frc.robot.groupcommands.armwristcommands.MiddleGamePieceArmCommand;
+import frc.robot.groupcommands.RollIntakeGroupCommand;
 import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
 import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.MiddleGamePieceArmCommand;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -92,6 +93,7 @@ public class OI {
     ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new MiddleGamePieceArmCommand());
     ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(new HighGamePieceArmCommand());
 
+    ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
   }
 
   // Controllers
