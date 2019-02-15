@@ -155,6 +155,11 @@ public class Robot extends TimedRobot {
       armExtensionEncoder2.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
           + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
+      armExtensionEncoder1 = new MockMagEncoderSensor();
+
+      armExtensionEncoder2 = new MockMagEncoderSensor();
+
+      armRotateEncoder1 = new MockMagEncoderSensor();
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
@@ -248,6 +253,7 @@ public class Robot extends TimedRobot {
     driveController = new Joystick(0);
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
+
 
     Config senseConf = conf.getConfig("sensors.lineFollowSensor");
     lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),

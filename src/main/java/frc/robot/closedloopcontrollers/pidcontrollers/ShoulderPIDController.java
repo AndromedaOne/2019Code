@@ -1,6 +1,7 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
+import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
@@ -24,6 +25,7 @@ public class ShoulderPIDController extends PIDControllerBase {
     super.trace = Trace.getInstance();
     shoulderPIDOut = new ShoulderPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
+    shoulderEncoder = Robot.armRotateEncoder1;
     super.pidMultiton = PIDMultiton.getInstance(shoulderEncoder, shoulderPIDOut, super.pidConfiguration);
     shoulderPIDOut.setContainer(super.pidMultiton);
   }
