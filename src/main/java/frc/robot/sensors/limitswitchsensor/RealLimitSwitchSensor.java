@@ -10,8 +10,8 @@ public class RealLimitSwitchSensor extends LimitSwitchSensor {
    * Sets the limit switch to a new DigitalInput with the port specified and
    * records whether or not the limit switch has reversed polarity
    * 
-   * @param port
-   * @param reversedPolarityParam
+   * @param port Port to use
+   * @param reversedPolarityParam Whether or not to reverse the polarity
    */
   public RealLimitSwitchSensor(int port, boolean reversedPolarityParam) {
     limitSwitch = new DigitalInput(port);

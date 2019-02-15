@@ -3,12 +3,14 @@ package frc.robot.sensors;
 import java.util.TimerTask;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 
@@ -22,6 +24,7 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   private java.util.Timer controlLoop;
   private double robotAngleCount = 0;
 
+
   /**
    * Trys creating the gyro and if it can not then it reports an error to the
    * DriveStation.
@@ -34,8 +37,18 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
        * See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for
        * details.
        */
-      gyro = new AHRS(SPI.Port.kMXP);
-
+      Config conf = Robot.getConfig();
+      Config navXConfig = conf.getConfig("sensors.navx");
+      String navXPort = navXConfig.getString("port");
+      System.out.println("Creating a NavX Gyro on port: " + navXPort);
+      if(navXPort.equals("MXP")) {
+        gyro = new AHRS(SPI.Port.kMXP);
+      } else if(navXPort.equals("SPI")) {
+        gyro = new AHRS(SPI.Port.kOnboardCS0);
+      } else {
+        System.err.println("ERROR: Unkown NavX Port: " + navXPort);
+        return;
+      }
       System.out.println("Created NavX instance");
       // New thread to initialize the initial angle
       controlLoop = new java.util.Timer();
