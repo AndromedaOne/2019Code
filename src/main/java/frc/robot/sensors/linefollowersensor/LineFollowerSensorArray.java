@@ -42,7 +42,7 @@ public class LineFollowerSensorArray extends BaseLineFollowerSensor {
   public boolean[] isThereLine() {
     boolean[] boolBuf = new boolean[buffer.length / 2];
     double[] dValues = new double[buffer.length / 2];
-    //TODO: This is TOTALLY wrong, someone needs to fix it.
+    // TODO: This is TOTALLY wrong, someone needs to fix it.
     mI2cBus.readOnly(buffer, (numSensors * 2) - 1);
     if (mI2cBus.readOnly(buffer, 16) == false) {
       if (once) {

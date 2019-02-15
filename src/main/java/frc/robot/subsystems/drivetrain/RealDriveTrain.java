@@ -42,9 +42,9 @@ public class RealDriveTrain extends DriveTrain {
    * motion-magic-position-velocity-current-closed-loop-closed-loop
    */
   private final double kF = 1023 / kMaxSpeedLowGear;
-  private final double kP = 0 * (.1 * 1023) / 590; // Measured an error of ~170 on 2/9/19
+  private final double kP = 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
   private final double kI = 0;
-  private final double kD = 0;
+  private final double kD = 10 * kP;
 
   /**
    * Specialization of WPI_TalonSRX
