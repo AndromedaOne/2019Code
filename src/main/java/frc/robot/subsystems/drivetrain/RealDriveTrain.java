@@ -33,15 +33,18 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   private final int kTimeoutMs = 30;
-  /* 100% throttle corresponds to 3600 RPM */
+  /* 100% throttle corresponds to 13500 RPM in low gear */
   private final double kMaxSpeedLowGear = 13500;
+  /* 100% throttle corresponds to 35500 RPM in high gear */
+  private final double kMaxSpeedHighGear = 35500;
+  private double maxSpeed = kMaxSpeedLowGear;
   /*
    * Implement math according to section 12.4.2 of the TALON SRX Software
    * Reference manual Rev 1.22 Also inspired by
    * https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#
    * motion-magic-position-velocity-current-closed-loop-closed-loop
    */
-  private final double kF = 1023 / kMaxSpeedLowGear;
+  private final double kF = 1023 / maxSpeed;
   private final double kP = 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
   private final double kI = 0;
   private final double kD = 10 * kP;
@@ -100,7 +103,7 @@ public class RealDriveTrain extends DriveTrain {
   public void setVelocityMode() {
     setVelocityMode(driveTrainLeftMaster);
     setVelocityMode(driveTrainRightMaster);
-    differentialDrive.setMaxOutput(kMaxSpeedLowGear);
+    differentialDrive.setMaxOutput(maxSpeed);
   }
 
   private void setVelocityMode(ArbitraryModeWPI_TalonSRX talon) {
@@ -162,7 +165,7 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
         driveConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
-    setVelocityMode();
+    //setVelocityMode();
 
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
@@ -208,10 +211,12 @@ public class RealDriveTrain extends DriveTrain {
 
   public void shiftToLowGear() {
     shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
+    maxSpeed = kMaxSpeedLowGear;
   }
 
   public void shiftToHighGear() {
     shifterSolenoid.set(DoubleSolenoid.Value.kForward);
+    maxSpeed = kMaxSpeedHighGear;
   }
 
   @Override
