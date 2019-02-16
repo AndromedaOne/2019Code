@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigException.Null;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -33,11 +32,9 @@ public class RealDriveTrain extends DriveTrain {
     return shifterPresentFlag;
   }
 
-
-
   private final int kTimeoutMs = 30;
   /* 100% throttle corresponds to 13500 RPM in low gear */
-  private final double kMaxSpeedLowGear = 3500; //13500
+  private final double kMaxSpeedLowGear = 13500;
   /* 100% throttle corresponds to 35500 RPM in high gear */
   private final double kMaxSpeedHighGear = 35500;
   private double maxSpeed = kMaxSpeedLowGear;
@@ -51,9 +48,9 @@ public class RealDriveTrain extends DriveTrain {
    * motion-magic-position-velocity-current-closed-loop-closed-loop
    */
   private final double kLowF = 1023 / kMaxSpeedLowGear;
-  private final double kLowP = 0 * 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
+  private final double kLowP = 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
   private final double kLowI = 0;
-  private final double kLowD = 0 * 10 * kLowP;
+  private final double kLowD = 10 * kLowP;
 
   private final double kHighF = 1023 / kMaxSpeedHighGear;
   private final double kHighP = 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
@@ -174,7 +171,6 @@ public class RealDriveTrain extends DriveTrain {
   public void initDefaultCommand() {
 
     Config conf = Robot.getConfig();
-   
     Config driveConf = conf.getConfig("ports.driveTrain");
     setDefaultCommand(new TeleOpDrive());
     driveTrainLeftMaster = initTalonMaster(driveConf, "left");
