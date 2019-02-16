@@ -7,7 +7,6 @@ public class RealLimitSwitchSensor extends LimitSwitchSensor {
   private DigitalInput limitSwitch;
   private boolean reversedPolarity;
 
-
   /**
    * Sets the limit switch to a new DigitalInput with the port specified and
    * records whether or not the limit switch has reversed polarity

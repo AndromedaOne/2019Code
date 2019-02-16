@@ -30,7 +30,7 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    //System.out.println("extensionValue: " + extensionValue);
+    // System.out.println("extensionValue: " + extensionValue);
     try {
       MoveArmAndWristSafely.move(extensionValue, actualArmWristVal, shoulderRotateValue);
     } catch (ArmOutOfBoundsException e) {

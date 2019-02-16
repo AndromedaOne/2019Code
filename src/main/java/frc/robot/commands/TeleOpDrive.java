@@ -98,7 +98,7 @@ public class TeleOpDrive extends Command {
     if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
     }
-    
+
   }
 
   // Make this return true when this Command no longer needs to run execute()

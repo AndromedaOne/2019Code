@@ -38,7 +38,7 @@ public class TeleOpClaw extends Command {
     } else {
       DriveClawMotorsSafely.DriveClawMotors(-1);
     }
-    
+
     if (leftPOVPressed) {
       Robot.claw.openClaw();
     } else if (rightPOVPressed) {

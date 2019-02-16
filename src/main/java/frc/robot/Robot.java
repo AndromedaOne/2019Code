@@ -333,7 +333,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
-    //System.out.println("Gyro reading: " + NavXGyroSensor.getInstance().getZAngle());
+    // System.out.println("Gyro reading: " +
+    // NavXGyroSensor.getInstance().getZAngle());
   }
 
   /**
