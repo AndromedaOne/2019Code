@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.PIDBase.Tolerance;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
@@ -29,7 +28,7 @@ public class TurnToCompassHeading extends Command {
     }
 
     double setPoint = deltaAngle + NavXGyroSensor.getInstance().getZAngle();
-    
+
     if (Math.abs(deltaAngle) < gyroPID.getAbsoluteTolerance()) {
       System.out.println("Delta is to small, not moving!");
       setPoint = NavXGyroSensor.getInstance().getZAngle();

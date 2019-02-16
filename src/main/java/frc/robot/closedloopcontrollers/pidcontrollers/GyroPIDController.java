@@ -19,7 +19,7 @@ public class GyroPIDController extends PIDControllerBase {
    */
   private GyroPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0.01; 
+    super.p = 0.01;
     super.i = 0;
     super.d = 0;
     super.outputRange = 0.5;

@@ -147,8 +147,8 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
     private final double m_value;
 
     public AbsoluteTolerance(double value, int sampleNumber) {
-        this(value);
-        numberOfSamples = sampleNumber;
+      this(value);
+      numberOfSamples = sampleNumber;
     }
 
     AbsoluteTolerance(double value) {
@@ -157,11 +157,11 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
 
     @Override
     public boolean onTarget() {
-        if(Math.abs(getError()) < m_value) {
-            ++onTargetSamples;
-        } else {
-            onTargetSamples = 0;
-        }
+      if (Math.abs(getError()) < m_value) {
+        ++onTargetSamples;
+      } else {
+        onTargetSamples = 0;
+      }
       return (numberOfSamples < onTargetSamples);
     }
   }
