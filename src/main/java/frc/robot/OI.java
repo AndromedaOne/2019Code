@@ -8,9 +8,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.POVButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.CallLineFollowerController;
+import frc.robot.commands.DriveForward;
+import frc.robot.commands.IntakeArmControl;
+import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.MoveUsingEncoderPID;
 import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.utilities.POVDirectionNames;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -45,20 +53,57 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
+  // Drive Controller and Buttons
+  Joystick driveController;
+
+  // Subsystem Controller and Buttons
+  Joystick subsystemController;
+  JoystickButton raiseRobotButton;
+
   private static OI instance = new OI();
 
-  private OI(){}
+  private POVButton intakeUp;
+  private POVButton intakeDown;
+  private Button driveForward;
+
+  JoystickButton openClawButton;
+  JoystickButton closeClawButton;
+
+  private OI() {
+    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
+    testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
+
+    SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+    // Claw buttons are temp until I figure out the D-Pad
+    openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
+    closeClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
+
+    intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
+    intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
+    SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
+
+    intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
+    intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+
+    driveForward = new POVButton(driveStick, POVDirectionNames.SOUTH.getValue());
+    driveForward.whileHeld(new DriveForward());
+  }
 
   // Controllers
-  protected Joystick driveStick = new Joystick(0);
+  protected Joystick driveStick = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick operatorController = Robot.operatorController;
 
-  public Joystick getDriveStick(){
+  public Joystick getDriveStick() {
     return driveStick;
   }
-  
-  public static OI getInstance(){
+
+  public Joystick getOperatorStick() {
+    return operatorController;
+  }
+
+  public static OI getInstance() {
     return instance;
   }
 
 }
-
