@@ -8,15 +8,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
-import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
-import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.groupcommands.RollIntakeGroupCommand;
+import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
+import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.MiddleGamePieceArmCommand;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -64,15 +66,11 @@ public class OI {
 
   private POVButton intakeUp;
   private POVButton intakeDown;
-  private Button driveForward;
 
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
 
   private OI() {
-    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
-    testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
-
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
     // Claw buttons are temp until I figure out the D-Pad
     openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
@@ -86,8 +84,12 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    driveForward = new POVButton(driveStick, POVDirectionNames.SOUTH.getValue());
-    driveForward.whileHeld(new DriveForward());
+    ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
+    ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new CargoShipAndLoadingCommand());
+    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new MiddleGamePieceArmCommand());
+    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(new HighGamePieceArmCommand());
+
+    ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
   }
 
   // Controllers
