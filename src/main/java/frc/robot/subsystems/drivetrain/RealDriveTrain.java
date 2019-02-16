@@ -195,8 +195,8 @@ public class RealDriveTrain extends DriveTrain {
       shifterPresentFlag = true;
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
-    }
-    shiftToLowGear();
+        }
+        shiftToLowGear();
   }
 
   @Override
@@ -235,7 +235,9 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void shiftToLowGear() {
-    shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
+    if (shifterSolenoid != null) {
+      shifterSolenoid.set(DoubleSolenoid.Value.kReverse); 
+    }
     maxSpeed = kMaxSpeedLowGear;
     driveTrainLeftMaster.selectProfileSlot(kLowGearPIDSlot, 0);
     driveTrainRightMaster.selectProfileSlot(kLowGearPIDSlot, 0);
@@ -243,11 +245,15 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void shiftToHighGear() {
-    shifterSolenoid.set(DoubleSolenoid.Value.kForward);
-    maxSpeed = kMaxSpeedHighGear;
-    driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
-    driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
-    slotIdx = 1;
+    if (shifterSolenoid != null) {
+      shifterSolenoid.set(DoubleSolenoid.Value.kForward);
+      maxSpeed = kMaxSpeedHighGear;
+      driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
+      driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
+      slotIdx = 1;
+    } else {
+      System.out.println("NO SHIFTER");
+    }
   }
 
   @Override
