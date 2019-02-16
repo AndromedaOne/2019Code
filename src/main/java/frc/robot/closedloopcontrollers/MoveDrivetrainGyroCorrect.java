@@ -69,7 +69,7 @@ public class MoveDrivetrainGyroCorrect {
     }
 
     if (gyroCorrect) {
-      double correctionEquation = (robotAngle - savedAngle) * kProportion;
+      double correctionEquation = (savedAngle - robotAngle) * kProportion;
       newRotateValue = correctionEquation;
     } else {
       newRotateValue = rotation;

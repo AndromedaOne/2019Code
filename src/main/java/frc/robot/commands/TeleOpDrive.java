@@ -65,9 +65,9 @@ public class TeleOpDrive extends Command {
     }
 
     shifterDelayCounter++;
-    double forwardBackwardStickValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
+    double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
 
-    double rotateStickValue = -EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
+    double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
 
     if (shifterDelayCounter >= delay) {
       Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);

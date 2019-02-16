@@ -43,5 +43,4 @@ public class MockDriveTrain extends DriveTrain {
   public void changeControlMode(NeutralMode mode) {
     System.out.println("Changed mode to: " + mode.toString());
   }
-
 }

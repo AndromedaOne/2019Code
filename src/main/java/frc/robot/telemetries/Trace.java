@@ -9,6 +9,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -147,6 +150,13 @@ public class Trace {
           return;
         }
       }
+
+      Path link = Paths.get(m_basePathOfTraceDirs + "/latest");
+      if (Files.exists(link)) {
+        Files.delete(link);
+      }
+      Files.createSymbolicLink(link, traceDir.toPath());
+
       FileWriter fstream = new FileWriter(traceNumFileName, false);
       BufferedWriter dirNumbFile = new BufferedWriter(fstream);
       System.out.println("Created trace file " + m_basePathOfTraceDirs + m_traceDirNumberFile);
