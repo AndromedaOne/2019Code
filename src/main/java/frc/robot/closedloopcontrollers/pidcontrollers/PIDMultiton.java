@@ -18,6 +18,13 @@ public class PIDMultiton {
     instances = new HashMap<>();
   }
 
+  public static void resetDisableAll() {
+    for(PIDMultiton a : instances.values()) {
+      a.disable();
+      a.reset();
+    }
+  }
+
   public static synchronized PIDMultiton getInstance(PIDSource source, PIDOutput output, PIDConfiguration config) {
 
     PIDName name = new PIDName(source, output);
@@ -136,5 +143,7 @@ public class PIDMultiton {
   private PIDConfiguration gitConfig() {
     return config;
   }
+  
+
 
 }

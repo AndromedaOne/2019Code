@@ -27,6 +27,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
@@ -327,6 +328,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    PIDMultiton.resetDisableAll();
     Trace.getInstance().flushTraceFiles();
   }
 
