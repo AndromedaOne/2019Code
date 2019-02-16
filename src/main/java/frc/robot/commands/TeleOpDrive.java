@@ -44,23 +44,25 @@ public class TeleOpDrive extends Command {
     // Then we shift the gears
     // Then wait a given time for the gears to shift
     // Then switch the motors back to break mode and reapply power
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && (shifterDelayCounter >= delay)
-        && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, driveController)
+        && (shifterDelayCounter >= delay) && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
       shifterDelayCounter = 0;
       shiftButtonPressed = true;
       Robot.driveTrain.changeControlMode(NeutralMode.Coast);
       Robot.gyroCorrectMove.stop();
       if (shifterHigh) {
+        System.out.println(" - Shifting to Low Gear - ");
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
       } else {
+        System.out.println(" - Shifting to High Gear - ");
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
       }
     }
 
     // This stops you from shifting over and over again while holding the button
-    if (!ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController)) {
+    if (!ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, driveController)) {
       shiftButtonPressed = false;
     }
 
@@ -79,7 +81,7 @@ public class TeleOpDrive extends Command {
       Robot.driveTrain.changeControlMode(NeutralMode.Brake);
     }
 
-    if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick()) && !slowModeButtonPressed) {
+    if (ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick()) && !slowModeButtonPressed) {
       slowModeButtonPressed = true;
       if (!slowMoEnabled) {
         mod = kSlowModeModifier;
@@ -93,9 +95,10 @@ public class TeleOpDrive extends Command {
     }
     // This stops you from switching in slow over and over again while holding the
     // button
-    if (!ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
+    if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
     }
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -108,7 +111,6 @@ public class TeleOpDrive extends Command {
   @Override
   protected void end() {
     Robot.driveTrain.stop();
-
   }
 
   // Called when another command which requires one or more of the same

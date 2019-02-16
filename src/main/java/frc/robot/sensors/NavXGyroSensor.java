@@ -23,7 +23,6 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   private long kDefaultPeriod = 50;
   private java.util.Timer controlLoop;
   private double robotAngleCount = 0;
-
   /**
    * Trys creating the gyro and if it can not then it reports an error to the
    * DriveStation.
