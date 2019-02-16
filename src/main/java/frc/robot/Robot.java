@@ -175,13 +175,13 @@ public class Robot extends TimedRobot {
     System.out.println("This is " + getName() + ".");
     driveController = new Joystick(0);
     lineSensor = new PololuLineSensor();
-    I2C sunfounderbus = sunfounderdevice.getBus();
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10, 0.5, 8 /* TODO: Change these! */);
+    // I2C sunfounderbus = sunfounderdevice.getBus();
+    // lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10, 0.5, 8 /* TODO: Change these! */);
 
     Config senseConf = conf.getConfig("sensors.lineFollowSensor");
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
-        senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
-        senseConf.getInt("numSensors"));
+    //lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+    //    senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+    //    senseConf.getInt("numSensors"));
 
     // Camera Code
     if (conf.hasPath("cameras")) {
@@ -196,11 +196,11 @@ public class Robot extends TimedRobot {
     }
 
     if (conf.hasPath("sensors.lineFollowSensor")) {
-      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
-          senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
-          senseConf.getInt("numSensors"));
+     // lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
+     //     senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
+     //     senseConf.getInt("numSensors"));
     } else {
-      lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
+      //lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
     }
 
     // Check for existance of claw subsystem

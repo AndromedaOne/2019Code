@@ -31,7 +31,8 @@ public class PololuLineSensor {
         enabled = false;
     }
 
-    public PololuLineSensor() {
+    public 
+    PololuLineSensor() {
         readThread = new ReadDataThread();
         readThread.start();
     }
@@ -48,6 +49,10 @@ public class PololuLineSensor {
                     byte[] buffer = new byte[2 * NUM_SENSORS];
                     Instant startTime = Instant.now();
                     i2c.readOnly(buffer, 2 * NUM_SENSORS);
+
+                    // This calculates the time it takes the to read the sensor
+                    // This is average for each second
+                    // This is mainly test code
                     Instant endTime = Instant.now();
                     Duration timeElapsed = Duration.between(startTime, endTime);
                     timeAccumulated += timeElapsed.toMillis();
@@ -61,7 +66,7 @@ public class PololuLineSensor {
                         i = 0;
                     }
 
-                    
+                    // This calulates the deconstructed bytes that come from the ardruino
                     for (int sensorNumber = 0; sensorNumber < NUM_SENSORS; ++sensorNumber) {
                         int b = 0;
                         for (int count = 0; count < 2; ++count) {
