@@ -39,13 +39,11 @@ public class MoveArmAndWristSafely {
     double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
     if (Math.abs(shoulderRotVelocity) <= 0.2) {
       shoulderRotVelocity = 0;
-
       if (!pidSetpointSet) {
         System.out.println("Enabling PID");
         Robot.shoulderPIDController.setSetpoint(shoulderTicks);
         Robot.shoulderPIDController.enable();
       }
-
       pidSetpointSet = true;
     } else {
       pidSetpointSet = false;
