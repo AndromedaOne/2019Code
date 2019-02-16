@@ -1,18 +1,18 @@
 package frc.robot.closedloopcontrollers;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
 
 public class LineFollowerController {
   private MoveDrivetrainGyroCorrect gyroCorrectMove;
-  private BaseLineFollowerSensor sensor;
+  private LineFollowerSensorBase sensor;
   private final double kMinimumLineAngle = Math.toRadians(10);
   private final double kForwardSpeed = .39;
   private final double kRotateAmount = .6; // all constants are currently placeholders
 
   public LineFollowerController(MoveDrivetrainGyroCorrect theGyroCorrectMove,
-      BaseLineFollowerSensor lineFollowerSensorArray) {
+      LineFollowerSensorBase lineFollowerSensorArray) {
     gyroCorrectMove = theGyroCorrectMove;
     sensor = lineFollowerSensorArray;
 

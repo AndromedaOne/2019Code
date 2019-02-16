@@ -3,7 +3,7 @@ package frc.robot.sensors.linefollowersensor;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class LineFollowerSensorArray extends BaseLineFollowerSensor {
+public class SunFounderSensorArray extends LineFollowerSensorBase {
   private I2C mI2cBus;
   private byte[] buffer;
   // Default Distance to sensor array in centimetres
@@ -22,7 +22,7 @@ public class LineFollowerSensorArray extends BaseLineFollowerSensor {
    * @param numSensors the number of sensors in the array
    * @author Owen Salter
    */
-  public LineFollowerSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor, double distanceBtSensors,
+  public SunFounderSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor, double distanceBtSensors,
       int numSensors) {
     mI2cBus = i2cBus;
     this.detectionThreshold = detectionThreshold;
@@ -42,7 +42,7 @@ public class LineFollowerSensorArray extends BaseLineFollowerSensor {
   public boolean[] isThereLine() {
     boolean[] boolBuf = new boolean[buffer.length / 2];
     double[] dValues = new double[buffer.length / 2];
-    //TODO: This is TOTALLY wrong, someone needs to fix it.
+    // TODO: This is TOTALLY wrong, someone needs to fix it.
     mI2cBus.readOnly(buffer, (numSensors * 2) - 1);
     if (mI2cBus.readOnly(buffer, 16) == false) {
       if (once) {

@@ -11,12 +11,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray.*;
+import frc.robot.sensors.linefollowersensor.SunFounderSensorArray.*;
 import frc.robot.utilities.*;
 
 public class LineFollowerSensorTest {
   FakeI2CBus i2cBus = new FakeI2CBus(9);
-  LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 20, 10, 0.5, 8);
+  SunFounderSensorArray lfs = new SunFounderSensorArray(i2cBus, 20, 10, 0.5, 8);
 
   @Test
   public void isThereLineTest() {
@@ -69,7 +69,7 @@ public class LineFollowerSensorTest {
   // Different geometry
   @Test
   public void getSensorReadingDiffGeoTest() {
-    LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 20, 15, 3, 8);
+    SunFounderSensorArray lfs = new SunFounderSensorArray(i2cBus, 20, 15, 3, 8);
     i2cBus.setBuffer(new byte[] { 15, 14, 16, 25, 26, 17, 16, 15 });
     LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
     assertEquals(Math.atan2(-1.5, 15), sensorReading.lineAngle, 0.001);
@@ -78,7 +78,7 @@ public class LineFollowerSensorTest {
   // Real data, fake measurements
   @Test
   public void getSensorReadingRealNumsTest() {
-    LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 50, 10, 0.5, 8);
+    SunFounderSensorArray lfs = new SunFounderSensorArray(i2cBus, 50, 10, 0.5, 8);
     i2cBus.setBuffer(new byte[] { 22, 26, 32, 31, 33, 41, 58, 64 });
     LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
     assertEquals(Math.atan2(-1.75, 10), sensorReading.lineAngle, 0.001);
@@ -87,7 +87,7 @@ public class LineFollowerSensorTest {
   // Try it with different number of sensors
   @Test
   public void getSensorReadingMoreSensorsTest() {
-    LineFollowerSensorArray lfs = new LineFollowerSensorArray(i2cBus, 50, 10, 0.5, 10);
+    SunFounderSensorArray lfs = new SunFounderSensorArray(i2cBus, 50, 10, 0.5, 10);
     i2cBus.setBuffer(new byte[] { 22, 24, 26, 32, 31, 33, 41, 58, 64, 70 });
     LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
     assertEquals(Math.atan2(-2.25, 10), sensorReading.lineAngle, 0.001);

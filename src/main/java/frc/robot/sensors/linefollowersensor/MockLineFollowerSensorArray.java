@@ -2,7 +2,7 @@ package frc.robot.sensors.linefollowersensor;
 
 import edu.wpi.first.wpilibj.I2C;
 
-public class MockLineFollowerSensorArray extends BaseLineFollowerSensor {
+public class MockLineFollowerSensorArray extends LineFollowerSensorBase {
 
   private int numSensors;
 
