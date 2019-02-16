@@ -38,16 +38,24 @@ public class RealDriveTrain extends DriveTrain {
   /* 100% throttle corresponds to 35500 RPM in high gear */
   private final double kMaxSpeedHighGear = 35500;
   private double maxSpeed = kMaxSpeedLowGear;
+  private final int kLowGearPIDSlot = 0;
+  private final int kHighGearPIDSlot = 1;
+  private int slotIdx = 0;
   /*
    * Implement math according to section 12.4.2 of the TALON SRX Software
    * Reference manual Rev 1.22 Also inspired by
    * https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#
    * motion-magic-position-velocity-current-closed-loop-closed-loop
    */
-  private final double kF = 1023 / maxSpeed;
-  private final double kP = 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
-  private final double kI = 0;
-  private final double kD = 10 * kP;
+  private final double kLowF = 1023 / kMaxSpeedLowGear;
+  private final double kLowP = 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
+  private final double kLowI = 0;
+  private final double kLowD = 10 * kLowP;
+
+  private final double kHighF = 1023 / kMaxSpeedHighGear;
+  private final double kHighP = 1 * (.1 * 1023) / 590; // Measured an error of ~590 on 2/10/19
+  private final double kHighI = 0;
+  private final double kHighD = 10 * kLowP;
 
   /**
    * Specialization of WPI_TalonSRX
@@ -122,8 +130,10 @@ public class RealDriveTrain extends DriveTrain {
     _talon.setSensorPhase(driveConf.getBoolean(side + "SideSensorInverted"));
 
     /* Config sensor used for Primary PID [Velocity] */
+
     _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
 
+    _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 1, kTimeoutMs);
     /**
      * Phase sensor accordingly. Positive Sensor Reading should match Green
      * (blinking) Leds on Talon
@@ -136,10 +146,15 @@ public class RealDriveTrain extends DriveTrain {
     _talon.configPeakOutputReverse(-1, kTimeoutMs);
 
     /* Config the Velocity closed loop gains in slot0 */
-    _talon.config_kF(0, kF, kTimeoutMs);
-    _talon.config_kP(0, kP, kTimeoutMs);
-    _talon.config_kI(0, kI, kTimeoutMs);
-    _talon.config_kD(0, kD, kTimeoutMs);
+    _talon.config_kF(kLowGearPIDSlot, kLowF, kTimeoutMs);
+    _talon.config_kP(kLowGearPIDSlot, kLowP, kTimeoutMs);
+    _talon.config_kI(kLowGearPIDSlot, kLowI, kTimeoutMs);
+    _talon.config_kD(kLowGearPIDSlot, kLowD, kTimeoutMs);
+    /* Config the Velocity closed loop gains in slot1 */
+    _talon.config_kF(kHighGearPIDSlot, kHighF, kTimeoutMs);
+    _talon.config_kP(kHighGearPIDSlot, kHighP, kTimeoutMs);
+    _talon.config_kI(kHighGearPIDSlot, kHighI, kTimeoutMs);
+    _talon.config_kD(kHighGearPIDSlot, kHighD, kTimeoutMs);
     return _talon;
   }
 
@@ -165,7 +180,7 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
         driveConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
-    //setVelocityMode();
+    setVelocityMode();
 
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
@@ -173,6 +188,7 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
+    shiftToLowGear();
   }
 
   @Override
@@ -196,9 +212,9 @@ public class RealDriveTrain extends DriveTrain {
     double motorOutput = _talon.getMotorOutputPercent();
 
     Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
-        new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(0)),
-        new TracePair("Error", (double) _talon.getClosedLoopError(0)),
-        new TracePair("Target", (double) _talon.getClosedLoopTarget(0)));
+        new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
+        new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
+        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
   }
 
   public void stop() {
@@ -212,11 +228,17 @@ public class RealDriveTrain extends DriveTrain {
   public void shiftToLowGear() {
     shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
     maxSpeed = kMaxSpeedLowGear;
+    driveTrainLeftMaster.selectProfileSlot(kLowGearPIDSlot, 0);
+    driveTrainRightMaster.selectProfileSlot(kLowGearPIDSlot, 0);
+    slotIdx = 0;
   }
 
   public void shiftToHighGear() {
     shifterSolenoid.set(DoubleSolenoid.Value.kForward);
     maxSpeed = kMaxSpeedHighGear;
+    driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
+    driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
+    slotIdx = 1;
   }
 
   @Override
