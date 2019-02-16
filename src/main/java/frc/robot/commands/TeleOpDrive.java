@@ -44,7 +44,7 @@ public class TeleOpDrive extends Command {
     // Then we shift the gears
     // Then wait a given time for the gears to shift
     // Then switch the motors back to break mode and reapply power
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController) && (shifterDelayCounter >= delay)
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, driveController) && (shifterDelayCounter >= delay)
         && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
       shifterDelayCounter = 0;
       shiftButtonPressed = true;
@@ -60,7 +60,7 @@ public class TeleOpDrive extends Command {
     }
 
     // This stops you from shifting over and over again while holding the button
-    if (!ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, driveController)) {
+    if (!ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, driveController)) {
       shiftButtonPressed = false;
     }
 
@@ -79,7 +79,7 @@ public class TeleOpDrive extends Command {
       Robot.driveTrain.changeControlMode(NeutralMode.Brake);
     }
 
-    if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick()) && !slowModeButtonPressed) {
+    if (ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick()) && !slowModeButtonPressed) {
       slowModeButtonPressed = true;
       if (!slowMoEnabled) {
         mod = kSlowModeModifier;
@@ -93,7 +93,7 @@ public class TeleOpDrive extends Command {
     }
     // This stops you from switching in slow over and over again while holding the
     // button
-    if (!ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
+    if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
     }
   }
