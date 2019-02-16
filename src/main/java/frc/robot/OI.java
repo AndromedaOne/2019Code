@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
-import frc.robot.commands.MoveUsingEncoderPID;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
 import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
 import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
