@@ -16,7 +16,7 @@ public class TurnToCompassHeading extends Command {
   }
 
   protected void initialize() {
-    double deltaAngle = NavXGyroSensor.getInstance().getCompassHeading() - heading;
+    double deltaAngle = heading - NavXGyroSensor.getInstance().getCompassHeading();
     double setPoint = deltaAngle + NavXGyroSensor.getInstance().getZAngle();
     System.out.println(" - Turn to Compass Heading  - ");
     System.out.println("Heading: " + heading);

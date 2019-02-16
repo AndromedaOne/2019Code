@@ -54,9 +54,6 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-  // Drive Controller and Buttons
-  Joystick driveController;
-
   // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
@@ -100,7 +97,7 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    driveForward = new POVButton(driveStick, POVDirectionNames.SOUTH.getValue());
+    driveForward = new POVButton(driveController, POVDirectionNames.SOUTH.getValue());
     driveForward.whileHeld(new DriveForward());
   }
 

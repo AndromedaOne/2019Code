@@ -181,6 +181,7 @@ public class RealDriveTrain extends DriveTrain {
         new TracePair("Rotate", rotateAmount));
     logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
     logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
+    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
   /* String for output */
