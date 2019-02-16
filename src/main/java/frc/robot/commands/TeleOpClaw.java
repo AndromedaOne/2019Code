@@ -2,20 +2,29 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.utilities.EnumeratedRawAxis;
+import frc.robot.utilities.POVDirectionNames;
 
 public class TeleOpClaw extends Command {
 
-  protected void initialize() {
+  public TeleOpClaw() {
     requires(Robot.claw);
+  }
+
+  protected void initialize() {
+
   }
 
   protected void execute() {
     double rightTriggerValue = EnumeratedRawAxis.RIGHTTRIGGER.getRawAxis(Robot.operatorController);
     double leftTriggerValue = EnumeratedRawAxis.LEFTTRIGGER.getRawAxis(Robot.operatorController);
 
-    //Threshold Code
-    if(rightTriggerValue < 0.2) {
+    boolean leftPOVPressed = POVDirectionNames.getPOVWest(Robot.operatorController);
+    boolean rightPOVPressed = POVDirectionNames.getPOVEast(Robot.operatorController);
+
+    // Threshold Code
+    if (rightTriggerValue < 0.2) {
       rightTriggerValue = 0;
     }
     if (leftTriggerValue < 0.2) {
@@ -23,11 +32,17 @@ public class TeleOpClaw extends Command {
     }
 
     if (rightTriggerValue == 0 && leftTriggerValue == 0) {
-      Robot.claw.driveIntakeMotors(0);
+      DriveClawMotorsSafely.DriveClawMotors(0);
     } else if (rightTriggerValue > leftTriggerValue) {
-      Robot.claw.driveIntakeMotors(rightTriggerValue);
+      DriveClawMotorsSafely.DriveClawMotors(rightTriggerValue);
     } else {
-      Robot.claw.driveIntakeMotors(-leftTriggerValue);
+      DriveClawMotorsSafely.DriveClawMotors(-leftTriggerValue);
+    }
+    
+    if (leftPOVPressed) {
+      Robot.claw.openClaw();
+    } else if (rightPOVPressed) {
+      Robot.claw.closeClaw();
     }
   }
 

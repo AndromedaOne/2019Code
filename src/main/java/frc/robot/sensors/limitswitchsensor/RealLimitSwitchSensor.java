@@ -1,10 +1,12 @@
 package frc.robot.sensors.limitswitchsensor;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class RealLimitSwitchSensor extends LimitSwitchSensor {
   private DigitalInput limitSwitch;
   private boolean reversedPolarity;
+
 
   /**
    * Sets the limit switch to a new DigitalInput with the port specified and
@@ -16,6 +18,8 @@ public class RealLimitSwitchSensor extends LimitSwitchSensor {
   public RealLimitSwitchSensor(int port, boolean reversedPolarityParam) {
     limitSwitch = new DigitalInput(port);
     reversedPolarity = reversedPolarityParam;
+    limitSwitch.setName("test", "TestSwitch");
+    LiveWindow.add(limitSwitch);
   }
 
   @Override

@@ -5,8 +5,12 @@ import frc.robot.Robot;
 
 public class OpenClaw extends Command {
 
-  protected void initialize() {
+  public OpenClaw() {
     requires(Robot.claw);
+  }
+
+  protected void initialize() {
+
   }
 
   protected void execute() {

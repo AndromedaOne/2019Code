@@ -20,7 +20,7 @@ public class RealClaw extends Claw {
     leftGripperSPX = new VictorSPX(clawConf.getInt("leftGripper"));
     rightGripperSPX = new VictorSPX(clawConf.getInt("rightGripper"));
     jawSolenoid = new DoubleSolenoid(clawConf.getInt("forwardChannel"), clawConf.getInt("backwardsChannel"));
-    initDefaultCommand();
+
   }
 
   @Override
@@ -30,24 +30,25 @@ public class RealClaw extends Claw {
 
   @Override
   public void openClaw() {
-    jawSolenoid.set(Value.kForward);
+    jawSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   @Override
   public void stop() {
     leftGripperSPX.set(ControlMode.PercentOutput, 0);
+    rightGripperSPX.set(ControlMode.PercentOutput, 0);
     jawSolenoid.set(Value.kOff);
   }
 
   @Override
   public void driveIntakeMotors(double speed) {
-    leftGripperSPX.set(ControlMode.PercentOutput, speed);
+    leftGripperSPX.set(ControlMode.PercentOutput, -speed);
     rightGripperSPX.set(ControlMode.PercentOutput, speed);
   }
 
   @Override
   public void closeClaw() {
-    jawSolenoid.set(Value.kReverse);
+    jawSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
 }

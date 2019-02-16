@@ -23,12 +23,16 @@ public class DriveClawMotorsSafely {
     conf = Robot.getConfig();
     iSensor = Robot.clawInfraredSensor;
 
-    int threshold = conf.getInt("ports.claw.infrared.threshold");
+    double threshold = conf.getDouble("ports.claw.infrared.threshold");
     if (iSensor.getInfraredDistance() >= threshold) {
-      Robot.claw.driveIntakeMotors(speed);
+      if(speed >= 0) {
+        Robot.claw.stop();
+      }else {
+        Robot.claw.driveIntakeMotors(speed);
+      }
       hasBall = true;
     } else {
-      Robot.claw.stop();
+      Robot.claw.driveIntakeMotors(speed);
       hasBall = false;
     }
 

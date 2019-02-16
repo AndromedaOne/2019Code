@@ -171,7 +171,7 @@ public class Robot extends TimedRobot {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
 
-    if (conf.hasPath("subsystems.driveTrain") && false) {
+    if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
 
@@ -214,7 +214,8 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("sensors.fullyRetractedArmLimitSwitch")) {
       System.out.println("Using real fullyRetractedArmLimitSwitch");
       int fullyRetractedArmLimitSwitchPort = conf.getInt("sensors.fullyRetractedArmLimitSwitch.port");
-      fullyRetractedArmLimitSwitch = new RealLimitSwitchSensor(fullyRetractedArmLimitSwitchPort, false);
+      fullyRetractedArmLimitSwitch = new RealLimitSwitchSensor(fullyRetractedArmLimitSwitchPort, true);
+      fullyRetractedArmLimitSwitch.putSensorOnLiveWindow("ArmAndWrist", "FullyRetractedLimitSwitch");
     } else {
       System.out.println("Using mock fullyRetractedArmLimitSwitch");
       fullyRetractedArmLimitSwitch = new MockLimitSwitchSensor();
@@ -222,7 +223,8 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("sensors.fullyExtendedArmLimitSwitch")) {
       System.out.println("Using real fullyExtendedArmLimitSwitch");
       int fullyExtendedArmLimitSwitchPort = conf.getInt("sensors.fullyExtendedArmLimitSwitch.port");
-      fullyExtendedArmLimitSwitch = new RealLimitSwitchSensor(fullyExtendedArmLimitSwitchPort, false);
+      fullyExtendedArmLimitSwitch = new RealLimitSwitchSensor(fullyExtendedArmLimitSwitchPort, true);
+      fullyExtendedArmLimitSwitch.putSensorOnLiveWindow("ArmAndWrist", "fullyExtendedArmLimitSwitch");
     } else {
       System.out.println("Using mock fullyExtendedArmLimitSwitch");
       fullyExtendedArmLimitSwitch = new MockLimitSwitchSensor();
@@ -231,6 +233,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using real wristLimitSwitchUp");
       int wristLimitSwitchUpPort = conf.getInt("sensors.wristLimitSwitchUp.port");
       wristLimitSwitchUp = new RealLimitSwitchSensor(wristLimitSwitchUpPort, false);
+      wristLimitSwitchUp.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchUp");
     } else {
       System.out.println("Using mock wristLimitSwitchUp");
       wristLimitSwitchUp = new MockLimitSwitchSensor();
@@ -239,9 +242,20 @@ public class Robot extends TimedRobot {
       System.out.println("Using real wristLimitSwitchDown");
       int wristLimitSwitchDownPort = conf.getInt("sensors.wristLimitSwitchDown.port");
       wristLimitSwitchDown = new RealLimitSwitchSensor(wristLimitSwitchDownPort, false);
+      wristLimitSwitchDown.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchDown");
     } else {
       System.out.println("Using mock wristLimitSwitchDown");
       wristLimitSwitchDown = new MockLimitSwitchSensor();
+    }
+    // Check for existance of claw subsystem
+    if (conf.hasPath("subsystems.claw")) {
+      System.out.println("Real claw");
+      claw = new RealClaw();
+      clawInfraredSensor = new RealInfraredDistanceSensor(conf.getInt("ports.claw.infrared.port"));
+      clawInfraredSensor.putSensorOnLiveWindow("Claw", "IRSensor");
+    } else {
+      System.out.println("mock claw");
+      claw = new MockClaw();
     }
 
     operatorController = new Joystick(1);
@@ -285,13 +299,6 @@ public class Robot extends TimedRobot {
       lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
     }
 
-    // Check for existance of claw subsystem
-    if (conf.hasPath("ports.claw")) {
-      claw = new RealClaw();
-      clawInfraredSensor = new RealInfraredDistanceSensor(conf.getInt("ports.claw.infrared.port"));
-    } else {
-      claw = new MockClaw();
-    }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);

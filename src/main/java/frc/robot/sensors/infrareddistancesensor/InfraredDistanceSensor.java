@@ -1,5 +1,7 @@
 package frc.robot.sensors.infrareddistancesensor;
 
-public abstract class InfraredDistanceSensor {
+import frc.robot.sensors.SensorBase;
+
+public abstract class InfraredDistanceSensor extends SensorBase{
   public abstract double getInfraredDistance();
 }
