@@ -38,8 +38,8 @@ public class MoveArmAndWristSafely {
     double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
 
     if (!isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot)) {
-      throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
-          shoulderRotDeg + deltaShoulderRot);
+      //throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
+      //    shoulderRotDeg + deltaShoulderRot);
     }
 
     /*

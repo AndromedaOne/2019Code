@@ -25,6 +25,7 @@ import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
@@ -170,7 +171,7 @@ public class Robot extends TimedRobot {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
 
-    if (conf.hasPath("subsystems.driveTrain")) {
+    if (conf.hasPath("subsystems.driveTrain") && false) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
 
@@ -260,6 +261,9 @@ public class Robot extends TimedRobot {
     lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
         senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
         senseConf.getInt("numSensors"));
+
+    // Creates first instance to put onto live window
+    ExtendableArmPIDController.getInstance();
 
     // Camera Code
     if (conf.hasPath("cameras")) {

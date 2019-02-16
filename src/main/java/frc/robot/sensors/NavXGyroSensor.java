@@ -15,7 +15,6 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   private double initialAngleReading = 0.0;
   boolean angleReadingSet = false;
 
-
   /**
    * Trys creating the gyro and if it can not then it reports an error to the
    * DriveStation.
@@ -32,9 +31,9 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
       Config navXConfig = conf.getConfig("sensors.navx");
       String navXPort = navXConfig.getString("port");
       System.out.println("Creating a NavX Gyro on port: " + navXPort);
-      if(navXPort.equals("MXP")) {
+      if (navXPort.equals("MXP")) {
         gyro = new AHRS(SPI.Port.kMXP);
-      } else if(navXPort.equals("SPI")) {
+      } else if (navXPort.equals("SPI")) {
         gyro = new AHRS(SPI.Port.kOnboardCS0);
       } else {
         System.err.println("ERROR: Unkown NavX Port: " + navXPort);

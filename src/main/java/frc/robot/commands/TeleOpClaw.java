@@ -13,6 +13,15 @@ public class TeleOpClaw extends Command {
   protected void execute() {
     double rightTriggerValue = EnumeratedRawAxis.RIGHTTRIGGER.getRawAxis(Robot.operatorController);
     double leftTriggerValue = EnumeratedRawAxis.LEFTTRIGGER.getRawAxis(Robot.operatorController);
+
+    //Threshold Code
+    if(rightTriggerValue < 0.2) {
+      rightTriggerValue = 0;
+    }
+    if (leftTriggerValue < 0.2) {
+      leftTriggerValue = 0;
+    }
+
     if (rightTriggerValue == 0 && leftTriggerValue == 0) {
       Robot.claw.driveIntakeMotors(0);
     } else if (rightTriggerValue > leftTriggerValue) {

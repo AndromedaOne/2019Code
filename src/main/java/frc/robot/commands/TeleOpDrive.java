@@ -44,16 +44,18 @@ public class TeleOpDrive extends Command {
     // Then we shift the gears
     // Then wait a given time for the gears to shift
     // Then switch the motors back to break mode and reapply power
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, driveController) && (shifterDelayCounter >= delay)
-        && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, driveController)
+        && (shifterDelayCounter >= delay) && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
       shifterDelayCounter = 0;
       shiftButtonPressed = true;
       Robot.driveTrain.changeControlMode(NeutralMode.Coast);
       Robot.gyroCorrectMove.stop();
       if (shifterHigh) {
+        System.out.println(" - Shifting to Low Gear - ");
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
       } else {
+        System.out.println(" - Shifting to High Gear - ");
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
       }

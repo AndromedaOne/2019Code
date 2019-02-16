@@ -30,8 +30,8 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     armEncoder2 = Robot.armExtensionEncoder2;
     super.trace = Trace.getInstance();
     armPIDSource = new ArmPIDSource();
-    armEncoder1.putSensorOnLiveWindow(super.subsytemName, "Arm");
-    armEncoder2.putSensorOnLiveWindow(super.subsytemName, "Arm");
+    armEncoder1.putSensorOnLiveWindow(super.subsytemName, "ArmEncoder1");
+    armEncoder2.putSensorOnLiveWindow(super.subsytemName, "ArmEncoder2");
     armPIDOut = new ArmPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, super.pidConfiguration);
