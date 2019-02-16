@@ -3,7 +3,6 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -13,6 +12,10 @@ import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
+
+/* For the Java CTRE Talon API Docs, see this link:
+http://www.ctr-electronics.com/downloads/api/java/html/index.html
+*/
 
 /**
  *
@@ -34,7 +37,9 @@ public class RealDriveTrain extends DriveTrain {
 
   private final int kTimeoutMs = 30;
   /* 100% throttle corresponds to 13500 RPM in low gear */
-  private final double kMaxSpeedLowGear = 13500;
+  //private final double kMaxSpeedLowGear = 13500;
+  /*THIS IS ONLY HERE FOR PRACTICEPRACTICE, CHANGE THIS FOR PAUL! */
+  private final double kMaxSpeedLowGear = 3500;
   /* 100% throttle corresponds to 35500 RPM in high gear */
   private final double kMaxSpeedHighGear = 35500;
   private double maxSpeed = kMaxSpeedLowGear;
@@ -124,6 +129,8 @@ public class RealDriveTrain extends DriveTrain {
   // and
   private ArbitraryModeWPI_TalonSRX initTalonMaster(Config driveConf, String side) {
     ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(driveConf.getInt(side + "Master"));
+    final double closedLoopNeutralToMaxSpeedSeconds = 0.1;
+    
     /* Factory Default all hardware to prevent unexpected behaviour */
     _talon.configFactoryDefault();
     _talon.setInverted(driveConf.getBoolean(side + "SideInverted"));
@@ -155,6 +162,7 @@ public class RealDriveTrain extends DriveTrain {
     _talon.config_kP(kHighGearPIDSlot, kHighP, kTimeoutMs);
     _talon.config_kI(kHighGearPIDSlot, kHighI, kTimeoutMs);
     _talon.config_kD(kHighGearPIDSlot, kHighD, kTimeoutMs);
+    _talon.configClosedloopRamp(closedLoopNeutralToMaxSpeedSeconds);
     return _talon;
   }
 
@@ -214,7 +222,8 @@ public class RealDriveTrain extends DriveTrain {
     Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
         new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
-        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
+        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)),
+        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()));
   }
 
   public void stop() {
