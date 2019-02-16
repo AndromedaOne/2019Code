@@ -7,6 +7,7 @@ public class MoveArmAndWristSafely {
 
   private static final int maxWristRotDegrees = 1000;
   private static final int maxExtensionInches = 1000;
+  private static boolean pidSetpointSet = false;
 
   public static final double SHOULDERTICKSTODEGRESS = 1.0;
   public static final double EXTENSIONTICKSTOINCHES = 1.0;
@@ -36,7 +37,23 @@ public class MoveArmAndWristSafely {
     double deltaExtension = extensionVelocity * extensionVelocityConversion * deltaTime;
     double deltaWristRot = wristRotVelocity * wristRotVelocityConversion * deltaTime;
     double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
-
+    System.out.println("Math.abs(shoulderRotVelocity): " + Math.abs(shoulderRotVelocity));
+    if(Math.abs(shoulderRotVelocity) <= 0.2) {
+      shoulderRotVelocity =0;
+      
+      if(!pidSetpointSet){
+        System.out.println("Enabling PID");
+        Robot.shoulderPIDController.setSetpoint(shoulderTicks);
+        Robot.shoulderPIDController.enable();
+       }
+      
+      pidSetpointSet = true;
+    }else {
+      pidSetpointSet = false;
+      System.out.println("Disabling");
+      Robot.shoulderPIDController.disable();
+      Robot.shoulderPIDController.reset();
+    }
     if (!isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot)) {
       //throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
       //    shoulderRotDeg + deltaShoulderRot);
@@ -71,8 +88,8 @@ public class MoveArmAndWristSafely {
       }*/
     
       boolean fullyExtended = Robot.fullyExtendedArmLimitSwitch.isAtLimit();
-      System.out.println("fullyExtended: " + fullyExtended);
-    if (Robot.fullyExtendedArmLimitSwitch.isAtLimit()) { 
+      //System.out.println("fullyExtended: " + fullyExtended);
+    if (fullyExtended) { 
       //extensionIn = 0; 
       /*double topEncoderPosition = (wristRotDeg / WRISTTICKSTODEGREES) / 2; double
       bottomEncoderPosition = -(wristRotDeg / WRISTTICKSTODEGREES) / 2;
@@ -87,7 +104,7 @@ public class MoveArmAndWristSafely {
       Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
       Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);*/
       if(extensionVelocity > 0) { 
-        extensionVelocity = 0; 
+        extensionVelocity = 0;  
       } 
     }else if (Robot.fullyRetractedArmLimitSwitch.isAtLimit()) {
       if(extensionVelocity < 0) { 

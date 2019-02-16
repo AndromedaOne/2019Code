@@ -34,9 +34,9 @@ public class TeleOpClaw extends Command {
     if (rightTriggerValue == 0 && leftTriggerValue == 0) {
       DriveClawMotorsSafely.DriveClawMotors(0);
     } else if (rightTriggerValue > leftTriggerValue) {
-      DriveClawMotorsSafely.DriveClawMotors(rightTriggerValue);
+      DriveClawMotorsSafely.DriveClawMotors(1);
     } else {
-      DriveClawMotorsSafely.DriveClawMotors(-leftTriggerValue);
+      DriveClawMotorsSafely.DriveClawMotors(-1);
     }
     
     if (leftPOVPressed) {

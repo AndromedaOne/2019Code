@@ -16,7 +16,7 @@ public class ShoulderPIDController extends PIDControllerBase {
 
   private ShoulderPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0;
+    super.p = 1.0*Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
     super.subsytemName = "Extendable Arm and Wrist";
@@ -26,6 +26,7 @@ public class ShoulderPIDController extends PIDControllerBase {
     shoulderPIDOut = new ShoulderPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     shoulderEncoder = Robot.armRotateEncoder1;
+    shoulderEncoder.putSensorOnLiveWindow(super.subsytemName, "ShoulderEncoder");
     super.pidMultiton = PIDMultiton.getInstance(shoulderEncoder, shoulderPIDOut, super.pidConfiguration);
     shoulderPIDOut.setContainer(super.pidMultiton);
   }

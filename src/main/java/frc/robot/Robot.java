@@ -27,6 +27,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
@@ -99,6 +100,7 @@ public class Robot extends TimedRobot {
   public static LimitSwitchSensor fullyExtendedArmLimitSwitch;
   public static LimitSwitchSensor wristLimitSwitchUp;
   public static LimitSwitchSensor wristLimitSwitchDown;
+  public static ShoulderPIDController shoulderPIDController;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -278,6 +280,7 @@ public class Robot extends TimedRobot {
 
     // Creates first instance to put onto live window
     ExtendableArmPIDController.getInstance();
+    shoulderPIDController = ShoulderPIDController.getInstance();
 
     // Camera Code
     if (conf.hasPath("cameras")) {
@@ -330,6 +333,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
+    //System.out.println("Gyro reading: " + NavXGyroSensor.getInstance().getZAngle());
   }
 
   /**
