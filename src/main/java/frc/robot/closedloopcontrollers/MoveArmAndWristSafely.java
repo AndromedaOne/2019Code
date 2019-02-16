@@ -37,7 +37,6 @@ public class MoveArmAndWristSafely {
     double deltaExtension = extensionVelocity * extensionVelocityConversion * deltaTime;
     double deltaWristRot = wristRotVelocity * wristRotVelocityConversion * deltaTime;
     double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
-    System.out.println("Math.abs(shoulderRotVelocity): " + Math.abs(shoulderRotVelocity));
     if (Math.abs(shoulderRotVelocity) <= 0.2) {
       shoulderRotVelocity = 0;
 

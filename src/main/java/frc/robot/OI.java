@@ -72,9 +72,6 @@ public class OI {
   JoystickButton closeClawButton;
 
   private OI() {
-    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
-    testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
-
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
     // Claw buttons are temp until I figure out the D-Pad
     openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());

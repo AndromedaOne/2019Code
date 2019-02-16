@@ -21,8 +21,8 @@ public class TeleopArm extends Command {
 
   @Override
   protected void execute() {
-    double armWristValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
-    double rotateValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(armController);
+    double armWristValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
+    double rotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
 
     double actualArmWristVal = rotateValue * 0.5;
     double extensionValue = -armWristValue;
