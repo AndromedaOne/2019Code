@@ -1,6 +1,7 @@
-package frc.robot.commands.stilts;
+package frc.robot.groupcommands.stilts;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.commands.stilts.*;
 
 public class RaiseAllLegs extends CommandGroup {
   public RaiseAllLegs() {
