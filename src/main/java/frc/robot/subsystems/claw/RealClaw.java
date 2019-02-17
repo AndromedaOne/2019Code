@@ -7,6 +7,7 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Robot;
+import frc.robot.commands.TeleOpClaw;
 
 public class RealClaw extends Claw {
   VictorSPX leftGripperSPX;
@@ -24,29 +25,30 @@ public class RealClaw extends Claw {
 
   @Override
   protected void initDefaultCommand() {
-    // TODO: Create command to teleop this
+    setDefaultCommand(new TeleOpClaw());
   }
 
   @Override
   public void openClaw() {
-    jawSolenoid.set(Value.kForward);
+    jawSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   @Override
   public void stop() {
     leftGripperSPX.set(ControlMode.PercentOutput, 0);
+    rightGripperSPX.set(ControlMode.PercentOutput, 0);
     jawSolenoid.set(Value.kOff);
   }
 
   @Override
   public void driveIntakeMotors(double speed) {
-    leftGripperSPX.set(ControlMode.PercentOutput, speed);
+    leftGripperSPX.set(ControlMode.PercentOutput, -speed);
     rightGripperSPX.set(ControlMode.PercentOutput, speed);
   }
 
   @Override
   public void closeClaw() {
-    jawSolenoid.set(Value.kReverse);
+    jawSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
 }

@@ -1,5 +1,7 @@
 package frc.robot.sensors;
 
+import java.util.TimerTask;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.typesafe.config.Config;
 
@@ -7,13 +9,20 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 public class NavXGyroSensor extends SensorBase implements PIDSource {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   static NavXGyroSensor instance = new NavXGyroSensor();
   private double initialAngleReading = 0.0;
   boolean angleReadingSet = false;
+  private long kInitializeDelay = 3000;
+  private long kDefaultPeriod = 50;
+  private java.util.Timer controlLoop;
+  private double robotAngleCount = 0;
 
   /**
    * Trys creating the gyro and if it can not then it reports an error to the
@@ -41,9 +50,24 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
       }
       System.out.println("Created NavX instance");
       // New thread to initialize the initial angle
+      controlLoop = new java.util.Timer();
+      SetInitialAngleReading task = new SetInitialAngleReading();
+      controlLoop.schedule(task, kInitializeDelay, kDefaultPeriod);
 
     } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+    }
+  }
+
+  private class SetInitialAngleReading extends TimerTask {
+
+    @Override
+    public void run() {
+      System.out.println("Setting Initial Gyro Angle");
+      if (!isCalibrating()) {
+        initialAngleReading = gyro.getAngle();
+        cancel();
+      }
     }
   }
 
@@ -56,13 +80,26 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
     return instance;
   }
 
+  public boolean isCalibrating() {
+    return gyro.isCalibrating();
+  }
+
   /**
    * Gets the Z angle and supbracts the initial angle member variable from it.
    * 
    * @return gyro.getAngle() - initialAngleReading
    */
   public double getZAngle() {
-    return gyro.getAngle() - initialAngleReading;
+    double correctedAngle = gyro.getAngle() - initialAngleReading;
+    if ((robotAngleCount % 10) == 0) {
+      SmartDashboard.putNumber("Raw Angle", gyro.getAngle());
+      SmartDashboard.putNumber("Get Robot Angle", correctedAngle);
+    }
+    robotAngleCount++;
+    Trace.getInstance().addTrace(true, "Gyro", new TracePair("Raw Angle", gyro.getAngle()),
+        new TracePair("Corrected Angle", correctedAngle));
+
+    return correctedAngle;
   }
 
   /**
