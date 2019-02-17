@@ -29,6 +29,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
@@ -103,6 +104,8 @@ public class Robot extends TimedRobot {
   public static LimitSwitchSensor wristLimitSwitchUp;
   public static LimitSwitchSensor wristLimitSwitchDown;
   public static ShoulderPIDController shoulderPIDController;
+  public static ExtendableArmPIDController extendableArmPIDController;
+  public static WristPIDController wristPIDController;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -281,8 +284,9 @@ public class Robot extends TimedRobot {
         senseConf.getInt("numSensors"));
 
     // Creates first instance to put onto live window
-    ExtendableArmPIDController.getInstance();
     shoulderPIDController = ShoulderPIDController.getInstance();
+    extendableArmPIDController = ExtendableArmPIDController.getInstance();
+    wristPIDController = WristPIDController.getInstance();
 
     // Camera Code
     if (conf.hasPath("cameras")) {

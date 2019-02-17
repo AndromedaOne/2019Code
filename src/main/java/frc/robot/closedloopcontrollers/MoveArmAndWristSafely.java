@@ -10,7 +10,9 @@ public class MoveArmAndWristSafely {
   }
   private static final int maxWristRotDegrees = 1000;
   private static final int maxExtensionInches = 1000;
-  private static boolean pidSetpointSet = false;
+  private static boolean shoulderPIDSetpointSet = false;
+  private static boolean wristPIDSetpointSet = false;
+  private static boolean extensionPIDSetpointSet = false;
 
   public static final double SHOULDERTICKSTODEGRESS = 1.0;
   public static final double EXTENSIONTICKSTOINCHES = 1.0;
@@ -44,17 +46,45 @@ public class MoveArmAndWristSafely {
     if (dontUsePidHold != DontUsePIDHold.SHOULDER){
       if (Math.abs(shoulderRotVelocity) <= 0.2) {
         shoulderRotVelocity = 0;
-        if (!pidSetpointSet) {
+        if (!shoulderPIDSetpointSet) {
           System.out.println("Enabling PID");
           Robot.shoulderPIDController.setSetpoint(shoulderTicks);
           Robot.shoulderPIDController.enable();
         }
-        pidSetpointSet = true;
+        shoulderPIDSetpointSet = true;
       } else {
-        pidSetpointSet = false;
+        shoulderPIDSetpointSet = false;
         System.out.println("Disabling");
         Robot.shoulderPIDController.disable();
         Robot.shoulderPIDController.reset();
+      }
+    }
+    if (dontUsePidHold != DontUsePIDHold.EXTENSION) {
+      if (Math.abs(extensionVelocity) <= 0.2) {
+        extensionVelocity = 0;
+        if (!extensionPIDSetpointSet) {
+          Robot.extendableArmPIDController.setSetpoint(extensionIn);
+          Robot.extendableArmPIDController.enable();
+        }
+        extensionPIDSetpointSet = true;
+      } else {
+        extensionPIDSetpointSet = false;
+        Robot.extendableArmPIDController.disable();
+        Robot.extendableArmPIDController.reset();
+      }
+    }
+    if (dontUsePidHold != DontUsePIDHold.WRIST) {
+      if (Math.abs(wristRotVelocity) <= 0.2) {
+        wristRotVelocity = 0;
+        if (!wristPIDSetpointSet) {
+          Robot.wristPIDController.setSetpoint(wristRotDeg);
+          Robot.wristPIDController.enable();
+        }
+        wristPIDSetpointSet = true;
+      } else {
+        wristPIDSetpointSet = false;
+        Robot.wristPIDController.disable();
+        Robot.wristPIDController.reset();
       }
     }
     if (!isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot)) {
