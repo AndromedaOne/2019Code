@@ -14,12 +14,13 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
   private int numSensors;
 
   /**
-   * @param i2cBus A prebuilt I2C bus
+   * @param i2cBus             A prebuilt I2C bus
    * @param detectionThreshold The minimum level required for activation of the
-   * sensor
-   * @param distanceToSensor The distance from the centre of turning to the sensor
-   * @param distanceBtSensors The distance between each sensor
-   * @param numSensors the number of sensors in the array
+   *                           sensor
+   * @param distanceToSensor   The distance from the centre of turning to the
+   *                           sensor
+   * @param distanceBtSensors  The distance between each sensor
+   * @param numSensors         the number of sensors in the array
    * @author Owen Salter
    */
   public SunFounderSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor, double distanceBtSensors,
@@ -34,7 +35,7 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
 
   /**
    * @return An array of booleans where true means that a line was detected and
-   * false means that a line wasn't detected
+   *         false means that a line wasn't detected
    * @author Owen Salter
    */
   private boolean once = true;
@@ -76,13 +77,13 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
    * Doesn't do anything right now.
    * 
    * @return structure containing a boolean of whether the line is found, and the
-   * angle in radians
+   *         angle in radians
    */
-  public LineFollowArraySensorReading getSensorReading() {
+  public void getSensorReading(int[] readingBuf) {
     /*
      * Need to: - figure out adj from DistanceToSensor - get hyp from adj and op -
      * use hyp to calculate angle - return angle
-     */
+     
     boolean[] boolBuf = new boolean[(this.numSensors / 2) + 1];
     int senseCount = 0;
     double adj1 = 0;
@@ -93,7 +94,7 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
       if (boolBuf[i] == true) {
         adj1 = getAdjacent(i);
         senseCount++;
-      }
+      } */
     }
 
     double angle = Math.atan2(adj1, distanceToSensor);
@@ -105,41 +106,6 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
     } else {
       sensorReading.lineFound = false;
     }
-    return sensorReading;
-  }
-
-  private double getAdjacent(int i) {
-    double distFromSensor = getDistanceFromCentre(i);
-    double tempAdj = 0;
-    if (distFromSensor >= 0) {
-      tempAdj = (distFromSensor) - (distanceBtSensors / 2);
-    } else {
-      tempAdj = (distFromSensor) + (distanceBtSensors / 2);
-    }
-    return tempAdj;
-  }
-
-  /**
-   * Gets the distance from the centre of the sensor (assuming 0 is the leftmost
-   * sensor and there are an even number of sensors)
-   */
-  private double getDistanceFromCentre(int i) {
-    double distFromSensor;
-    // Get the number of sensors on each side of the center
-    int halfNumSensors = (numSensors + 1) / 2;
-    // If it's on the left...
-    if (i < halfNumSensors) {
-      distFromSensor = (halfNumSensors - i);
-      distFromSensor = (distFromSensor * distanceBtSensors);
-      return distFromSensor;
-      // If it's on the right...
-    } else {
-      distFromSensor = (halfNumSensors - i) - 1;
-      distFromSensor = (distFromSensor * distanceBtSensors);
-      return distFromSensor /** = -1 */
-      ;
-    }
-
   }
 
 }
