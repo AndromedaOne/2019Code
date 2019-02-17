@@ -17,9 +17,13 @@ public class GyroPIDController extends PIDControllerBase {
    * trace, and pidConfiguration variables. Also creates the gyroPID from the
    * PIDMultiton class.
    */
+
+
   private GyroPIDController() {
+    // This PID Configuration is for low gear
+    // When we start the robot we cannot tell what gear we are in until we shift them
     super.absoluteTolerance = 3;
-    super.p = 0.01;
+    super.p = 0.03;
     super.i = 0;
     super.d = 0;
     super.outputRange = 0.5;
@@ -32,6 +36,24 @@ public class GyroPIDController extends PIDControllerBase {
     navXGyroSensor.putSensorOnLiveWindow(super.subsytemName, "Gyro");
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, super.pidConfiguration);
+  }
+
+  public void setLowGearPID() {
+    super.absoluteTolerance = 3;
+    super.p = 0.03;
+    super.i = 0;
+    super.d = 0;
+    super.outputRange = 0.5;
+    super.setPIDConfiguration(super.pidConfiguration);
+  }
+
+  public void setHighGearPID() {
+    super.absoluteTolerance = 3;
+    super.p = 0.01;
+    super.i = 0;
+    super.d = 0;
+    super.outputRange = 0.5;
+    super.setPIDConfiguration(super.pidConfiguration);
   }
 
   private class GyroPIDOut implements PIDOutput {

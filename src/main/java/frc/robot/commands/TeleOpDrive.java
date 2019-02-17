@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -14,6 +15,7 @@ import frc.robot.utilities.EnumeratedRawAxis;
  */
 public class TeleOpDrive extends Command {
 
+  private GyroPIDController gyroPID = Robot.gyroPID.getInstance();
   private boolean slowMoEnabled;
   private double mod;
   private boolean shifterHigh = false;
@@ -54,10 +56,12 @@ public class TeleOpDrive extends Command {
         System.out.println(" - Shifting to Low Gear - ");
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
+        gyroPID.setLowGearPID();
       } else {
         System.out.println(" - Shifting to High Gear - ");
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
+        gyroPID.setHighGearPID();
       }
     }
 
