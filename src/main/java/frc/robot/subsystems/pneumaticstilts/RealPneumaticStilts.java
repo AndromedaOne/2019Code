@@ -1,6 +1,9 @@
 package frc.robot.subsystems.pneumaticstilts;
 
+import com.typesafe.config.Config;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.Robot;
 
 public class RealPneumaticStilts extends PneumaticStilts {
 
@@ -33,10 +36,11 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   public RealPneumaticStilts() {
 
-    frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 0, 1));
-    frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 2, 3));
-    rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 4, 5));
-    rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7));
+    Config portConf = Robot.getConfig().getConfig("ports.stilts");
+    frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 1));
+    frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(2, 3));
+    rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(4, 5));
+    rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(6, 7));
 
     stopAllLegs();
   }
