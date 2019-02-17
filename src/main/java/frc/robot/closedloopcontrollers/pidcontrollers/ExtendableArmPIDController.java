@@ -20,7 +20,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0;
+    super.p = 2.5 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
     super.subsytemName = "Extendable Arm and Wrist";
@@ -48,7 +48,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     @Override
     public void pidWrite(double output) {
       trace.addTrace(true, "ExtensionPID", new TracePair("Output", output), new TracePair("Setpoint", pidMultiton.getSetpoint()),
-          new TracePair("Extension 1", armPIDSource.pidGet()));
+          new TracePair("Extension", armPIDSource.pidGet()));
       try {
         MoveArmAndWristSafely.move(output, 0, 0, MoveArmAndWristSafely.DontUsePIDHold.EXTENSION);
       } catch (ArmOutOfBoundsException e) {

@@ -138,11 +138,11 @@ public class MoveArmAndWristSafely {
        * Robot.armExtensionEncoder1.resetTo(topEncoderPosition);
        * Robot.armExtensionEncoder2.resetTo(bottomEncoderPosition);
        */
-      if (extensionVelocity > 0) {
+      if (extensionVelocity < 0) {
         extensionVelocity = 0;
       }
     } else if (Robot.fullyRetractedArmLimitSwitch.isAtLimit()) {
-      if (extensionVelocity < 0) {
+      if (extensionVelocity > 0) {
         extensionVelocity = 0;
       }
     }
@@ -186,7 +186,7 @@ public class MoveArmAndWristSafely {
   }
 
   public static double getExtensionIn(double topEncoderTicks, double bottomEncoderTicks) {
-    return (topEncoderTicks + bottomEncoderTicks) / 2 * EXTENSIONTICKSTOINCHES;
+    return (bottomEncoderTicks - topEncoderTicks) / 2 * EXTENSIONTICKSTOINCHES;
   }
 
   public static double getWristRotDegrees(double topEncoderTicks, double bottomEncoderTicks) {
