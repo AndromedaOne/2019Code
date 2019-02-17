@@ -96,8 +96,8 @@ public class Robot extends TimedRobot {
 
   public static InfraredDistanceSensor clawInfraredSensor;
 
-  public static MagEncoderSensor armExtensionEncoder1;
-  public static MagEncoderSensor armExtensionEncoder2;
+  public static MagEncoderSensor topArmExtensionEncoder;
+  public static MagEncoderSensor bottomArmExtensionEncoder;
   public static MagEncoderSensor armRotateEncoder1;
   public static LimitSwitchSensor fullyRetractedArmLimitSwitch;
   public static LimitSwitchSensor fullyExtendedArmLimitSwitch;
@@ -149,24 +149,23 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.armAndWrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
-      RealExtendableArmAndWrist rExtendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
 
-      armExtensionEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getTopExtendableArmAndWristTalon());
+      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon());
 
-      armExtensionEncoder2 = new RealMagEncoderSensor(rExtendableArmAndWrist.getBottomExtendableArmAndWristTalon());
+      bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon());
 
-      armRotateEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getShoulderJointTalon());
+      armRotateEncoder1 = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon());
       armRotateEncoder1.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
       double initialWristPos = -7;
       double initialArmExtension = 99;
-      armExtensionEncoder1.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
+      topArmExtensionEncoder.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
           + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
-      armExtensionEncoder2.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
+      bottomArmExtensionEncoder.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
           + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
-      armExtensionEncoder1 = new MockMagEncoderSensor();
+      topArmExtensionEncoder = new MockMagEncoderSensor();
 
-      armExtensionEncoder2 = new MockMagEncoderSensor();
+      bottomArmExtensionEncoder = new MockMagEncoderSensor();
 
       armRotateEncoder1 = new MockMagEncoderSensor();
       System.out.println("Using fake extendablearmandwrist");

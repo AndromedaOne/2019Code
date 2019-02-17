@@ -21,18 +21,19 @@ public class TeleopArm extends Command {
 
   @Override
   protected void execute() {
-    double armWristValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
+    double extensionValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
     double rotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
 
-    double actualArmWristVal = rotateValue * 0.5;
-    double extensionValue = -armWristValue;
+    rotateValue = rotateValue * 0.5;
+    extensionValue = -extensionValue;
     double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
     // System.out.println("extensionValue: " + extensionValue);
     try {
-      MoveArmAndWristSafely.move(extensionValue, actualArmWristVal, shoulderRotateValue, MoveArmAndWristSafely.DontUsePIDHold.HOLDALL);
+      System.out.println("extensionValue: " + extensionValue);
+      MoveArmAndWristSafely.move(extensionValue, rotateValue, shoulderRotateValue, MoveArmAndWristSafely.DontUsePIDHold.HOLDALL);
     } catch (ArmOutOfBoundsException e) {
       // System.out.println(e.getMessage());
     }

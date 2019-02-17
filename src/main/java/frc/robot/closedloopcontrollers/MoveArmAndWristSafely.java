@@ -32,23 +32,24 @@ public class MoveArmAndWristSafely {
 
   public static void move(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity, DontUsePIDHold dontUsePidHold)
       throws ArmOutOfBoundsException {
-    double armExtensionEncoder1Ticks = Robot.armExtensionEncoder1.getDistanceTicks();
-    double armExtensionEncoder2Ticks = Robot.armExtensionEncoder2.getDistanceTicks();
+    double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
+    double bottomExtensionEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
     double shoulderTicks = Robot.armRotateEncoder1.getDistanceTicks();
 
-    double extensionIn = getExtensionIn(armExtensionEncoder1Ticks, armExtensionEncoder2Ticks);
-    double wristRotDeg = getWristRotDegrees(armExtensionEncoder1Ticks, armExtensionEncoder2Ticks);
+    double extensionIn = getExtensionIn(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
+    double wristRotDeg = getWristRotDegrees(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
     double shoulderRotDeg = getShoulderRotDeg(shoulderTicks);
 
     double deltaExtension = extensionVelocity * extensionVelocityConversion * deltaTime;
     double deltaWristRot = wristRotVelocity * wristRotVelocityConversion * deltaTime;
     double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
+    
     if (dontUsePidHold != DontUsePIDHold.SHOULDER){
       if (Math.abs(shoulderRotVelocity) <= 0.2) {
         shoulderRotVelocity = 0;
         if (!shoulderPIDSetpointSet) {
           System.out.println("Enabling PID");
-          Robot.shoulderPIDController.setSetpoint(shoulderTicks);
+          Robot.shoulderPIDController.setSetpoint(shoulderRotDeg);
           Robot.shoulderPIDController.enable();
         }
         shoulderPIDSetpointSet = true;
@@ -119,7 +120,6 @@ public class MoveArmAndWristSafely {
      */
 
     boolean fullyExtended = Robot.fullyExtendedArmLimitSwitch.isAtLimit();
-    // System.out.println("fullyExtended: " + fullyExtended);
     if (fullyExtended) {
       // extensionIn = 0;
       /*

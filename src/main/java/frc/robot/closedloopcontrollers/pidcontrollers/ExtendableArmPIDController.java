@@ -15,8 +15,8 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private static ExtendableArmPIDController instance;
   private static ArmPIDOut armPIDOut;
   private static ArmPIDSource armPIDSource;
-  private final MagEncoderSensor armEncoder1;
-  private final MagEncoderSensor armEncoder2;
+  private final MagEncoderSensor topArmEncoder;
+  private final MagEncoderSensor bottomArmEncoder;
 
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 3;
@@ -24,14 +24,14 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     super.i = 0;
     super.d = 0;
     super.subsytemName = "Extendable Arm and Wrist";
-    super.pidName = "Arm Extension";
+    super.pidName = "Extension";
 
-    armEncoder1 = Robot.armExtensionEncoder1;
-    armEncoder2 = Robot.armExtensionEncoder2;
+    topArmEncoder = Robot.topArmExtensionEncoder;
+    bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     super.trace = Trace.getInstance();
     armPIDSource = new ArmPIDSource();
-    armEncoder1.putSensorOnLiveWindow(super.subsytemName, "ArmEncoder1");
-    armEncoder2.putSensorOnLiveWindow(super.subsytemName, "ArmEncoder2");
+    topArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionTopEncoder");
+    bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionBottomEncoder");
     armPIDOut = new ArmPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, super.pidConfiguration);
@@ -88,8 +88,8 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double average = (armEncoder1.pidGet() + armEncoder2.pidGet()) / 2;
-      return average;
+      double extension = MoveArmAndWristSafely.getExtensionIn(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
+      return extension;
     }
 
   }
