@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray.*;
 import frc.robot.utilities.*;
 
 public class LineFollowerSensorTest {

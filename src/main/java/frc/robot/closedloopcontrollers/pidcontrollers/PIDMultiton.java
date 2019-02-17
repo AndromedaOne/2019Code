@@ -65,7 +65,7 @@ public class PIDMultiton {
 
   private PIDController pidController;
   private PIDConfiguration config;
-  private PIDName name;
+  //private PIDName name;
 
   private PIDMultiton(PIDName name, PIDConfiguration config) {
     this.name = name;

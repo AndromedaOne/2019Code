@@ -23,7 +23,6 @@ public class RealUltrasonicSensor extends UltrasonicSensor {
   @Override
   public double getDistanceInches() {
     double distance = ultrasonic.getRangeInches();
-    boolean isRangeValid = ultrasonic.isRangeValid();
     return distance;
   }
 

@@ -92,7 +92,7 @@ public class OI {
   }
 
   // Controllers
-  protected Joystick driveStick = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick driveStick = new Joystick(0); //TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController = Robot.operatorController;
 
   public Joystick getDriveStick() {
