@@ -10,6 +10,7 @@ public class MoveArmAndWristSafely {
   }
   private static final int maxWristRotDegrees = 1000;
   private static final int maxExtensionInches = 1000;
+
   private static boolean shoulderPIDSetpointSet = false;
   private static boolean wristPIDSetpointSet = false;
   private static boolean extensionPIDSetpointSet = false;
@@ -21,7 +22,7 @@ public class MoveArmAndWristSafely {
   private static final double extensionVelocityConversion = 1.0;
   private static final double wristRotVelocityConversion = 1.0;
   private static final double shoulderRotVelocityConversion = 1.0;
-  private static final double deltaTime = 1.0;
+  private static final double deltaTime = 0.02;
 
   /**
    * @param extensionVelocity
