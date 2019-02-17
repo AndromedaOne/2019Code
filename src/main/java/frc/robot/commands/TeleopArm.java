@@ -32,7 +32,7 @@ public class TeleopArm extends Command {
     }
     // System.out.println("extensionValue: " + extensionValue);
     try {
-      MoveArmAndWristSafely.move(extensionValue, actualArmWristVal, shoulderRotateValue);
+      MoveArmAndWristSafely.move(extensionValue, actualArmWristVal, shoulderRotateValue, MoveArmAndWristSafely.DontUsePIDHold.HOLDALL);
     } catch (ArmOutOfBoundsException e) {
       // System.out.println(e.getMessage());
     }
@@ -52,7 +52,7 @@ public class TeleopArm extends Command {
   @Override
   protected void end() {
     try {
-      MoveArmAndWristSafely.move(0, 0, 0);
+      MoveArmAndWristSafely.move(0, 0, 0, MoveArmAndWristSafely.DontUsePIDHold.HOLDALL);
     } catch (ArmOutOfBoundsException e) {
       System.out.println(e.getMessage());
     }

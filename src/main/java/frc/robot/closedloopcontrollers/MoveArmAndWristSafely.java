@@ -5,6 +5,9 @@ import frc.robot.exceptions.ArmOutOfBoundsException;
 
 public class MoveArmAndWristSafely {
 
+  public enum DontUsePIDHold {
+    WRIST, EXTENSION, SHOULDER, HOLDALL
+  }
   private static final int maxWristRotDegrees = 1000;
   private static final int maxExtensionInches = 1000;
   private static boolean pidSetpointSet = false;
@@ -23,8 +26,9 @@ public class MoveArmAndWristSafely {
    * @param wristRotVelocity
    * @param shoulderRotVelocity
    * @throws ArmOutOfBoundsException
-   */
-  public static void move(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity)
+    */
+
+  public static void move(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity, DontUsePIDHold dontUsePidHold)
       throws ArmOutOfBoundsException {
     double armExtensionEncoder1Ticks = Robot.armExtensionEncoder1.getDistanceTicks();
     double armExtensionEncoder2Ticks = Robot.armExtensionEncoder2.getDistanceTicks();
@@ -37,19 +41,21 @@ public class MoveArmAndWristSafely {
     double deltaExtension = extensionVelocity * extensionVelocityConversion * deltaTime;
     double deltaWristRot = wristRotVelocity * wristRotVelocityConversion * deltaTime;
     double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
-    if (Math.abs(shoulderRotVelocity) <= 0.2) {
-      shoulderRotVelocity = 0;
-      if (!pidSetpointSet) {
-        System.out.println("Enabling PID");
-        Robot.shoulderPIDController.setSetpoint(shoulderTicks);
-        Robot.shoulderPIDController.enable();
+    if (dontUsePidHold != DontUsePIDHold.SHOULDER){
+      if (Math.abs(shoulderRotVelocity) <= 0.2) {
+        shoulderRotVelocity = 0;
+        if (!pidSetpointSet) {
+          System.out.println("Enabling PID");
+          Robot.shoulderPIDController.setSetpoint(shoulderTicks);
+          Robot.shoulderPIDController.enable();
+        }
+        pidSetpointSet = true;
+      } else {
+        pidSetpointSet = false;
+        System.out.println("Disabling");
+        Robot.shoulderPIDController.disable();
+        Robot.shoulderPIDController.reset();
       }
-      pidSetpointSet = true;
-    } else {
-      pidSetpointSet = false;
-      System.out.println("Disabling");
-      Robot.shoulderPIDController.disable();
-      Robot.shoulderPIDController.reset();
     }
     if (!isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot)) {
       // throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg +

@@ -50,7 +50,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
       trace.addTrace(true, "Arm PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
           new TracePair("Extension 1", armPIDSource.pidGet()));
       try {
-        MoveArmAndWristSafely.move(output, 0, 0);
+        MoveArmAndWristSafely.move(output, 0, 0, MoveArmAndWristSafely.DontUsePIDHold.EXTENSION);
       } catch (ArmOutOfBoundsException e) {
         System.out.println(e.getMessage());
         container.disable();

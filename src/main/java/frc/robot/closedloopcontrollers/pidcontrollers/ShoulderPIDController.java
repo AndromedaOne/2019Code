@@ -40,10 +40,10 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Shoulder PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
+      trace.addTrace(true, "ShoulderPID", new TracePair("Output", output*10000), new TracePair("Setpoint", _setpoint),
           new TracePair("Angle", shoulderEncoder.pidGet()));
       try {
-        MoveArmAndWristSafely.move(0, 0, output);
+        MoveArmAndWristSafely.move(0, 0, output, MoveArmAndWristSafely.DontUsePIDHold.SHOULDER);
       } catch (ArmOutOfBoundsException e) {
         System.out.println(e.getMessage());
         container.disable();

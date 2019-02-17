@@ -71,6 +71,7 @@ import frc.robot.utilities.I2CBusDriver;
  * project.
  */
 public class Robot extends TimedRobot {
+  private boolean robotInitDone = false;
   public static Compressor compressor;
   public static Joystick driveController;
   public static Joystick operatorController;
@@ -306,6 +307,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
+    robotInitDone = true;
   }
 
   /**
@@ -328,7 +330,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    PIDMultiton.resetDisableAll();
+    if(robotInitDone){
+      PIDMultiton.resetDisableAll();
+    }
     Trace.getInstance().flushTraceFiles();
   }
 
