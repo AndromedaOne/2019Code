@@ -47,7 +47,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Arm PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
+      trace.addTrace(true, "ExtensionPID", new TracePair("Output", output), new TracePair("Setpoint", pidMultiton.getSetpoint()),
           new TracePair("Extension 1", armPIDSource.pidGet()));
       try {
         MoveArmAndWristSafely.move(output, 0, 0, MoveArmAndWristSafely.DontUsePIDHold.EXTENSION);

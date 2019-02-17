@@ -40,7 +40,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Encoder Drivetrain", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
+      trace.addTrace(true, "EncoderDrivetrain", new TracePair("Output", output), new TracePair("Setpoint", pidMultiton.getSetpoint()),
           new TracePair("EncoderTicks", encoder.pidGet()));
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }

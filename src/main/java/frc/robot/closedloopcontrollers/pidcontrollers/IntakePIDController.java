@@ -40,7 +40,7 @@ public class IntakePIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Intake PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
+      trace.addTrace(true, "IntakePID", new TracePair("Output", output), new TracePair("Setpoint", container.getSetpoint()),
           new TracePair("Angle", intakeAngleSensor.pidGet()));
       try {
         MoveIntakeSafely.moveIntake(output);

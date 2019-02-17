@@ -22,9 +22,10 @@ public class WristPIDController extends PIDControllerBase {
 
   private WristPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0;
+    super.p = 2.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
+    super.outputRange = 0.5;
     super.subsytemName = "Extendable Arm and Wrist";
     super.pidName = "Wrist";
 
@@ -50,10 +51,12 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Shoulder PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("Angle", topArmEncoder.pidGet()));
+      trace.addTrace(true, "WristPID", new TracePair("Output", output), new TracePair("Setpoint", container.getSetpoint()),
+          new TracePair("Angle", wristPIDSource.pidGet()),
+          new TracePair("TopTicks", topArmEncoder.getDistanceTicks()),
+          new TracePair("BottomTicks", bottomArmEncoder.getDistanceTicks()));
       try {
-        MoveArmAndWristSafely.move(0, 0, output, MoveArmAndWristSafely.DontUsePIDHold.WRIST);
+        MoveArmAndWristSafely.move(0, output, 0, MoveArmAndWristSafely.DontUsePIDHold.WRIST);
       } catch (ArmOutOfBoundsException e) {
         System.out.println(e.getMessage());
         container.disable();

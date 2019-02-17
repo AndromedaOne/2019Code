@@ -41,8 +41,8 @@ public class GyroPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Ultrasonic Drivetrain", new TracePair("Output", output),
-          new TracePair("Setpoint", _setpoint), new TracePair("DistanceInches", navXGyroSensor.pidGet()));
+      trace.addTrace(true, "GyroPid", new TracePair("Output", output),
+          new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("DistanceInches", navXGyroSensor.pidGet()));
 
       Robot.gyroCorrectMove.moveUsingGyro(0, output, false, false);
     }

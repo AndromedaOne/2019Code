@@ -49,10 +49,11 @@ public class MoveArmAndWristSafely {
       if (Math.abs(shoulderRotVelocity) <= 0.2) {
         shoulderRotVelocity = 0;
         if (!shoulderPIDSetpointSet) {
-          System.out.println("Enabling PID");
           Robot.shoulderPIDController.setSetpoint(shoulderRotDeg);
           Robot.shoulderPIDController.enable();
+          System.out.println("Enabling PID at: " + shoulderRotDeg);
         }
+        //System.out.println("Running PID");
         shoulderPIDSetpointSet = true;
       } else {
         shoulderPIDSetpointSet = false;
@@ -145,7 +146,16 @@ public class MoveArmAndWristSafely {
         extensionVelocity = 0;
       }
     }
-
+    if(wristRotVelocity > 0.8) {
+      wristRotVelocity = 0.8;
+    }else if (wristRotVelocity < -0.8) {
+      wristRotVelocity = -0.8;
+    }
+    if(extensionVelocity > 0.5) {
+      extensionVelocity = 0.5;
+    }else if (extensionVelocity < -0.5) {
+      extensionVelocity = -0.5;
+    }
     Robot.extendableArmAndWrist.moveArmWrist(extensionVelocity, wristRotVelocity, shoulderRotVelocity);
   }
 
@@ -180,7 +190,7 @@ public class MoveArmAndWristSafely {
   }
 
   public static double getWristRotDegrees(double topEncoderTicks, double bottomEncoderTicks) {
-    return (topEncoderTicks - bottomEncoderTicks) * WRISTTICKSTODEGREES;
+    return (bottomEncoderTicks + topEncoderTicks) * WRISTTICKSTODEGREES;
   }
 
   public static double getShoulderRotDeg(double ticks) {

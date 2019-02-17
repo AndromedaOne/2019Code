@@ -146,6 +146,8 @@ public class PIDMultiton {
     return config;
   }
   
-
+  public double getSetpoint(){
+    return pidController.getSetpoint();
+  }
 
 }
