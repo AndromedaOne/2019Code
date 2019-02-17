@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
@@ -30,6 +31,7 @@ public class RealDriveTrain extends DriveTrain {
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
+  private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public boolean getShifterPresentFlag() {
     return shifterPresentFlag;
@@ -37,9 +39,9 @@ public class RealDriveTrain extends DriveTrain {
 
   private final int kTimeoutMs = 30;
   /* 100% throttle corresponds to 13500 RPM in low gear */
-  //private final double kMaxSpeedLowGear = 13500;
-  /*THIS IS ONLY HERE FOR PRACTICEPRACTICE, CHANGE THIS FOR PAUL! */
-  private final double kMaxSpeedLowGear = 3500;
+  private final double kMaxSpeedLowGear = 13500;
+  /* THIS IS ONLY HERE FOR PRACTICEPRACTICE, CHANGE THIS FOR PAUL! */
+  // private final double kMaxSpeedLowGear = 3500;
   /* 100% throttle corresponds to 35500 RPM in high gear */
   private final double kMaxSpeedHighGear = 35500;
   private double maxSpeed = kMaxSpeedLowGear;
@@ -130,7 +132,7 @@ public class RealDriveTrain extends DriveTrain {
   private ArbitraryModeWPI_TalonSRX initTalonMaster(Config driveConf, String side) {
     ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(driveConf.getInt(side + "Master"));
     final double closedLoopNeutralToMaxSpeedSeconds = 0.1;
-    
+
     /* Factory Default all hardware to prevent unexpected behaviour */
     _talon.configFactoryDefault();
     _talon.setInverted(driveConf.getBoolean(side + "SideInverted"));
@@ -139,8 +141,6 @@ public class RealDriveTrain extends DriveTrain {
     /* Config sensor used for Primary PID [Velocity] */
 
     _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
-
-    _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 1, kTimeoutMs);
     /**
      * Phase sensor accordingly. Positive Sensor Reading should match Green
      * (blinking) Leds on Talon
@@ -195,8 +195,8 @@ public class RealDriveTrain extends DriveTrain {
       shifterPresentFlag = true;
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
-        }
-        shiftToLowGear();
+    }
+    shiftToLowGear();
   }
 
   @Override
@@ -218,12 +218,15 @@ public class RealDriveTrain extends DriveTrain {
   private void logMeasurements(String side, WPI_TalonSRX _talon, double targetVelocity, boolean doneMeasuring) {
     /* Get Talon/Victor's current output percentage */
     double motorOutput = _talon.getMotorOutputPercent();
-
     Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
         new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
         new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)),
-        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()));
+        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()),
+        new TracePair("Current Channel 0", (double) pdp.getCurrent(0)),
+        new TracePair("Current Channel 1", (double) pdp.getCurrent(1)),
+        new TracePair("Current Channel 2", (double) pdp.getCurrent(2)),
+        new TracePair("Current Channel 3", (double) pdp.getCurrent(3)));
   }
 
   public void stop() {
@@ -235,8 +238,9 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void shiftToLowGear() {
+    System.out.println("Shifting to low gear");
     if (shifterSolenoid != null) {
-      shifterSolenoid.set(DoubleSolenoid.Value.kReverse); 
+      shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
     maxSpeed = kMaxSpeedLowGear;
     driveTrainLeftMaster.selectProfileSlot(kLowGearPIDSlot, 0);
@@ -245,6 +249,7 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void shiftToHighGear() {
+    System.out.println("Shifting to high gear");
     if (shifterSolenoid != null) {
       shifterSolenoid.set(DoubleSolenoid.Value.kForward);
       maxSpeed = kMaxSpeedHighGear;
