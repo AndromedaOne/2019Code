@@ -109,6 +109,7 @@ public class RealDriveTrain extends DriveTrain {
     setVelocityMode(driveTrainLeftMaster);
     setVelocityMode(driveTrainRightMaster);
     differentialDrive.setMaxOutput(maxSpeed);
+    System.out.println("maxSpeed set to " + maxSpeed);
   }
 
   private void setVelocityMode(ArbitraryModeWPI_TalonSRX talon) {
@@ -121,7 +122,7 @@ public class RealDriveTrain extends DriveTrain {
   // and
   private ArbitraryModeWPI_TalonSRX initTalonMaster(Config driveConf, String side) {
     ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(driveConf.getInt(side + "Master"));
-    final double closedLoopNeutralToMaxSpeedSeconds = 0.1;
+    final double closedLoopNeutralToMaxSpeedSeconds = 0.0;
 
     /* Factory Default all hardware to prevent unexpected behaviour */
     _talon.configFactoryDefault();
@@ -137,30 +138,15 @@ public class RealDriveTrain extends DriveTrain {
     double highGearI = 0.0;
     double highGearD = 0.0;
     
-    if (driveConf.hasPath(side + "lowGearMaxSpeed")) {
-      lowGearMaxSpeed = driveConf.getDouble(side + "lowGearMaxSpeed");
-    }
-    if (driveConf.hasPath(side + "lowGearP")) {
-      lowGearP = driveConf.getDouble(side + "lowGearP");
-    }
-    if (driveConf.hasPath(side + "lowGearI")) {
-      lowGearI = driveConf.getDouble(side + "lowGearI");
-    }
-    if (driveConf.hasPath(side + "lowGearD")) {
-      lowGearD = driveConf.getDouble(side + "lowGearD");
-    }
-    if (driveConf.hasPath(side + "highGearMaxSpeed")) {
-      highGearMaxSpeed = driveConf.getDouble(side + "highGearMaxSpeed");
-    }
-    if (driveConf.hasPath(side + "highGearP")) {
-      highGearP = driveConf.getDouble(side + "highGearP");
-    }
-    if (driveConf.hasPath(side + "highGearI")) {
-      highGearI = driveConf.getDouble(side + "highGearI");
-    }
-    if (driveConf.hasPath(side + "highGearD")) {
-      highGearD = driveConf.getDouble(side + "highGearD");
-    }
+    lowGearMaxSpeed = readPIDConfigItem(driveConf, side, "LowGearMaxSpeed", 1);
+    lowGearP        = readPIDConfigItem(driveConf, side, "LowGearP", 0);
+    lowGearI        = readPIDConfigItem(driveConf, side, "LowGearI", 0);
+    lowGearD        = readPIDConfigItem(driveConf, side, "LowGearD", 0);
+
+    highGearMaxSpeed = readPIDConfigItem(driveConf, side, "HighGearMaxSpeed", 1);
+    highGearP        = readPIDConfigItem(driveConf, side, "HighGearP", 0);
+    highGearI        = readPIDConfigItem(driveConf, side, "HighGearI", 0);
+    highGearD        = readPIDConfigItem(driveConf, side, "HighGearD", 0);
 
     _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
     /**
@@ -188,6 +174,15 @@ public class RealDriveTrain extends DriveTrain {
     return _talon;
   }
 
+  private double readPIDConfigItem(Config driveConf, String side, String configItem, double defaultValue) {
+    double configValue = defaultValue;
+    if (driveConf.hasPath(side + "Side" + configItem)) {
+      configValue = driveConf.getDouble(side + "Side" + configItem);
+    }
+    System.out.println(side + "Side" + configItem + "=" + configValue);
+    return configValue;
+  }
+
   private WPI_TalonSRX initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
     WPI_TalonSRX slaveMotor = new WPI_TalonSRX(driveConf.getInt(motorName));
     slaveMotor.configFactoryDefault();
@@ -210,7 +205,7 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
         driveConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
-    setVelocityMode();
+
 
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
@@ -219,6 +214,7 @@ public class RealDriveTrain extends DriveTrain {
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
     shiftToLowGear();
+    setVelocityMode();
   }
 
   @Override
