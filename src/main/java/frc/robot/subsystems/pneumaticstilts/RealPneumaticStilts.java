@@ -33,14 +33,17 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   }
 
-
   public RealPneumaticStilts() {
 
     Config portConf = Robot.getConfig().getConfig("ports.stilts");
-    frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(portConf.getInt("frontLeft.forward"), portConf.getInt("frontLeft.backward")));
-    frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(portConf.getInt("frontRight.forward"), portConf.getInt("frontRight.backward")));
-    rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(portConf.getInt("rearLeft.forward"), portConf.getInt("rearLeft.backward")));
-    rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(portConf.getInt("rearRight.forward"), portConf.getInt("rearRight.backward")));
+    frontLeftStiltLeg = new StiltLeg(
+        new DoubleSolenoid(portConf.getInt("frontLeft.forward"), portConf.getInt("frontLeft.backward")));
+    frontRightStiltLeg = new StiltLeg(
+        new DoubleSolenoid(portConf.getInt("frontRight.forward"), portConf.getInt("frontRight.backward")));
+    rearLeftStiltLeg = new StiltLeg(
+        new DoubleSolenoid(portConf.getInt("rearLeft.forward"), portConf.getInt("rearLeft.backward")));
+    rearRightStiltLeg = new StiltLeg(
+        new DoubleSolenoid(portConf.getInt("rearRight.forward"), portConf.getInt("rearRight.backward")));
 
     stopAllLegs();
   }
