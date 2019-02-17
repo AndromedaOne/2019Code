@@ -89,10 +89,12 @@ public class PIDConfiguration {
    * @param minimumOutput minimum threshold to be output
    * @param maximumOutput upper limit to output amount
    * @param absoluteTolerance
-   * @param liveWindowName The name to put on LiveWindow (SmartDashboard, Shuffleboard, etc)
+   * @param liveWindowName The name to put on LiveWindow (SmartDashboard,
+   * Shuffleboard, etc)
    * @param PIDName name to put in tracefile
    */
-  public PIDConfiguration(double p, double i, double d, double minimumOutput, double maximumOutput, double absoluteTolerance, String liveWindowName, String PIDName) {
+  public PIDConfiguration(double p, double i, double d, double minimumOutput, double maximumOutput,
+      double absoluteTolerance, String liveWindowName, String PIDName) {
     this.p = p;
     this.i = i;
     this.d = d;

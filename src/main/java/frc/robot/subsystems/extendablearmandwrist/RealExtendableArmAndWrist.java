@@ -7,7 +7,6 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
-import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 
 public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   private static RealExtendableArmAndWrist instance;

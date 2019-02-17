@@ -75,7 +75,7 @@ public class IntakeArmControl extends Command {
       nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
       break;
     case UNKNOWN:
-      //Don't move
+      // Don't move
       intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
       break;
@@ -100,7 +100,7 @@ public class IntakeArmControl extends Command {
       nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
       break;
     case UNKNOWN:
-      //Don't move
+      // Don't move
       intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
       break;
