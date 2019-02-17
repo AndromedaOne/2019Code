@@ -4,33 +4,19 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SunFounderSensorArray extends LineFollowerSensorBase {
+
+  private LineFollowerSensorBase lineSensor;
   private I2C mI2cBus;
   private byte[] buffer;
-  // Default Distance to sensor array in centimetres
-  private double distanceToSensor;
-  // Distance between sensors in centimetres
-  private double distanceBtSensors;
-  private int detectionThreshold;
-  private int numSensors;
+  private static final int NUM_SENSORS = 8;
+  // Distance between sensors in centimeters
+  private static final double DIST_BT_SENORS = 0;
+  // Distance to sensors from center of rotation
+  private static final double DIST_TO_SENSORS = 0;
+  private static final int DETECTION_THRESHOLD = 0;
 
-  /**
-   * @param i2cBus             A prebuilt I2C bus
-   * @param detectionThreshold The minimum level required for activation of the
-   *                           sensor
-   * @param distanceToSensor   The distance from the centre of turning to the
-   *                           sensor
-   * @param distanceBtSensors  The distance between each sensor
-   * @param numSensors         the number of sensors in the array
-   * @author Owen Salter
-   */
-  public SunFounderSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor, double distanceBtSensors,
-      int numSensors) {
-    mI2cBus = i2cBus;
-    this.detectionThreshold = detectionThreshold;
-    this.distanceToSensor = distanceToSensor;
-    this.distanceBtSensors = distanceBtSensors;
-    this.numSensors = numSensors;
-    this.buffer = new byte[(numSensors * 2)];
+  public SunFounderSensorArray() {
+    super(DETECTION_THRESHOLD, DIST_TO_SENSORS, DIST_BT_SENORS, NUM_SENSORS);
   }
 
   /**
@@ -83,29 +69,18 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
     /*
      * Need to: - figure out adj from DistanceToSensor - get hyp from adj and op -
      * use hyp to calculate angle - return angle
-     
-    boolean[] boolBuf = new boolean[(this.numSensors / 2) + 1];
-    int senseCount = 0;
-    double adj1 = 0;
+     * 
+     * boolean[] boolBuf = new boolean[(this.numSensors / 2) + 1]; int senseCount =
+     * 0; double adj1 = 0;
+     * 
+     * boolBuf = isThereLine(); // Get the adjacent for the angles for (int i = 0; i
+     * < boolBuf.length; i++) { if (boolBuf[i] == true) { adj1 = getAdjacent(i);
+     * senseCount++; } }
+     *
+     * 
+     * if (senseCount != 0) { sensorReading.lineFound = true; } else {
+     * sensorReading.lineFound = false; }
+     */
 
-    boolBuf = isThereLine();
-    // Get the adjacent for the angles
-    for (int i = 0; i < boolBuf.length; i++) {
-      if (boolBuf[i] == true) {
-        adj1 = getAdjacent(i);
-        senseCount++;
-      } */
-    }
-
-    double angle = Math.atan2(adj1, distanceToSensor);
-    LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
-    sensorReading.lineAngle = angle;
-
-    if (senseCount != 0) {
-      sensorReading.lineFound = true;
-    } else {
-      sensorReading.lineFound = false;
-    }
   }
-
 }

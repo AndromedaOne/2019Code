@@ -17,11 +17,22 @@ import edu.wpi.first.wpilibj.I2C;
  * Which is read by an Ardruino, then the values are sent to the robo rio via I2C
  */
 public class LineSensor4905 extends LineFollowerSensorBase {
+
   private static I2C i2c = new I2C(I2C.Port.kOnboard, 2);
   private static final int NUM_SENSORS = 8;
+  // Distance between sensors in centimeters
+  private static final double DIST_BT_SENSORS = 0;
+  // Distance to sensors from center of rotation
+  private static final double DIST_TO_SENSORS = 0;
+  private static final int DETECTION_THRESHOLD = 0;
+  private static final int THREAD_DELAY = 20;
   private static long averageTime = 0;
   private static int timesAveraged = 50;
   private static long timeAccumulated = 0;
+
+  public LineSensor4905() {
+    super(DETECTION_THRESHOLD, DIST_TO_SENSORS, DIST_BT_SENSORS, NUM_SENSORS, THREAD_DELAY);
+  }
 
   /**
    * This will return the average time for reading the I2C 
