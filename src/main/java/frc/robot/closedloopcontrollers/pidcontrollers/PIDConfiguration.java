@@ -102,4 +102,15 @@ public class PIDConfiguration {
     this.liveWindowName = liveWindowName;
     this.pidName = PIDName;
   }
+
+  public PIDConfiguration() {
+    this.p = 0;
+    this.i = 0;
+    this.d = 0;
+    this.minimumOutput = 0;
+    this.maximumOutput = 0;
+    this.absoluteTolerance = 0;
+    this.liveWindowName = "Unconfigured PID config";
+    this.pidName = "Unconfigured";
+  }
 }
