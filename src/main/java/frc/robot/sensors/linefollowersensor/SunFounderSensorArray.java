@@ -78,7 +78,7 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
    * @return structure containing a boolean of whether the line is found, and the
    * angle in radians
    */
-  public LineFollowArraySensorReading getSensorReading() {
+  public double getSensorReading() {
     /*
      * Need to: - figure out adj from DistanceToSensor - get hyp from adj and op -
      * use hyp to calculate angle - return angle
@@ -97,15 +97,14 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
     }
 
     double angle = Math.atan2(adj1, distanceToSensor);
-    LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
-    sensorReading.lineAngle = angle;
+    LineFollowerSensorBase.lineAngle() = angle;
 
     if (senseCount != 0) {
-      sensorReading.lineFound = true;
+      LineFollowerSensorBase.lineFound() = true;
     } else {
-      sensorReading.lineFound = false;
+      LineFollowerSensorBase.lineFound() = false;
     }
-    return sensorReading;
+    return angle;
   }
 
   private double getAdjacent(int i) {
@@ -140,6 +139,16 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
       ;
     }
 
+  }
+
+  @Override
+  public boolean lineFound() {
+    return false;
+  }
+
+  @Override
+  public double lineAngle() {
+    return 0;
   }
 
 }

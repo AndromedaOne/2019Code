@@ -21,11 +21,13 @@ public class MockLineFollowerSensorArray extends LineFollowerSensorBase {
   }
 
   @Override
-  public LineFollowArraySensorReading getSensorReading() {
-    LineFollowArraySensorReading lfsreading = new LineFollowArraySensorReading();
-    lfsreading.lineAngle = 0;
-    lfsreading.lineFound = false;
-    return lfsreading;
+  public boolean lineFound() {
+    return false;
+  }
+
+  @Override
+  public double lineAngle() {
+    return 0;
   }
 
 }

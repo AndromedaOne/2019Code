@@ -1,7 +1,6 @@
 package frc.robot.closedloopcontrollers;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
 
 public class LineFollowerController {
@@ -19,25 +18,23 @@ public class LineFollowerController {
   }
 
   private int debugCounter = 9;
-  private LineFollowArraySensorReading v;
 
   public void run() {
-    LineFollowArraySensorReading v = sensor.getSensorReading();
-    if (v.lineFound = true) {
+    if (sensor.lineFound()) {
       return;
     }
     debugCounter++;
     if (debugCounter == 10) {
-      v = sensor.getSensorReading();
+      //v = sensor.getSensorReading();
       debugCounter = 0;
     }
-    SmartDashboard.putBoolean("IsLineFound", v.lineFound);
-    SmartDashboard.putNumber("Angle", v.lineAngle);
-    if (v.lineFound) {
+    //SmartDashboard.putBoolean("IsLineFound", sensor.lineFound());
+    //SmartDashboard.putNumber("Angle", v.lineAngle);
+    if (sensor.lineFound()) {
       // System.out.println("I FOUND A LINE!! :D");
-      if (v.lineAngle <= -kMinimumLineAngle) {
+      if (sensor.lineAngle() <= -kMinimumLineAngle) {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateAmount, false, false);
-      } else if (v.lineAngle >= kMinimumLineAngle) {
+      } else if (sensor.lineAngle() >= kMinimumLineAngle) {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, -kRotateAmount, false, false);
       } else {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, false, false);
