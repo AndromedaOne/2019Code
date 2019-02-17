@@ -11,11 +11,9 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   private class StiltLeg {
     private DoubleSolenoid solenoid;
-    private String stiltLegID;
 
-    StiltLeg(DoubleSolenoid mySolenoid, String myStiltLegID) {
+    StiltLeg(DoubleSolenoid mySolenoid) {
       solenoid = mySolenoid;
-      stiltLegID = myStiltLegID;
     }
 
     public void stopLeg() {
@@ -35,10 +33,10 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   public RealPneumaticStilts() {
 
-    frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 0, 1), "FL");
-    frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 2, 3), "FR");
-    rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 4, 5), "RL");
-    rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7), "RR");
+    frontLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 0, 1));
+    frontRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 2, 3));
+    rearLeftStiltLeg = new StiltLeg(new DoubleSolenoid(0, 4, 5));
+    rearRightStiltLeg = new StiltLeg(new DoubleSolenoid(0, 6, 7));
 
     stopAllLegs();
   }
