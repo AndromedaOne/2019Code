@@ -10,8 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
-import frc.robot.commands.PulseLeg.stiltLeg;
+import frc.robot.commands.stilts.*;
+import frc.robot.commands.stilts.PulseLeg.stiltLeg;
 import frc.robot.utilities.ButtonsEnumerated;
 
 /**

@@ -1,12 +1,12 @@
-package frc.robot.commands;
+package frc.robot.commands.stilts;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class RaiseFrontRight extends Command {
+public class RetractRearRight extends Command {
 
   public void initialize() {
-    Robot.pneumaticStilts.extendFrontRight();
+    Robot.pneumaticStilts.retractRearRight();
   }
 
   @Override
