@@ -46,15 +46,16 @@ public class LineFollowerSensorTest {
      * data - Make sure math works
      */
     i2cBus.setBuffer(new byte[] { 15, 14, 16, 25, 26, 17, 16, 15 });
-    assertTrue(lfs.lineFound());
+    assertTrue(lfs.getSensorReading().lineFound);
   }
 
   // Next two tests: Value = atan(1.75/10) = x
   @Test
   public void getSensorReadingLeftTest() {
     i2cBus.setBuffer(new byte[] { 100, 0, 0, 0, 0, 0, 0, 0 });
-    assertTrue(lfs.lineFound());
-    assertEquals(0.173246, lfs.lineAngle(), 0.001);
+    LineFollowArraySensorReading sensorReading = lfs.getSensorReading();
+    assertTrue(sensorReading.lineFound);
+    assertEquals(0.173246, sensorReading.lineAngle, 0.001);
   }
 
   @Test

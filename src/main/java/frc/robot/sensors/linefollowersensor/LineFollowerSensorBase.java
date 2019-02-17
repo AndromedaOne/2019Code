@@ -4,7 +4,5 @@ public abstract class LineFollowerSensorBase {
 
   public abstract boolean[] isThereLine();
 
-  public abstract boolean lineFound();
-
-  public abstract double lineAngle();
+  public abstract LineFollowArraySensorReading getSensorReading();
 }

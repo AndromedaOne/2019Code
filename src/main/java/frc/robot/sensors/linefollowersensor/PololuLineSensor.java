@@ -87,13 +87,8 @@ public class PololuLineSensor extends LineFollowerSensorBase {
     return null;
   }
 
-    @Override
-    public boolean lineFound() {
-        return false;
-    }
-
-    @Override
-    public double lineAngle() {
-        return 0;
-    }
+  @Override
+  public LineFollowArraySensorReading getSensorReading() {
+    return null;
+  }
 }
