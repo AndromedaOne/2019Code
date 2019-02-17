@@ -6,6 +6,8 @@ import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
+import frc.robot.sensors.magencodersensor.MagEncoderSensor;
+import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 
 public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   private static RealExtendableArmAndWrist instance;
@@ -13,7 +15,9 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
   public final WPI_TalonSRX topExtendableArmAndWristTalon;
   public final WPI_TalonSRX bottomExtendableArmAndWristTalon;
   protected DifferentialDrive differentialDrive;
-  // TODO: Add real encoders
+  public final MagEncoderSensor shoulderEncoder;
+  public final MagEncoderSensor armEncoder1;
+  public final MagEncoderSensor armEncoder2;
 
   public WPI_TalonSRX getShoulderJointTalon() {
     return shoulderJointTalon;
@@ -36,6 +40,9 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
     shoulderJointTalon = new WPI_TalonSRX(armConf.getInt("shoulderJointTalon"));
     topExtendableArmAndWristTalon = new WPI_TalonSRX(armConf.getInt("topExtendableArmAndWristTalon"));
     bottomExtendableArmAndWristTalon = new WPI_TalonSRX(armConf.getInt("bottomExtendableArmAndWristTalon"));
+    shoulderEncoder = Robot.armRotateEncoder1;
+    armEncoder1 = Robot.armExtensionEncoder1;
+    armEncoder2 = Robot.armExtensionEncoder2;
     differentialDrive = new DifferentialDrive(topExtendableArmAndWristTalon, bottomExtendableArmAndWristTalon);
 
   }
