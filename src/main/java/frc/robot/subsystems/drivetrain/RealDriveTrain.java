@@ -41,7 +41,7 @@ public class RealDriveTrain extends DriveTrain {
   /* 100% throttle corresponds to 13500 RPM in low gear */
   private final double kMaxSpeedLowGear = 13500;
   /* THIS IS ONLY HERE FOR THE PRACTICEPRACTICE ROBOT, CHANGE THIS FOR PAUL! */
-  //private final double kMaxSpeedLowGear = 3500; 
+  // private final double kMaxSpeedLowGear = 3500;
   /* 100% throttle corresponds to 35500 RPM in high gear */
   private final double kMaxSpeedHighGear = 35500;
   private double maxSpeed = kMaxSpeedLowGear;
