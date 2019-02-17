@@ -19,7 +19,6 @@ public class LineFollowerController {
   }
 
   private int debugCounter = 9;
-  private LineFollowArraySensorReading v;
 
   public void run() {
     LineFollowArraySensorReading v = sensor.getSensorReading();

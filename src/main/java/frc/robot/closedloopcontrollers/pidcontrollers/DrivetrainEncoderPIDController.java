@@ -3,7 +3,6 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
-import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 
 public class DrivetrainEncoderPIDController extends PIDControllerBase {
@@ -25,7 +24,6 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     super.pidName = "EncoderPID";
 
     encoder = Robot.drivetrainLeftRearEncoder;
-    super.trace = Trace.getInstance();
     encoder.putSensorOnLiveWindow(super.subsytemName, "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut();
     pidConfiguration = new PIDConfiguration();
