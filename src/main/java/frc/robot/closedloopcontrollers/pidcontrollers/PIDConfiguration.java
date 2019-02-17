@@ -2,7 +2,6 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 
 public class PIDConfiguration {
 
-  // TODO: Write a constructor
   private double p;
 
   public double getP() {
@@ -81,5 +80,26 @@ public class PIDConfiguration {
 
   public void setPIDName(String pidNameParam) {
     pidName = pidNameParam;
+  }
+
+  /**
+   * @param p P-Value
+   * @param i I-Value
+   * @param d D-Value
+   * @param minimumOutput minimum threshold to be output
+   * @param maximumOutput upper limit to output amount
+   * @param absoluteTolerance
+   * @param liveWindowName The name to put on LiveWindow (SmartDashboard, Shuffleboard, etc)
+   * @param PIDName name to put in tracefile
+   */
+  public PIDConfiguration(double p, double i, double d, double minimumOutput, double maximumOutput, double absoluteTolerance, String liveWindowName, String PIDName) {
+    this.p = p;
+    this.i = i;
+    this.d = d;
+    this.minimumOutput = minimumOutput;
+    this.maximumOutput = maximumOutput;
+    this.absoluteTolerance = absoluteTolerance;
+    this.liveWindowName = liveWindowName;
+    this.pidName = PIDName;
   }
 }
