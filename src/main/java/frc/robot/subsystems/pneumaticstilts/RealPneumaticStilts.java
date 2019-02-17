@@ -32,11 +32,6 @@ public class RealPneumaticStilts extends PneumaticStilts {
 
   }
 
-  /*
-   * public static StiltLeg frontLeftStiltLeg; public static StiltLeg
-   * frontRightStiltLeg; public static StiltLeg rearLeftStiltLeg; public static
-   * StiltLeg rearRightStiltLeg;
-   */
 
   public RealPneumaticStilts() {
 
