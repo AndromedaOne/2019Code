@@ -8,15 +8,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.*;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
-import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
-import frc.robot.commands.MoveUsingEncoderPID;
+import frc.robot.commands.TurnToCompassHeading;
+import frc.robot.groupcommands.RollIntakeGroupCommand;
+import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
+import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.MiddleGamePieceArmCommand;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -53,9 +56,6 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-  // Drive Controller and Buttons
-  Joystick driveController;
-
   // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
@@ -64,19 +64,29 @@ public class OI {
 
   private POVButton intakeUp;
   private POVButton intakeDown;
+  private Button driveForward;
   private Button driveTrainPIDTest;
+  private JoystickButton turnToEast;
+  private JoystickButton turnToSouth;
+  private JoystickButton turnToWest;
 
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
 
   private OI() {
-    JoystickButton testEncoder = new JoystickButton(driveStick, 6);
-    testEncoder.whenPressed(new MoveUsingEncoderPID(1500));
-
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
     // Claw buttons are temp until I figure out the D-Pad
     openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
     closeClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
+
+    turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
+    turnToNorth.whenPressed(new TurnToCompassHeading(0));
+    turnToEast = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
+    turnToEast.whenPressed(new TurnToCompassHeading(90));
+    turnToSouth = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
+    turnToSouth.whenPressed(new TurnToCompassHeading(180));
+    turnToWest = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
+    turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
@@ -89,14 +99,20 @@ public class OI {
     driveTrainPIDTest = new POVButton(driveStick, POVDirectionNames.SOUTH.getValue());
     // driveTrainPIDTest.whileHeld(new DriveTrainPIDTest());
     driveTrainPIDTest.whileHeld(new DriveForward());
+    ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
+    ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new CargoShipAndLoadingCommand());
+    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new MiddleGamePieceArmCommand());
+    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(new HighGamePieceArmCommand());
+
+    ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
   }
 
   // Controllers
-  protected Joystick driveStick = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick driveController = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController = Robot.operatorController;
 
   public Joystick getDriveStick() {
-    return driveStick;
+    return driveController;
   }
 
   public Joystick getOperatorStick() {

@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public abstract class DriveTrain extends Subsystem {
 
-  public abstract WPI_TalonSRX getLeftRearTalon();
-
   @Override
   public void periodic() {
   }
@@ -28,4 +26,5 @@ public abstract class DriveTrain extends Subsystem {
 
   public abstract void changeControlMode(NeutralMode mode);
 
+  public abstract WPI_TalonSRX getLeftRearTalon();
 }
