@@ -20,7 +20,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 2.5 * Math.pow(10, -4);
+    super.p = 0;//2.5 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
     super.subsytemName = "Extendable Arm and Wrist";
