@@ -52,4 +52,14 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     return ticks;
   }
 
+  @Override
+  public double getVelocity() {
+    // multiply by ten to get the velocity in ticks per second
+    double velocity = talonSpeedController.getSelectedSensorVelocity()*10;
+    if(reverseDirection) {
+      velocity *=-1.0;
+    }
+    return velocity;
+  }
+
 }

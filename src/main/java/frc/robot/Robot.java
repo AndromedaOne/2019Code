@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
           false);
 
       shoulderEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true);
-      shoulderEncoder.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
+      shoulderEncoder.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
       double initialWristPos = -7;
       double initialArmExtension = 99;
       topArmExtensionEncoder.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0

@@ -23,4 +23,9 @@ public class MockMagEncoderSensor extends MagEncoderSensor {
     System.out.println("Trying to reset the encoder to: " + value);
   }
 
+  @Override
+  public double getVelocity() {
+    return 0;
+  }
+
 }

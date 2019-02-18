@@ -17,13 +17,10 @@ public class MoveArmAndWristSafely {
   private static boolean wristPIDSetpointSet = false;
   private static boolean extensionPIDSetpointSet = false;
 
-  public static final double SHOULDERTICKSTODEGRESS = 1.0;
+  public static final double SHOULDERTICKSTODEGREES = 1.0;
   public static final double EXTENSIONTICKSTOINCHES = 1.0;
   public static final double WRISTTICKSTODEGREES = 1.0;
 
-  private static final double extensionVelocityConversion = 1.0;
-  private static final double wristRotVelocityConversion = 1.0;
-  private static final double shoulderRotVelocityConversion = 1.0;
   private static final double deltaTime = 0.02;
 
   /**
@@ -43,9 +40,15 @@ public class MoveArmAndWristSafely {
     double wristRotDeg = getWristRotDegrees(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
     double shoulderRotDeg = getShoulderRotDeg(shoulderTicks);
 
-    double deltaExtension = extensionVelocity * extensionVelocityConversion * deltaTime;
-    double deltaWristRot = wristRotVelocity * wristRotVelocityConversion * deltaTime;
-    double deltaShoulderRot = shoulderRotVelocity * shoulderRotVelocityConversion * deltaTime;
+    double extensionVelocityConversion = getExtensionIn(Robot.topArmExtensionEncoder.getVelocity(), Robot.bottomArmExtensionEncoder.getVelocity());
+    double wristRotVelocityConversion = getWristRotDegrees(Robot.topArmExtensionEncoder.getVelocity(), Robot.bottomArmExtensionEncoder.getVelocity());
+    double shoulderRotVelocityConversion = getShoulderRotDeg(Robot.shoulderEncoder.getVelocity());
+    
+    // multiplying by 1.1 to try to look into the future and see where the 
+    // deltaExtension can be if speed is increasing
+    double deltaExtension = extensionIn + extensionVelocityConversion * deltaTime*1.1;
+    double deltaWristRot = wristRotDeg + wristRotVelocityConversion * deltaTime*1.1;
+    double deltaShoulderRot = shoulderRotDeg + shoulderRotVelocityConversion * deltaTime*1.1;
 
     if (dontUsePidHold != DontUsePIDHold.SHOULDER) {
       if (Math.abs(shoulderRotVelocity) <= 0.2) {
@@ -203,7 +206,7 @@ public class MoveArmAndWristSafely {
   }
 
   public static double getShoulderRotDeg(double ticks) {
-    return ticks * SHOULDERTICKSTODEGRESS;
+    return ticks * SHOULDERTICKSTODEGREES;
   }
 
 }
