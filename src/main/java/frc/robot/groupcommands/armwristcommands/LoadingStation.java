@@ -12,8 +12,9 @@ public class LoadingStation extends CommandGroup {
   private final double extensionPosition = 26.75;
 
   public LoadingStation(boolean positiveWristCurently, boolean sameSidePlacement, double shoulderAngle) {
-    double directionFactor = positiveWristCurently ? -1 : 1;
+    double directionFactor = positiveWristCurently ? 1 : -1;
     boolean positiveWristDestination = (-95.5 * directionFactor) > 0 ? true : false;
+    positiveWristDestination = sameSidePlacement ? positiveWristDestination : !positiveWristDestination;
 
     addSequential(new TuckArm(shoulderAngle, positiveWristDestination));
     if (sameSidePlacement) {
@@ -22,7 +23,7 @@ public class LoadingStation extends CommandGroup {
       addSequential(new RetractArm(extensionPosition));
     } else {
       addSequential(new RotateShoulder(-shoulderPosition * directionFactor));
-      addSequential(new RotateWrist(wristPosition * directionFactor));
+      addSequential(new RotateWrist(-wristPosition * directionFactor));
       addSequential(new RetractArm(extensionPosition));
     }
   }
