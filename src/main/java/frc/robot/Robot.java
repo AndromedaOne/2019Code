@@ -150,11 +150,11 @@ public class Robot extends TimedRobot {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
 
-      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon());
+      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon(), false);
 
-      bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon());
+      bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon(), false);
 
-      armRotateEncoder1 = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon());
+      armRotateEncoder1 = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true);
       armRotateEncoder1.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
       double initialWristPos = -7;
       double initialArmExtension = 99;
@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
     if (conf.hasPath("sensors.drivetrainEncoders")) {
-      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon());
+      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false);
     } else {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }

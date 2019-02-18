@@ -190,7 +190,7 @@ public class MoveArmAndWristSafely {
   }
 
   public static double getWristRotDegrees(double topEncoderTicks, double bottomEncoderTicks) {
-    return (bottomEncoderTicks + topEncoderTicks) * WRISTTICKSTODEGREES;
+    return -(bottomEncoderTicks + topEncoderTicks) * WRISTTICKSTODEGREES;
   }
 
   public static double getShoulderRotDeg(double ticks) {
