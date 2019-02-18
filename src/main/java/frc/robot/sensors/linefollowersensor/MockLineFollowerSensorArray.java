@@ -1,28 +1,16 @@
 package frc.robot.sensors.linefollowersensor;
 
-import edu.wpi.first.wpilibj.I2C;
-
 public class MockLineFollowerSensorArray extends LineFollowerSensorBase {
 
-  private int numSensors;
-
-  public MockLineFollowerSensorArray(I2C i2cBus, int detectionThreshold, double distanceToSensor,
-      double distanceBtSensors, int numSensors) {
-    this.numSensors = numSensors;
-  }
-
-  @Override
-  public boolean[] isThereLine() {
-    boolean[] boolBuf = new boolean[numSensors - 1];
-    for (int i = 0; i < boolBuf.length; i++) {
-      boolBuf[i] = false;
-    }
-    return boolBuf;
+  public MockLineFollowerSensorArray() {
+    // These are bogus values
+    super(1,1,1,2,20);
   }
 
   @Override
   public void getSensorReading(int[] readingBuf) {
-
+    // This should be called once every 20ms
+    System.out.println("Reading Mock Line Sensor");
   }
 
 }

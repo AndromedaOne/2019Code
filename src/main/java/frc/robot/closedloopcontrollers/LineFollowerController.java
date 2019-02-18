@@ -7,6 +7,7 @@ import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
 public class LineFollowerController {
   private MoveDrivetrainGyroCorrect gyroCorrectMove;
   private LineFollowerSensorBase sensor;
+  private LineFollowArraySensorReading values;
   private final double kMinimumLineAngle = Math.toRadians(10);
   private final double kForwardSpeed = .39;
   private final double kRotateAmount = .6; // all constants are currently placeholders
@@ -18,26 +19,15 @@ public class LineFollowerController {
 
   }
 
-  private int debugCounter = 9;
-  private LineFollowArraySensorReading v;
-
   public void run() {
-    LineFollowArraySensorReading v = sensor.getSensorReading();
-    if (v.lineFound = true) {
-      return;
-    }
-    debugCounter++;
-    if (debugCounter == 10) {
-      v = sensor.getSensorReading();
-      debugCounter = 0;
-    }
-    SmartDashboard.putBoolean("IsLineFound", v.lineFound);
-    SmartDashboard.putNumber("Angle", v.lineAngle);
-    if (v.lineFound) {
-      // System.out.println("I FOUND A LINE!! :D");
-      if (v.lineAngle <= -kMinimumLineAngle) {
+    values = sensor.findLine();
+    SmartDashboard.putBoolean("IsLineFound", values.lineFound);
+    SmartDashboard.putNumber("Angle", values.lineAngle);
+    if (values.lineFound) {
+      System.out.println("I FOUND A LINE!! :D");
+      if (values.lineAngle <= -kMinimumLineAngle) {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateAmount, false, false);
-      } else if (v.lineAngle >= kMinimumLineAngle) {
+      } else if (values.lineAngle >= kMinimumLineAngle) {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, -kRotateAmount, false, false);
       } else {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, false, false);
