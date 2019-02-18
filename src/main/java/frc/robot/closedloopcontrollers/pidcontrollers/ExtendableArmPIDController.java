@@ -47,8 +47,11 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "ExtensionPID", new TracePair("Output", output), new TracePair("Setpoint", pidMultiton.getSetpoint()),
-          new TracePair("Extension", armPIDSource.pidGet()));
+      trace.addTrace(true, "ExtensionPID", new TracePair("Output", output), 
+          new TracePair("SetpointTicks", pidMultiton.getSetpoint()),
+          new TracePair("SetpointInches", pidMultiton.getSetpoint()*MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES),
+          new TracePair("ExtensionTicks", armPIDSource.pidGet()),
+          new TracePair("ExtensionInches", armPIDSource.pidGet()*MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES));
       try {
         MoveArmAndWristSafely.move(output, 0, 0, MoveArmAndWristSafely.DontUsePIDHold.EXTENSION);
       } catch (ArmOutOfBoundsException e) {
@@ -88,10 +91,15 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double extension = MoveArmAndWristSafely.getExtensionIn(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      return extension;
+      double extensionInches = MoveArmAndWristSafely.getExtensionIn(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
+      double extensionTicks = extensionInches / MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES;
+      return extensionTicks;
     }
 
+  }
+  @Override
+  public void setSetpoint(double setpoint) {
+    pidMultiton.setSetpoint(setpoint/MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES);
   }
 
 }

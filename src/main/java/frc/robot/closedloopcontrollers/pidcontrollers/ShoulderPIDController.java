@@ -40,8 +40,11 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "ShoulderPID", new TracePair("Output", output*10000), new TracePair("Setpoint", container.getSetpoint()),
-          new TracePair("Angle", shoulderEncoder.pidGet()));
+      trace.addTrace(true, "ShoulderPID", new TracePair("Output", output*10000), 
+          new TracePair("SetpointTicks", container.getSetpoint()),
+          new TracePair("SetpointDegrees", container.getSetpoint()*MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS),
+          new TracePair("AngleTicks", shoulderEncoder.pidGet()),
+          new TracePair("AngleDegrees", shoulderEncoder.pidGet()*MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS));
       try {
         MoveArmAndWristSafely.move(0, 0, output, MoveArmAndWristSafely.DontUsePIDHold.SHOULDER);
       } catch (ArmOutOfBoundsException e) {
@@ -58,6 +61,11 @@ public class ShoulderPIDController extends PIDControllerBase {
       instance = new ShoulderPIDController();
     }
     return instance;
+  }
+
+  @Override
+  public void setSetpoint(double setpoint) {
+    pidMultiton.setSetpoint(setpoint/MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
   }
 
 }

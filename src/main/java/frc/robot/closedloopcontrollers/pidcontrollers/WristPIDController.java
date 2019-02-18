@@ -51,10 +51,11 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "WristPID", new TracePair("Output", output), new TracePair("Setpoint", container.getSetpoint()),
-          new TracePair("Angle", wristPIDSource.pidGet()),
-          new TracePair("TopTicks", topArmEncoder.getDistanceTicks()),
-          new TracePair("BottomTicks", bottomArmEncoder.getDistanceTicks()));
+      trace.addTrace(true, "WristPID", new TracePair("Output", output), 
+          new TracePair("SetpointTicks", container.getSetpoint()),
+          new TracePair("SetpointDegrees", container.getSetpoint()*MoveArmAndWristSafely.WRISTTICKSTODEGREES),
+          new TracePair("TicksAngle", wristPIDSource.pidGet()),
+          new TracePair("DegreeAngle", MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
       try {
         MoveArmAndWristSafely.move(0, output, 0, MoveArmAndWristSafely.DontUsePIDHold.WRIST);
       } catch (ArmOutOfBoundsException e) {
@@ -95,7 +96,13 @@ public class WristPIDController extends PIDControllerBase {
     @Override
     public double pidGet() {
       double wristDegrees = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      return wristDegrees;
+      double wristTicks = wristDegrees/MoveArmAndWristSafely.WRISTTICKSTODEGREES;
+      return wristTicks;
     }
+  }
+
+  @Override
+  public void setSetpoint(double setpoint) {
+    pidMultiton.setSetpoint(setpoint/MoveArmAndWristSafely.WRISTTICKSTODEGREES);
   }
 }
