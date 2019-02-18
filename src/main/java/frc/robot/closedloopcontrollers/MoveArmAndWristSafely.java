@@ -37,7 +37,7 @@ public class MoveArmAndWristSafely {
       DontUsePIDHold dontUsePidHold) throws ArmOutOfBoundsException {
     double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
     double bottomExtensionEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
-    double shoulderTicks = Robot.armRotateEncoder1.getDistanceTicks();
+    double shoulderTicks = Robot.shoulderEncoder.getDistanceTicks();
 
     double extensionIn = getExtensionIn(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
     double wristRotDeg = getWristRotDegrees(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
@@ -96,10 +96,6 @@ public class MoveArmAndWristSafely {
       // throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg +
       // deltaWristRot,
       // shoulderRotDeg + deltaShoulderRot);
-    }
-
-    if (Robot.wristLimitSwitchUp.isAtLimit()) {
-      wristRotVelocity *= 1;
     }
 
     if (Robot.wristLimitSwitchUp.isAtLimit()) {

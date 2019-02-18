@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
 
   public static MagEncoderSensor topArmExtensionEncoder;
   public static MagEncoderSensor bottomArmExtensionEncoder;
-  public static MagEncoderSensor armRotateEncoder1;
+  public static MagEncoderSensor shoulderEncoder;
   public static LimitSwitchSensor fullyRetractedArmLimitSwitch;
   public static LimitSwitchSensor fullyExtendedArmLimitSwitch;
   public static LimitSwitchSensor wristLimitSwitchUp;
@@ -156,8 +156,8 @@ public class Robot extends TimedRobot {
       bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon(),
           false);
 
-      armRotateEncoder1 = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true);
-      armRotateEncoder1.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
+      shoulderEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true);
+      shoulderEncoder.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
       double initialWristPos = -7;
       double initialArmExtension = 99;
       topArmExtensionEncoder.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
@@ -169,7 +169,7 @@ public class Robot extends TimedRobot {
 
       bottomArmExtensionEncoder = new MockMagEncoderSensor();
 
-      armRotateEncoder1 = new MockMagEncoderSensor();
+      shoulderEncoder = new MockMagEncoderSensor();
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }

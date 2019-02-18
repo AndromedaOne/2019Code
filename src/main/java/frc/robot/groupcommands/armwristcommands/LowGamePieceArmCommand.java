@@ -8,7 +8,7 @@ import frc.robot.utilities.ButtonsEnumerated;
 
 public class LowGamePieceArmCommand extends CommandGroup {
   public LowGamePieceArmCommand() {
-    double shoulderAngle = MoveArmAndWristSafely.getShoulderRotDeg(Robot.armRotateEncoder1.getDistanceTicks());
+    double shoulderAngle = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
     double wristAngle = MoveArmAndWristSafely.getWristRotDegrees(Robot.topArmExtensionEncoder.getDistanceTicks(),
         Robot.bottomArmExtensionEncoder.getDistanceTicks());
     boolean positiveWrist = (shoulderAngle + wristAngle) > 0;

@@ -25,7 +25,7 @@ public class ShoulderPIDController extends PIDControllerBase {
     super.trace = Trace.getInstance();
     shoulderPIDOut = new ShoulderPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
-    shoulderEncoder = Robot.armRotateEncoder1;
+    shoulderEncoder = Robot.shoulderEncoder;
     shoulderEncoder.putSensorOnLiveWindow(super.subsytemName, "ShoulderEncoder");
     super.pidMultiton = PIDMultiton.getInstance(shoulderEncoder, shoulderPIDOut, super.pidConfiguration);
     shoulderPIDOut.setContainer(super.pidMultiton);
