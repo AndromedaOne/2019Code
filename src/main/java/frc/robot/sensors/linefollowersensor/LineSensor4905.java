@@ -29,6 +29,8 @@ public class LineSensor4905 extends LineFollowerSensorBase {
   private static long averageTime = 0;
   private static int timesAveraged = 50;
   private static long timeAccumulated = 0;
+  private byte[] buffer = new byte[2 * NUM_SENSORS];
+  private int averageCounter = 0;
 
   public LineSensor4905() {
     super(DETECTION_THRESHOLD, DIST_TO_SENSORS, DIST_BT_SENSORS, NUM_SENSORS, THREAD_DELAY);
@@ -58,8 +60,6 @@ public class LineSensor4905 extends LineFollowerSensorBase {
 
   @Override
   public void getSensorReading(int[] readingBuf) {
-    int i = 0;
-    byte[] buffer = new byte[2 * NUM_SENSORS];
     Instant startTime = Instant.now();
     i2c.readOnly(buffer, 2 * NUM_SENSORS);
 
@@ -69,13 +69,13 @@ public class LineSensor4905 extends LineFollowerSensorBase {
     Instant endTime = Instant.now();
     Duration timeElapsed = Duration.between(startTime, endTime);
     timeAccumulated += timeElapsed.toMillis();
-    if (i < timesAveraged) {
-      System.out.println(timeElapsed.toMillis());
-      ++i;
+    if (averageCounter < timesAveraged) {
+      //System.out.println(timeElapsed.toMillis());
+      ++averageCounter;
     } else {
       averageTime = timeAccumulated / (timesAveraged + 1);
       timeAccumulated = 0;
-      i = 0;
+      averageCounter = 0;
     }
 
     // This calulates the deconstructed bytes that come from the arduino
@@ -86,9 +86,9 @@ public class LineSensor4905 extends LineFollowerSensorBase {
         b = b | a;
         if (count != 1) {
           b = b << 8;
-          readingBuf[i] = b;
         }
       }
+      readingBuf[sensorNumber] = -b;
       System.out.print(b + "\t");
     }
     System.out.println();

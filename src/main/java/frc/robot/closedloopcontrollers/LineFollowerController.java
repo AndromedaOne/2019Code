@@ -26,9 +26,9 @@ public class LineFollowerController {
     if (values.lineFound) {
       System.out.println("I FOUND A LINE!! :D");
       if (values.lineAngle <= -kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateAmount, false, false);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateAmount, true, false);
       } else if (values.lineAngle >= kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, -kRotateAmount, false, false);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, -kRotateAmount, true, false);
       } else {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, false, false);
       }

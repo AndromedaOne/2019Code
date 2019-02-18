@@ -16,10 +16,10 @@ public abstract class LineFollowerSensorBase {
   protected double distanceBtSensors;
   protected int detectionThreshold;
   protected int numSensors;
-  protected int threadTime = 0;
+  protected double threadTime = 0;
   protected int[] sensorReadingBuffer;
 
-  protected LineFollowerSensorBase(int detectionThreshold, double distanceToSensor, double distanceBtSensors, int numSensors, int threadTime) {
+  protected LineFollowerSensorBase(int detectionThreshold, double distanceToSensor, double distanceBtSensors, int numSensors, double threadTime) {
     this.detectionThreshold = detectionThreshold;
     this.distanceToSensor = distanceToSensor;
     this.distanceBtSensors = distanceBtSensors;
@@ -29,12 +29,22 @@ public abstract class LineFollowerSensorBase {
   }
 
   private class GetSensorData extends Thread {
-    public synchronized void run() {
+    int[] mySensorReadingBuffer = new int[numSensors];
+    int[] returnSensorReadingBuffer = new int[numSensors];
+    public void run() {
       while(true) {
-        getSensorReading(sensorReadingBuffer);
+        getSensorReading(mySensorReadingBuffer);
+        updateSensorReadingBuffer();
         Timer.delay(threadTime);
       }
     }
+    private synchronized void updateSensorReadingBuffer() {
+      returnSensorReadingBuffer = mySensorReadingBuffer.clone();
+    }
+
+    public synchronized int[] getSensorReadingBuffer() {
+      return returnSensorReadingBuffer;
+    } 
   }
 
   /**
@@ -92,7 +102,7 @@ public abstract class LineFollowerSensorBase {
    *  means that a line was detected and false means that a line wasn't detected
    * @author Owen Salter & Devin C
    */
-  public boolean[] getLinePositionArray() {
+  private boolean[] getLinePositionArray() {
     boolean[] boolBuf = new boolean[sensorReadingBuffer.length];
 
     for (int i = 0; i < sensorReadingBuffer.length; i++) {
@@ -111,6 +121,7 @@ public abstract class LineFollowerSensorBase {
    * as a type LineFollowArraySensorReading
    */
   public LineFollowArraySensorReading findLine() {
+    sensorReadingBuffer = sensorDataThread.getSensorReadingBuffer();
     sensorReading.lineFound = isThereLine();
     sensorReading.lineAngle = calculateLineAngleFromCenter(currentDistanceFromCenter);
     return sensorReading;
