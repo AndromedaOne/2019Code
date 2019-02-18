@@ -106,6 +106,9 @@ public class Robot extends TimedRobot {
   public static ShoulderPIDController shoulderPIDController;
   public static ExtendableArmPIDController extendableArmPIDController;
   public static WristPIDController wristPIDController;
+  private static final double absoluteShoulderPositionError = 0.0;
+  private static final double absoluteWristPositionError = 0.0;
+  private static final double absoluteArmPositionError = 0.0;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -157,9 +160,22 @@ public class Robot extends TimedRobot {
           false);
 
       shoulderEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true);
-      shoulderEncoder.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
-      double initialWristPos = -7;
-      double initialArmExtension = 99;
+
+      double shoulderEncoderAbsolutePositionTicks = shoulderEncoder.getAbsolutePosition();
+      double shoulderEncoderAbsouletPositionDegrees = shoulderEncoderAbsolutePositionTicks* MoveArmAndWristSafely.SHOULDERTICKSTODEGREES;
+      double initialShoulderPos = shoulderEncoderAbsouletPositionDegrees % 360.0;
+      initialShoulderPos -= absoluteShoulderPositionError;
+
+      double topArmExtensionEncoderAbsoluteTicks = topArmExtensionEncoder.getAbsolutePosition();
+      double bottomArmExtensionEncoderAbsoluteTicks = bottomArmExtensionEncoder.getAbsolutePosition();
+
+      double initialWristPos = MoveArmAndWristSafely.getWristRotDegrees(topArmExtensionEncoderAbsoluteTicks, bottomArmExtensionEncoderAbsoluteTicks) % 360;
+      double initialArmExtension = MoveArmAndWristSafely.getExtensionIn(topArmExtensionEncoderAbsoluteTicks, bottomArmExtensionEncoderAbsoluteTicks) % MoveArmAndWristSafely.maxExtensionInches;
+
+      initialWristPos -= absoluteWristPositionError;
+      initialArmExtension -= absoluteArmPositionError;
+
+      shoulderEncoder.resetTo(initialShoulderPos / MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
       topArmExtensionEncoder.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
           + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
       bottomArmExtensionEncoder.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0

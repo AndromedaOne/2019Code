@@ -28,4 +28,9 @@ public class MockMagEncoderSensor extends MagEncoderSensor {
     return 0;
   }
 
+  @Override
+  public double getAbsolutePosition() {
+    return 0;
+  }
+
 }

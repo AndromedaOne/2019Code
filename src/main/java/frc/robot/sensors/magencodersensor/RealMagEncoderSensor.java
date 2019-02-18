@@ -62,4 +62,13 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     return velocity;
   }
 
+  @Override
+  public double getAbsolutePosition() {
+    double absolutePosition = talonSpeedController.getSelectedSensorPosition();
+    if(reverseDirection) {
+      absolutePosition *= -1.0;
+    }
+    return absolutePosition;
+  }
+
 }
