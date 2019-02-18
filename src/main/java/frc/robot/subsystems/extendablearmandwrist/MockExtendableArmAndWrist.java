@@ -1,6 +1,5 @@
 package frc.robot.subsystems.extendablearmandwrist;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class MockExtendableArmAndWrist extends ExtendableArmAndWrist {

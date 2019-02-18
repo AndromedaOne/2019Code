@@ -18,12 +18,12 @@ public class PIDMultiton {
   }
 
   public static void resetDisableAll() {
-    
-    for(PIDMultiton a : instances.values()) {
+
+    for (PIDMultiton a : instances.values()) {
       a.disable();
       a.reset();
     }
-    
+
   }
 
   public static synchronized PIDMultiton getInstance(PIDSource source, PIDOutput output, PIDConfiguration config) {
@@ -145,8 +145,8 @@ public class PIDMultiton {
   private PIDConfiguration gitConfig() {
     return config;
   }
-  
-  public double getSetpoint(){
+
+  public double getSetpoint() {
     return pidController.getSetpoint();
   }
 

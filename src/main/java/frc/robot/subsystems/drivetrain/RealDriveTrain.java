@@ -192,7 +192,7 @@ public class RealDriveTrain extends DriveTrain {
 
   private void logMeasurements(String side, WPI_TalonSRX _talon, double targetVelocity, boolean doneMeasuring) {
     /* Get Talon/Victor's current output percentage */
-    if(_talon == null) {
+    if (_talon == null) {
       System.out.println("TALON IS NULL!!! ");
     }
     double motorOutput = _talon.getMotorOutputPercent();

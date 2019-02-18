@@ -150,9 +150,11 @@ public class Robot extends TimedRobot {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
 
-      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon(), false);
+      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon(),
+          false);
 
-      bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon(), false);
+      bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon(),
+          false);
 
       armRotateEncoder1 = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true);
       armRotateEncoder1.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
@@ -335,7 +337,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    if(robotInitDone){
+    if (robotInitDone) {
       PIDMultiton.resetDisableAll();
     }
     Trace.getInstance().flushTraceFiles();

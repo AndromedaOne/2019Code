@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
-import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
@@ -51,11 +50,11 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "WristPID", new TracePair("Output", output), 
+      trace.addTrace(true, "WristPID", new TracePair("Output", output),
           new TracePair("SetpointTicks", container.getSetpoint()),
-          new TracePair("SetpointDegrees", container.getSetpoint()*MoveArmAndWristSafely.WRISTTICKSTODEGREES),
-          new TracePair("TicksAngle", wristPIDSource.pidGet()),
-          new TracePair("DegreeAngle", MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
+          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.WRISTTICKSTODEGREES),
+          new TracePair("TicksAngle", wristPIDSource.pidGet()), new TracePair("DegreeAngle",
+              MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
       try {
         MoveArmAndWristSafely.move(0, output, 0, MoveArmAndWristSafely.DontUsePIDHold.WRIST);
       } catch (ArmOutOfBoundsException e) {
@@ -96,13 +95,13 @@ public class WristPIDController extends PIDControllerBase {
     @Override
     public double pidGet() {
       double wristDegrees = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      double wristTicks = wristDegrees/MoveArmAndWristSafely.WRISTTICKSTODEGREES;
+      double wristTicks = wristDegrees / MoveArmAndWristSafely.WRISTTICKSTODEGREES;
       return wristTicks;
     }
   }
 
   @Override
   public void setSetpoint(double setpoint) {
-    pidMultiton.setSetpoint(setpoint/MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
   }
 }

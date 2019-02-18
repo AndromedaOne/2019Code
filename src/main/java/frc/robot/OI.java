@@ -16,10 +16,6 @@ import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
-import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
-import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
-import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
-import frc.robot.groupcommands.armwristcommands.MiddleGamePieceArmCommand;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -95,10 +91,16 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    /*ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
-    ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new CargoShipAndLoadingCommand());
-    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new MiddleGamePieceArmCommand());
-    ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(new HighGamePieceArmCommand());*/
+    /*
+     * ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(
+     * new LowGamePieceArmCommand());
+     * ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(
+     * new CargoShipAndLoadingCommand());
+     * ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(
+     * new MiddleGamePieceArmCommand());
+     * ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(
+     * new HighGamePieceArmCommand());
+     */
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
   }

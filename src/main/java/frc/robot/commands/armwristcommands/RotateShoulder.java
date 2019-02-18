@@ -2,7 +2,6 @@ package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 
 public class RotateShoulder extends Command {
@@ -23,7 +22,7 @@ public class RotateShoulder extends Command {
   }
 
   protected void execute() {
-    
+
   }
 
   protected void interrupted() {

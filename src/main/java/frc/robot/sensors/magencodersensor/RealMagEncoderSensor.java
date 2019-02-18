@@ -43,10 +43,10 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     double error = value - getDistanceTicks();
     initialPosition -= error;
   }
-  
+
   private double getPosition() {
     double ticks = talonSpeedController.getSelectedSensorPosition();
-    if(reverseDirection){
+    if (reverseDirection) {
       ticks *= -1.0;
     }
     return ticks;
