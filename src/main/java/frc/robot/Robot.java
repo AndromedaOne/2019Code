@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
   public static LimitSwitchSensor fullyRetractedArmLimitSwitch;
   public static LimitSwitchSensor fullyExtendedArmLimitSwitch;
   public static LimitSwitchSensor wristLimitSwitchUp;
-  public static LimitSwitchSensor wristLimitSwitchDown;
+  public static LimitSwitchSensor shoulderLimitSwitch;
   public static ShoulderPIDController shoulderPIDController;
   public static ExtendableArmPIDController extendableArmPIDController;
   public static WristPIDController wristPIDController;
@@ -246,14 +246,14 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock wristLimitSwitchUp");
       wristLimitSwitchUp = new MockLimitSwitchSensor();
     }
-    if (conf.hasPath("sensors.wristLimitSwitchDown")) {
-      System.out.println("Using real wristLimitSwitchDown");
-      int wristLimitSwitchDownPort = conf.getInt("sensors.wristLimitSwitchDown.port");
-      wristLimitSwitchDown = new RealLimitSwitchSensor(wristLimitSwitchDownPort, false);
-      wristLimitSwitchDown.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchDown");
+    if (conf.hasPath("sensors.shoulderLimitSwitch")) {
+      System.out.println("Using real shoulderLimitSwitch");
+      int shoulderLimitSwitchPort = conf.getInt("sensors.shoulderLimitSwitch.port");
+      shoulderLimitSwitch = new RealLimitSwitchSensor(shoulderLimitSwitchPort, false);
+      shoulderLimitSwitch.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchDown");
     } else {
-      System.out.println("Using mock wristLimitSwitchDown");
-      wristLimitSwitchDown = new MockLimitSwitchSensor();
+      System.out.println("Using mock shoulderLimitSwitch");
+      shoulderLimitSwitch = new MockLimitSwitchSensor();
     }
     // Check for existance of claw subsystem
     if (conf.hasPath("subsystems.claw")) {
