@@ -7,16 +7,20 @@ import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController
 
 public class ExtendArm extends Command {
 
-  private double encTicks;
+  private double inchesExtension;
 
-  public ExtendArm(double inchesExtension) {
-    this.encTicks = inchesExtension / MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES;
+  public ExtendArm(double inchesExtensionParam) {
+    inchesExtension = inchesExtensionParam;
     requires(Robot.extendableArmAndWrist);
+  }
+  @Override
+  protected void initialize() {
+    ExtendableArmPIDController.getInstance().setSetpoint(inchesExtension);
+    ExtendableArmPIDController.getInstance().enable();
   }
 
   protected void execute() {
-    ExtendableArmPIDController.getInstance().setSetpoint(encTicks);
-    ExtendableArmPIDController.getInstance().enable();
+    
   }
 
   @Override
@@ -30,7 +34,7 @@ public class ExtendArm extends Command {
 
   @Override
   protected boolean isFinished() {
-    return !ExtendableArmPIDController.getInstance().isEnabled();
+    return !ExtendableArmPIDController.getInstance().isEnabled() || ExtendableArmPIDController.getInstance().onTarget();
   }
 
 }
