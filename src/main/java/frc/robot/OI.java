@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
 import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
 import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
@@ -55,9 +56,6 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-  // Drive Controller and Buttons
-  Joystick driveController;
-
   // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
@@ -66,6 +64,10 @@ public class OI {
 
   private POVButton intakeUp;
   private POVButton intakeDown;
+  private JoystickButton turnToNorth;
+  private JoystickButton turnToEast;
+  private JoystickButton turnToSouth;
+  private JoystickButton turnToWest;
 
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
@@ -75,6 +77,15 @@ public class OI {
     // Claw buttons are temp until I figure out the D-Pad
     openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
     closeClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
+
+    turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
+    turnToNorth.whenPressed(new TurnToCompassHeading(0));
+    turnToEast = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
+    turnToEast.whenPressed(new TurnToCompassHeading(90));
+    turnToSouth = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
+    turnToSouth.whenPressed(new TurnToCompassHeading(180));
+    turnToWest = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
+    turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
@@ -93,11 +104,11 @@ public class OI {
   }
 
   // Controllers
-  protected Joystick driveStick = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick driveController = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController = Robot.operatorController;
 
   public Joystick getDriveStick() {
-    return driveStick;
+    return driveController;
   }
 
   public Joystick getOperatorStick() {
