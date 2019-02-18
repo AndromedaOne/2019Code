@@ -40,15 +40,17 @@ public class MoveArmAndWristSafely {
     double wristRotDeg = getWristRotDegrees(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
     double shoulderRotDeg = getShoulderRotDeg(shoulderTicks);
 
-    double extensionVelocityConversion = getExtensionIn(Robot.topArmExtensionEncoder.getVelocity(), Robot.bottomArmExtensionEncoder.getVelocity());
-    double wristRotVelocityConversion = getWristRotDegrees(Robot.topArmExtensionEncoder.getVelocity(), Robot.bottomArmExtensionEncoder.getVelocity());
+    double extensionVelocityConversion = getExtensionIn(Robot.topArmExtensionEncoder.getVelocity(),
+        Robot.bottomArmExtensionEncoder.getVelocity());
+    double wristRotVelocityConversion = getWristRotDegrees(Robot.topArmExtensionEncoder.getVelocity(),
+        Robot.bottomArmExtensionEncoder.getVelocity());
     double shoulderRotVelocityConversion = getShoulderRotDeg(Robot.shoulderEncoder.getVelocity());
-    
-    // multiplying by 1.1 to try to look into the future and see where the 
+
+    // multiplying by 1.1 to try to look into the future and see where the
     // deltaExtension can be if speed is increasing
-    double deltaExtension = extensionIn + extensionVelocityConversion * deltaTime*1.1;
-    double deltaWristRot = wristRotDeg + wristRotVelocityConversion * deltaTime*1.1;
-    double deltaShoulderRot = shoulderRotDeg + shoulderRotVelocityConversion * deltaTime*1.1;
+    double deltaExtension = extensionIn + extensionVelocityConversion * deltaTime * 1.1;
+    double deltaWristRot = wristRotDeg + wristRotVelocityConversion * deltaTime * 1.1;
+    double deltaShoulderRot = shoulderRotDeg + shoulderRotVelocityConversion * deltaTime * 1.1;
 
     if (dontUsePidHold != DontUsePIDHold.SHOULDER) {
       if (Math.abs(shoulderRotVelocity) <= 0.2) {
@@ -127,21 +129,21 @@ public class MoveArmAndWristSafely {
       }
     }
 
-    if(Robot.shoulderLimitSwitch.isAtLimit()) {
-      if(shoulderRotDeg > 0) {
-        //shoulderRotDeg = maxShoulderRotDegrees;
-        
-        //Robot.armRotateEncoder1.resetTo(maxShoulderRotDegrees/SHOULDERTICKSTODEGRESS);
-        //if (shoulderRotVelocity > 0) {
-        //  shoulderRotVelocity = 0;
-        //}
-      }else {
-        //shoulderRotDeg = -maxShoulderRotDegrees;
-        
-        //Robot.armRotateEncoder1.resetTo(-maxShoulderRotDegrees/SHOULDERTICKSTODEGRESS);
-        //if (shoulderRotVelocity < 0) {
-        //  shoulderRotVelocity = 0;
-        //}
+    if (Robot.shoulderLimitSwitch.isAtLimit()) {
+      if (shoulderRotDeg > 0) {
+        // shoulderRotDeg = maxShoulderRotDegrees;
+
+        // Robot.armRotateEncoder1.resetTo(maxShoulderRotDegrees/SHOULDERTICKSTODEGRESS);
+        // if (shoulderRotVelocity > 0) {
+        // shoulderRotVelocity = 0;
+        // }
+      } else {
+        // shoulderRotDeg = -maxShoulderRotDegrees;
+
+        // Robot.armRotateEncoder1.resetTo(-maxShoulderRotDegrees/SHOULDERTICKSTODEGRESS);
+        // if (shoulderRotVelocity < 0) {
+        // shoulderRotVelocity = 0;
+        // }
       }
     }
 

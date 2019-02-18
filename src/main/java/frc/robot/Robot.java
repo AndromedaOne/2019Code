@@ -106,9 +106,9 @@ public class Robot extends TimedRobot {
   public static ShoulderPIDController shoulderPIDController;
   public static ExtendableArmPIDController extendableArmPIDController;
   public static WristPIDController wristPIDController;
-  private static final double absoluteShoulderPositionError = 0.0;
-  private static final double absoluteWristPositionError = 0.0;
-  private static final double absoluteArmPositionError = 0.0;
+  private static double absoluteShoulderPositionError = 0.0;
+  private static double absoluteWristPositionError = 0.0;
+  private static double absoluteArmPositionError = 0.0;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -153,24 +153,34 @@ public class Robot extends TimedRobot {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
 
-      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon(),
-          false);
+      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon(), false,
+          true);
 
       bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon(),
-          false);
+          false, true);
 
-      shoulderEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true);
+      shoulderEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true, true);
 
-      double shoulderEncoderAbsolutePositionTicks = shoulderEncoder.getAbsolutePosition();
-      double shoulderEncoderAbsouletPositionDegrees = shoulderEncoderAbsolutePositionTicks* MoveArmAndWristSafely.SHOULDERTICKSTODEGREES;
-      double initialShoulderPos = shoulderEncoderAbsouletPositionDegrees % 360.0;
+      absoluteShoulderPositionError = conf.getDouble("subsystems.armAndWrist.absoluteShoulderPositionError");
+      absoluteWristPositionError = conf.getDouble("subsystems.armAndWrist.absoluteWristPositionError");
+      absoluteArmPositionError = conf.getDouble("subsystems.armAndWrist.absoluteArmPositionError");
+
+      double shoulderEncoderAbsolutePositionTicks = shoulderEncoder.getDistanceTicks();
+      double initialShoulderPos = MoveArmAndWristSafely.getShoulderRotDeg(shoulderEncoderAbsolutePositionTicks);
+      System.out.println("initialShoulderPos: " + initialShoulderPos);
+
       initialShoulderPos -= absoluteShoulderPositionError;
 
-      double topArmExtensionEncoderAbsoluteTicks = topArmExtensionEncoder.getAbsolutePosition();
-      double bottomArmExtensionEncoderAbsoluteTicks = bottomArmExtensionEncoder.getAbsolutePosition();
+      double topArmExtensionEncoderAbsoluteTicks = topArmExtensionEncoder.getDistanceTicks();
+      double bottomArmExtensionEncoderAbsoluteTicks = bottomArmExtensionEncoder.getDistanceTicks();
 
-      double initialWristPos = MoveArmAndWristSafely.getWristRotDegrees(topArmExtensionEncoderAbsoluteTicks, bottomArmExtensionEncoderAbsoluteTicks) % 360;
-      double initialArmExtension = MoveArmAndWristSafely.getExtensionIn(topArmExtensionEncoderAbsoluteTicks, bottomArmExtensionEncoderAbsoluteTicks) % MoveArmAndWristSafely.maxExtensionInches;
+      double initialWristPos = MoveArmAndWristSafely.getWristRotDegrees(topArmExtensionEncoderAbsoluteTicks,
+          bottomArmExtensionEncoderAbsoluteTicks);
+      double initialArmExtension = MoveArmAndWristSafely.getExtensionIn(topArmExtensionEncoderAbsoluteTicks,
+          bottomArmExtensionEncoderAbsoluteTicks);
+
+      System.out.println("initialWristPos: " + initialWristPos);
+      System.out.println("initialArmExtension: " + initialArmExtension);
 
       initialWristPos -= absoluteWristPositionError;
       initialArmExtension -= absoluteArmPositionError;
@@ -190,7 +200,7 @@ public class Robot extends TimedRobot {
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
     if (conf.hasPath("sensors.drivetrainEncoders")) {
-      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false);
+      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false);
     } else {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }

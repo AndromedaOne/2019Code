@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class RealMagEncoderSensor extends MagEncoderSensor {
   private WPI_TalonSRX talonSpeedController;
   private double initialPosition = 0;
-  boolean reverseDirection = false;
 
   /**
    * Sets the talonSpeedController talon to the talon passed in, configures the
@@ -15,11 +14,14 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
    * 
    * @param talon Talon object to attach encoder to
    */
-  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam) {
-    reverseDirection = reverseDirectionParam;
+  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam, boolean useAbsoluteReadings) {
     talonSpeedController = talon;
-    talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-    talon.setSensorPhase(true); /* keep sensor and motor in phase */
+    if (!useAbsoluteReadings) {
+      talonSpeedController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+    } else {
+      talonSpeedController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
+    }
+    talonSpeedController.setSensorPhase(!reverseDirectionParam); /* keep sensor and motor in phase */
   }
 
   @Override
@@ -46,29 +48,14 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
 
   private double getPosition() {
     double ticks = talonSpeedController.getSelectedSensorPosition();
-    if (reverseDirection) {
-      ticks *= -1.0;
-    }
     return ticks;
   }
 
   @Override
   public double getVelocity() {
     // multiply by ten to get the velocity in ticks per second
-    double velocity = talonSpeedController.getSelectedSensorVelocity()*10;
-    if(reverseDirection) {
-      velocity *=-1.0;
-    }
+    double velocity = talonSpeedController.getSelectedSensorVelocity() * 10;
     return velocity;
-  }
-
-  @Override
-  public double getAbsolutePosition() {
-    double absolutePosition = talonSpeedController.getSelectedSensorPosition();
-    if(reverseDirection) {
-      absolutePosition *= -1.0;
-    }
-    return absolutePosition;
   }
 
 }

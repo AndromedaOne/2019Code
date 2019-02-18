@@ -21,7 +21,7 @@ public class WristPIDController extends PIDControllerBase {
 
   private WristPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0.0;//2.0 * Math.pow(10, -4);
+    super.p = 0.0;// 2.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
     super.outputRange = 0.5;

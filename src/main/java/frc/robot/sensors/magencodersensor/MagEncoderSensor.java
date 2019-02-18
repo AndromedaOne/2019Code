@@ -12,11 +12,6 @@ public abstract class MagEncoderSensor extends SensorBase implements PIDSource {
   public abstract double getDistanceTicks();
 
   /**
-   * @return the distance in ticks that the MagEncoder has traveled
-   */
-  public abstract double getAbsolutePosition();
-
-  /**
    * @return the velocity of the MagEncoder in ticks per second
    */
   public abstract double getVelocity();

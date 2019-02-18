@@ -150,7 +150,7 @@ public class PIDMultiton {
     return pidController.getSetpoint();
   }
 
-  public void setPIDTerms(double p, double i, double d){
+  public void setPIDTerms(double p, double i, double d) {
     pidController.setP(p);
     pidController.setD(d);
     pidController.setI(i);
