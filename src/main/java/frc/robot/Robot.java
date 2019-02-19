@@ -266,7 +266,7 @@ public class Robot extends TimedRobot {
     System.out.println("This is " + getName() + ".");
     driveController = new Joystick(0);
 
-    if(conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
+    if (conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
       frontLineSensor4905 = new LineSensor4905();
     }
 

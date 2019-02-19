@@ -24,7 +24,6 @@ public abstract class LineFollowerSensorBase {
   protected int[] sensorReadingBuffer;
   private boolean sensorsReadLeftToRight = true;
 
-
   protected LineFollowerSensorBase(String sensorConfigName) {
     detectionThreshold = lineConf.getInt(sensorConfigName + ".detectionThreshold");
     distanceToSensor = lineConf.getInt(sensorConfigName + ".distanceToSensor");
@@ -84,10 +83,10 @@ public abstract class LineFollowerSensorBase {
     // Get the number of sensors on each side of the center
     if (isEven(numSensors)) {
       int halfNumSensors = numSensors / 2;
-      double sensorsOffSet = (halfNumSensors * distanceBtSensors)- (distanceBtSensors / 2);
-        distFromSensor = (distanceBtSensors * i) - sensorsOffSet;
-        distFromSensor = sensorsReadLeftToRight ? distFromSensor : -distFromSensor;
-        return distFromSensor;
+      double sensorsOffSet = (halfNumSensors * distanceBtSensors) - (distanceBtSensors / 2);
+      distFromSensor = (distanceBtSensors * i) - sensorsOffSet;
+      distFromSensor = sensorsReadLeftToRight ? distFromSensor : -distFromSensor;
+      return distFromSensor;
     } else {
       // There is no case for an odd number of sensors yet
       System.err.println("ERROR: Line Sensors with an odd number of sensors are not supported");

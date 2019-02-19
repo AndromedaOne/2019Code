@@ -41,12 +41,12 @@ public class RealDriveTrain extends DriveTrain {
 
   private double lowGearMaxSpeed = 1;
   private double highGearMaxSpeed = 1;
-  
+
   private double maxSpeed = lowGearMaxSpeed;
   private final int kLowGearPIDSlot = 0;
   private final int kHighGearPIDSlot = 1;
   private int slotIdx = 0;
-  
+
   /*
    * Implement math according to section 12.4.2 of the TALON SRX Software
    * Reference manual Rev 1.22 Also inspired by
@@ -130,23 +130,23 @@ public class RealDriveTrain extends DriveTrain {
     _talon.setSensorPhase(driveConf.getBoolean(side + "SideSensorInverted"));
 
     /* Config sensor used for Primary PID [Velocity] */
-    
+
     double lowGearP = 0.0;
     double lowGearI = 0.0;
     double lowGearD = 0.0;
     double highGearP = 0.0;
     double highGearI = 0.0;
     double highGearD = 0.0;
-    
+
     lowGearMaxSpeed = readPIDConfigItem(driveConf, side, "LowGearMaxSpeed", 1);
-    lowGearP        = readPIDConfigItem(driveConf, side, "LowGearP", 0);
-    lowGearI        = readPIDConfigItem(driveConf, side, "LowGearI", 0);
-    lowGearD        = readPIDConfigItem(driveConf, side, "LowGearD", 0);
+    lowGearP = readPIDConfigItem(driveConf, side, "LowGearP", 0);
+    lowGearI = readPIDConfigItem(driveConf, side, "LowGearI", 0);
+    lowGearD = readPIDConfigItem(driveConf, side, "LowGearD", 0);
 
     highGearMaxSpeed = readPIDConfigItem(driveConf, side, "HighGearMaxSpeed", 1);
-    highGearP        = readPIDConfigItem(driveConf, side, "HighGearP", 0);
-    highGearI        = readPIDConfigItem(driveConf, side, "HighGearI", 0);
-    highGearD        = readPIDConfigItem(driveConf, side, "HighGearD", 0);
+    highGearP = readPIDConfigItem(driveConf, side, "HighGearP", 0);
+    highGearI = readPIDConfigItem(driveConf, side, "HighGearI", 0);
+    highGearD = readPIDConfigItem(driveConf, side, "HighGearD", 0);
 
     _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
     /**
@@ -207,7 +207,6 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
         driveConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
-
 
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {

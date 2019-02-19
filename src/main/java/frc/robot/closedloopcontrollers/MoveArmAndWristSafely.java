@@ -41,7 +41,7 @@ public class MoveArmAndWristSafely {
       shoulderRotVelocity = 0;
 
       if (!pidSetpointSet) {
-        System.out.println("Enabling PID");
+        // System.out.println("Enabling PID");
         Robot.shoulderPIDController.setSetpoint(shoulderTicks);
         Robot.shoulderPIDController.enable();
       }
@@ -49,7 +49,7 @@ public class MoveArmAndWristSafely {
       pidSetpointSet = true;
     } else {
       pidSetpointSet = false;
-      System.out.println("Disabling");
+      // System.out.println("Disabling");
       Robot.shoulderPIDController.disable();
       Robot.shoulderPIDController.reset();
     }

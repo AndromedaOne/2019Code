@@ -8,9 +8,10 @@ public class LineFollowerController {
   private MoveDrivetrainGyroCorrect gyroCorrectMove;
   private LineFollowerSensorBase sensor;
   private LineFollowArraySensorReading values;
-  private final double kMinimumLineAngle = Math.toRadians(10);
-  private final double kForwardSpeed = .39;
-  private final double kRotateAmount = .6; // all constants are currently placeholders
+  private final double kMinimumLineAngle = Math.toRadians(2);
+  private final double kForwardSpeed = .1;
+  private final double kRotateScaleFactor = .5; // all constants are currently placeholders
+  private int lineNotFoundCounter = 0;
 
   public LineFollowerController(MoveDrivetrainGyroCorrect theGyroCorrectMove,
       LineFollowerSensorBase lineFollowerSensorArray) {
@@ -24,16 +25,22 @@ public class LineFollowerController {
     SmartDashboard.putBoolean("IsLineFound", values.lineFound);
     SmartDashboard.putNumber("Angle", values.lineAngle);
     if (values.lineFound) {
-      System.out.println("I FOUND A LINE!! :D");
+      lineNotFoundCounter = 0;
+      // System.out.println("I FOUND A LINE!! :D");
       if (values.lineAngle <= -kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateAmount, true, false);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);
       } else if (values.lineAngle >= kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, -kRotateAmount, true, false);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);
       } else {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, false, false);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, true, false);
       }
     } else {
-      gyroCorrectMove.stop();
+      lineNotFoundCounter++;
+      if (lineNotFoundCounter >= 10) {
+        gyroCorrectMove.stop();
+      } else {
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, true, false);
+      }
     }
 
   }
@@ -52,7 +59,12 @@ public class LineFollowerController {
   }
 
   public boolean isDone() {
-    return false;
+    if (lineNotFoundCounter >= 10) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   public void enable(double setpoint) {
