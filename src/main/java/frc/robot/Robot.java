@@ -380,6 +380,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
+    MoveArmAndWristSafely.stop();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -408,6 +409,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    MoveArmAndWristSafely.stop();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -423,6 +425,11 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
   }
 
+  @Override
+  public void testInit() {
+    MoveArmAndWristSafely.stop();
+    super.testInit();
+  }
   /**
    * This function is called periodically during test mode.
    */
