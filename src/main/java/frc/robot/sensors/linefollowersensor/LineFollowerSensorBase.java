@@ -14,6 +14,7 @@ public abstract class LineFollowerSensorBase {
   private LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
   private GetSensorData sensorDataThread;
   private double currentDistanceFromCenter = 0;
+  private double currentLineFoundSensor = 0;
   // Default Distance to sensor array in centimetres
   protected double distanceToSensor;
   // Distance between sensors in centimetres
@@ -78,13 +79,13 @@ public abstract class LineFollowerSensorBase {
    * Gets the distance from the center of the sensor (assuming 0 is the leftmost
    * sensor and there are an even number of sensors)
    */
-  private double calculateDistanceFromCenter(int i) {
+  private double calculateDistanceFromCenter(double sensor) {
     double distFromSensor;
     // Get the number of sensors on each side of the center
     if (isEven(numSensors)) {
       int halfNumSensors = numSensors / 2;
       double sensorsOffSet = (halfNumSensors * distanceBtSensors) - (distanceBtSensors / 2);
-      distFromSensor = (distanceBtSensors * i) - sensorsOffSet;
+      distFromSensor = (distanceBtSensors * sensor) - sensorsOffSet;
       distFromSensor = sensorsReadLeftToRight ? distFromSensor : -distFromSensor;
       return distFromSensor;
     } else {
@@ -99,33 +100,28 @@ public abstract class LineFollowerSensorBase {
     return angle;
   }
 
-  private boolean isThereLine() {
-    boolean[] lineArray = getLinePositionArray();
-    for (int i = 0; i < sensorReadingBuffer.length; i++) {
-      if (lineArray[i]) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   /**
-   * @return An array of booleans for each sensor in the sensor array where true
-   * means that a line was detected and false means that a line wasn't detected
+   * This function also records which sensor sees a line, which is important in
+   * calculating a line angle. So you must call this to get an accurate angle from center
+   * @return This will return a boolean stating wether or not we are detecting a line
    * @author Owen Salter & Devin C
    */
-  private boolean[] getLinePositionArray() {
-    boolean[] boolBuf = new boolean[sensorReadingBuffer.length];
+  private boolean isThereLine() {
+    int highestValue = sensorReadingBuffer[0];
+    int savedIndex = 0;
+    double lineFoundSensor = 0;
 
-    for (int i = 0; i < sensorReadingBuffer.length; i++) {
-      if (sensorReadingBuffer[i] >= detectionThreshold) {
-        currentDistanceFromCenter = calculateDistanceFromCenter(i);
-        boolBuf[i] = true;
-      } else {
-        boolBuf[i] = false;
+    for (int i = 1; i < sensorReadingBuffer.length; i++) {
+      if(sensorReadingBuffer[i] > highestValue) {
+        highestValue = sensorReadingBuffer[i];
+        savedIndex = i;
+        lineFoundSensor = savedIndex;
+      } else if(sensorReadingBuffer[i] == highestValue) {
+        lineFoundSensor = (savedIndex + i) / 2;
       }
     }
-    return boolBuf;
+    currentDistanceFromCenter = calculateDistanceFromCenter(lineFoundSensor);
+    return highestValue >= detectionThreshold;
   }
 
   /**
