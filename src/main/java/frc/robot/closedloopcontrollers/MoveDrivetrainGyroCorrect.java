@@ -25,6 +25,7 @@ public class MoveDrivetrainGyroCorrect {
 
   public void stop() {
     moveUsingGyro(0, 0, false, false);
+    currentDelay = 0;
   }
 
   /**
