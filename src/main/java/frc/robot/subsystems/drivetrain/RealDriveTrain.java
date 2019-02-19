@@ -37,6 +37,27 @@ public class RealDriveTrain extends DriveTrain {
     return shifterPresentFlag;
   }
 
+  public RealDriveTrain() {
+    Config conf = Robot.getConfig();
+    Config driveConf = conf.getConfig("ports.driveTrain");
+    driveTrainLeftMaster = initTalonMaster(driveConf, "left");
+    driveTrainLeftSlave = initTalonSlave(driveConf, "leftSlave", driveTrainLeftMaster,
+        driveConf.getBoolean("leftSideInverted"));
+    driveTrainRightMaster = initTalonMaster(driveConf, "right");
+    driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
+        driveConf.getBoolean("rightSideInverted"));
+    differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
+
+    // Gear Shift Solenoid
+    if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
+      shifterPresentFlag = true;
+      shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
+          driveConf.getInt("pneumatics.backwardsChannel"));
+    }
+    shiftToLowGear();
+    setVelocityMode();
+  }
+
   private final int kTimeoutMs = 30;
 
   private double lowGearMaxSpeed = 1;
@@ -196,26 +217,7 @@ public class RealDriveTrain extends DriveTrain {
 
   @Override
   public void initDefaultCommand() {
-
-    Config conf = Robot.getConfig();
-    Config driveConf = conf.getConfig("ports.driveTrain");
     setDefaultCommand(new TeleOpDrive());
-    driveTrainLeftMaster = initTalonMaster(driveConf, "left");
-    driveTrainLeftSlave = initTalonSlave(driveConf, "leftSlave", driveTrainLeftMaster,
-        driveConf.getBoolean("leftSideInverted"));
-    driveTrainRightMaster = initTalonMaster(driveConf, "right");
-    driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
-        driveConf.getBoolean("rightSideInverted"));
-    differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
-
-    // Gear Shift Solenoid
-    if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
-      shifterPresentFlag = true;
-      shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
-          driveConf.getInt("pneumatics.backwardsChannel"));
-    }
-    shiftToLowGear();
-    setVelocityMode();
   }
 
   @Override
@@ -236,6 +238,9 @@ public class RealDriveTrain extends DriveTrain {
 
   private void logMeasurements(String side, WPI_TalonSRX _talon, double targetVelocity, boolean doneMeasuring) {
     /* Get Talon/Victor's current output percentage */
+    if (_talon == null) {
+      System.out.println("TALON IS NULL!!! ");
+    }
     double motorOutput = _talon.getMotorOutputPercent();
     Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),

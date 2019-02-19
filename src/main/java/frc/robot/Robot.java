@@ -26,7 +26,9 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
@@ -67,6 +69,7 @@ import frc.robot.telemetries.Trace;
  * project.
  */
 public class Robot extends TimedRobot {
+  private boolean robotInitDone = false;
   public static Compressor compressor;
   public static Joystick driveController;
   public static Joystick operatorController;
@@ -89,14 +92,19 @@ public class Robot extends TimedRobot {
 
   public static InfraredDistanceSensor clawInfraredSensor;
   public static LineFollowerSensorBase frontLineSensor4905;
-  public static MagEncoderSensor armExtensionEncoder1;
-  public static MagEncoderSensor armExtensionEncoder2;
-  public static MagEncoderSensor armRotateEncoder1;
+  public static MagEncoderSensor topArmExtensionEncoder;
+  public static MagEncoderSensor bottomArmExtensionEncoder;
+  public static MagEncoderSensor shoulderEncoder;
   public static LimitSwitchSensor fullyRetractedArmLimitSwitch;
   public static LimitSwitchSensor fullyExtendedArmLimitSwitch;
   public static LimitSwitchSensor wristLimitSwitchUp;
-  public static LimitSwitchSensor wristLimitSwitchDown;
+  public static LimitSwitchSensor shoulderLimitSwitch;
   public static ShoulderPIDController shoulderPIDController;
+  public static ExtendableArmPIDController extendableArmPIDController;
+  public static WristPIDController wristPIDController;
+  public static double absoluteShoulderPositionError = 0.0;
+  public static double absoluteWristPositionError = 0.0;
+  public static double absoluteArmPositionError = 0.0;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -140,31 +148,44 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.armAndWrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
-      RealExtendableArmAndWrist rExtendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
 
-      armExtensionEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getTopExtendableArmAndWristTalon());
+      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon(), false,
+          true);
 
-      armExtensionEncoder2 = new RealMagEncoderSensor(rExtendableArmAndWrist.getBottomExtendableArmAndWristTalon());
+      bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon(),
+          false, true);
 
-      armRotateEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getShoulderJointTalon());
-      armRotateEncoder1.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
-      double initialWristPos = -7;
-      double initialArmExtension = 99;
-      armExtensionEncoder1.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
-          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
-      armExtensionEncoder2.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
-          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      shoulderEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true, true);
+
+      absoluteShoulderPositionError = conf.getDouble("subsystems.armAndWrist.absoluteShoulderPositionError");
+      absoluteWristPositionError = conf.getDouble("subsystems.armAndWrist.absoluteWristPositionError");
+      absoluteArmPositionError = conf.getDouble("subsystems.armAndWrist.absoluteExtensionPositionError");
+
+      double initialShoulderPos = -169;
+
+      double initialWristPos = 100;
+      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;
+
+      // shoulderEncoder.resetTo(initialShoulderPos /
+      // MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
+
+      // topArmExtensionEncoder.resetTo((initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      // bottomArmExtensionEncoder.resetTo((-initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
-      armExtensionEncoder1 = new MockMagEncoderSensor();
+      topArmExtensionEncoder = new MockMagEncoderSensor();
 
-      armExtensionEncoder2 = new MockMagEncoderSensor();
+      bottomArmExtensionEncoder = new MockMagEncoderSensor();
 
-      armRotateEncoder1 = new MockMagEncoderSensor();
+      shoulderEncoder = new MockMagEncoderSensor();
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
     if (conf.hasPath("sensors.drivetrainEncoders")) {
-      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon());
+      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false);
     } else {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
@@ -236,14 +257,14 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock wristLimitSwitchUp");
       wristLimitSwitchUp = new MockLimitSwitchSensor();
     }
-    if (conf.hasPath("sensors.wristLimitSwitchDown")) {
-      System.out.println("Using real wristLimitSwitchDown");
-      int wristLimitSwitchDownPort = conf.getInt("sensors.wristLimitSwitchDown.port");
-      wristLimitSwitchDown = new RealLimitSwitchSensor(wristLimitSwitchDownPort, false);
-      wristLimitSwitchDown.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchDown");
+    if (conf.hasPath("sensors.shoulderLimitSwitch")) {
+      System.out.println("Using real shoulderLimitSwitch");
+      int shoulderLimitSwitchPort = conf.getInt("sensors.shoulderLimitSwitch.port");
+      shoulderLimitSwitch = new RealLimitSwitchSensor(shoulderLimitSwitchPort, false);
+      shoulderLimitSwitch.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchDown");
     } else {
-      System.out.println("Using mock wristLimitSwitchDown");
-      wristLimitSwitchDown = new MockLimitSwitchSensor();
+      System.out.println("Using mock shoulderLimitSwitch");
+      shoulderLimitSwitch = new MockLimitSwitchSensor();
     }
     // Check for existance of claw subsystem
     if (conf.hasPath("subsystems.claw")) {
@@ -271,8 +292,9 @@ public class Robot extends TimedRobot {
     }
 
     // Creates first instance to put onto live window
-    ExtendableArmPIDController.getInstance();
     shoulderPIDController = ShoulderPIDController.getInstance();
+    extendableArmPIDController = ExtendableArmPIDController.getInstance();
+    wristPIDController = WristPIDController.getInstance();
 
     // Camera Code
     if (conf.hasPath("cameras")) {
@@ -289,6 +311,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
+    robotInitDone = true;
   }
 
   /**
@@ -313,11 +336,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    if (robotInitDone) {
+      PIDMultiton.resetDisableAll();
+    }
     Trace.getInstance().flushTraceFiles();
   }
 
   @Override
   public void disabledPeriodic() {
+    double topEncoderTicks = topArmExtensionEncoder.getDistanceTicks();
+    double bottomEncoderTicks = bottomArmExtensionEncoder.getDistanceTicks();
     Scheduler.getInstance().run();
     // System.out.println("Gyro reading: " +
     // NavXGyroSensor.getInstance().getZAngle());
@@ -339,6 +367,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
+    MoveArmAndWristSafely.stop();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -367,6 +396,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    MoveArmAndWristSafely.stop();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -380,6 +410,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+  }
+
+  @Override
+  public void testInit() {
+    MoveArmAndWristSafely.stop();
+    super.testInit();
   }
 
   /**

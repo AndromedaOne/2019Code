@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
-import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -15,23 +14,23 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private static ExtendableArmPIDController instance;
   private static ArmPIDOut armPIDOut;
   private static ArmPIDSource armPIDSource;
-  private final MagEncoderSensor armEncoder1;
-  private final MagEncoderSensor armEncoder2;
+  private final MagEncoderSensor topArmEncoder;
+  private final MagEncoderSensor bottomArmEncoder;
 
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0;
+    super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
     super.subsytemName = "Extendable Arm and Wrist";
-    super.pidName = "Arm Extension";
+    super.pidName = "Extension";
 
-    armEncoder1 = Robot.armExtensionEncoder1;
-    armEncoder2 = Robot.armExtensionEncoder2;
+    topArmEncoder = Robot.topArmExtensionEncoder;
+    bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     super.trace = Trace.getInstance();
     armPIDSource = new ArmPIDSource();
-    armEncoder1.putSensorOnLiveWindow(super.subsytemName, "ArmEncoder1");
-    armEncoder2.putSensorOnLiveWindow(super.subsytemName, "ArmEncoder2");
+    topArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionTopEncoder");
+    bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionBottomEncoder");
     armPIDOut = new ArmPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, super.pidConfiguration);
@@ -47,14 +46,17 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Arm PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("Extension 1", armPIDSource.pidGet()));
-      try {
-        MoveArmAndWristSafely.move(output, 0, 0);
-      } catch (ArmOutOfBoundsException e) {
-        System.out.println(e.getMessage());
-        container.disable();
-      }
+      trace.addTrace(true, "ExtensionPID", new TracePair("Output", output),
+          new TracePair("SetpointTicks", pidMultiton.getSetpoint()),
+          new TracePair("SetpointInches", pidMultiton.getSetpoint() * MoveArmAndWristSafely.EXTENSIONINCHESPERTICK),
+          new TracePair("ExtensionTicks", armPIDSource.pidGet()),
+          new TracePair("ExtensionInches", armPIDSource.pidGet() * MoveArmAndWristSafely.EXTENSIONINCHESPERTICK));
+      // try {
+      MoveArmAndWristSafely.setPidExtensionPower(output);
+      // } catch (ArmOutOfBoundsException e) {
+      // System.out.println(e.getMessage());
+      // container.disable();
+      // }
     }
   }
 
@@ -88,10 +90,16 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double average = (armEncoder1.pidGet() + armEncoder2.pidGet()) / 2;
-      return average;
+      double extensionInches = MoveArmAndWristSafely.getExtensionIn(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
+      double extensionTicks = extensionInches / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
+      return extensionTicks;
     }
 
+  }
+
+  @Override
+  public void setSetpoint(double setpoint) {
+    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK);
   }
 
 }

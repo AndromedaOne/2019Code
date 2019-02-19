@@ -2,23 +2,27 @@ package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 
 public class RotateShoulder extends Command {
 
-  private double encTicks;
+  private double encDegrees;
   ShoulderPIDController sPidController;
 
   public RotateShoulder(double angle) {
     requires(Robot.extendableArmAndWrist);
-    this.encTicks = angle / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS;
+    encDegrees = angle;
     sPidController = ShoulderPIDController.getInstance();
   }
 
-  protected void execute() {
-    sPidController.setSetpoint(encTicks);
+  @Override
+  protected void initialize() {
+    sPidController.setSetpoint(encDegrees);
     sPidController.enable();
+  }
+
+  protected void execute() {
+
   }
 
   protected void interrupted() {
@@ -31,7 +35,7 @@ public class RotateShoulder extends Command {
 
   @Override
   protected boolean isFinished() {
-    return !sPidController.isEnabled();
+    return !sPidController.isEnabled() || sPidController.onTarget();
   }
 
 }

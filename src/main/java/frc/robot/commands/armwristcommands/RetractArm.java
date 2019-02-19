@@ -2,21 +2,25 @@ package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 
-public class ExtendArm extends Command {
+public class RetractArm extends Command {
 
-  private double encTicks;
+  private double inchesExtension;
 
-  public ExtendArm(double inchesExtension) {
-    this.encTicks = inchesExtension / MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES;
+  public RetractArm(double inchesExtensionParam) {
+    inchesExtension = inchesExtensionParam;
     requires(Robot.extendableArmAndWrist);
   }
 
-  protected void execute() {
-    ExtendableArmPIDController.getInstance().setSetpoint(encTicks);
+  @Override
+  protected void initialize() {
+    ExtendableArmPIDController.getInstance().setSetpoint(inchesExtension);
     ExtendableArmPIDController.getInstance().enable();
+  }
+
+  protected void execute() {
+
   }
 
   @Override
@@ -30,7 +34,7 @@ public class ExtendArm extends Command {
 
   @Override
   protected boolean isFinished() {
-    return !ExtendableArmPIDController.getInstance().isEnabled();
+    return !ExtendableArmPIDController.getInstance().isEnabled() || ExtendableArmPIDController.getInstance().onTarget();
   }
 
 }

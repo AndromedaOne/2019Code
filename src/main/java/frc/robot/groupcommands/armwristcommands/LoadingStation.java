@@ -1,24 +1,30 @@
 package frc.robot.groupcommands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.armwristcommands.ExtendArm;
+import frc.robot.commands.armwristcommands.RetractArm;
 import frc.robot.commands.armwristcommands.RotateShoulder;
 import frc.robot.commands.armwristcommands.RotateWrist;
 
 public class LoadingStation extends CommandGroup {
 
-  public LoadingStation(boolean positiveWrist, boolean sameSidePlacement) {
-    double directionFactor = positiveWrist ? 1 : -1;
+  private final double shoulderPosition = 11.75;
+  private final double wristPosition = 122.11;
+  private final double extensionPosition = 26.75;
 
+  public LoadingStation(boolean positiveWristCurently, boolean sameSidePlacement, double shoulderAngle) {
+    double directionFactor = positiveWristCurently ? 1 : -1;
+    boolean positiveWristDestination = (-95.5 * directionFactor) > 0 ? true : false;
+    positiveWristDestination = sameSidePlacement ? positiveWristDestination : !positiveWristDestination;
+
+    addSequential(new TuckArm(shoulderAngle, positiveWristDestination));
     if (sameSidePlacement) {
-      addSequential(new RotateWrist(122.11 * directionFactor));
-      addSequential(new ExtendArm(26.75));
-      addSequential(new RotateShoulder(11.75 * directionFactor));
+      addSequential(new RotateShoulder(shoulderPosition * directionFactor));
+      addSequential(new RotateWrist(wristPosition * directionFactor));
+      addSequential(new RetractArm(extensionPosition));
     } else {
-      addSequential(new ExtendArm(20.0));
-      addSequential(new RotateWrist(122.11 * -directionFactor));
-      addSequential(new ExtendArm(26.75));
-      addSequential(new RotateShoulder(11.75 * -directionFactor));
+      addSequential(new RotateShoulder(-shoulderPosition * directionFactor));
+      addSequential(new RotateWrist(-wristPosition * directionFactor));
+      addSequential(new RetractArm(extensionPosition));
     }
   }
 }

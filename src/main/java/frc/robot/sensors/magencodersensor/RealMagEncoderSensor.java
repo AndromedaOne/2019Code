@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class RealMagEncoderSensor extends MagEncoderSensor {
   private WPI_TalonSRX talonSpeedController;
-  private double initialPosition = 0;;
+  private double initialPosition = 0;
 
   /**
    * Sets the talonSpeedController talon to the talon passed in, configures the
@@ -14,15 +14,19 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
    * 
    * @param talon Talon object to attach encoder to
    */
-  public RealMagEncoderSensor(WPI_TalonSRX talon) {
+  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam, boolean useAbsoluteReadings) {
     talonSpeedController = talon;
-    talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-    talon.setSensorPhase(true); /* keep sensor and motor in phase */
+    if (!useAbsoluteReadings) {
+      talonSpeedController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+    } else {
+      talonSpeedController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
+    }
+    talonSpeedController.setSensorPhase(!reverseDirectionParam); /* keep sensor and motor in phase */
   }
 
   @Override
   public double getDistanceTicks() {
-    double ticks = talonSpeedController.getSelectedSensorPosition();
+    double ticks = getPosition();
     return ticks - initialPosition;
   }
 
@@ -33,13 +37,25 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
 
   @Override
   public void reset() {
-    initialPosition = talonSpeedController.getSelectedSensorPosition();
+    initialPosition = getPosition();
   }
 
   @Override
   public void resetTo(double value) {
     double error = value - getDistanceTicks();
     initialPosition -= error;
+  }
+
+  private double getPosition() {
+    double ticks = talonSpeedController.getSelectedSensorPosition();
+    return ticks;
+  }
+
+  @Override
+  public double getVelocity() {
+    // multiply by ten to get the velocity in ticks per second
+    double velocity = talonSpeedController.getSelectedSensorVelocity() * 10;
+    return velocity;
   }
 
 }

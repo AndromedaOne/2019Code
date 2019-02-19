@@ -57,7 +57,7 @@ public class MoveDrivetrainGyroCorrect {
      * If we aren't rotating or our delay time is higher than our set Delay do not
      * use gyro correct This allows the robot to rotate naturally after we turn
      */
-    if ((rotation != 0) || (useDelay && !(currentDelay > kDelay))) {
+    if ((rotation != 0) || (useDelay && !(currentDelay > kDelay)) || (forwardBackward == 0.0)) {
       gyroCorrect = false;
       savedAngle = robotAngle;
       currentDelay++;
