@@ -165,11 +165,13 @@ public class RealDriveTrain extends DriveTrain {
     _talon.config_kP(kLowGearPIDSlot, lowGearP, kTimeoutMs);
     _talon.config_kI(kLowGearPIDSlot, lowGearI, kTimeoutMs);
     _talon.config_kD(kLowGearPIDSlot, lowGearD, kTimeoutMs);
+    _talon.config_IntegralZone(kLowGearPIDSlot, 50, kTimeoutMs);
     /* Config the Velocity closed loop gains in slot1 */
     _talon.config_kF(kHighGearPIDSlot, (1023 / highGearMaxSpeed), kTimeoutMs);
     _talon.config_kP(kHighGearPIDSlot, highGearP, kTimeoutMs);
     _talon.config_kI(kHighGearPIDSlot, highGearI, kTimeoutMs);
     _talon.config_kD(kHighGearPIDSlot, highGearD, kTimeoutMs);
+    _talon.config_IntegralZone(kHighGearPIDSlot, 50, kTimeoutMs);
     _talon.configClosedloopRamp(closedLoopNeutralToMaxSpeedSeconds);
     return _talon;
   }
@@ -239,12 +241,12 @@ public class RealDriveTrain extends DriveTrain {
     Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
         new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
-        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)),
-        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()),
-        new TracePair("Current Channel 0", (double) pdp.getCurrent(0)),
-        new TracePair("Current Channel 1", (double) pdp.getCurrent(1)),
-        new TracePair("Current Channel 2", (double) pdp.getCurrent(2)),
-        new TracePair("Current Channel 3", (double) pdp.getCurrent(3)));
+        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
+//        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()),
+//        new TracePair("Current Channel 0", (double) pdp.getCurrent(0)),
+//        new TracePair("Current Channel 1", (double) pdp.getCurrent(1)),
+//        new TracePair("Current Channel 2", (double) pdp.getCurrent(2)),
+//        new TracePair("Current Channel 3", (double) pdp.getCurrent(3)));
   }
 
   public void stop() {
