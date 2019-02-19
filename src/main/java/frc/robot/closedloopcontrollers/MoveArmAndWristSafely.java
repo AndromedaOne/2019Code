@@ -130,8 +130,14 @@ public class MoveArmAndWristSafely {
     mutex.unlock();
     
     double shoulderPower = 0;
+    boolean useTeleopPower = true;
+    try{
+      isMovementSafe(localTeleopExtensionPower,localTeleopWristPower,localTeleopShoulderPower);
+    }catch(ArmOutOfBoundsException a){
+      useTeleopPower = false;
+    }
 
-    if(Math.abs(localTeleopShoulderPower) >= 0.2 && ) {
+    if(Math.abs(localTeleopShoulderPower) >= 0.2 && useTeleopPower) {
       shoulderPower = localTeleopShoulderPower;
       shoulderPIDSetpointSet = false;
     }else {
@@ -141,13 +147,17 @@ public class MoveArmAndWristSafely {
         shoulderPIDSetpointSet = true;
         shoulderPower = 0;
       }else {
-        shoulderPower = localPIDShoulderPower;
+        try{
+          isMovementSafe(0,0,shoulderPower);
+          shoulderPower = localPIDShoulderPower;
+        }catch(ArmOutOfBoundsException a){
+          shoulderPower = 0;
+        }
       }
-  
     }
 
     double wristPower = 0;
-    if(Math.abs(localTeleopWristPower) >= 0.2) {
+    if(Math.abs(localTeleopWristPower) >= 0.2 && useTeleopPower) {
       wristPower = localTeleopWristPower;
       wristPIDSetpointSet = false;
     }else {
@@ -157,12 +167,17 @@ public class MoveArmAndWristSafely {
         wristPIDSetpointSet = true;
         wristPower = 0;
       }else {
-        wristPower = localPIDWristPower;
+        try{
+          isMovementSafe(0,localPIDWristPower,0);
+          wristPower = localPIDWristPower;
+        }catch(ArmOutOfBoundsException a){
+          wristPower = 0;
+        }
       }
     }
 
     double extensionPower = 0;
-    if(Math.abs(localTeleopExtensionPower) >= 0.2) {
+    if(Math.abs(localTeleopExtensionPower) >= 0.2 && useTeleopPower) {
       extensionPower = localTeleopExtensionPower;
       extensionPIDSetpointSet = false;
     }else {
@@ -172,11 +187,16 @@ public class MoveArmAndWristSafely {
         extensionPIDSetpointSet = true;
         extensionPower = 0;
       }else {
-        extensionPower = localPIDExtensionPower;
+        try{
+          isMovementSafe(localPIDExtensionPower,0,0);
+          extensionPower = localPIDExtensionPower;
+        }catch(ArmOutOfBoundsException a){
+          extensionPower = 0;
+        }
       }
     }
 
-    move(extensionPower, wristPower, shoulderPower);
+    Robot.extendableArmAndWrist.moveArmWrist(extensionPower, wristPower, shoulderPower);
   }
   /**
    * @param extensionVelocity
@@ -185,7 +205,8 @@ public class MoveArmAndWristSafely {
    * @throws ArmOutOfBoundsException
    */
 
-  private static void move(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity) {
+  private static void isMovementSafe(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity)
+      throws ArmOutOfBoundsException {
     double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
     double bottomExtensionEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
     double shoulderTicks = Robot.shoulderEncoder.getDistanceTicks();
@@ -215,9 +236,9 @@ public class MoveArmAndWristSafely {
     boolean locationSafe = isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot);
     System.out.println("locationSafe: " + locationSafe);
     if (!isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot)) {
-      // throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg +
-      // deltaWristRot,
-      // shoulderRotDeg + deltaShoulderRot);
+      throw new ArmOutOfBoundsException(extensionIn + deltaExtension, wristRotDeg +
+      deltaWristRot,
+      shoulderRotDeg + deltaShoulderRot);
     }
 
     if (Robot.wristLimitSwitchUp.isAtLimit()) {
@@ -287,7 +308,7 @@ public class MoveArmAndWristSafely {
       }
     }
 
-    Robot.extendableArmAndWrist.moveArmWrist(extensionVelocity, wristRotVelocity, shoulderRotVelocity);
+    
   }
 
   public static boolean isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg) {
