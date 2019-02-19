@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.*;
 
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -70,17 +69,17 @@ public class PIDMultiton {
 
   }
 
-  private PIDController pidController;
+  private PIDController4905 pidController;
   private PIDConfiguration config;
   private PIDName name;
 
   private PIDMultiton(PIDName name, PIDConfiguration config) {
     this.name = name;
     this.config = config;
-    pidController = new PIDController(config.getP(), config.getI(), config.getD(), name.source, name.output);
+    pidController = new PIDController4905(config.getP(), config.getI(), config.getD(), name.source, name.output);
     pidController.setOutputRange(config.getMinimumOutput(), config.getMaximumOutput());
 
-    pidController.setAbsoluteTolerance(config.getAbsoluteTolerance());
+    pidController.setAbsoluteTolerance(config.getAbsoluteTolerance(), 6);
 
     if (config.getLiveWindowName() == config.getPIDName()) {
       config.setLiveWindowName(config.getLiveWindowName() + "Header");
@@ -96,6 +95,7 @@ public class PIDMultiton {
    * @param setpoint Target point
    */
   public void setSetpoint(double setpoint) {
+    pidController.setAbsoluteTolerance(config.getAbsoluteTolerance(), 6);
     pidController.setSetpoint(setpoint);
   }
 
