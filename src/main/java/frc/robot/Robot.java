@@ -15,7 +15,6 @@ import com.typesafe.config.ConfigFactory;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -38,9 +37,8 @@ import frc.robot.sensors.infrareddistancesensor.RealInfraredDistanceSensor;
 import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
-import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
-import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
-import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
+import frc.robot.sensors.linefollowersensor.LineSensor4905;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
@@ -60,7 +58,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
 import frc.robot.telemetries.Trace;
-import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -82,8 +79,7 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
-  public static BaseLineFollowerSensor lineFollowerSensorArray;
-
+  public static LineFollowerSensorBase lineFollowerSensorArray;
   public static Claw claw;
 
   public static MoveDrivetrainGyroCorrect gyroCorrectMove;
@@ -92,7 +88,7 @@ public class Robot extends TimedRobot {
   public static LimitSwitchSensor intakeStowedSwitch;
 
   public static InfraredDistanceSensor clawInfraredSensor;
-
+  public static LineFollowerSensorBase frontLineSensor4905;
   public static MagEncoderSensor armExtensionEncoder1;
   public static MagEncoderSensor armExtensionEncoder2;
   public static MagEncoderSensor armRotateEncoder1;
@@ -269,14 +265,10 @@ public class Robot extends TimedRobot {
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
     driveController = new Joystick(0);
-    I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
-    I2C sunfounderbus = sunfounderdevice.getBus();
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10, 0.5, 8 /* TODO: Change these! */);
 
-    Config senseConf = conf.getConfig("sensors.lineFollowSensor");
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
-        senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
-        senseConf.getInt("numSensors"));
+    if(conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
+      frontLineSensor4905 = new LineSensor4905();
+    }
 
     // Creates first instance to put onto live window
     ExtendableArmPIDController.getInstance();
@@ -292,14 +284,6 @@ public class Robot extends TimedRobot {
       camera0.setFPS(10);
       camera1.setResolution(320, 240);
       camera1.setFPS(10);
-    }
-
-    if (conf.hasPath("sensors.lineFollowSensor")) {
-      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
-          senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
-          senseConf.getInt("numSensors"));
-    } else {
-      lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
     }
 
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
