@@ -18,7 +18,7 @@ public class PIDMultiton {
   }
 
   public static void resetDisableAll() {
-    for(PIDMultiton a : instances.values()) {
+    for (PIDMultiton a : instances.values()) {
       a.disable();
       a.reset();
     }
@@ -143,7 +143,5 @@ public class PIDMultiton {
   private PIDConfiguration gitConfig() {
     return config;
   }
-  
-
 
 }
