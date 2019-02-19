@@ -10,22 +10,21 @@ package frc.robot.sensors.linefollowersensor;
 import java.time.Duration;
 import java.time.Instant;
 
+import com.typesafe.config.Config;
+
 import edu.wpi.first.wpilibj.I2C;
+import frc.robot.Robot;
 
 /**
  * This line sensor is the line sensor that currently uses 8 Pololu sensors
- * Which is read by an Ardruino, then the values are sent to the robo rio via I2C
+ * Which is read by an Ardruino, then the values are sent to the robo rio via
+ * I2C
  */
 public class LineSensor4905 extends LineFollowerSensorBase {
 
   private static I2C i2c = new I2C(I2C.Port.kOnboard, 2);
-  private static final int NUM_SENSORS = 8;
-  // Distance between sensors in centimeters
-  private static final double DIST_BT_SENSORS = 0;
-  // Distance to sensors from center of rotation
-  private static final double DIST_TO_SENSORS = 0;
-  private static final int DETECTION_THRESHOLD = 0;
-  private static final int THREAD_DELAY = 20;
+  private Config lineConf = Robot.getConfig().getConfig("sensors.lineFollowSensor.lineFollowSensor4905");
+  private final int NUM_SENSORS = lineConf.getInt("numSensors");
   private static long averageTime = 0;
   private static int timesAveraged = 50;
   private static long timeAccumulated = 0;
@@ -33,12 +32,14 @@ public class LineSensor4905 extends LineFollowerSensorBase {
   private int averageCounter = 0;
 
   public LineSensor4905() {
-    super(DETECTION_THRESHOLD, DIST_TO_SENSORS, DIST_BT_SENSORS, NUM_SENSORS, THREAD_DELAY);
+    super("lineFollowSensor4905");
+    System.out.println(" - Creating 4905 Line Sensor! - ");
   }
 
   /**
-   * This will return the average time for reading the I2C 
-   * This will default to averaging 50 reads, but can be changed
+   * This will return the average time for reading the I2C This will default to
+   * averaging 50 reads, but can be changed
+   * 
    * @return returns the averged time in miliseconds for reads
    */
   public long getAverageReadTime() {
@@ -46,8 +47,9 @@ public class LineSensor4905 extends LineFollowerSensorBase {
   }
 
   /**
-   * Allows you to changed how many samples are taken before averaging the amount of
-   * time it takes to read the I2C
+   * Allows you to changed how many samples are taken before averaging the amount
+   * of time it takes to read the I2C
+   * 
    * @param times the amount of samples we are averaging
    */
   public void setTimesAveraged(int times) {
@@ -70,7 +72,7 @@ public class LineSensor4905 extends LineFollowerSensorBase {
     Duration timeElapsed = Duration.between(startTime, endTime);
     timeAccumulated += timeElapsed.toMillis();
     if (averageCounter < timesAveraged) {
-      //System.out.println(timeElapsed.toMillis());
+      // System.out.println(timeElapsed.toMillis());
       ++averageCounter;
     } else {
       averageTime = timeAccumulated / (timesAveraged + 1);
@@ -89,8 +91,6 @@ public class LineSensor4905 extends LineFollowerSensorBase {
         }
       }
       readingBuf[sensorNumber] = -b;
-      System.out.print(b + "\t");
     }
-    System.out.println();
   }
 }

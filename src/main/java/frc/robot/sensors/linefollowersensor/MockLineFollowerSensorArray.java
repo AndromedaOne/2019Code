@@ -3,8 +3,8 @@ package frc.robot.sensors.linefollowersensor;
 public class MockLineFollowerSensorArray extends LineFollowerSensorBase {
 
   public MockLineFollowerSensorArray() {
-    // These are bogus values
-    super(1,1,1,2,20);
+    // TODO Add to config
+    super("mockLineFollower");
   }
 
   @Override

@@ -38,6 +38,7 @@ import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
+import frc.robot.sensors.linefollowersensor.LineSensor4905;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
@@ -87,7 +88,7 @@ public class Robot extends TimedRobot {
   public static LimitSwitchSensor intakeStowedSwitch;
 
   public static InfraredDistanceSensor clawInfraredSensor;
-
+  public static LineFollowerSensorBase frontLineSensor4905;
   public static MagEncoderSensor armExtensionEncoder1;
   public static MagEncoderSensor armExtensionEncoder2;
   public static MagEncoderSensor armRotateEncoder1;
@@ -264,16 +265,10 @@ public class Robot extends TimedRobot {
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
     driveController = new Joystick(0);
-    // I2C sunfounderbus = sunfounderdevice.getBus();
-    // lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10,
-    // 0.5, 8 /* TODO: Change these! */);
 
-    Config senseConf = conf.getConfig("sensors.lineFollowSensor");
-    // lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus,
-    // senseConf.getInt("detectionThreshold"),
-    // senseConf.getDouble("distanceToSensor"),
-    // senseConf.getDouble("distanceBtSensors"),
-    // senseConf.getInt("numSensors"));
+    if(conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
+      frontLineSensor4905 = new LineSensor4905();
+    }
 
     // Creates first instance to put onto live window
     ExtendableArmPIDController.getInstance();

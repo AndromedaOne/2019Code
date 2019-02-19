@@ -1,12 +1,16 @@
 package frc.robot.sensors.linefollowersensor;
 
+import com.typesafe.config.Config;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 
 public abstract class LineFollowerSensorBase {
 
   public abstract void getSensorReading(int[] readingBuf);
 
+  private Config lineConf = Robot.getConfig().getConfig("sensors.lineFollowSensor");
   private LineFollowArraySensorReading sensorReading = new LineFollowArraySensorReading();
   private GetSensorData sensorDataThread;
   private double currentDistanceFromCenter = 0;
@@ -19,41 +23,51 @@ public abstract class LineFollowerSensorBase {
   protected double threadTime = 0;
   protected int[] sensorReadingBuffer;
 
-  protected LineFollowerSensorBase(int detectionThreshold, double distanceToSensor, double distanceBtSensors, int numSensors, double threadTime) {
-    this.detectionThreshold = detectionThreshold;
-    this.distanceToSensor = distanceToSensor;
-    this.distanceBtSensors = distanceBtSensors;
-    this.numSensors = numSensors;
-    this.threadTime = threadTime;
+  protected LineFollowerSensorBase(String sensorConfigName) {
+    detectionThreshold = lineConf.getInt(sensorConfigName + ".detectionThreshold");
+    distanceToSensor = lineConf.getInt(sensorConfigName + ".distanceToSensor");
+    distanceBtSensors = lineConf.getDouble(sensorConfigName + ".distanceBtSensors");
+    numSensors = lineConf.getInt(sensorConfigName + ".numSensors");
+    threadTime = lineConf.getDouble(sensorConfigName + ".threadDelay");
     sensorDataThread = new GetSensorData();
+    sensorDataThread.start();
   }
 
   private class GetSensorData extends Thread {
     int[] mySensorReadingBuffer = new int[numSensors];
     int[] returnSensorReadingBuffer = new int[numSensors];
+
     public void run() {
-      while(true) {
+      while (true) {
         getSensorReading(mySensorReadingBuffer);
         updateSensorReadingBuffer();
+        SmartDashboard.putNumber("Line Sensor 1", returnSensorReadingBuffer[0]);
+        SmartDashboard.putNumber("Line Sensor 2", returnSensorReadingBuffer[1]);
+        SmartDashboard.putNumber("Line Sensor 3", returnSensorReadingBuffer[2]);
+        SmartDashboard.putNumber("Line Sensor 4", returnSensorReadingBuffer[3]);
+        SmartDashboard.putNumber("Line Sensor 5", returnSensorReadingBuffer[4]);
+        SmartDashboard.putNumber("Line Sensor 6", returnSensorReadingBuffer[5]);
+        SmartDashboard.putNumber("Line Sensor 7", returnSensorReadingBuffer[6]);
+        SmartDashboard.putNumber("Line Sensor 8", returnSensorReadingBuffer[7]);
         Timer.delay(threadTime);
       }
     }
+
     private synchronized void updateSensorReadingBuffer() {
       returnSensorReadingBuffer = mySensorReadingBuffer.clone();
     }
 
     public synchronized int[] getSensorReadingBuffer() {
       return returnSensorReadingBuffer;
-    } 
+    }
   }
 
   /**
    * Determines if an integer is even or odd
    */
-  private static Boolean isEven (Integer i) {
+  private static Boolean isEven(Integer i) {
     return (i % 2) == 0;
   }
-
 
   /**
    * Gets the distance from the center of the sensor (assuming 0 is the leftmost
@@ -62,7 +76,7 @@ public abstract class LineFollowerSensorBase {
   private double calculateDistanceFromCenter(int i) {
     double distFromSensor;
     // Get the number of sensors on each side of the center
-    if(isEven(numSensors)) {
+    if (isEven(numSensors)) {
       int halfNumSensors = (numSensors + 1) / 2;
       // If it's on the left...
       if (i < halfNumSensors) {
@@ -89,8 +103,8 @@ public abstract class LineFollowerSensorBase {
 
   private boolean isThereLine() {
     boolean[] lineArray = getLinePositionArray();
-    for(int i = 0; i < sensorReadingBuffer.length; i++) {
-      if(lineArray[i]) {
+    for (int i = 0; i < sensorReadingBuffer.length; i++) {
+      if (lineArray[i]) {
         return true;
       }
     }
@@ -99,7 +113,7 @@ public abstract class LineFollowerSensorBase {
 
   /**
    * @return An array of booleans for each sensor in the sensor array where true
-   *  means that a line was detected and false means that a line wasn't detected
+   * means that a line was detected and false means that a line wasn't detected
    * @author Owen Salter & Devin C
    */
   private boolean[] getLinePositionArray() {
@@ -117,8 +131,8 @@ public abstract class LineFollowerSensorBase {
   }
 
   /**
-   * @return This will return wether or not we found a line and what angle we found the line at
-   * as a type LineFollowArraySensorReading
+   * @return This will return wether or not we found a line and what angle we
+   * found the line at as a type LineFollowArraySensorReading
    */
   public LineFollowArraySensorReading findLine() {
     sensorReadingBuffer = sensorDataThread.getSensorReadingBuffer();

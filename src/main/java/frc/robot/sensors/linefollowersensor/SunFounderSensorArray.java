@@ -1,13 +1,12 @@
 package frc.robot.sensors.linefollowersensor;
 
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SunFounderSensorArray extends LineFollowerSensorBase {
 
   private LineFollowerSensorBase lineSensor;
   private I2C I2cBus;
-  // - None of these values are properly set needs to be researched - 
+  // - None of these values are properly set needs to be researched -
   private static final int NUM_SENSORS = 8;
   // Distance between sensors in centimeters
   private static final double DIST_BT_SENORS = 0;
@@ -17,22 +16,22 @@ public class SunFounderSensorArray extends LineFollowerSensorBase {
   private static final int THREAD_TIME = 50;
 
   public SunFounderSensorArray() {
-    super(DETECTION_THRESHOLD, DIST_TO_SENSORS, DIST_BT_SENORS, NUM_SENSORS, THREAD_TIME);
+    // TODO Add this to the config
+    super("sunFounder");
   }
 
   /**
    * @return An array of booleans where true means that a line was detected and
-   *         false means that a line wasn't detected
+   * false means that a line wasn't detected
    * @author Owen Salter
    */
   private boolean once = true;
-
 
   /**
    * Doesn't do anything right now.
    * 
    * @return structure containing a boolean of whether the line is found, and the
-   *         angle in radians
+   * angle in radians
    */
   public void getSensorReading(int[] readingBuf) {
     /*
