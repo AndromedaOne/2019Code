@@ -22,22 +22,23 @@ public class TeleopArm extends Command {
   @Override
   protected void execute() {
     double extensionValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
-    double rotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
+    double wristRotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
 
-    rotateValue = rotateValue * 0.5;
+    wristRotateValue = wristRotateValue * 0.5;
     extensionValue = -extensionValue;
     double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
     // System.out.println("extensionValue: " + extensionValue);
-    try {
+    //try {
       // System.out.println("extensionValue: " + extensionValue);
-      MoveArmAndWristSafely.move(extensionValue, rotateValue, shoulderRotateValue,
-          MoveArmAndWristSafely.DontUsePIDHold.HOLDALL);
-    } catch (ArmOutOfBoundsException e) {
+      MoveArmAndWristSafely.setTeleopExtensionPower(extensionValue);
+      MoveArmAndWristSafely.setTeleopShoulderPower(shoulderRotateValue);
+      MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);
+    //} catch (ArmOutOfBoundsException e) {
       // System.out.println(e.getMessage());
-    }
+    //}
 
   }
 
@@ -53,11 +54,11 @@ public class TeleopArm extends Command {
 
   @Override
   protected void end() {
-    try {
-      MoveArmAndWristSafely.move(0, 0, 0, MoveArmAndWristSafely.DontUsePIDHold.HOLDALL);
-    } catch (ArmOutOfBoundsException e) {
-      System.out.println(e.getMessage());
-    }
+    //try {
+      MoveArmAndWristSafely.stop();
+    //} catch (ArmOutOfBoundsException e) {
+      //System.out.println(e.getMessage());
+    //}
   }
 
 }

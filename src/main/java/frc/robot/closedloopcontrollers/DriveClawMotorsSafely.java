@@ -31,11 +31,11 @@ public class DriveClawMotorsSafely {
 
     double threshold = conf.getDouble("ports.claw.infrared.threshold");
     if (iSensor.getInfraredDistance() >= threshold) {
-      if (!initialTimeSet && speed >= 0) {
+      if (!initialTimeSet ){//&& speed >= 0) {
         initialTime = Instant.now();
         initialTimeSet = true;
       }
-      if (speed >= 0 && (Duration.between(initialTime, Instant.now()).toMillis() > deltaTimeThreshhold)) {
+      if (speed >= 0 ){//&& (Duration.between(initialTime, Instant.now()).toMillis() > deltaTimeThreshhold)) {
         Robot.claw.stop();
       } else {
         initialTimeSet = false;

@@ -20,7 +20,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0;// 2.5 * Math.pow(10, -4);
+    super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
     super.subsytemName = "Extendable Arm and Wrist";
@@ -49,15 +49,15 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     public void pidWrite(double output) {
       trace.addTrace(true, "ExtensionPID", new TracePair("Output", output),
           new TracePair("SetpointTicks", pidMultiton.getSetpoint()),
-          new TracePair("SetpointInches", pidMultiton.getSetpoint() * MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES),
+          new TracePair("SetpointInches", pidMultiton.getSetpoint() * MoveArmAndWristSafely.EXTENSIONINCHESPERTICK),
           new TracePair("ExtensionTicks", armPIDSource.pidGet()),
-          new TracePair("ExtensionInches", armPIDSource.pidGet() * MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES));
-      try {
-        MoveArmAndWristSafely.move(output, 0, 0, MoveArmAndWristSafely.DontUsePIDHold.EXTENSION);
-      } catch (ArmOutOfBoundsException e) {
-        System.out.println(e.getMessage());
-        container.disable();
-      }
+          new TracePair("ExtensionInches", armPIDSource.pidGet() * MoveArmAndWristSafely.EXTENSIONINCHESPERTICK));
+      //try {
+        MoveArmAndWristSafely.setPidExtensionPower(output);
+      //} catch (ArmOutOfBoundsException e) {
+        //System.out.println(e.getMessage());
+        //container.disable();
+      //}
     }
   }
 
@@ -92,7 +92,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     @Override
     public double pidGet() {
       double extensionInches = MoveArmAndWristSafely.getExtensionIn(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      double extensionTicks = extensionInches / MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES;
+      double extensionTicks = extensionInches / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
       return extensionTicks;
     }
 
@@ -100,7 +100,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
   @Override
   public void setSetpoint(double setpoint) {
-    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.EXTENSIONTICKSTOINCHES);
+    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK);
   }
 
 }

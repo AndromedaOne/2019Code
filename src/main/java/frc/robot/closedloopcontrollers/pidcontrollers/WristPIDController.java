@@ -21,10 +21,10 @@ public class WristPIDController extends PIDControllerBase {
 
   private WristPIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0.0;// 2.0 * Math.pow(10, -4);
+    super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
-    super.outputRange = 0.5;
+    super.outputRange = 0.75;
     super.subsytemName = "Extendable Arm and Wrist";
     super.pidName = "Wrist";
 
@@ -52,15 +52,15 @@ public class WristPIDController extends PIDControllerBase {
     public void pidWrite(double output) {
       trace.addTrace(true, "WristPID", new TracePair("Output", output),
           new TracePair("SetpointTicks", container.getSetpoint()),
-          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.WRISTTICKSTODEGREES),
+          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.WRISTDEGREESPERTICK),
           new TracePair("TicksAngle", wristPIDSource.pidGet()), new TracePair("DegreeAngle",
               MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
-      try {
-        MoveArmAndWristSafely.move(0, output, 0, MoveArmAndWristSafely.DontUsePIDHold.WRIST);
-      } catch (ArmOutOfBoundsException e) {
-        System.out.println(e.getMessage());
-        container.disable();
-      }
+      //try {
+        MoveArmAndWristSafely.setPidWristPower(output);
+      //} catch (ArmOutOfBoundsException e) {
+        //System.out.println(e.getMessage());
+        //container.disable();
+      //}
     }
   }
 
@@ -95,13 +95,13 @@ public class WristPIDController extends PIDControllerBase {
     @Override
     public double pidGet() {
       double wristDegrees = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      double wristTicks = wristDegrees / MoveArmAndWristSafely.WRISTTICKSTODEGREES;
+      double wristTicks = wristDegrees / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
       return wristTicks;
     }
   }
 
   @Override
   public void setSetpoint(double setpoint) {
-    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.WRISTDEGREESPERTICK);
   }
 }

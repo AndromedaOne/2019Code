@@ -106,9 +106,9 @@ public class Robot extends TimedRobot {
   public static ShoulderPIDController shoulderPIDController;
   public static ExtendableArmPIDController extendableArmPIDController;
   public static WristPIDController wristPIDController;
-  private static double absoluteShoulderPositionError = 0.0;
-  private static double absoluteWristPositionError = 0.0;
-  private static double absoluteArmPositionError = 0.0;
+  public static double absoluteShoulderPositionError = 0.0;
+  public static double absoluteWristPositionError = 0.0;
+  public static double absoluteArmPositionError = 0.0;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -163,33 +163,19 @@ public class Robot extends TimedRobot {
 
       absoluteShoulderPositionError = conf.getDouble("subsystems.armAndWrist.absoluteShoulderPositionError");
       absoluteWristPositionError = conf.getDouble("subsystems.armAndWrist.absoluteWristPositionError");
-      absoluteArmPositionError = conf.getDouble("subsystems.armAndWrist.absoluteArmPositionError");
+      absoluteArmPositionError = conf.getDouble("subsystems.armAndWrist.absoluteExtensionPositionError");
 
-      double shoulderEncoderAbsolutePositionTicks = shoulderEncoder.getDistanceTicks();
-      double initialShoulderPos = MoveArmAndWristSafely.getShoulderRotDeg(shoulderEncoderAbsolutePositionTicks);
-      System.out.println("initialShoulderPos: " + initialShoulderPos);
+      double initialShoulderPos = -169;
 
-      initialShoulderPos -= absoluteShoulderPositionError;
+      double initialWristPos = 100;
+      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;  
 
-      double topArmExtensionEncoderAbsoluteTicks = topArmExtensionEncoder.getDistanceTicks();
-      double bottomArmExtensionEncoderAbsoluteTicks = bottomArmExtensionEncoder.getDistanceTicks();
+      //shoulderEncoder.resetTo(initialShoulderPos / MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
 
-      double initialWristPos = MoveArmAndWristSafely.getWristRotDegrees(topArmExtensionEncoderAbsoluteTicks,
-          bottomArmExtensionEncoderAbsoluteTicks);
-      double initialArmExtension = MoveArmAndWristSafely.getExtensionIn(topArmExtensionEncoderAbsoluteTicks,
-          bottomArmExtensionEncoderAbsoluteTicks);
-
-      System.out.println("initialWristPos: " + initialWristPos);
-      System.out.println("initialArmExtension: " + initialArmExtension);
-
-      initialWristPos -= absoluteWristPositionError;
-      initialArmExtension -= absoluteArmPositionError;
-
-      shoulderEncoder.resetTo(initialShoulderPos / MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
-      topArmExtensionEncoder.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
-          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
-      bottomArmExtensionEncoder.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
-          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      //topArmExtensionEncoder.resetTo((initialWristPos / MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+        //  + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      //bottomArmExtensionEncoder.resetTo((-initialWristPos / MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+        //  + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
       topArmExtensionEncoder = new MockMagEncoderSensor();
 
@@ -371,6 +357,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    double topEncoderTicks = topArmExtensionEncoder.getDistanceTicks();
+    double bottomEncoderTicks = bottomArmExtensionEncoder.getDistanceTicks();
     Scheduler.getInstance().run();
     // System.out.println("Gyro reading: " +
     // NavXGyroSensor.getInstance().getZAngle());
