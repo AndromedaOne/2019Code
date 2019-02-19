@@ -22,6 +22,8 @@ public abstract class LineFollowerSensorBase {
   protected int numSensors;
   protected double threadTime = 0;
   protected int[] sensorReadingBuffer;
+  private boolean sensorsReadLeftToRight = true;
+
 
   protected LineFollowerSensorBase(String sensorConfigName) {
     detectionThreshold = lineConf.getInt(sensorConfigName + ".detectionThreshold");
@@ -29,6 +31,7 @@ public abstract class LineFollowerSensorBase {
     distanceBtSensors = lineConf.getDouble(sensorConfigName + ".distanceBtSensors");
     numSensors = lineConf.getInt(sensorConfigName + ".numSensors");
     threadTime = lineConf.getDouble(sensorConfigName + ".threadDelay");
+    sensorsReadLeftToRight = lineConf.getBoolean(sensorConfigName + ".sensorsReadLeftToRight");
     sensorDataThread = new GetSensorData();
     sensorDataThread.start();
   }
@@ -49,6 +52,9 @@ public abstract class LineFollowerSensorBase {
         SmartDashboard.putNumber("Line Sensor 6", returnSensorReadingBuffer[5]);
         SmartDashboard.putNumber("Line Sensor 7", returnSensorReadingBuffer[6]);
         SmartDashboard.putNumber("Line Sensor 8", returnSensorReadingBuffer[7]);
+        SmartDashboard.putNumber("Distance From Center", currentDistanceFromCenter);
+        SmartDashboard.putBoolean("Found Line", findLine().lineFound);
+        SmartDashboard.putNumber("Line Angle", findLine().lineAngle);
         Timer.delay(threadTime);
       }
     }
@@ -77,18 +83,11 @@ public abstract class LineFollowerSensorBase {
     double distFromSensor;
     // Get the number of sensors on each side of the center
     if (isEven(numSensors)) {
-      int halfNumSensors = (numSensors + 1) / 2;
-      // If it's on the left...
-      if (i < halfNumSensors) {
-        distFromSensor = (halfNumSensors - i);
-        distFromSensor = ((distFromSensor * distanceBtSensors) - distanceBtSensors / 2);
+      int halfNumSensors = numSensors / 2;
+      double sensorsOffSet = (halfNumSensors * distanceBtSensors)- (distanceBtSensors / 2);
+        distFromSensor = (distanceBtSensors * i) - sensorsOffSet;
+        distFromSensor = sensorsReadLeftToRight ? distFromSensor : -distFromSensor;
         return distFromSensor;
-        // If it's on the right...
-      } else {
-        distFromSensor = (halfNumSensors - i) - 1;
-        distFromSensor = ((distFromSensor * distanceBtSensors) - distanceBtSensors / 2);
-        return distFromSensor;
-      }
     } else {
       // There is no case for an odd number of sensors yet
       System.err.println("ERROR: Line Sensors with an odd number of sensors are not supported");

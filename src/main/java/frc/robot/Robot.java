@@ -286,17 +286,6 @@ public class Robot extends TimedRobot {
       camera1.setFPS(10);
     }
 
-    if (conf.hasPath("sensors.lineFollowSensor")) {
-      // lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus,
-      // senseConf.getInt("detectionThreshold"),
-      // senseConf.getDouble("distanceToSensor"),
-      // senseConf.getDouble("distanceBtSensors"),
-      // senseConf.getInt("numSensors"));
-    } else {
-      // lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2,
-      // 10, 1, 8);
-    }
-
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
