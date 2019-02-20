@@ -109,7 +109,7 @@ public class OI {
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
     LowGamePieceButton= new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue());
-    LowGamePieceButton.whenPressed(new LowGamePieceArmCommand() );
+    LowGamePieceButton.whileHeld(new TestCommand() );
 
     CargoShipAndLoadingCommand = new JoystickButton(operatorController, ButtonsEnumerated.BBUTTON.getValue());
     CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());
