@@ -131,7 +131,7 @@ public class MoveArmAndWristSafely {
     
     double shoulderPower = 0;
 
-    if(Math.abs(localTeleopShoulderPower) >= 0.2 && ) {
+    if(Math.abs(localTeleopShoulderPower) >= 0.2) {
       shoulderPower = localTeleopShoulderPower;
       shoulderPIDSetpointSet = false;
     }else {
