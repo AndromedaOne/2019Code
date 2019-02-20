@@ -110,6 +110,8 @@ public class Robot extends TimedRobot {
   public static double absoluteWristPositionError = 0.0;
   public static double absoluteArmPositionError = 0.0;
 
+  private OI oi;
+
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
@@ -143,7 +145,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-
+    
     System.out.println("Here is my config: " + conf);
 
     driveController = new Joystick(0);
@@ -324,6 +326,12 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
+   
+    // OI must be constructed after subsystems. If the OI creates Commands
+    //(which it very likely will), subsystems are not guaranteed to be
+    // constructed yet. Thus, their requires() statements may grab null
+    // pointers. Bad news. Don't move it.
+    OI.getInstance();
     robotInitDone = true;
   }
 

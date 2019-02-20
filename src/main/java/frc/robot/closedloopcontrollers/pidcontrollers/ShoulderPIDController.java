@@ -18,7 +18,7 @@ public class ShoulderPIDController extends PIDControllerBase {
   private MagEncoderSensor shoulderEncoder;
 
   private ShoulderPIDController() {
-    super.absoluteTolerance = 3;
+    super.absoluteTolerance = 5 / MoveArmAndWristSafely.SHOULDERDEGREESPERTICK;
     super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
