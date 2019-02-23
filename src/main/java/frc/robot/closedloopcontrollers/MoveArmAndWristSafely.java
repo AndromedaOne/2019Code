@@ -39,6 +39,11 @@ public class MoveArmAndWristSafely {
   public static final double WRISTDEGREESPERTICK = 1.0 / WRISTTICKSPERDEGREE;
 
   private static final double deltaTime = 0.02;
+  private static final double BUTTCAPLENGTH = 2;
+  private static final double SHOULDEROFFSETFROMCENTER = 0.75;
+  private static final double SHOULDERHEIGHT = 40;
+  private static final double ELECTRONICSDANGERZONEHEIGHT = 14;
+  private static final double ROBOTLENGTH = 29.5;
 
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
@@ -234,7 +239,7 @@ public class MoveArmAndWristSafely {
     double deltaWristRot = wristRotVelocityConversion * deltaTime * 1.0;
     double deltaShoulderRot = shoulderRotVelocityConversion * deltaTime * 1.0;
 
-    SafeArmMovements safeArmMovements = isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
+    SafeArmMovements safeArmMovements = isMovementSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
         shoulderRotDeg + deltaShoulderRot, extensionVelocity, wristRotVelocity, shoulderRotVelocity);
 
     if (Robot.wristLimitSwitchUp.isAtLimit()) {
@@ -311,29 +316,27 @@ public class MoveArmAndWristSafely {
 
   }
 
-  public static SafeArmMovements isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+  public static SafeArmMovements isMovementSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double extensionPower, double wristPower, double shoulderPower) {
 
     SafeArmMovements safeArmMovements = new SafeArmMovements();
-    if (shoulderRotDeg > 180) {
-      safeArmMovements.shoulderRotateClockwise = false;
-    }
-    if (shoulderRotDeg < -180) {
-      safeArmMovements.shoulderRotateCounterClockwise = false;
-    }
-    if (extensionIn < 0) {
-      safeArmMovements.armExtension = false;
-    }
-    if (extensionIn > maxExtensionInches) {
-      safeArmMovements.armRetraction = false;
-    }
-    if (wristRotDeg > maxWristRotDegrees) {
-      safeArmMovements.wristRotateClockwise = false;
+    checkSafetyConstraints(extensionIn, wristRotDeg, shoulderRotDeg, safeArmMovements);
+    checkZoneConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+    checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+    return safeArmMovements;
+  }
 
-    }
-    if (wristRotDeg < -maxWristRotDegrees) {
-      safeArmMovements.wristRotateCounterClockwise = false;
-    }
+  /**
+   * Makes sure no-go zones are not being violated
+  *       
+  *       
+  *       
+  *      
+  *      
+  *      
+  */
+  private static void checkZoneConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+      double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     if (shoulderRotDeg < -165 && extensionIn > maxExtensionInches - 10) {
       // This is when the arm is retracted enough that when it is swung through
       // the robot the "butt" of the arm will hit the elctronics
@@ -360,7 +363,7 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armRetraction = false;
     }
     if (extensionIn < 13 && shoulderRotDeg > 68 && shoulderRotDeg < 127) {
-      // This safety prevents the arm from extrending over 30 inches out.
+      // This safety prevents the arm from extending over 30 inches out.
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((53 + 127) / 2);
       if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
@@ -374,7 +377,7 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armExtension = false;
     }
     if (extensionIn < 13 && shoulderRotDeg < -68 && shoulderRotDeg > -127) {
-      // This safety prevents the arm from extrending over 30 inches out.
+      // This safety prevents the arm from extending over 30 inches out.
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-53 + -127) / 2);
       if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
@@ -417,7 +420,69 @@ public class MoveArmAndWristSafely {
         safeArmMovements.armExtension = false;
       }
     }
-    return safeArmMovements;
+  }
+/**
+ * Makes sure no-go zones are not being violated
+ * 
+ */
+private static void checkZoneConstraintsNew(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+double wristPower, double shoulderPower, SafeArmMovements safeArmMovements){
+  checkButtEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+  checkClawEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+
+}
+  
+  private static void checkButtEndConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+      double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
+        double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
+        double buttPositionX = extensionIn * Math.sin(shoulderRotationRadians) + BUTTCAPLENGTH + SHOULDEROFFSETFROMCENTER;
+        double buttPositionY = SHOULDERHEIGHT - (extensionIn * Math.cos(shoulderRotationRadians) + BUTTCAPLENGTH);
+        if (buttPositionY > ELECTRONICSDANGERZONEHEIGHT) {
+          // We are safe
+          return;
+        }
+        if (buttPositionX >= 0 && buttPositionX < ROBOTLENGTH/2) {
+          // This is when the arm is retracted enough that when it is swung through
+          // the robot the "butt" of the arm will hit the elctronics
+          safeArmMovements.shoulderRotateCounterClockwise = false;
+          safeArmMovements.armRetraction = false;
+        }
+        if (buttPositionX > -ROBOTLENGTH/2 && buttPositionX <= 0) {
+          // This is when the arm is retracted enough that when it is swung through
+          // the robot the "butt" of the arm will hit the elctronics
+          safeArmMovements.shoulderRotateCounterClockwise = false;
+          safeArmMovements.armRetraction = false;
+        }
+  }
+
+  private static void checkClawEndConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+      double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
+  }
+
+  /**
+   * Check to make sure we dont break anything on the robot
+   */
+  private static void checkSafetyConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+      SafeArmMovements safeArmMovements) {
+    if (shoulderRotDeg > 180) {
+      safeArmMovements.shoulderRotateClockwise = false;
+    }
+    if (shoulderRotDeg < -180) {
+      safeArmMovements.shoulderRotateCounterClockwise = false;
+    }
+    if (extensionIn < 0) {
+      safeArmMovements.armExtension = false;
+    }
+    if (extensionIn > maxExtensionInches) {
+      safeArmMovements.armRetraction = false;
+    }
+    if (wristRotDeg > maxWristRotDegrees) {
+      safeArmMovements.wristRotateClockwise = false;
+
+    }
+    if (wristRotDeg < -maxWristRotDegrees) {
+      safeArmMovements.wristRotateCounterClockwise = false;
+    }
   }
 
   public static double getExtensionIn(double topEncoderTicks, double bottomEncoderTicks) {
