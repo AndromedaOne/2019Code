@@ -36,6 +36,7 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 import frc.robot.subsystems.drivetrain.MockDriveTrain;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
 import frc.robot.telemetries.Trace;
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
+  public static UltrasonicSensor climbUltrasonicSensor;
   public static BaseLineFollowerSensor lineFollowerSensorArray;
 
   /**
@@ -116,7 +118,7 @@ public class Robot extends TimedRobot {
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
-    pneumaticStilts = new RealPneumaticStilts();
+
 
     gyroPID = new GyroPIDController();
 
@@ -145,6 +147,14 @@ public class Robot extends TimedRobot {
           senseConf.getInt("numSensors"));
     } else {
       lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
+    }
+
+    if (conf.hasPath("subsystems.climber")) {
+      climbUltrasonicSensor = new RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"), conf.getInt("subsystems.climber.ultrasonic.echo"));
+      pneumaticStilts = new RealPneumaticStilts();
+    } else {
+      climbUltrasonicSensor = new MockUltrasonicSensor();
+      pneumaticStilts = new MockPneumaticStilts();
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
