@@ -12,7 +12,7 @@ public class PIDControllerBase {
   protected double p = 0;
   protected double i = 0;
   protected double d = 0;
-  protected String subsytemName;
+  protected String subsystemName;
   protected String pidName;
 
   /**
@@ -62,7 +62,7 @@ public class PIDControllerBase {
     pidConfiguration.setAbsoluteTolerance(absoluteTolerance);
     pidConfiguration.setMaximumOutput(outputRange);
     pidConfiguration.setMinimumOutput(-outputRange);
-    pidConfiguration.setLiveWindowName(subsytemName);
+    pidConfiguration.setLiveWindowName(subsystemName);
     pidConfiguration.setPIDName(pidName);
   }
 }
