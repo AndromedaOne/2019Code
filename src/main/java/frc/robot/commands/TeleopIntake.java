@@ -13,7 +13,7 @@ import frc.robot.Robot;
 import frc.robot.utilities.EnumeratedRawAxis;
 
 public class TeleopIntake extends Command {
-  private double mod = 0.5;
+  private double mod = 0.8;
   public TeleopIntake() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -33,13 +33,13 @@ public class TeleopIntake extends Command {
     double upDownValue = opController.getRawAxis(EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getValue());
 
     if (Robot.intake.isAtLimitSwitch()) {
-      if (upDownValue > 0) {
+      if (upDownValue < 0) {
         Robot.intake.moveIntakeArm(upDownValue * mod);
       } else {
         Robot.intake.moveIntakeArm(0);
       }
     } else if (Robot.intake.isAtGround()) {
-      if (upDownValue < 0) {
+      if (upDownValue > 0) {
         Robot.intake.moveIntakeArm(upDownValue * mod);
       } else {
         Robot.intake.moveIntakeArm(0);
