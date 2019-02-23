@@ -29,7 +29,7 @@ public class LineFollowerController {
     SmartDashboard.putNumber("Angle", values.lineAngle);
     if (values.lineFound && frontUltrasonicRange > kDistanceFromWall) {
       lineNotFoundCounter = 0;
-      if (values.lineAngle <= -kMinimumLineAngle)  {
+      if (values.lineAngle <= -kMinimumLineAngle) {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);
       } else if (values.lineAngle >= kMinimumLineAngle) {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);

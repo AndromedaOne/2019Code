@@ -102,8 +102,11 @@ public abstract class LineFollowerSensorBase {
 
   /**
    * This function also records which sensor sees a line, which is important in
-   * calculating a line angle. So you must call this to get an accurate angle from center
-   * @return This will return a boolean stating wether or not we are detecting a line
+   * calculating a line angle. So you must call this to get an accurate angle from
+   * center
+   * 
+   * @return This will return a boolean stating wether or not we are detecting a
+   * line
    * @author Owen Salter & Devin C
    */
   private boolean isThereLine() {
@@ -112,11 +115,11 @@ public abstract class LineFollowerSensorBase {
     double lineFoundSensor = 0;
 
     for (int i = 1; i < sensorReadingBuffer.length; i++) {
-      if(sensorReadingBuffer[i] > highestValue) {
+      if (sensorReadingBuffer[i] > highestValue) {
         highestValue = sensorReadingBuffer[i];
         savedIndex = i;
         lineFoundSensor = savedIndex;
-      } else if(sensorReadingBuffer[i] == highestValue) {
+      } else if (sensorReadingBuffer[i] == highestValue) {
         lineFoundSensor = (savedIndex + i) / 2;
       }
     }

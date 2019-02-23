@@ -392,7 +392,7 @@ public class MoveArmAndWristSafely {
       } else if (extensionIn > 15 && wristRotDeg > 95) {
 
       } else {
-        //System.out.println("Failing 6");
+        // System.out.println("Failing 6");
         boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-50 + 50) / 2);
         if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
           safeArmMovements.shoulderRotateClockwise = false;

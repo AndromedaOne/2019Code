@@ -55,7 +55,7 @@ public class RealDriveTrain extends DriveTrain {
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
     shiftToLowGear();
-    setVelocityMode();
+    // setVelocityMode();
   }
 
   private final int kTimeoutMs = 30;
