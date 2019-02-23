@@ -184,16 +184,10 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
-    if (conf.hasPath("sensors.drivetrainEncoders")) {
-      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false);
-    } else {
-      drivetrainLeftRearEncoder = new MockMagEncoderSensor();
-    }
-
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
-
+      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false);
     } else {
       System.out.println("Using fake drivetrain");
       driveTrain = new MockDriveTrain();
