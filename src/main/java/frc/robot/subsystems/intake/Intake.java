@@ -11,5 +11,7 @@ public abstract class Intake extends Subsystem {
 
   public abstract void setCurrentIntakeArmPosition(IntakeArmPositionsEnum position);
 
-  public abstract boolean isAtLimit();
+  public abstract boolean isAtLimitSwitch();
+
+  public abstract boolean isAtGround();
 }

@@ -30,7 +30,12 @@ public class MockIntake extends Intake {
   }
 
   @Override
-  public boolean isAtLimit() {
+  public boolean isAtLimitSwitch() {
+    return false;
+  }
+
+  @Override
+  public boolean isAtGround() {
     return false;
   }
 

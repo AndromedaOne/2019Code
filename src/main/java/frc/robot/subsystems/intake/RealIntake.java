@@ -64,7 +64,7 @@ public class RealIntake extends Intake {
     currentIntakePosition = position;
   }
 
-  public boolean isAtLimit() {
+  public boolean isAtLimitSwitch() {
     return Robot.intakeStowedSwitch.isAtLimit();
   }
 
@@ -74,6 +74,15 @@ public class RealIntake extends Intake {
 
   public double getGroundSetpoint() {
     return groundPositionSetPoint;
+  }
+
+  @Override
+  public boolean isAtGround() {
+    if (Robot.intakeAngleSensor.getAngle() > groundPositionSetPoint) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
