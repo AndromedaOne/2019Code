@@ -167,20 +167,6 @@ public class Robot extends TimedRobot {
       absoluteWristPositionError = conf.getDouble("subsystems.armAndWrist.absoluteWristPositionError");
       absoluteArmPositionError = conf.getDouble("subsystems.armAndWrist.absoluteExtensionPositionError");
 
-      double initialShoulderPos = -169;
-
-      double initialWristPos = 100;
-      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;
-
-      // shoulderEncoder.resetTo(initialShoulderPos /
-      // MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
-
-      // topArmExtensionEncoder.resetTo((initialWristPos /
-      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
-      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
-      // bottomArmExtensionEncoder.resetTo((-initialWristPos /
-      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
-      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
       topArmExtensionEncoder = new MockMagEncoderSensor();
 
