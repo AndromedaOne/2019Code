@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
-import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -49,12 +48,12 @@ public class ShoulderPIDController extends PIDControllerBase {
           new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.SHOULDERDEGREESPERTICK),
           new TracePair("AngleTicks", shoulderPIDSrc.pidGet()),
           new TracePair("AngleDegrees", shoulderPIDSrc.pidGet() * MoveArmAndWristSafely.SHOULDERDEGREESPERTICK));
-      //try {
-        MoveArmAndWristSafely.setPidShoulderPower(output);
-      //} catch (ArmOutOfBoundsException e) {
-        //System.out.println(e.getMessage());
-        //container.disable();
-      //}
+      // try {
+      MoveArmAndWristSafely.setPidShoulderPower(output);
+      // } catch (ArmOutOfBoundsException e) {
+      // System.out.println(e.getMessage());
+      // container.disable();
+      // }
     }
   }
 

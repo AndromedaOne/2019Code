@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
-import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -52,12 +51,12 @@ public class ExtendableArmPIDController extends PIDControllerBase {
           new TracePair("SetpointInches", pidMultiton.getSetpoint() * MoveArmAndWristSafely.EXTENSIONINCHESPERTICK),
           new TracePair("ExtensionTicks", armPIDSource.pidGet()),
           new TracePair("ExtensionInches", armPIDSource.pidGet() * MoveArmAndWristSafely.EXTENSIONINCHESPERTICK));
-      //try {
-        MoveArmAndWristSafely.setPidExtensionPower(output);
-      //} catch (ArmOutOfBoundsException e) {
-        //System.out.println(e.getMessage());
-        //container.disable();
-      //}
+      // try {
+      MoveArmAndWristSafely.setPidExtensionPower(output);
+      // } catch (ArmOutOfBoundsException e) {
+      // System.out.println(e.getMessage());
+      // container.disable();
+      // }
     }
   }
 
