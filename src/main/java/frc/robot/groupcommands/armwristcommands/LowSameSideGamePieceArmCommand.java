@@ -16,10 +16,10 @@ public class LowSameSideGamePieceArmCommand extends CommandGroup {
     
     System.out.println("Still Creating Low Game Piece Command");
     if (DriveClawMotorsSafely.hasBall) {
-      addSequential(new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle));
+      //addSequential(new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle));
     } else {
       System.out.println("creating low hatch command");
-      addSequential(new LowHatch(positiveWrist, sameSidePlacement, shoulderAngle));
+      //addSequential(new LowHatch(positiveWrist, sameSidePlacement, shoulderAngle));
     }
   }
 
@@ -28,6 +28,6 @@ public class LowSameSideGamePieceArmCommand extends CommandGroup {
     super.initialize();
     boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
         Robot.operatorController);
-    setSameSidePlacement(sameSidePlacement);
+    //setShoulderDirectionFactor();
   }
 }
