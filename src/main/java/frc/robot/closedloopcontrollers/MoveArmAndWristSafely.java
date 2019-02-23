@@ -335,14 +335,14 @@ public class MoveArmAndWristSafely {
       safeArmMovements.wristRotateCounterClockwise = false;
     }
     if (shoulderRotDeg < -165 && extensionIn > maxExtensionInches - 10) {
-      // This is when the arm is retracted enough that when it is swung through 
+      // This is when the arm is retracted enough that when it is swung through
       // the robot the "butt" of the arm will hit the elctronics
       safeArmMovements.shoulderRotateCounterClockwise = false;
       safeArmMovements.armRetraction = false;
 
     }
     if ((shoulderRotDeg < -140) && (shoulderRotDeg >= -165) && (extensionIn > maxExtensionInches - 7.5)) {
-      // This safety prevents the arm from hitting the metal bar that the intake 
+      // This safety prevents the arm from hitting the metal bar that the intake
       // rotates on
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-140 + -165) / 2);
       if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
@@ -354,7 +354,7 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armRetraction = false;
     }
     if (shoulderRotDeg > 150 && extensionIn > maxExtensionInches - 10) {
-      // This is when the arm is retracted enough that when it is swung through 
+      // This is when the arm is retracted enough that when it is swung through
       // the robot the "butt" of the arm will hit the elctronics
       safeArmMovements.shoulderRotateClockwise = false;
       safeArmMovements.armRetraction = false;
@@ -388,7 +388,7 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armExtension = false;
     }
     if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtensionInches - 1) {
-      // This safety is preventing the claw from hitting the elctronics when it 
+      // This safety is preventing the claw from hitting the elctronics when it
       // is being swung through the robot
       if (extensionIn > 15 && wristRotDeg < -95) {
 
