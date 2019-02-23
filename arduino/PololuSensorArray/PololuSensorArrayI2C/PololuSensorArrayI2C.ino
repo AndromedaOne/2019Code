@@ -15,7 +15,7 @@
 #include <QTRSensors.h>
 
 const int NUM_SENSORS = 8;
-const int TIMEOUT = 2000;  // waits for 2500 microseconds for sensor outputs to go low
+const int TIMEOUT = 2000;  // waits for 2000 microseconds for sensor outputs to go low
 const int EMITTER_PIN = 2;
 bool requested = false;
 
