@@ -6,6 +6,7 @@ import frc.robot.commands.*;
 public class HPBay3 extends CommandGroup {
 
     /**
+     * This Command assumes you are starting from Hab Platform
      * This does not support us being in the middle
      */
     public HPBay3(boolean onRightSide, boolean onLevelTwo, boolean useLineSensorTurn) {
