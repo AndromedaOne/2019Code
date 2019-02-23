@@ -1,8 +1,8 @@
 package frc.robot.groupcommands.autopaths;
 
 public class AutoStartingConfig {
-    public boolean inMiddle;
-    public boolean onRightSide;
-    public boolean onLevelTwo;
-    public boolean useLineSensorTurn;
+    public static boolean inMiddle;
+    public static boolean onRightSide;
+    public static boolean onLevelTwo;
+    public static boolean useLineSensorTurn;
 }
