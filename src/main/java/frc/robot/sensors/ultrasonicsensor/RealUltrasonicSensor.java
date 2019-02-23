@@ -16,7 +16,6 @@ public class RealUltrasonicSensor extends UltrasonicSensor {
    * @param echo Port for the echo
    */
   public RealUltrasonicSensor(int ping, int echo) {
-    System.out.print("Creating Front Ultrasonic");
     ultrasonic = new Ultrasonic(ping, echo);
     ultrasonic.setEnabled(true);
     ultrasonic.setAutomaticMode(true);
