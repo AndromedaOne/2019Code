@@ -6,9 +6,9 @@ import frc.robot.groupcommands.armwristcommands.LowOppositeSideGamePieceArmComma
 import frc.robot.groupcommands.armwristcommands.LowSameSideGamePieceArmCommand;
 
 
-public class MHPCenterCenter extends CommandGroup {
+public class CenterBaysFromMiddle extends CommandGroup {
 
-    public MHPCenterCenter(boolean onRightSide) {
+    public CenterBaysFromMiddle(boolean onRightSide) {
         // Move forward to Center Bay Wall, while we move the arm into placing position
         addSequential(new MoveUsingFrontUltrasonic(2));
         addParallel(new LowSameSideGamePieceArmCommand());

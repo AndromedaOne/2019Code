@@ -3,14 +3,14 @@ import frc.robot.groupcommands.armwristcommands.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class HPBay3Bay2 extends CommandGroup {
+public class Bay3Bay2FromHab extends CommandGroup {
     /**
      * Left and Right Level 1 Hatch Pannel Autonomous placement for Bays 2 and 3 of the 
      * respective side of the platform. Calling isLevel1RightSide as true tells the robot that 
      * it is currently on the right side of the level 1 platform, calling false does the 
      * opposite. A Hatch Panel should be pre-loaded onto the robot.
      */
-    public HPBay3Bay2(boolean onRightSide, boolean onLevelTwo) {
+    public Bay3Bay2FromHab(boolean onRightSide, boolean onLevelTwo) {
 
             addSequential(new Bay3FromHab(onRightSide, onLevelTwo, false));
 
