@@ -1,49 +1,48 @@
 package frc.robot.closedloopcontrollers;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
+import frc.robot.Robot;
 import frc.robot.sensors.linefollowersensor.LineFollowArraySensorReading;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
 
 public class LineFollowerController {
   private MoveDrivetrainGyroCorrect gyroCorrectMove;
-  private BaseLineFollowerSensor sensor;
-  private final double kMinimumLineAngle = Math.toRadians(10);
-  private final double kForwardSpeed = .39;
-  private final double kRotateAmount = .6; // all constants are currently placeholders
+  private LineFollowerSensorBase sensor;
+  private LineFollowArraySensorReading values;
+  private final double kMinimumLineAngle = Math.toRadians(2);
+  private final double kForwardSpeed = .1;
+  private final double kRotateScaleFactor = .5; // all constants are currently placeholders
+  private final double kDistanceFromWall = 3; // Inches
+  private int lineNotFoundCounter = 0;
 
   public LineFollowerController(MoveDrivetrainGyroCorrect theGyroCorrectMove,
-      BaseLineFollowerSensor lineFollowerSensorArray) {
+      LineFollowerSensorBase lineFollowerSensorArray) {
     gyroCorrectMove = theGyroCorrectMove;
     sensor = lineFollowerSensorArray;
 
   }
 
-  private int debugCounter = 9;
-  private LineFollowArraySensorReading v;
-
   public void run() {
-    LineFollowArraySensorReading v = sensor.getSensorReading();
-    if (v.lineFound = true) {
-      return;
-    }
-    debugCounter++;
-    if (debugCounter == 10) {
-      v = sensor.getSensorReading();
-      debugCounter = 0;
-    }
-    SmartDashboard.putBoolean("IsLineFound", v.lineFound);
-    SmartDashboard.putNumber("Angle", v.lineAngle);
-    if (v.lineFound) {
-      // System.out.println("I FOUND A LINE!! :D");
-      if (v.lineAngle <= -kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateAmount, false, false);
-      } else if (v.lineAngle >= kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, -kRotateAmount, false, false);
+    double frontUltrasonicRange = Robot.drivetrainFrontUltrasonic.getDistanceInches();
+    values = sensor.findLine();
+    SmartDashboard.putBoolean("IsLineFound", values.lineFound);
+    SmartDashboard.putNumber("Angle", values.lineAngle);
+    if (values.lineFound && frontUltrasonicRange > kDistanceFromWall) {
+      lineNotFoundCounter = 0;
+      if (values.lineAngle <= -kMinimumLineAngle) {
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);
+      } else if (values.lineAngle >= kMinimumLineAngle) {
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);
       } else {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, false, false);
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, true, false);
       }
     } else {
-      gyroCorrectMove.stop();
+      lineNotFoundCounter++;
+      if (lineNotFoundCounter >= 10) {
+        gyroCorrectMove.stop();
+      } else {
+        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, true, false);
+      }
     }
 
   }
@@ -62,7 +61,12 @@ public class LineFollowerController {
   }
 
   public boolean isDone() {
-    return false;
+    if (lineNotFoundCounter >= 10) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   public void enable(double setpoint) {

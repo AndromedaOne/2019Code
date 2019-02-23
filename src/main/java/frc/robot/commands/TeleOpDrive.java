@@ -32,6 +32,7 @@ public class TeleOpDrive extends Command {
   protected void initialize() {
     mod = 1;
     slowMoEnabled = false;
+    shifterDelayCounter = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
