@@ -58,7 +58,7 @@ public class OI {
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
 
-  private static OI instance = new OI();
+  private static OI instance;
 
   private POVButton intakeUp;
   private POVButton intakeDown;
@@ -69,14 +69,24 @@ public class OI {
   private JoystickButton turnToSouth;
   private JoystickButton turnToWest;
 
+  private JoystickButton LowGamePieceButton;
+  private JoystickButton MiddleGamePieceButton;
+  private JoystickButton HighGamePieceButton;
+  private JoystickButton CargoShipAndLoadingCommand;
+
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
+  // Controllers
+  protected Joystick driveController; // TODO: Cleanup use of joysticks/controllers in the code.
+  protected Joystick operatorController;
 
   private OI() {
+    System.out.println("Constructing OI");
+    driveController = new Joystick(0);
+    operatorController = new Joystick(1);
+
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
     // Claw buttons are temp until I figure out the D-Pad
-    openClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.ABUTTON.getValue());
-    closeClawButton = new JoystickButton(subsystemController, ButtonsEnumerated.BBUTTON.getValue());
 
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
     turnToNorth.whenPressed(new TurnToCompassHeading(0));
@@ -99,22 +109,25 @@ public class OI {
     // driveTrainPIDTest.whileHeld(new DriveTrainPIDTest());
     driveTrainPIDTest.whileHeld(new DriveForward());
     /*
-     * ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(
-     * new LowGamePieceArmCommand());
-     * ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(
-     * new CargoShipAndLoadingCommand());
-     * ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(
-     * new MiddleGamePieceArmCommand());
-     * ButtonsEnumerated.YBUTTON.getJoystickButton(operatorController).whenPressed(
-     * new HighGamePieceArmCommand());
+     * LowGamePieceButton= new JoystickButton(operatorController,
+     * ButtonsEnumerated.ABUTTON.getValue()); LowGamePieceButton.whileHeld(new
+     * TestCommand() );
+     * 
+     * CargoShipAndLoadingCommand = new JoystickButton(operatorController,
+     * ButtonsEnumerated.BBUTTON.getValue());
+     * CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());
+     * 
+     * MiddleGamePieceButton = new JoystickButton(operatorController,
+     * ButtonsEnumerated.XBUTTON.getValue()); MiddleGamePieceButton.whileHeld(new
+     * MiddleGamePieceArmCommand());
+     * 
+     * HighGamePieceButton = new JoystickButton(operatorController,
+     * ButtonsEnumerated.YBUTTON.getValue()); HighGamePieceButton.whileHeld(new
+     * HighGamePieceArmCommand());
      */
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
   }
-
-  // Controllers
-  protected Joystick driveController = new Joystick(0); // TODO: Cleanup use of joysticks/controllers in the code.
-  protected Joystick operatorController = Robot.operatorController;
 
   public Joystick getDriveStick() {
     return driveController;
@@ -125,6 +138,9 @@ public class OI {
   }
 
   public static OI getInstance() {
+    if (instance == null) {
+      instance = new OI();
+    }
     return instance;
   }
 

@@ -332,17 +332,18 @@ public class MoveArmAndWristSafely {
 
     }
     if (wristRotDeg < -maxWristRotDegrees) {
-      System.out.println("Failing 1");
       safeArmMovements.wristRotateCounterClockwise = false;
     }
     if (shoulderRotDeg < -165 && extensionIn > maxExtensionInches - 10) {
-      System.out.println("Failing 2");
+      // This is when the arm is retracted enough that when it is swung through
+      // the robot the "butt" of the arm will hit the elctronics
       safeArmMovements.shoulderRotateCounterClockwise = false;
       safeArmMovements.armRetraction = false;
 
     }
     if ((shoulderRotDeg < -140) && (shoulderRotDeg >= -165) && (extensionIn > maxExtensionInches - 7.5)) {
-      System.out.println("Failing 7");
+      // This safety prevents the arm from hitting the metal bar that the intake
+      // rotates on
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-140 + -165) / 2);
       if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
@@ -353,13 +354,13 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armRetraction = false;
     }
     if (shoulderRotDeg > 150 && extensionIn > maxExtensionInches - 10) {
-      System.out.println("Failing 3");
+      // This is when the arm is retracted enough that when it is swung through
+      // the robot the "butt" of the arm will hit the elctronics
       safeArmMovements.shoulderRotateClockwise = false;
-
       safeArmMovements.armRetraction = false;
     }
-    if (extensionIn < 13 && shoulderRotDeg > 53 && shoulderRotDeg < 127) {
-      System.out.println("Failing 4");
+    if (extensionIn < 13 && shoulderRotDeg > 68 && shoulderRotDeg < 127) {
+      // This safety prevents the arm from extrending over 30 inches out.
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((53 + 127) / 2);
       if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
@@ -372,8 +373,8 @@ public class MoveArmAndWristSafely {
       }
       safeArmMovements.armExtension = false;
     }
-    if (extensionIn < 13 && shoulderRotDeg < -53 && shoulderRotDeg > -127) {
-      System.out.println("Failing 5");
+    if (extensionIn < 13 && shoulderRotDeg < -68 && shoulderRotDeg > -127) {
+      // This safety prevents the arm from extrending over 30 inches out.
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-53 + -127) / 2);
       if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
@@ -387,12 +388,13 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armExtension = false;
     }
     if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtensionInches - 1) {
+      // This safety is preventing the claw from hitting the elctronics when it
+      // is being swung through the robot
       if (extensionIn > 15 && wristRotDeg < -95) {
 
       } else if (extensionIn > 15 && wristRotDeg > 95) {
 
       } else {
-        // System.out.println("Failing 6");
         boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-50 + 50) / 2);
         if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
           safeArmMovements.shoulderRotateClockwise = false;

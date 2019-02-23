@@ -106,6 +106,8 @@ public class Robot extends TimedRobot {
   public static double absoluteWristPositionError = 0.0;
   public static double absoluteArmPositionError = 0.0;
 
+  private OI oi;
+
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
@@ -161,14 +163,9 @@ public class Robot extends TimedRobot {
       absoluteWristPositionError = conf.getDouble("subsystems.armAndWrist.absoluteWristPositionError");
       absoluteArmPositionError = conf.getDouble("subsystems.armAndWrist.absoluteExtensionPositionError");
 
-      double initialShoulderPos = -169;
-
-      double initialWristPos = 100;
       double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;
-
       // shoulderEncoder.resetTo(initialShoulderPos /
       // MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
-
       // topArmExtensionEncoder.resetTo((initialWristPos /
       // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
       // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
@@ -305,6 +302,12 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
+
+    // OI must be constructed after subsystems. If the OI creates Commands
+    // (which it very likely will), subsystems are not guaranteed to be
+    // constructed yet. Thus, their requires() statements may grab null
+    // pointers. Bad news. Don't move it.
+    OI.getInstance();
     robotInitDone = true;
   }
 
