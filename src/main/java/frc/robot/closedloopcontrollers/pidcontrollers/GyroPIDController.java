@@ -42,8 +42,8 @@ public class GyroPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "GyroPID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("CurrentAngle", navXGyroSensor.pidGet()));
+      trace.addTrace(true, "GyroPID", new TracePair("Output", output),
+          new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("CurrentAngle", navXGyroSensor.pidGet()));
 
       Robot.gyroCorrectMove.moveUsingGyro(0, output, false, false);
     }

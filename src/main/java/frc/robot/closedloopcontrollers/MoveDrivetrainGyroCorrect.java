@@ -12,7 +12,7 @@ public class MoveDrivetrainGyroCorrect {
   private boolean gyroCorrect = false;
   private double currentDelay = 0;
   private static final double kDelay = 25;
-  private static final double kProportion = 0.05;
+  private static final double kProportion = 0.0;// 0.05;
 
   public MoveDrivetrainGyroCorrect(NavXGyroSensor theNavX, DriveTrain theDriveTrain) {
     navX = theNavX;
@@ -56,7 +56,7 @@ public class MoveDrivetrainGyroCorrect {
      * If we aren't rotating or our delay time is higher than our set Delay do not
      * use gyro correct This allows the robot to rotate naturally after we turn
      */
-    if ((rotation != 0) || (useDelay && !(currentDelay > kDelay))) {
+    if ((rotation != 0) || (useDelay && !(currentDelay > kDelay)) || (forwardBackward == 0.0)) {
       gyroCorrect = false;
       savedAngle = robotAngle;
       currentDelay++;

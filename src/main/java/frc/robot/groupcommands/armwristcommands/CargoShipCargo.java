@@ -4,18 +4,24 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.armwristcommands.*;
 
 public class CargoShipCargo extends CommandGroup {
-  public CargoShipCargo(boolean positiveWrist, boolean sameSidePlacement) {
-    double directionFactor = positiveWrist ? 1 : -1;
+  private final double shoulderPosition = 151;
+  private final double wristPosition = -98.59;
+  private final double extensionPosition = 20.92;
 
+  public CargoShipCargo(boolean positiveWristCurently, boolean sameSidePlacement, double shoulderAngle) {
+    double directionFactor = positiveWristCurently ? 1 : -1;
+    boolean positiveWristDestination = (-95.5 * directionFactor) > 0 ? true : false;
+    positiveWristDestination = sameSidePlacement ? positiveWristDestination : !positiveWristDestination;
+
+    addSequential(new TuckArm(shoulderAngle, positiveWristDestination));
     if (sameSidePlacement) {
-      addSequential(new RotateWrist(-98.59 * directionFactor));
-      addSequential(new ExtendArm(20.92));
-      addSequential(new RotateShoulder(151 * directionFactor));
+      addSequential(new RotateShoulder(shoulderPosition * directionFactor));
+      addSequential(new RotateWrist(wristPosition * directionFactor));
+      addSequential(new RetractArm(extensionPosition));
     } else {
-      addSequential(new ExtendArm(20.92));
-      addSequential(new RotateWrist(-98.59 * -directionFactor));
-      addSequential(new ExtendArm(20.92));
-      addSequential(new RotateShoulder(151 * -directionFactor));
+      addSequential(new RotateShoulder(-shoulderPosition * directionFactor));
+      addSequential(new RotateWrist(-wristPosition * directionFactor));
+      addSequential(new RetractArm(extensionPosition));
     }
   }
 }
