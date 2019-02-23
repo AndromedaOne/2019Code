@@ -3,6 +3,7 @@ package frc.robot.groupcommands.autopaths;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.*;
 import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
+import frc.robot.groupcommands.armwristcommands.LowSameSideGamePieceArmCommand;
 
 
 public class L1MHPCenterCenter extends CommandGroup {
@@ -11,7 +12,7 @@ public class L1MHPCenterCenter extends CommandGroup {
     public L1MHPCenterCenter(boolean onRightSide) {
         // Move forward to Center Bay Wall, while we move the arm into placing position
         addSequential(new MoveUsingFrontUltrasonic(2));
-        addParallel(new LowGamePieceArmCommand());
+        addParallel(new LowSameSideGamePieceArmCommand());
         // This releases the hatch, If we are having trouble lining up we can add
         // A line follow sequential here
         addSequential(new CloseClaw());
@@ -28,10 +29,9 @@ public class L1MHPCenterCenter extends CommandGroup {
 
         addSequential(new MoveUsingEncoderPID(20));
         // Turn towards the loading station
-        addSequential(new TurnToCompassHeading(180));
+        addSequential(new TurnToCompassHeading(0));
         // Drive up to the loading station
-        addParallel(new MoveUsingFrontUltrasonic(2));
-        addParallel(new );
+        addSequential(new MoveUsingFrontUltrasonic(18));
 
     }
 
