@@ -119,7 +119,6 @@ public class Robot extends TimedRobot {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
 
-
     gyroPID = new GyroPIDController();
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
@@ -150,7 +149,8 @@ public class Robot extends TimedRobot {
     }
 
     if (conf.hasPath("subsystems.climber")) {
-      climbUltrasonicSensor = new RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"), conf.getInt("subsystems.climber.ultrasonic.echo"));
+      climbUltrasonicSensor = new RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
+          conf.getInt("subsystems.climber.ultrasonic.echo"));
       pneumaticStilts = new RealPneumaticStilts();
     } else {
       climbUltrasonicSensor = new MockUltrasonicSensor();
