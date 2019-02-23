@@ -46,7 +46,7 @@ public class TeleopIntake extends Command {
     } else {
       Robot.intake.moveIntakeArm(upDownValue);
     }
-    }
+  }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
