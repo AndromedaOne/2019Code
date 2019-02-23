@@ -1,5 +1,6 @@
 package frc.robot.closedloopcontrollers;
 
+import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.telemetries.Trace;
