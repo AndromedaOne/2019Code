@@ -7,8 +7,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.utilities.EnumeratedRawAxis;
 
 public class TeleopIntake extends Command {
   public TeleopIntake() {
@@ -25,11 +27,14 @@ public class TeleopIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    System.out.println("Moving intake in Teleop");
-    if (!Robot.intake.isAtLimit()) {
-      Robot.intake.moveIntakeArm(0.3);
+    Joystick opController = Robot.operatorController;
+
+    double upDownValue = opController.getRawAxis(EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getValue());
+
+    if (Robot.intake.isAtLimit()) {
+      Robot.intake.moveIntakeArm(upDownValue);
     } else {
-      end();
+      Robot.intake.moveIntakeArm(0);
     }
   }
 
