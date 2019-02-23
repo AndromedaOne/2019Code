@@ -106,7 +106,7 @@ public class L1HPBay3Bay2 extends CommandGroup {
             At this point, we will return to the loading station and obtain the 
             Second Hatch Panel.
             */
-            addSequential(new MoveUsingBackLineFollower());
+            addSequential(new MoveUsingEncoderPID(0));
             //Follow the line backwards.
             addSequential(new TurnToCompassHeading(0));
             //Turn to face the loading station.
@@ -140,7 +140,7 @@ public class L1HPBay3Bay2 extends CommandGroup {
             //Move into Bay 2.
             addSequential(new CloseClaw());
             //Close the claw to release the Hatch Panel.
-            addSequential(new MoveUsingFrontLineFollower());
+            addSequential(new MoveUsingEncoderPID(0));
             //Move to the end of the line.
             addSequential(new LowSameSideGamePieceArmCommand());
             //Move the arm to the front of the robot.
