@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.CallLineFollowerController;
+import frc.robot.commands.MoveUsingFrontLineFollower;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
@@ -85,7 +85,7 @@ public class OI {
     driveController = new Joystick(0);
     operatorController = new Joystick(1);
 
-    SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+    SmartDashboard.putData("CallFrontLineFollowerController", new MoveUsingFrontLineFollower());
     // Claw buttons are temp until I figure out the D-Pad
 
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
