@@ -24,9 +24,9 @@ public class TeleopArm extends Command {
     double extensionValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
     double wristRotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
 
-    wristRotateValue = wristRotateValue * 0.5;
+    wristRotateValue = -wristRotateValue * 0.5;
     extensionValue = -extensionValue;
-    double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
+    double shoulderRotateValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }

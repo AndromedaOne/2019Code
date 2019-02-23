@@ -108,7 +108,7 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    LowGamePieceButton= new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue());
+    /*LowGamePieceButton= new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue());
     LowGamePieceButton.whileHeld(new TestCommand() );
 
     CargoShipAndLoadingCommand = new JoystickButton(operatorController, ButtonsEnumerated.BBUTTON.getValue());
@@ -118,7 +118,7 @@ public class OI {
     MiddleGamePieceButton.whileHeld(new MiddleGamePieceArmCommand());
 
     HighGamePieceButton = new JoystickButton(operatorController, ButtonsEnumerated.YBUTTON.getValue());
-    HighGamePieceButton.whileHeld(new HighGamePieceArmCommand());
+    HighGamePieceButton.whileHeld(new HighGamePieceArmCommand());*/
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
   }

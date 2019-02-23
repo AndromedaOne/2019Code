@@ -353,7 +353,7 @@ public class MoveArmAndWristSafely {
       
       safeArmMovements.armRetraction = false;
     }
-    if (extensionIn < 13 && shoulderRotDeg > 53 && shoulderRotDeg < 127) {
+    if (extensionIn < 13 && shoulderRotDeg > 68 && shoulderRotDeg < 127) {
       System.out.println("Failing 4");
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((53 + 127) / 2);
       if(shoulderPower > 0  && shoulderRotateDegreeBelowMiddleOfDeadzone){
@@ -367,7 +367,7 @@ public class MoveArmAndWristSafely {
       }
       safeArmMovements.armExtension = false;
     }
-    if (extensionIn < 13 && shoulderRotDeg < -53 && shoulderRotDeg > -127) {
+    if (extensionIn < 13 && shoulderRotDeg < -68 && shoulderRotDeg > -127) {
       System.out.println("Failing 5");
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-53 + -127) / 2);
       if(shoulderPower > 0  && shoulderRotateDegreeBelowMiddleOfDeadzone){
