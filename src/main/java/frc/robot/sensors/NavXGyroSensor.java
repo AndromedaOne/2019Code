@@ -16,7 +16,7 @@ import frc.robot.telemetries.TracePair;
 
 public class NavXGyroSensor extends SensorBase implements PIDSource {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
-  static NavXGyroSensor instance = new NavXGyroSensor();
+  static NavXGyroSensor instance;
   private double initialAngleReading = 0.0;
   boolean angleReadingSet = false;
   private long kInitializeDelay = 3000;
@@ -77,6 +77,10 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
    * @return instance
    */
   public static NavXGyroSensor getInstance() {
+    if (instance == null) {
+      System.out.println("Creating NavX gyro");
+      instance = new NavXGyroSensor();
+    }
     return instance;
   }
 

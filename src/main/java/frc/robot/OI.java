@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.RollIntakeIn;
+import frc.robot.commands.TeleopIntake;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
 import frc.robot.utilities.ButtonsEnumerated;
@@ -64,6 +66,8 @@ public class OI {
   private JoystickButton turnToEast;
   private JoystickButton turnToSouth;
   private JoystickButton turnToWest;
+  private JoystickButton runIntakeIn;
+  private JoystickButton runIntakeOut;
 
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
@@ -84,8 +88,13 @@ public class OI {
     turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
-    intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
+    // intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
+    intakeUp.whileHeld(new TeleopIntake());
     SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
+
+    // TODO: Change these to actual buttons
+    runIntakeIn = new JoystickButton(operatorController, ButtonsEnumerated.RIGHTBUMPERBUTTON.getValue());
+    runIntakeIn.whileHeld(new RollIntakeIn());
 
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));

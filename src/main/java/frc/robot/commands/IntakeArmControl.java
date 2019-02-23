@@ -22,7 +22,7 @@ public class IntakeArmControl extends Command {
   private static double groundPositionSetPoint;
   static {
     Config conf = Robot.getConfig();
-    if (conf.hasPath("subsystems.intake")) {
+    if (!conf.hasPath("subsystems.intake")) {
       Config intakeConf = conf.getConfig("subsystems.intake");
       cargoPositionSetPoint = intakeConf.getDouble("CargoPositionSetpoint");
       groundPositionSetPoint = intakeConf.getDouble("GroundPositionSetPoint");
@@ -45,6 +45,7 @@ public class IntakeArmControl extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println(directionToMove.toString());
     switch (directionToMove) {
     case UP:
       setUpSetPoint();

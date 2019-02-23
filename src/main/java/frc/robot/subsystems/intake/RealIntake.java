@@ -1,8 +1,8 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
+import edu.wpi.first.wpilibj.PWMVictorSPX;
 import frc.robot.Robot;
 
 /* TODO 
@@ -11,8 +11,8 @@ import frc.robot.Robot;
 * find actual values for CARGOPOSITION and ENDGAMEPOSITION
 */
 public class RealIntake extends Intake {
-  public static WPI_TalonSRX rollerTalon;
-  public static WPI_TalonSRX intakeArmTalon;
+  public static PWMVictorSPX rollerTalon;
+  public static PWMVictorSPX intakeArmTalon;
   private int intakeDownDirection;
   private IntakeArmPositionsEnum currentIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
 
@@ -20,10 +20,10 @@ public class RealIntake extends Intake {
     Config conf = Robot.getConfig();
 
     // TODO: only put ports in port config and put intake config in subsystem block
-    Config intakeConf = conf.getConfig("port.can");
-    rollerTalon = new WPI_TalonSRX(intakeConf.getInt("rollerTalon"));
-    intakeArmTalon = new WPI_TalonSRX(intakeConf.getInt("intakeArm"));
-    intakeDownDirection = intakeConf.getInt("intakeDownDirection");
+    Config intakeConf = conf.getConfig("ports.intake");
+    rollerTalon = new PWMVictorSPX(intakeConf.getInt("rollerTalon"));
+    intakeArmTalon = new PWMVictorSPX(intakeConf.getInt("intakeArm"));
+    intakeDownDirection = intakeConf.getInt("intakeDowndirection");
   }
 
   @Override
@@ -34,6 +34,7 @@ public class RealIntake extends Intake {
 
   @Override
   public void moveIntakeArm(double speed) {
+    System.out.println(speed * intakeDownDirection);
     intakeArmTalon.set(speed * intakeDownDirection);
   }
 

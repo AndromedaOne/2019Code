@@ -27,6 +27,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
@@ -137,6 +138,10 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  public Robot() {
+    Trace.getInstance();
+  }
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -149,6 +154,7 @@ public class Robot extends TimedRobot {
     driveController = new Joystick(0);
     armController = new Joystick(1);
 
+    NavXGyroSensor.getInstance();
     if (conf.hasPath("subsystems.armAndWrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
@@ -168,14 +174,17 @@ public class Robot extends TimedRobot {
       double initialShoulderPos = -169;
 
       double initialWristPos = 100;
-      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;  
+      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;
 
-      //shoulderEncoder.resetTo(initialShoulderPos / MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
+      // shoulderEncoder.resetTo(initialShoulderPos /
+      // MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
 
-      //topArmExtensionEncoder.resetTo((initialWristPos / MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
-        //  + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
-      //bottomArmExtensionEncoder.resetTo((-initialWristPos / MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
-        //  + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      // topArmExtensionEncoder.resetTo((initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      // bottomArmExtensionEncoder.resetTo((-initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
       topArmExtensionEncoder = new MockMagEncoderSensor();
 
@@ -300,6 +309,7 @@ public class Robot extends TimedRobot {
     shoulderPIDController = ShoulderPIDController.getInstance();
     extendableArmPIDController = ExtendableArmPIDController.getInstance();
     wristPIDController = WristPIDController.getInstance();
+    IntakePIDController.getInstance();
 
     // Camera Code
     if (conf.hasPath("cameras")) {

@@ -19,6 +19,7 @@ public class IntakePIDController extends PIDControllerBase {
     super.p = 0;
     super.i = 0;
     super.d = 0;
+    super.outputRange = 0.3;
     super.subsytemName = "Intake";
     super.pidName = "IntakePID";
 
@@ -52,7 +53,7 @@ public class IntakePIDController extends PIDControllerBase {
   }
 
   public static IntakePIDController getInstance() {
-    System.out.println(" --- Asking for Instance --- ");
+    System.out.println(" --- Asking for Instance ---  IntakePID");
     if (instance == null) {
       System.out.println("Creating new Intake PID Controller");
       instance = new IntakePIDController();
