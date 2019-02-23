@@ -10,4 +10,6 @@ public abstract class Intake extends Subsystem {
   public abstract IntakeArmPositionsEnum getCurrentIntakeArmPosition();
 
   public abstract void setCurrentIntakeArmPosition(IntakeArmPositionsEnum position);
+
+  public abstract boolean isAtLimit();
 }

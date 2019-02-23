@@ -29,4 +29,9 @@ public class MockIntake extends Intake {
     System.out.println("Setting Position to " + position);
   }
 
+  @Override
+  public boolean isAtLimit() {
+    return false;
+  }
+
 }

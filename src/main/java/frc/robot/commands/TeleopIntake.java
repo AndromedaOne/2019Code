@@ -26,7 +26,11 @@ public class TeleopIntake extends Command {
   @Override
   protected void execute() {
     System.out.println("Moving intake in Teleop");
-    Robot.intake.moveIntakeArm(0.3);
+    if (!Robot.intake.isAtLimit()) {
+      Robot.intake.moveIntakeArm(0.3);
+    } else {
+      end();
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -38,11 +42,13 @@ public class TeleopIntake extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.intake.moveIntakeArm(0);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

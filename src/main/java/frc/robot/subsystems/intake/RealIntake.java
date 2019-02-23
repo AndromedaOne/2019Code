@@ -15,6 +15,8 @@ public class RealIntake extends Intake {
   public static PWMVictorSPX intakeArmTalon;
   private int intakeDownDirection;
   private IntakeArmPositionsEnum currentIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
+  private double cargoPositionSetPoint;
+  private double groundPositionSetPoint;
 
   public RealIntake() {
     Config conf = Robot.getConfig();
@@ -24,6 +26,14 @@ public class RealIntake extends Intake {
     rollerTalon = new PWMVictorSPX(intakeConf.getInt("rollerTalon"));
     intakeArmTalon = new PWMVictorSPX(intakeConf.getInt("intakeArm"));
     intakeDownDirection = intakeConf.getInt("intakeDowndirection");
+    if (conf.hasPath("subsystems.intake")) {
+      Config intakeSubConf = conf.getConfig("subsystems.intake");
+      cargoPositionSetPoint = intakeSubConf.getDouble("CargoPositionSetpoint");
+      groundPositionSetPoint = intakeSubConf.getDouble("GroundPositionSetPoint");
+    } else {
+      cargoPositionSetPoint = 7;
+      groundPositionSetPoint = 6;
+    }
   }
 
   @Override
@@ -52,6 +62,18 @@ public class RealIntake extends Intake {
   @Override
   public void setCurrentIntakeArmPosition(IntakeArmPositionsEnum position) {
     currentIntakePosition = position;
+  }
+
+  public boolean isAtLimit() {
+    return Robot.intakeStowedSwitch.isAtLimit();
+  }
+
+  public double getCargoSetpoint() {
+    return cargoPositionSetPoint;
+  }
+
+  public double getGroundSetpoint() {
+    return groundPositionSetPoint;
   }
 
 }
