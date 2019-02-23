@@ -4,6 +4,7 @@ import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import frc.robot.Robot;
+import frc.robot.commands.TeleopIntake;
 
 /* TODO 
 * Test to make sure speed is accurate in RAISEARMSPEED
@@ -44,13 +45,12 @@ public class RealIntake extends Intake {
 
   @Override
   public void moveIntakeArm(double speed) {
-    System.out.println(speed * intakeDownDirection);
-    intakeArmTalon.set(speed * intakeDownDirection);
+    intakeArmTalon.set(Math.pow(speed * intakeDownDirection, 2));
   }
 
   @Override
   protected void initDefaultCommand() {
-
+    setDefaultCommand(new TeleopIntake());
   }
 
   @Override
@@ -65,7 +65,7 @@ public class RealIntake extends Intake {
   }
 
   public boolean isAtLimitSwitch() {
-    return Robot.intakeStowedSwitch.isAtLimit();
+    return !Robot.intakeStowedSwitch.isAtLimit();
   }
 
   public double getCargoSetpoint() {
