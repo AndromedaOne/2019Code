@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    
+
     System.out.println("Here is my config: " + conf);
 
     driveController = new Joystick(0);
@@ -170,14 +170,17 @@ public class Robot extends TimedRobot {
       double initialShoulderPos = -169;
 
       double initialWristPos = 100;
-      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;  
+      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;
 
-      //shoulderEncoder.resetTo(initialShoulderPos / MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
+      // shoulderEncoder.resetTo(initialShoulderPos /
+      // MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
 
-      //topArmExtensionEncoder.resetTo((initialWristPos / MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
-        //  + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
-      //bottomArmExtensionEncoder.resetTo((-initialWristPos / MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
-        //  + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      // topArmExtensionEncoder.resetTo((initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      // bottomArmExtensionEncoder.resetTo((-initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
       topArmExtensionEncoder = new MockMagEncoderSensor();
 
@@ -326,9 +329,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
-   
+
     // OI must be constructed after subsystems. If the OI creates Commands
-    //(which it very likely will), subsystems are not guaranteed to be
+    // (which it very likely will), subsystems are not guaranteed to be
     // constructed yet. Thus, their requires() statements may grab null
     // pointers. Bad news. Don't move it.
     OI.getInstance();
@@ -438,6 +441,7 @@ public class Robot extends TimedRobot {
     MoveArmAndWristSafely.stop();
     super.testInit();
   }
+
   /**
    * This function is called periodically during test mode.
    */

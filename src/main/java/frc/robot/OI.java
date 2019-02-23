@@ -16,12 +16,6 @@ import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
-import frc.robot.groupcommands.TestCommand;
-import frc.robot.groupcommands.armwristcommands.CargoShipAndLoadingCommand;
-import frc.robot.groupcommands.armwristcommands.HighGamePieceArmCommand;
-import frc.robot.groupcommands.armwristcommands.LowGamePieceArmCommand;
-import frc.robot.groupcommands.armwristcommands.MiddleGamePieceArmCommand;
-import frc.robot.groupcommands.armwristcommands.TuckArm;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -76,7 +70,6 @@ public class OI {
   private JoystickButton HighGamePieceButton;
   private JoystickButton CargoShipAndLoadingCommand;
 
-
   JoystickButton openClawButton;
   JoystickButton closeClawButton;
   // Controllers
@@ -108,22 +101,26 @@ public class OI {
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    /*LowGamePieceButton= new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue());
-    LowGamePieceButton.whileHeld(new TestCommand() );
-
-    CargoShipAndLoadingCommand = new JoystickButton(operatorController, ButtonsEnumerated.BBUTTON.getValue());
-    CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());
-
-    MiddleGamePieceButton = new JoystickButton(operatorController, ButtonsEnumerated.XBUTTON.getValue());
-    MiddleGamePieceButton.whileHeld(new MiddleGamePieceArmCommand());
-
-    HighGamePieceButton = new JoystickButton(operatorController, ButtonsEnumerated.YBUTTON.getValue());
-    HighGamePieceButton.whileHeld(new HighGamePieceArmCommand());*/
+    /*
+     * LowGamePieceButton= new JoystickButton(operatorController,
+     * ButtonsEnumerated.ABUTTON.getValue()); LowGamePieceButton.whileHeld(new
+     * TestCommand() );
+     * 
+     * CargoShipAndLoadingCommand = new JoystickButton(operatorController,
+     * ButtonsEnumerated.BBUTTON.getValue());
+     * CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());
+     * 
+     * MiddleGamePieceButton = new JoystickButton(operatorController,
+     * ButtonsEnumerated.XBUTTON.getValue()); MiddleGamePieceButton.whileHeld(new
+     * MiddleGamePieceArmCommand());
+     * 
+     * HighGamePieceButton = new JoystickButton(operatorController,
+     * ButtonsEnumerated.YBUTTON.getValue()); HighGamePieceButton.whileHeld(new
+     * HighGamePieceArmCommand());
+     */
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
   }
-
-  
 
   public Joystick getDriveStick() {
     return driveController;
@@ -134,7 +131,7 @@ public class OI {
   }
 
   public static OI getInstance() {
-    if(instance == null){
+    if (instance == null) {
       instance = new OI();
     }
     return instance;

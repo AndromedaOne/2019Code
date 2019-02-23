@@ -3,8 +3,6 @@ package frc.robot.closedloopcontrollers;
 import java.util.concurrent.locks.ReentrantLock;
 
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.buttons.Button;
-import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
@@ -20,8 +18,8 @@ public class MoveArmAndWristSafely {
 
   private static ReentrantLock mutex = new ReentrantLock();
   private static Notifier m_controlLoop = new Notifier(MoveArmAndWristSafely::calculate);
-  static{
-    
+  static {
+
     m_controlLoop.startPeriodic(0.05);
   }
   public static final double maxWristRotDegrees = 1000;
@@ -36,15 +34,16 @@ public class MoveArmAndWristSafely {
   private static final double EXTENSIONTICKSPERINCH = 7204.0;
   private static final double WRISTTICKSPERDEGREE = 444.922;
 
-  public static final double SHOULDERDEGREESPERTICK = 1.0/SHOULDERTICKSPERDEGREE;
-  public static final double EXTENSIONINCHESPERTICK = 1.0/EXTENSIONTICKSPERINCH;
-  public static final double WRISTDEGREESPERTICK = 1.0/WRISTTICKSPERDEGREE;
+  public static final double SHOULDERDEGREESPERTICK = 1.0 / SHOULDERTICKSPERDEGREE;
+  public static final double EXTENSIONINCHESPERTICK = 1.0 / EXTENSIONTICKSPERINCH;
+  public static final double WRISTDEGREESPERTICK = 1.0 / WRISTTICKSPERDEGREE;
 
   private static final double deltaTime = 0.02;
 
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
   private static double teleopExtensionPower = 0;
+
   /**
    * @param teleopShoulderPower the teleopShoulderPower to set
    */
@@ -53,6 +52,7 @@ public class MoveArmAndWristSafely {
     teleopShoulderPower = teleopShoulderPowerParam;
     mutex.unlock();
   }
+
   /**
    * @param teleopExtensionPower the teleopExtensionPower to set
    */
@@ -61,6 +61,7 @@ public class MoveArmAndWristSafely {
     teleopExtensionPower = teleopExtensionPowerParam;
     mutex.unlock();
   }
+
   /**
    * @param teleopWristPower the teleopWristPower to set
    */
@@ -69,7 +70,7 @@ public class MoveArmAndWristSafely {
     teleopWristPower = teleopWristPowerParam;
     mutex.unlock();
   }
-  
+
   private static double pidShoulderPower = 0;
   private static double pidWristPower = 0;
   private static double pidExtensionPower = 0;
@@ -101,8 +102,8 @@ public class MoveArmAndWristSafely {
     mutex.unlock();
   }
 
-  public static void calculate(){
-    
+  public static void calculate() {
+
     double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
     double bottomExtensionEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
     double shoulderTicks = Robot.shoulderEncoder.getDistanceTicks();
@@ -110,7 +111,6 @@ public class MoveArmAndWristSafely {
     double extensionIn = getExtensionIn(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
     double wristRotDeg = getWristRotDegrees(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
     double shoulderRotDeg = getShoulderRotDeg(shoulderTicks);
-    
 
     double localTeleopShoulderPower;
     double localTeleopWristPower;
@@ -129,79 +129,80 @@ public class MoveArmAndWristSafely {
     localPIDWristPower = pidWristPower;
     localPIDExtensionPower = pidExtensionPower;
     mutex.unlock();
-    
+
     double shoulderPower = 0;
 
-    if(Math.abs(localTeleopShoulderPower) >= 0.2) {
+    if (Math.abs(localTeleopShoulderPower) >= 0.2) {
       shoulderPower = localTeleopShoulderPower;
       shoulderPIDSetpointSet = false;
-    }else {
+    } else {
       if (!shoulderPIDSetpointSet) {
         ShoulderPIDController.getInstance().setSetpoint(shoulderRotDeg);
         ShoulderPIDController.getInstance().enable();
         shoulderPIDSetpointSet = true;
         shoulderPower = 0;
-      }else {
-        isMovementSafe(0,0,shoulderPower);
+      } else {
+        isMovementSafe(0, 0, shoulderPower);
         shoulderPower = localPIDShoulderPower;
       }
     }
 
     double wristPower = 0;
-    if(Math.abs(localTeleopWristPower) >= 0.2) {
+    if (Math.abs(localTeleopWristPower) >= 0.2) {
       wristPower = localTeleopWristPower;
       wristPIDSetpointSet = false;
-    }else {
+    } else {
       if (!wristPIDSetpointSet) {
         WristPIDController.getInstance().setSetpoint(wristRotDeg);
         WristPIDController.getInstance().enable();
         wristPIDSetpointSet = true;
         wristPower = 0;
-      }else {
-        isMovementSafe(0,localPIDWristPower,0);
+      } else {
+        isMovementSafe(0, localPIDWristPower, 0);
         wristPower = localPIDWristPower;
       }
     }
 
     double extensionPower = 0;
-    if(Math.abs(localTeleopExtensionPower) >= 0.2) {
+    if (Math.abs(localTeleopExtensionPower) >= 0.2) {
       extensionPower = localTeleopExtensionPower;
       extensionPIDSetpointSet = false;
-    }else {
+    } else {
       if (!extensionPIDSetpointSet) {
         ExtendableArmPIDController.getInstance().setSetpoint(extensionIn);
         ExtendableArmPIDController.getInstance().enable();
         extensionPIDSetpointSet = true;
         extensionPower = 0;
-      }else {
-        isMovementSafe(localPIDExtensionPower,0,0);
+      } else {
+        isMovementSafe(localPIDExtensionPower, 0, 0);
         extensionPower = localPIDExtensionPower;
       }
     }
     SafeArmMovements safeArmMovements = new SafeArmMovements();
-    if(!ButtonsEnumerated.BACKBUTTON.isPressed(Robot.operatorController)){
-      safeArmMovements = isMovementSafe(extensionPower,wristPower,shoulderPower);
+    if (!ButtonsEnumerated.BACKBUTTON.isPressed(Robot.operatorController)) {
+      safeArmMovements = isMovementSafe(extensionPower, wristPower, shoulderPower);
     }
 
-    if(extensionPower > 0 && !safeArmMovements.armRetraction) {
+    if (extensionPower > 0 && !safeArmMovements.armRetraction) {
       extensionPower = 0;
-    }else if(extensionPower < 0 && !safeArmMovements.armExtension){
+    } else if (extensionPower < 0 && !safeArmMovements.armExtension) {
       extensionPower = 0;
     }
 
-    if(wristPower > 0 && !safeArmMovements.wristRotateClockwise){
+    if (wristPower > 0 && !safeArmMovements.wristRotateClockwise) {
       wristPower = 0;
-    }else if(wristPower < 0 && !safeArmMovements.wristRotateCounterClockwise){
+    } else if (wristPower < 0 && !safeArmMovements.wristRotateCounterClockwise) {
       wristPower = 0;
     }
 
-    if(shoulderPower > 0 && !safeArmMovements.shoulderRotateClockwise) {
+    if (shoulderPower > 0 && !safeArmMovements.shoulderRotateClockwise) {
       shoulderPower = 0;
-    }else if(shoulderPower < 0 && !safeArmMovements.shoulderRotateCounterClockwise) {
+    } else if (shoulderPower < 0 && !safeArmMovements.shoulderRotateCounterClockwise) {
       shoulderPower = 0;
     }
     Robot.extendableArmAndWrist.moveArmWrist(extensionPower, wristPower, shoulderPower);
   }
+
   /**
    * @param extensionVelocity
    * @param wristRotVelocity
@@ -209,7 +210,8 @@ public class MoveArmAndWristSafely {
    * @throws ArmOutOfBoundsException
    */
 
-  private static SafeArmMovements isMovementSafe(double extensionVelocity, double wristRotVelocity, double shoulderRotVelocity){
+  private static SafeArmMovements isMovementSafe(double extensionVelocity, double wristRotVelocity,
+      double shoulderRotVelocity) {
     double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
     double bottomExtensionEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
     double shoulderTicks = Robot.shoulderEncoder.getDistanceTicks();
@@ -223,8 +225,7 @@ public class MoveArmAndWristSafely {
     double shoulderEncoderVelocity = Robot.shoulderEncoder.getVelocity();
 
     double extensionVelocityConversion = getExtensionInVelocity(topArmEncoderVelocity, bottomArmEncoderVelocity);
-    double wristRotVelocityConversion = getWristRotDegreesVelocity(topArmEncoderVelocity,
-        bottomArmEncoderVelocity);
+    double wristRotVelocityConversion = getWristRotDegreesVelocity(topArmEncoderVelocity, bottomArmEncoderVelocity);
     double shoulderRotVelocityConversion = getShoulderRotDegVelocity(shoulderEncoderVelocity);
 
     // multiplying by 1.0 to try to look into the future and see where the
@@ -232,8 +233,9 @@ public class MoveArmAndWristSafely {
     double deltaExtension = extensionVelocityConversion * deltaTime * 1.0;
     double deltaWristRot = wristRotVelocityConversion * deltaTime * 1.0;
     double deltaShoulderRot = shoulderRotVelocityConversion * deltaTime * 1.0;
-    
-    SafeArmMovements safeArmMovements = isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot, shoulderRotDeg + deltaShoulderRot, extensionVelocity, wristRotVelocity, shoulderRotVelocity);
+
+    SafeArmMovements safeArmMovements = isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
+        shoulderRotDeg + deltaShoulderRot, extensionVelocity, wristRotVelocity, shoulderRotVelocity);
 
     if (Robot.wristLimitSwitchUp.isAtLimit()) {
       if (wristRotDeg > 0) {
@@ -306,42 +308,45 @@ public class MoveArmAndWristSafely {
       }
     }
     return safeArmMovements;
-    
+
   }
 
-  public static SafeArmMovements isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg, double extensionPower, double wristPower, double shoulderPower) {
+  public static SafeArmMovements isLocSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+      double extensionPower, double wristPower, double shoulderPower) {
 
     SafeArmMovements safeArmMovements = new SafeArmMovements();
-    if (shoulderRotDeg > 180){
+    if (shoulderRotDeg > 180) {
       safeArmMovements.shoulderRotateClockwise = false;
     }
-    if(shoulderRotDeg < -180){
+    if (shoulderRotDeg < -180) {
       safeArmMovements.shoulderRotateCounterClockwise = false;
     }
-    if(extensionIn < 0 ) {
+    if (extensionIn < 0) {
       safeArmMovements.armExtension = false;
     }
-    if(extensionIn > maxExtensionInches) {
+    if (extensionIn > maxExtensionInches) {
       safeArmMovements.armRetraction = false;
     }
-    if(wristRotDeg > maxWristRotDegrees){
+    if (wristRotDeg > maxWristRotDegrees) {
       safeArmMovements.wristRotateClockwise = false;
 
-    }if (wristRotDeg < -maxWristRotDegrees) {
+    }
+    if (wristRotDeg < -maxWristRotDegrees) {
       System.out.println("Failing 1");
       safeArmMovements.wristRotateCounterClockwise = false;
-    } 
+    }
     if (shoulderRotDeg < -165 && extensionIn > maxExtensionInches - 10) {
       System.out.println("Failing 2");
       safeArmMovements.shoulderRotateCounterClockwise = false;
       safeArmMovements.armRetraction = false;
 
-    }if ((shoulderRotDeg < -140) && (shoulderRotDeg >= -165) && (extensionIn > maxExtensionInches - 7.5)){
+    }
+    if ((shoulderRotDeg < -140) && (shoulderRotDeg >= -165) && (extensionIn > maxExtensionInches - 7.5)) {
       System.out.println("Failing 7");
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-140 + -165) / 2);
-      if(shoulderPower > 0  && shoulderRotateDegreeBelowMiddleOfDeadzone){
+      if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
-      }else if(shoulderPower < 0  && shoulderRotateDegreeBelowMiddleOfDeadzone) {
+      } else if (shoulderPower < 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
       }
       safeArmMovements.shoulderRotateCounterClockwise = false;
@@ -350,19 +355,19 @@ public class MoveArmAndWristSafely {
     if (shoulderRotDeg > 150 && extensionIn > maxExtensionInches - 10) {
       System.out.println("Failing 3");
       safeArmMovements.shoulderRotateClockwise = false;
-      
+
       safeArmMovements.armRetraction = false;
     }
     if (extensionIn < 13 && shoulderRotDeg > 68 && shoulderRotDeg < 127) {
       System.out.println("Failing 4");
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((53 + 127) / 2);
-      if(shoulderPower > 0  && shoulderRotateDegreeBelowMiddleOfDeadzone){
+      if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
-      }else if(shoulderPower > 0  && !shoulderRotateDegreeBelowMiddleOfDeadzone) {
+      } else if (shoulderPower > 0 && !shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateCounterClockwise = false;
-      }else if(shoulderPower < 0  && shoulderRotateDegreeBelowMiddleOfDeadzone) {
+      } else if (shoulderPower < 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
-      }else {
+      } else {
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
       safeArmMovements.armExtension = false;
@@ -370,46 +375,46 @@ public class MoveArmAndWristSafely {
     if (extensionIn < 13 && shoulderRotDeg < -68 && shoulderRotDeg > -127) {
       System.out.println("Failing 5");
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-53 + -127) / 2);
-      if(shoulderPower > 0  && shoulderRotateDegreeBelowMiddleOfDeadzone){
+      if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
-      }else if(shoulderPower > 0  && !shoulderRotateDegreeBelowMiddleOfDeadzone) {
+      } else if (shoulderPower > 0 && !shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateCounterClockwise = false;
-      }else if(shoulderPower < 0  && shoulderRotateDegreeBelowMiddleOfDeadzone) {
+      } else if (shoulderPower < 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
         safeArmMovements.shoulderRotateClockwise = false;
-      }else {
+      } else {
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
       safeArmMovements.armExtension = false;
-    } 
+    }
     if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtensionInches - 1) {
       if (extensionIn > 15 && wristRotDeg < -95) {
-        
+
       } else if (extensionIn > 15 && wristRotDeg > 95) {
 
       } else {
         System.out.println("Failing 6");
         boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-50 + 50) / 2);
-        if(shoulderPower > 0  && shoulderRotateDegreeBelowMiddleOfDeadzone){
+        if (shoulderPower > 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
           safeArmMovements.shoulderRotateClockwise = false;
-        }else if(shoulderPower > 0  && !shoulderRotateDegreeBelowMiddleOfDeadzone) {
+        } else if (shoulderPower > 0 && !shoulderRotateDegreeBelowMiddleOfDeadzone) {
           safeArmMovements.shoulderRotateCounterClockwise = false;
-        }else if(shoulderPower < 0  && shoulderRotateDegreeBelowMiddleOfDeadzone) {
+        } else if (shoulderPower < 0 && shoulderRotateDegreeBelowMiddleOfDeadzone) {
           safeArmMovements.shoulderRotateClockwise = false;
-        }else {
+        } else {
           safeArmMovements.shoulderRotateCounterClockwise = false;
         }
-        if(wristPower > 0 && wristRotDeg > 0){
+        if (wristPower > 0 && wristRotDeg > 0) {
           safeArmMovements.wristRotateCounterClockwise = false;
-        }else if(wristPower > 0 && !(wristRotDeg > 0)) {
+        } else if (wristPower > 0 && !(wristRotDeg > 0)) {
           safeArmMovements.wristRotateClockwise = false;
-        }else if(wristPower < 0 && (wristRotDeg > 0)) {
+        } else if (wristPower < 0 && (wristRotDeg > 0)) {
           safeArmMovements.wristRotateCounterClockwise = false;
-        }else {
+        } else {
           safeArmMovements.wristRotateClockwise = false;
         }
         safeArmMovements.armExtension = false;
       }
-    } 
+    }
     return safeArmMovements;
   }
 
@@ -437,7 +442,7 @@ public class MoveArmAndWristSafely {
     return ticks * SHOULDERDEGREESPERTICK;
   }
 
-  public static void stop(){
+  public static void stop() {
     mutex.lock();
     teleopShoulderPower = 0;
     teleopWristPower = 0;
