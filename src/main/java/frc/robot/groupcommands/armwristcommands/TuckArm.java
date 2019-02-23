@@ -1,7 +1,9 @@
 package frc.robot.groupcommands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
+import frc.robot.commands.armwristcommands.ArmPositionValues;
 import frc.robot.commands.armwristcommands.RetractArm;
 import frc.robot.commands.armwristcommands.RotateWrist;
 
@@ -10,22 +12,19 @@ public class TuckArm extends CommandGroup {
   private final double safeExtensionInCenterOfRobotNoGoZone = MoveArmAndWristSafely.maxExtensionInches - 0.5;
   private final double safeExtensionOfArm = 22;
 
-  public TuckArm(double shoulderAngle, boolean wristPositiveDirection) {
+  public TuckArm() {
+    addSequential(new RetractArm(ArmPositions.STOWEDFORROTATINGARM));
+    addSequential(new RotateWrist(ArmPositions.STOWEDFORROTATINGARM)); 
+    addSequential(new RetractArm(ArmPositions.STOWEDFORROTATINGARM));
+    
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    double shoulderAngle = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
     if (Math.abs(shoulderAngle) <= centerOfRobotWristTuckNoGoZone) {
-      addSequential(new RetractArm(safeExtensionInCenterOfRobotNoGoZone));
-      if (wristPositiveDirection) {
-        addSequential(new RotateWrist(100));
-      } else {
-        addSequential(new RotateWrist(-100));
-      }
-      addSequential(new RetractArm(safeExtensionOfArm));
-    } else {
-      addSequential(new RetractArm(safeExtensionOfArm));
-      if (wristPositiveDirection) {
-        addSequential(new RotateWrist(90));
-      } else {
-        addSequential(new RotateWrist(-90));
-      }
+      RetractArm.setWristTuckExtensionToHigh(true);
     }
   }
 

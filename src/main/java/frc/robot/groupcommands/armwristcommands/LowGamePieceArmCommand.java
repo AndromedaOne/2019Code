@@ -9,12 +9,12 @@ import frc.robot.commands.armwristcommands.RotateShoulder;
 import frc.robot.commands.armwristcommands.RotateWrist;
 import frc.robot.utilities.ButtonsEnumerated;
 
-public class CargoShipAndLoadingCommand extends CommandGroup {
-  public CargoShipAndLoadingCommand() {
+public class LowGamePieceArmCommand extends CommandGroup {
+  public LowGamePieceArmCommand() {
     addSequential(new TuckArm());
-    addSequential(new RotateShoulder(ArmPositions.CARGOLOADINGSTATIONANDCARGOSHIP));
-    addSequential(new RotateWrist(ArmPositions.CARGOLOADINGSTATIONANDCARGOSHIP));
-    addSequential(new RetractArm(ArmPositions.CARGOLOADINGSTATIONANDCARGOSHIP));
+    addSequential(new RotateShoulder(ArmPositions.LOWROCKETGAMEPIECE));
+    addSequential(new RotateWrist(ArmPositions.LOWROCKETGAMEPIECE));
+    addSequential(new RetractArm(ArmPositions.LOWROCKETGAMEPIECE));
   }
 
   @Override
