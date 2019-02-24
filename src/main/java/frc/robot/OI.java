@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
+import frc.robot.commands.TestCommandScheduler;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.TurnToCompassHeading;
@@ -114,8 +115,8 @@ public class OI {
     // driveTrainPIDTest.whileHeld(new DriveTrainPIDTest());
     driveTrainPIDTest.whileHeld(new DriveForward());
   
-    LowGamePieceButton= new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue()); 
-    LowGamePieceButton.whileHeld(new TuckArm() );
+    LowGamePieceButton = new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue()); 
+    LowGamePieceButton.whileHeld(new TestCommandScheduler());
     /*
      * CargoShipAndLoadingCommand = new JoystickButton(operatorController,
      * ButtonsEnumerated.BBUTTON.getValue());
