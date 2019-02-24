@@ -9,6 +9,11 @@ public class RotateShoulder extends Command {
   private double encDegrees;
   ShoulderPIDController sPidController;
 
+  private static boolean overrideAndFinishCommand = false;
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam){
+    overrideAndFinishCommand = overrideAndFinishCommandParam;
+  }
+
   public RotateShoulder(double angle) {
     requires(Robot.extendableArmAndWrist);
     encDegrees = angle;
@@ -35,7 +40,7 @@ public class RotateShoulder extends Command {
 
   @Override
   protected boolean isFinished() {
-    return !sPidController.isEnabled() || sPidController.onTarget();
+    return overrideAndFinishCommand || sPidController.onTarget();
   }
 
 }
