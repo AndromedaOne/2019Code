@@ -217,6 +217,15 @@ public class Robot extends TimedRobot {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
     compressor = new Compressor();
+    if (conf.hasPath("sensors.intakeStowedSwitch")) {
+      System.out.println("Using real intakeStowedSwitch");
+      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
+      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
+      intakeStowedSwitch.putSensorOnLiveWindow("Intake Limit", "Switch");
+    } else {
+      System.out.println("Using mock intakeStowedSwitch");
+      intakeStowedSwitch = new MockLimitSwitchSensor();
+    }
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
@@ -233,15 +242,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
     }
-    if (conf.hasPath("sensors.intakeStowedSwitch")) {
-      System.out.println("Using real intakeStowedSwitch");
-      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
-      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
-      intakeStowedSwitch.putSensorOnLiveWindow("Intake Limit", "Switch");
-    } else {
-      System.out.println("Using mock intakeStowedSwitch");
-      intakeStowedSwitch = new MockLimitSwitchSensor();
-    }
+
     if (conf.hasPath("sensors.fullyRetractedArmLimitSwitch")) {
       System.out.println("Using real fullyRetractedArmLimitSwitch");
       int fullyRetractedArmLimitSwitchPort = conf.getInt("sensors.fullyRetractedArmLimitSwitch.port");
