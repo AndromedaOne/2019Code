@@ -58,8 +58,7 @@ public class OI {
   // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
-
-  private static OI instance = new OI();
+  static OI instance;
 
   private POVButton intakeUp;
   private POVButton intakeDown;
@@ -99,6 +98,8 @@ public class OI {
 
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    SmartDashboard.putData("StowIntake", new StowIntakeArm());
+
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
     /*
@@ -114,7 +115,6 @@ public class OI {
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
 
-    SmartDashboard.putData("StowIntake", new StowIntakeArm());
   }
 
   // Controllers
@@ -130,6 +130,10 @@ public class OI {
   }
 
   public static OI getInstance() {
+    if (instance == null) {
+      instance = new OI();
+    }
+
     return instance;
   }
 
