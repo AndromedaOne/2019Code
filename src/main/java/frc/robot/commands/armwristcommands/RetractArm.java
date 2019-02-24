@@ -12,6 +12,10 @@ public class RetractArm extends Command {
   ArmPositions armposition;
   private boolean usingArmPositionEnumFlag = false;
   private static boolean wristTuckExtensionToHigh = false;
+  private static boolean overrideAndFinishCommand = false;
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam){
+    overrideAndFinishCommand = overrideAndFinishCommandParam;
+  }
 
   public RetractArm(double inchesExtensionParam) {
     inchesExtension = inchesExtensionParam;
@@ -25,6 +29,7 @@ public class RetractArm extends Command {
 
   @Override
   protected void initialize() {
+    overrideAndFinishCommand = false;
     if(usingArmPositionEnumFlag) {
       switch(armposition){
         case LOWROCKETGAMEPIECE:
@@ -78,12 +83,11 @@ public class RetractArm extends Command {
   }
 
   protected void end() {
-    ExtendableArmPIDController.getInstance().disable();
   }
 
   @Override
   protected boolean isFinished() {
-    return !ExtendableArmPIDController.getInstance().isEnabled() || ExtendableArmPIDController.getInstance().onTarget();
+    return overrideAndFinishCommand || ExtendableArmPIDController.getInstance().onTarget();
   }
 
   public static void setWristTuckExtensionToHigh(boolean wristTuckExtensionToHighParam) {

@@ -28,8 +28,7 @@ public class MiddleGamePieceArmCommand extends CommandGroup {
         Robot.bottomArmExtensionEncoder.getDistanceTicks());
     boolean positiveWrist = (shoulderAngle + wristAngle) > 0;
     double directionFactor = positiveWrist ? 1 : -1;
-    boolean positiveWristDestination = (-wristAngle * directionFactor) > 0 ? true : false;
-    positiveWristDestination = sameSidePlacement ? positiveWristDestination : !positiveWristDestination;
+    directionFactor = sameSidePlacement ? directionFactor*1 : directionFactor*-1;
 
     RotateShoulder.setShoulderDirectionFactor(directionFactor);
     RotateWrist.setWristDirectionFactor(directionFactor);

@@ -9,8 +9,6 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 
 public class TuckArm extends CommandGroup {
   private final double centerOfRobotWristTuckNoGoZone = 20;
-  private final double safeExtensionInCenterOfRobotNoGoZone = MoveArmAndWristSafely.maxExtensionInches - 0.5;
-  private final double safeExtensionOfArm = 22;
 
   public TuckArm() {
     addSequential(new RetractArm(ArmPositions.STOWEDFORROTATINGARM));

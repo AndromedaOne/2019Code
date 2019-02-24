@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
   public static double absoluteWristPositionError = 0.0;
   public static double absoluteArmPositionError = 0.0;
 
-  private OI oi;
+  public static OI oi;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -307,7 +307,7 @@ public class Robot extends TimedRobot {
     // (which it very likely will), subsystems are not guaranteed to be
     // constructed yet. Thus, their requires() statements may grab null
     // pointers. Bad news. Don't move it.
-    OI.getInstance();
+    oi = OI.getInstance();
     robotInitDone = true;
   }
 

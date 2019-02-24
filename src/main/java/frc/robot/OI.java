@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
 import frc.robot.utilities.ButtonsEnumerated;
@@ -80,6 +82,8 @@ public class OI {
   protected Joystick driveController; // TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController;
 
+  public static final ButtonsEnumerated overRideSafetiesButton = ButtonsEnumerated.BACKBUTTON;
+
   private OI() {
     System.out.println("Constructing OI");
     driveController = new Joystick(0);
@@ -127,6 +131,8 @@ public class OI {
      */
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
+    overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
+
   }
 
   public Joystick getDriveStick() {

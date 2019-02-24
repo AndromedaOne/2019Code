@@ -12,6 +12,10 @@ public class RotateWrist extends Command {
   private static double wristDirectionFactor = 0;
   ArmPositions armposition;
   private boolean usingArmPositionEnumFlag = false;
+  private static boolean overrideAndFinishCommand = false;
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam){
+    overrideAndFinishCommand = overrideAndFinishCommandParam;
+  }
 
   public RotateWrist(double angle) {
     encDegrees = angle;
@@ -25,6 +29,7 @@ public class RotateWrist extends Command {
 
   @Override
   protected void initialize() {
+   overrideAndFinishCommand = false;
     if(usingArmPositionEnumFlag) {
       switch(armposition){
         case LOWROCKETGAMEPIECE:
@@ -56,6 +61,7 @@ public class RotateWrist extends Command {
           }
           break;
         case STOWEDFORROTATINGARM:
+          
           encDegrees = ArmPositionValues.WRISTSTOWEDFORROTATINGDEGREES.get();
       }
       encDegrees *= wristDirectionFactor;
@@ -74,12 +80,11 @@ public class RotateWrist extends Command {
   }
 
   protected void end() {
-    WristPIDController.getInstance().disable();
   }
 
   @Override
   protected boolean isFinished() {
-    return !WristPIDController.getInstance().isEnabled() || WristPIDController.getInstance().isEnabled();
+    return overrideAndFinishCommand || WristPIDController.getInstance().isEnabled();
   }
 
   public static void setWristDirectionFactor(double wristDirectionFactorParam) {

@@ -13,7 +13,10 @@ public class RotateShoulder extends Command {
   private static double shoulderDirectionFactor = 1;
   private ArmPositions armposition;
   private boolean usingArmPositionEnumFlag = false;
-  
+  private static boolean overrideAndFinishCommand = false;
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam){
+    overrideAndFinishCommand = overrideAndFinishCommandParam;
+  }
 
   public RotateShoulder(double angle) {
     requires(Robot.extendableArmAndWrist);
@@ -27,6 +30,7 @@ public class RotateShoulder extends Command {
 
   @Override
   protected void initialize() {
+    overrideAndFinishCommand = false;
     if(usingArmPositionEnumFlag) {
       switch(armposition){
         case LOWROCKETGAMEPIECE:
@@ -73,12 +77,11 @@ public class RotateShoulder extends Command {
   }
 
   protected void end() {
-    sPidController.disable();
   }
 
   @Override
   protected boolean isFinished() {
-    return !sPidController.isEnabled() || sPidController.onTarget();
+    return overrideAndFinishCommand || sPidController.onTarget();
   }
 
   public static void setShoulderDirectionFactor(double shoulderDirectionFactorParam) {
