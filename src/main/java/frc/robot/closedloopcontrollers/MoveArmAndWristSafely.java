@@ -44,6 +44,8 @@ public class MoveArmAndWristSafely {
   private static final double SHOULDERHEIGHT = 40;
   private static final double ELECTRONICSDANGERZONEHEIGHT = 14;
   private static final double ROBOTLENGTH = 29.5;
+  private static final double MAXARMLENGTH = 35.75;
+  private static final double CLAWLENGTH = 20.5;
 
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
@@ -351,7 +353,7 @@ public class MoveArmAndWristSafely {
       checkTeleOpConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
     }
     checkZoneConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
-    checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+    //checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
 
     return safeArmMovements;
   }
@@ -390,9 +392,17 @@ public class MoveArmAndWristSafely {
    * 
    *
    *
-   * / \ / \ / \ / \ / \ / \ / \ __________/_______________\_____ | | | | |_____/
-   * \________________/ \_____| \ / \ /
+   * 
    *
+   *
+   * 
+   * 
+   * 
+   *  _________________________________
+   * |
+   * |
+   * |___________________________
+   * 
    *
    *
    */
@@ -485,20 +495,22 @@ public class MoveArmAndWristSafely {
 
   /**
    * Makes sure no-go zones are not being violated
-   * 
    */
   private static void checkZoneConstraintsNew(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     checkButtEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
     checkClawEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
-
+    checkClawTipConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
   }
 
+/**
+ * Implements a way to find the butt end of the arm on a coordinate system
+ */
   private static void checkButtEndConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
-    double buttPositionX = extensionIn * Math.sin(shoulderRotationRadians) + BUTTCAPLENGTH + SHOULDEROFFSETFROMCENTER;
-    double buttPositionY = SHOULDERHEIGHT - (extensionIn * Math.cos(shoulderRotationRadians) + BUTTCAPLENGTH);
+    double buttPositionX = -extensionIn * Math.sin(shoulderRotationRadians) + BUTTCAPLENGTH - SHOULDEROFFSETFROMCENTER;
+    double buttPositionY = SHOULDERHEIGHT + (extensionIn * Math.cos(shoulderRotationRadians) + BUTTCAPLENGTH);
     if (buttPositionY > ELECTRONICSDANGERZONEHEIGHT) {
       // We are safe
       return;
@@ -516,9 +528,27 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armRetraction = false;
     }
   }
-
+/**
+ * Implements a way to find the end of the arm on a coordinate system
+ */
   private static void checkClawEndConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
+    double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
+    double extensionOut = MAXARMLENGTH - extensionIn;
+    double wristJointPositionX = extensionOut * Math.sin(shoulderRotationRadians) - SHOULDEROFFSETFROMCENTER;
+    double wristJointPositionY = SHOULDERHEIGHT - (extensionOut * Math.cos(shoulderRotationRadians));
+
+  }
+
+/**
+ * Implements a way to find the claw tip on a coordinate system
+ */
+  private static void checkClawTipConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+  double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
+    double wristRotRelativeToFloor = wristRotDeg- (180-(shoulderRotDeg + 90));
+    double XPosRelativeToArmJoint = (CLAWLENGTH) * Math.cos(wristRotRelativeToFloor);
+    double YposRelativeToArmJoint = (CLAWLENGTH) * Math.sin(wristRotRelativeToFloor);
+
   }
 
   /**
