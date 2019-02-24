@@ -8,13 +8,11 @@ public class HPBay3CargoBay2 extends CommandGroup {
      * Left and Right group command for moving the Robot from Level 1 to Bay 3 with a Hatch Panel
      * preloaded, then back to 
      * the loading station to pick up a cargo, then to Bay 2, where it will deposit it
-     * in the cargo bay. The parameter isOnRightSide is a Boolean that specifies whether it is on
-     * the Right or Left side of Level 1.
-     * @param isOnRightSide
+     * in the cargo bay. 
      */
-    public HPBay3CargoBay2(boolean isOnRightSide) {
+    public HPBay3CargoBay2() {
         //TODO: Add real values.
-        addSequential(new Bay3FromHab(false, false, false));
+        addSequential(new Bay3FromHab());
         //Moves to Bay 3 and deposits the game piece.
         addSequential(new MoveUsingEncoderPID(0));
         //Moves back.

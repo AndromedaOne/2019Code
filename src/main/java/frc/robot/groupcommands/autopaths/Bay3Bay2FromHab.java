@@ -12,7 +12,7 @@ public class Bay3Bay2FromHab extends CommandGroup {
      */
     public Bay3Bay2FromHab(boolean onRightSide, boolean onLevelTwo) {
 
-            addSequential(new Bay3FromHab(onRightSide, onLevelTwo, false));
+            addSequential(new Bay3FromHab());
 
             addSequential(new LoadingStationFromBay3(onRightSide));
 
