@@ -30,7 +30,7 @@ public class TeleopIntake extends Command {
   protected void execute() {
     Joystick opController = Robot.operatorController;
 
-    double upDownValue = opController.getRawAxis(EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getValue());
+    double upDownValue = opController.getRawAxis(EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getValue());
 
     /**
      * negative is moving to stow
