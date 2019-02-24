@@ -82,6 +82,7 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
+  public static UltrasonicSensor drivetrainRearUltrasonic;
   public static LineFollowerSensorBase lineFollowerSensorArray;
   public static Claw claw;
 
@@ -194,6 +195,13 @@ public class Robot extends TimedRobot {
       int ping = conf.getInt("sensors.drivetrainFrontUltrasonic.ping");
       int echo = conf.getInt("sensors.drivetrainFrontUltrasonic.echo");
       drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
+    } else {
+      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
+    }
+    if (conf.hasPath("sensors.drivetrainRearUltrasonic")) {
+      int ping = conf.getInt("sensors.drivetrainRearUltrasonic.ping");
+      int echo = conf.getInt("sensors.drivetrainRearUltrasonic.echo");
+      drivetrainRearUltrasonic = new RealUltrasonicSensor(ping, echo);
     } else {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
