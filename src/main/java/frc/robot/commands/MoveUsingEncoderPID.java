@@ -1,21 +1,29 @@
 package frc.robot.commands;
 
+import com.typesafe.config.Config;
+
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.closedloopcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 
 public class MoveUsingEncoderPID extends Command {
 
   private DrivetrainEncoderPIDController drivetrainEncoder = DrivetrainEncoderPIDController.getInstance();
+  private Config config = Robot.getConfig().getConfig("subsystems");
+  private int ticksPerInch = config.getInt("driveTrain.ticksToInches");
 
-  private int _setpoint = 0;
+  private int setpoint = 0;
 
-  public MoveUsingEncoderPID(int setpoint) {
-    _setpoint = setpoint;
+  /**
+   * Takes a Setpoint in inches
+   */
+  public MoveUsingEncoderPID(int distanceInInches) {
+    setpoint = distanceInInches * ticksPerInch;
   }
 
   public void initialize() {
     System.out.println(" -- Called! -- ");
-    drivetrainEncoder.setSetpoint(_setpoint);
+    drivetrainEncoder.setRelativeSetpoint(setpoint);
     drivetrainEncoder.enable();
   }
 
