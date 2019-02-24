@@ -76,6 +76,8 @@ public class OI {
   protected Joystick driveController; // TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController;
 
+  public static final ButtonsEnumerated overRideSafetiesButton = ButtonsEnumerated.BACKBUTTON;
+
   private OI() {
     System.out.println("Constructing OI");
     driveController = new Joystick(0);
@@ -120,6 +122,8 @@ public class OI {
      */
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
+    overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
+
   }
 
   public Joystick getDriveStick() {

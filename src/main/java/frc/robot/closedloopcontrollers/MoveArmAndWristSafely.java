@@ -3,6 +3,7 @@ package frc.robot.closedloopcontrollers;
 import java.util.concurrent.locks.ReentrantLock;
 
 import edu.wpi.first.wpilibj.Notifier;
+import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
@@ -179,7 +180,7 @@ public class MoveArmAndWristSafely {
       }
     }
     SafeArmMovements safeArmMovements = new SafeArmMovements();
-    if (!ButtonsEnumerated.BACKBUTTON.isPressed(Robot.operatorController)) {
+    if (!OI.overRideSafetiesButton.isPressed(Robot.operatorController)) {
       safeArmMovements = isMovementSafe(extensionPower, wristPower, shoulderPower);
     }
 
@@ -417,6 +418,16 @@ public class MoveArmAndWristSafely {
         safeArmMovements.armExtension = false;
       }
     }
+
+    if(shoulderRotDeg > -30 && shoulderRotDeg < -10){
+      if(wristRotDeg < -80 && extensionIn > maxExtensionInches - 10){
+        //TODO: Get the right number instead of 10 and set the safeArmMovements
+        // we are hitting the shoulder cim motor
+
+      }
+
+    }
+
     return safeArmMovements;
   }
 
