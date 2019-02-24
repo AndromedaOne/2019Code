@@ -88,8 +88,7 @@ public class OI {
     turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
-    // intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
-    intakeUp.whileHeld(new TeleopIntake());
+    intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
     SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
 
     // TODO: Change these to actual buttons
