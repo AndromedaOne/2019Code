@@ -9,18 +9,10 @@ public class Bay3FromHab extends CommandGroup {
      * This Command assumes you are starting from Hab Platform
      * This does not support us being in the middle
      */
-    public Bay3FromHab(boolean onRightSide, boolean onLevelTwo, boolean useLineSensorTurn) {
+    public Bay3FromHab() {
 
         // Initial Move forward, move further for lv 2 because we are further back
-        if(onLevelTwo) {
-            addSequential(new MoveUsingEncoderPID(18));
-            // Fix rotational error after fall from L2
-            addSequential(new TurnToCompassHeading(0));
-            addSequential(new MoveUsingBackUltrasonic(28));
-        } else {
-            addSequential(new MoveUsingBackUltrasonic(28));
-        }
-
+        addSequential(new MoveUsingEncoderPID(24));
 
     }
 
