@@ -21,7 +21,7 @@ public class WristPIDController extends PIDControllerBase {
   private WristPIDController() {
     super.absoluteTolerance = 5 / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.0 * Math.pow(10, -4);
+    super.p = 1.0e-4;
     super.i = 0;
     super.d = 0;
     super.outputRange = 0.75;
