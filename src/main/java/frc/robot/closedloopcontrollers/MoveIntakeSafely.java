@@ -10,15 +10,14 @@ public class MoveIntakeSafely {
    * trying to go up, then the exeption is thrown.
    * 
    * @param value
-   * @throws IsAtLimitException
    */
-  public static void moveIntake(double value) throws IsAtLimitException {
+  public static void moveIntake(double value) {
     // If the intake is at the limit
     if (Robot.intakeStowedSwitch.isAtLimit()) {
       Robot.intakeAngleSensor.reset();
       // If the intake is trying to go down
-      if (value < 0) {
-        throw Robot.intakeStowedSwitch.new IsAtLimitException();
+      if (value > 0) {
+        value = 0;
       }
     }
     Robot.intake.moveIntakeArm(value);
