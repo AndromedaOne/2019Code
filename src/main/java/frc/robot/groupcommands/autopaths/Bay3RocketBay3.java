@@ -8,7 +8,10 @@ public class Bay3RocketBay3 extends CommandGroup {
      * loading station to grab 2nd HP, then delivers it to left or right Rocket
      */
     public Bay3RocketBay3()    {
-        
+        addSequential(new Bay3FromHab());
+
+        addSequential(new LoadingStationFromBay3());
+
         
     }
 }
