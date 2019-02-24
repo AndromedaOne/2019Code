@@ -31,7 +31,7 @@ public class RealDriveTrain extends DriveTrain {
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
-  private PowerDistributionPanel pdp = new PowerDistributionPanel();
+  //private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public boolean getShifterPresentFlag() {
     return shifterPresentFlag;
