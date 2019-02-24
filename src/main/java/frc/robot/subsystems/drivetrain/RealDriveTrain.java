@@ -31,7 +31,7 @@ public class RealDriveTrain extends DriveTrain {
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
-  private PowerDistributionPanel pdp = new PowerDistributionPanel();
+  //private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public boolean getShifterPresentFlag() {
     return shifterPresentFlag;
@@ -250,7 +250,7 @@ public class RealDriveTrain extends DriveTrain {
         new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
 //        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()),
 //        new TracePair("Current Channel 0", (double) pdp.getCurrent(0)),
-//        new TracePair("Current Channel 1", (double) pdp.getCurrent(1)),
+//        new TracePair("Current Channel 1", (double) .getCurrent(1)),
 //        new TracePair("Current Channel 2", (double) pdp.getCurrent(2)),
 //        new TracePair("Current Channel 3", (double) pdp.getCurrent(3)));
   }

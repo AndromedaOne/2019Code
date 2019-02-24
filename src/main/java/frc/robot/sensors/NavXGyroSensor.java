@@ -16,7 +16,7 @@ import frc.robot.telemetries.TracePair;
 
 public class NavXGyroSensor extends SensorBase implements PIDSource {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
-  static NavXGyroSensor instance = new NavXGyroSensor();
+  static NavXGyroSensor instance;
   private double initialAngleReading = 0.0;
   boolean angleReadingSet = false;
   private long kInitializeDelay = 3000;
@@ -60,11 +60,16 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   }
 
   private class SetInitialAngleReading extends TimerTask {
-
+    private int counter = 0;
     @Override
     public void run() {
-      System.out.println("Setting Initial Gyro Angle");
+      counter++;
+      if(counter == 100){
+        counter =0;
+        System.out.println("Setting Initial Gyro Angle");
+      }
       if (!isCalibrating()) {
+        System.out.println("Navx is calibrated!");
         initialAngleReading = gyro.getAngle();
         cancel();
       }
@@ -77,6 +82,9 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
    * @return instance
    */
   public static NavXGyroSensor getInstance() {
+    if(instance == null) {
+      instance = new NavXGyroSensor();
+    }
     return instance;
   }
 

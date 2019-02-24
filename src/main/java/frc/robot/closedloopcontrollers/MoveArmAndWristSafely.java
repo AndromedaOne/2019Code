@@ -419,6 +419,14 @@ public class MoveArmAndWristSafely {
       }
     }
     
+    if(shoulderRotDeg > -30 && shoulderRotDeg < -10){
+      if(wristRotDeg < -80 && extensionIn > maxExtensionInches - a){
+        // we are hitting the shoulder cim motor
+        
+      }
+
+      }
+    }
     return safeArmMovements;
   }
 
