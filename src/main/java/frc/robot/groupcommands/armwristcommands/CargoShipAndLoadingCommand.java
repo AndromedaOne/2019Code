@@ -1,13 +1,17 @@
 package frc.robot.groupcommands.armwristcommands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.utilities.ButtonsEnumerated;
 
-public class CargoShipAndLoadingCommand extends CommandGroup {
-  public CargoShipAndLoadingCommand() {
+public class CargoShipAndLoadingCommand extends Command {
+
+  @Override
+  protected void initialize() {
+    super.initialize();
     double shoulderAngle = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
     double wristAngle = MoveArmAndWristSafely.getWristRotDegrees(Robot.topArmExtensionEncoder.getDistanceTicks(),
         Robot.bottomArmExtensionEncoder.getDistanceTicks());
@@ -16,9 +20,15 @@ public class CargoShipAndLoadingCommand extends CommandGroup {
     boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
         Robot.operatorController);
     if (DriveClawMotorsSafely.hasBall) {
-      addSequential(new CargoShipCargo(positiveWrist, sameSidePlacement, shoulderAngle));
+      (new CargoShipCargo(positiveWrist, sameSidePlacement, shoulderAngle)).start();
+      
     } else {
-      addSequential(new LoadingStation(positiveWrist, sameSidePlacement, shoulderAngle));
+      (new LoadingStation(positiveWrist, sameSidePlacement, shoulderAngle)).start();
     }
+  }
+
+  @Override
+  protected boolean isFinished() {
+    return true;
   }
 }

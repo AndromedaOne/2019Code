@@ -1,12 +1,13 @@
 package frc.robot.groupcommands.armwristcommands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.utilities.ButtonsEnumerated;
 
-public class LowGamePieceArmCommand extends CommandGroup {
+public class LowGamePieceArmCommand extends Command{
   public LowGamePieceArmCommand() {
   }
 
@@ -22,10 +23,15 @@ public class LowGamePieceArmCommand extends CommandGroup {
         Robot.operatorController);
     System.out.println("Still Creating Low Game Piece Command");
     if (DriveClawMotorsSafely.hasBall) {
-      addSequential(new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle));
+      (new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle)).start();;
     } else {
       System.out.println("creating low hatch command");
-      addSequential(new LowHatch(positiveWrist, sameSidePlacement, shoulderAngle));
+      (new LowHatch(positiveWrist, sameSidePlacement, shoulderAngle)).start();;
     }
+  }
+
+  @Override
+  protected boolean isFinished() {
+    return true;
   }
 }

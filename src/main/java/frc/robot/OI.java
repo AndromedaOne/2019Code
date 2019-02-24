@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
+import frc.robot.groupcommands.RollIntakeGroupCommandScheduler;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -77,6 +79,7 @@ public class OI {
   protected Joystick operatorController;
 
   public static final ButtonsEnumerated overRideSafetiesButton = ButtonsEnumerated.BACKBUTTON;
+  public static final ButtonsEnumerated rollIntakeButton = ButtonsEnumerated.RIGHTBUMPERBUTTON;
 
   private OI() {
     System.out.println("Constructing OI");
@@ -121,7 +124,7 @@ public class OI {
      * HighGamePieceArmCommand());
      */
 
-    ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
+    rollIntakeButton.getJoystickButton(operatorController).whenPressed(new RollIntakeGroupCommandScheduler());
     overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
 
   }
