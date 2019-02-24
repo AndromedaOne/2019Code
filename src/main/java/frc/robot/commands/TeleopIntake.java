@@ -32,20 +32,22 @@ public class TeleopIntake extends Command {
 
     double upDownValue = opController.getRawAxis(EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getValue());
 
-    if (Robot.intake.isAtLimitSwitch()) {
-      if (upDownValue < 0) {
-        Robot.intake.moveIntakeArm(upDownValue * mod);
-      } else {
+    /**
+     * negative is moving to stow
+     * positive is moving to deploy
+     */
+    if (upDownValue > 0) {
+      if (Robot.intake.isAtLimitSwitch()) {
         Robot.intake.moveIntakeArm(0);
-      }
-    } else if (Robot.intake.isAtGround()) {
-      if (upDownValue > 0) {
-        Robot.intake.moveIntakeArm(upDownValue * mod);
       } else {
-        Robot.intake.moveIntakeArm(0);
+        Robot.intake.moveIntakeArm(upDownValue * mod);
       }
     } else {
-      Robot.intake.moveIntakeArm(upDownValue * mod);
+      if (Robot.intake.isAtGround()) {
+        Robot.intake.moveIntakeArm(0);
+      } else {
+        Robot.intake.moveIntakeArm(upDownValue * mod);
+      }
     }
   }
 
