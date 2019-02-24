@@ -9,8 +9,8 @@ public class MoveOffHab extends MoveTurnBase {
      * the command will determine what we should do if we are on L1 or L2
      */
     public MoveOffHab() {
-
     }
+    
     public void initialize() {
         if (AutoStartingConfig.onLevelTwo) {
             // Drive off the platform

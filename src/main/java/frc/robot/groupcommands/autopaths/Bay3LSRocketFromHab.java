@@ -13,6 +13,7 @@ public class Bay3LSRocketFromHab extends CommandGroup {
      */
     public Bay3LSRocketFromHab() {
         /*TODO: add real values and determine what we're doing at the loading station, because we need to know what's getting written for the rocket.*/
+        
         addSequential(new Bay3FromHab());
         //From the Hab platform, we move to Bay 3.
         addSequential(new MoveUsingEncoderPID(0));

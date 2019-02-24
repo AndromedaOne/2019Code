@@ -3,14 +3,14 @@ import frc.robot.groupcommands.armwristcommands.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class HPBay3CargoBay2 extends CommandGroup {
+public class Bay3CargoBay2 extends CommandGroup {
     /**
      * Left and Right group command for moving the Robot from Level 1 to Bay 3 with a Hatch Panel
      * preloaded, then back to 
      * the loading station to pick up a cargo, then to Bay 2, where it will deposit it
      * in the cargo bay. 
      */
-    public HPBay3CargoBay2() {
+    public Bay3CargoBay2() {
         //TODO: Add real values.
         addSequential(new Bay3FromHab());
         //Moves to Bay 3 and deposits the game piece.
