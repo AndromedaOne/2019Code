@@ -10,8 +10,6 @@ public class ReleaseGamePiece extends CommandGroup {
      * This prevents commands from needing to know what we are carrying
      */
     public ReleaseGamePiece() {
-
-
     }
 
 }
