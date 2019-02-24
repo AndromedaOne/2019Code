@@ -15,7 +15,7 @@ public class IntakePIDController extends PIDControllerBase {
   private AngleSensor intakeAngleSensor;
 
   private IntakePIDController() {
-    super.absoluteTolerance = 3;
+    super.absoluteTolerance = 0.01;
     super.p = 15;
     super.i = 0;
     super.d = 0;
