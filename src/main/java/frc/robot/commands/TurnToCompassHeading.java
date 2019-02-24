@@ -3,9 +3,8 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 
-public class TurnToCompassHeading extends TurningBase {
+public class TurnToCompassHeading extends MoveTurnBase {
   private double heading = 0;
-  private static GyroPIDController gyroPID = GyroPIDController.getInstance();
 
   public TurnToCompassHeading(double theHeading) {
     heading = theHeading;
@@ -14,11 +13,6 @@ public class TurnToCompassHeading extends TurningBase {
 
   protected void initialize() {
     turnToCompassHeading(heading);
-  }
-
-  @Override
-  protected boolean isFinished() {
-    return gyroPID.onTarget();
   }
 
 }

@@ -13,9 +13,7 @@ public class MoveUsingBackLineFollower extends Command {
     private int counter = 0;
 
     public MoveUsingBackLineFollower() {
-        //controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.frontLineSensor4905);
         requires(Robot.driveTrain);
-
     }
 
     @Override
@@ -32,14 +30,5 @@ public class MoveUsingBackLineFollower extends Command {
     @Override
     protected boolean isFinished() {
         return false;//controller.isDone();
-    }
-
-    @Override
-    protected void end() {
-        //controller.stop();
-    }
-
-    @Override
-    protected void interrupted() {
     }
 }

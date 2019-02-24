@@ -10,9 +10,7 @@ public class Bay3FromHab extends CommandGroup {
      * This does not support us being in the middle
      */
     public Bay3FromHab() {
-
-        // Initial Move forward, move further for lv 2 because we are further back
-        addSequential(new MoveUsingEncoderPID(24));
+        addSequential(new MoveOffHab());
 
     }
 

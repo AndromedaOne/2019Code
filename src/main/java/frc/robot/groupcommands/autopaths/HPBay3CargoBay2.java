@@ -14,7 +14,7 @@ public class HPBay3CargoBay2 extends CommandGroup {
      */
     public HPBay3CargoBay2(boolean isOnRightSide) {
         //TODO: Add real values.
-        addSequential(new Bay3FromHab(false, false, false));
+        addSequential(new Bay3FromHab());
         //Moves to Bay 3 and deposits the game piece.
         addSequential(new MoveUsingEncoderPID(0));
         //Moves back.

@@ -4,7 +4,7 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.groupcommands.autopaths.AutoStartingConfig;
 
-public class TurnToFieldOutside extends TurningBase {
+public class TurnToFieldOutside extends MoveTurnBase {
     private static GyroPIDController gyroPID = GyroPIDController.getInstance();
 
     public TurnToFieldOutside() {
@@ -17,11 +17,6 @@ public class TurnToFieldOutside extends TurningBase {
         } else {
             turnToCompassHeading(270);
         }
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return gyroPID.onTarget();
     }
 
 }
