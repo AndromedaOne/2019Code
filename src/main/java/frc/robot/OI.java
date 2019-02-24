@@ -15,6 +15,7 @@ import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.RollIntakeIn;
+import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TeleopIntake;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
@@ -112,6 +113,8 @@ public class OI {
      */
 
     ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
+
+    SmartDashboard.putData("StowIntake", new StowIntakeArm());
   }
 
   // Controllers

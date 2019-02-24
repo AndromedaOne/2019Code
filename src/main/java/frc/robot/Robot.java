@@ -228,6 +228,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using real intakeAngleSensor");
       int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
+      intakeAngleSensor.putSensorOnLiveWindow("Intake Sensor", "Angle");
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
@@ -235,7 +236,8 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("sensors.intakeStowedSwitch")) {
       System.out.println("Using real intakeStowedSwitch");
       int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
-      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, false);
+      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
+      intakeStowedSwitch.putSensorOnLiveWindow("Intake Limit", "Switch");
     } else {
       System.out.println("Using mock intakeStowedSwitch");
       intakeStowedSwitch = new MockLimitSwitchSensor();
@@ -430,6 +432,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    if (intakeStowedSwitch.isAtLimit()) {
+      intakeAngleSensor.reset();
+    }
     Scheduler.getInstance().run();
   }
 

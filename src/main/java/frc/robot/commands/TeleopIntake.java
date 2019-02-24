@@ -13,7 +13,7 @@ import frc.robot.Robot;
 import frc.robot.utilities.EnumeratedRawAxis;
 
 public class TeleopIntake extends Command {
-  private double mod = 0.8;
+  private double mod = 0.9;
   public TeleopIntake() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
