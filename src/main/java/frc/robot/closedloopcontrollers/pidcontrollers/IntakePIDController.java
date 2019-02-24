@@ -16,10 +16,10 @@ public class IntakePIDController extends PIDControllerBase {
 
   private IntakePIDController() {
     super.absoluteTolerance = 3;
-    super.p = 0;
+    super.p = 15;
     super.i = 0;
     super.d = 0;
-    super.outputRange = 0.3;
+    super.outputRange = 0.9;
     super.subsytemName = "Intake";
     super.pidName = "IntakePID";
 
@@ -41,14 +41,10 @@ public class IntakePIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
+      output = -output;
       trace.addTrace(true, "IntakePID", new TracePair("Output", output),
           new TracePair("Setpoint", container.getSetpoint()), new TracePair("Angle", intakeAngleSensor.pidGet()));
-      try {
         MoveIntakeSafely.moveIntake(output);
-      } catch (IsAtLimitException e) {
-        System.out.println("The Intake PID loop is driving into the limit switch!");
-        container.disable();
-      }
     }
   }
 
