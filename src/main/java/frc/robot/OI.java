@@ -20,6 +20,7 @@ import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
+import frc.robot.groupcommands.armwristcommands.TuckArm;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -112,11 +113,10 @@ public class OI {
     driveTrainPIDTest = new POVButton(driveController, POVDirectionNames.SOUTH.getValue());
     // driveTrainPIDTest.whileHeld(new DriveTrainPIDTest());
     driveTrainPIDTest.whileHeld(new DriveForward());
+  
+    LowGamePieceButton= new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue()); 
+    LowGamePieceButton.whileHeld(new TuckArm() );
     /*
-     * LowGamePieceButton= new JoystickButton(operatorController,
-     * ButtonsEnumerated.ABUTTON.getValue()); LowGamePieceButton.whileHeld(new
-     * TestCommand() );
-     * 
      * CargoShipAndLoadingCommand = new JoystickButton(operatorController,
      * ButtonsEnumerated.BBUTTON.getValue());
      * CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());

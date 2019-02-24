@@ -418,6 +418,7 @@ public class MoveArmAndWristSafely {
         safeArmMovements.armExtension = false;
       }
     }
+    
     return safeArmMovements;
   }
 
