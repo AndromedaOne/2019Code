@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
 import frc.robot.utilities.EnumeratedRawAxis;
 
 public class TeleopIntake extends Command {
@@ -39,14 +40,18 @@ public class TeleopIntake extends Command {
     if (upDownValue > 0) {
       if (Robot.intake.isAtLimitSwitch()) {
         Robot.intake.moveIntakeArm(0);
+        Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.STOWED);
       } else {
         Robot.intake.moveIntakeArm(upDownValue * mod);
+        Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.UNKNOWN);
       }
     } else {
       if (Robot.intake.isAtGround()) {
+        Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.GROUNDHEIGHT);
         Robot.intake.moveIntakeArm(0);
       } else {
         Robot.intake.moveIntakeArm(upDownValue * mod);
+        Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.UNKNOWN);
       }
     }
   }
