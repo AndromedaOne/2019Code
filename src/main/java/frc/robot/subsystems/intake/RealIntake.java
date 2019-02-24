@@ -22,19 +22,18 @@ public class RealIntake extends Intake {
   public RealIntake() {
     Config conf = Robot.getConfig();
 
-    // TODO: only put ports in port config and put intake config in subsystem block
     Config intakeConf = conf.getConfig("ports.intake");
     rollerTalon = new PWMVictorSPX(intakeConf.getInt("rollerTalon"));
     intakeArmTalon = new PWMVictorSPX(intakeConf.getInt("intakeArm"));
     intakeDownDirection = intakeConf.getInt("intakeDowndirection");
-    if (conf.hasPath("subsystems.intake")) {
-      Config intakeSubConf = conf.getConfig("subsystems.intake");
-      cargoPositionSetPoint = intakeSubConf.getDouble("CargoPositionSetpoint");
-      groundPositionSetPoint = intakeSubConf.getDouble("GroundPositionSetPoint");
-    } else {
-      cargoPositionSetPoint = 7;
-      groundPositionSetPoint = 6;
+    Config intakeSubConf = conf.getConfig("subsystems.intake");
+    cargoPositionSetPoint = intakeSubConf.getDouble("CargoPositionSetpoint");
+    groundPositionSetPoint = intakeSubConf.getDouble("GroundPositionSetPoint");
+
+    if (isAtLimitSwitch()) {
+      currentIntakePosition = IntakeArmPositionsEnum.STOWED;
     }
+
   }
 
   @Override
@@ -69,7 +68,7 @@ public class RealIntake extends Intake {
   }
 
   public boolean isAtLimitSwitch() {
-    return !Robot.intakeStowedSwitch.isAtLimit();
+    return Robot.intakeStowedSwitch.isAtLimit();
   }
 
   public double getCargoSetpoint() {

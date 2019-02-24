@@ -39,4 +39,14 @@ public class MockIntake extends Intake {
     return false;
   }
 
+  @Override
+  public double getCargoSetpoint() {
+    return 0;
+  }
+
+  @Override
+  public double getGroundSetpoint() {
+    return 0;
+  }
+
 }

@@ -14,4 +14,8 @@ public abstract class Intake extends Subsystem {
   public abstract boolean isAtLimitSwitch();
 
   public abstract boolean isAtGround();
+
+  public abstract double getCargoSetpoint();
+
+  public abstract double getGroundSetpoint();
 }
