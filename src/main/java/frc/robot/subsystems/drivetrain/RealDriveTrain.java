@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
@@ -31,7 +30,7 @@ public class RealDriveTrain extends DriveTrain {
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
-  private PowerDistributionPanel pdp = new PowerDistributionPanel();
+  // private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public boolean getShifterPresentFlag() {
     return shifterPresentFlag;
