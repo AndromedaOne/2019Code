@@ -47,7 +47,7 @@ public class RealIntake extends Intake {
     if (speed < 0) {
       sign = -1;
     }
-    intakeArmTalon.set(/*Math.pow(speed * intakeDownDirection, 2) * sign*/ speed);
+    intakeArmTalon.set(/* Math.pow(speed * intakeDownDirection, 2) * sign */ speed);
   }
 
   @Override

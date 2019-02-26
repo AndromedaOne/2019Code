@@ -16,7 +16,6 @@ public class IntakeArmControl extends Command {
   private MoveIntakeArmDirection directionToMove;
   private IntakeArmPositionsEnum nextIntakePosition;
 
-
   /**
    * Construct an intake control command to make the intake arm go up or down
    * 

@@ -1,7 +1,6 @@
 package frc.robot.closedloopcontrollers;
 
 import frc.robot.Robot;
-import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor.IsAtLimitException;
 
 public class MoveIntakeSafely {
   /**
