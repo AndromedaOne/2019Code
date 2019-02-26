@@ -7,7 +7,6 @@ public class PIDControllerBase {
   protected PIDMultiton pidMultiton;
   protected double outputRange = 1;
   protected double absoluteTolerance = 0;
-  protected double _setpoint = 0;
   protected PIDConfiguration pidConfiguration = new PIDConfiguration();
   protected double p = 0;
   protected double i = 0;

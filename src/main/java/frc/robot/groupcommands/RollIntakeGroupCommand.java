@@ -8,7 +8,7 @@ import frc.robot.groupcommands.armwristcommands.IntakeReady;
 public class RollIntakeGroupCommand extends CommandGroup {
 
   public RollIntakeGroupCommand() {
-    boolean positiveShoulder = Robot.armRotateEncoder1.getDistanceTicks() > 0;
+    boolean positiveShoulder = Robot.shoulderEncoder.getDistanceTicks() > 0;
     addSequential(new IntakeReady(positiveShoulder));
     addSequential(new RollIntakeIn());
   }
