@@ -61,6 +61,8 @@ public class OI {
   JoystickButton raiseRightFront;
   JoystickButton raiseLeftRear;
   JoystickButton raiseRightRear;
+  private POVButton retractFrontLegs;
+  private POVButton retractRearLegs;
 
   // Subsystem Controller and Buttons
   Joystick subsystemController;
@@ -106,6 +108,12 @@ public class OI {
 
     raiseLeftRear = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
     raiseLeftRear.whenPressed(new PulseLeg(stiltLeg.REARLEFT));
+
+    retractFrontLegs = new POVButton(driveController, POVDirectionNames.EAST.getValue());
+    retractFrontLegs.whenPressed(new RetractFrontLegs());
+
+    retractRearLegs = new POVButton(driveController, POVDirectionNames.WEST.getValue());
+    retractRearLegs.whenPressed(new RetractRearLegs());
 
     SmartDashboard.putData("Extend Front Left", new RaiseFrontLeft());
     SmartDashboard.putData("Extend Front Right", new RaiseFrontRight());
