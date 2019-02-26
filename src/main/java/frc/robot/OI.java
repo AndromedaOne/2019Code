@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.stilts.*;
-import frc.robot.commands.stilts.PulseLeg.stiltLeg;
 import frc.robot.utilities.ButtonsEnumerated;
 
 /**
