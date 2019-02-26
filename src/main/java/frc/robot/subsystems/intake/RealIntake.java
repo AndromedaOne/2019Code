@@ -4,7 +4,6 @@ import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import frc.robot.Robot;
-import frc.robot.commands.TeleopIntake;
 
 /* TODO 
 * Test to make sure speed is accurate in RAISEARMSPEED
@@ -53,7 +52,6 @@ public class RealIntake extends Intake {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new TeleopIntake());
   }
 
   @Override
