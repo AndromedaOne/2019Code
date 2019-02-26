@@ -65,16 +65,16 @@ public class OI {
     raiseRobotButton.whenPressed(new RaiseRobot());
 
     raiseLeftFront = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
-    raiseLeftFront.whenPressed(new PulseLeg(stiltLeg.FRONTLEFT));
+    raiseLeftFront.whenPressed(new RaiseFrontLeft());
 
     raiseRightFront = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
-    raiseRightFront.whenPressed(new PulseLeg(stiltLeg.FRONTRIGHT));
+    raiseRightFront.whenPressed(new RaiseFrontRight());
 
     raiseRightRear = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
-    raiseRightRear.whenPressed(new PulseLeg(stiltLeg.REARRIGHT));
+    raiseRightRear.whenPressed(new RaiseRearRight());
 
     raiseLeftRear = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
-    raiseLeftRear.whenPressed(new PulseLeg(stiltLeg.REARLEFT));
+    raiseLeftRear.whenPressed(new RaiseRearLeft());
 
     SmartDashboard.putData("Extend Front Left", new RaiseFrontLeft());
     SmartDashboard.putData("Extend Front Right", new RaiseFrontRight());
