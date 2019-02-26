@@ -2,7 +2,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import frc.robot.telemetries.Trace;
 
-public class PIDControllerBase {
+public class PIDControllerBase extends SendableBase{
   protected static Trace trace;
   protected PIDMultiton pidMultiton;
   protected double outputRange = 1;
@@ -76,4 +76,12 @@ public class PIDControllerBase {
     pidConfiguration.setLiveWindowName(subsytemName);
     pidConfiguration.setPIDName(pidName);
   }
+
+  builder.setSmartDashboardType("PIDController");
+    builder.setSafeState(this::reset);
+    builder.addDoubleProperty("p", this::getP, this::setP);
+    builder.addDoubleProperty("i", this::getI, this::setI);
+    builder.addDoubleProperty("d", this::getD, this::setD);
+    builder.addDoubleProperty("f", this::getF, this::setF);
+    builder.addDoubleProperty("setpoint", this::getSetpoint, this::setSetpoint);
 }
