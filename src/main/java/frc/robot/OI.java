@@ -18,7 +18,6 @@ import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.stilts.*;
-import frc.robot.commands.stilts.PulseLeg.stiltLeg;
 import frc.robot.groupcommands.RollIntakeGroupCommand;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
@@ -63,6 +62,8 @@ public class OI {
   JoystickButton raiseRightRear;
   private POVButton retractFrontLegs;
   private POVButton retractRearLegs;
+  private POVButton extendAllLegs;
+  JoystickButton retractAllLegs;
 
   // Subsystem Controller and Buttons
   Joystick subsystemController;
@@ -97,17 +98,11 @@ public class OI {
     subsystemController = new Joystick(1);
     raiseRobotButton = new JoystickButton(driveController, ButtonsEnumerated.LEFTBUMPERBUTTON.getValue());
 
-    raiseLeftFront = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
-    raiseLeftFront.whenPressed(new PulseLeg(stiltLeg.FRONTLEFT));
+    retractAllLegs = new JoystickButton(driveController, ButtonsEnumerated.BACKBUTTON.getValue());
+    retractAllLegs.whenPressed(new RetractAll());
 
-    raiseRightFront = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
-    raiseRightFront.whenPressed(new PulseLeg(stiltLeg.FRONTRIGHT));
-
-    raiseRightRear = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
-    raiseRightRear.whenPressed(new PulseLeg(stiltLeg.REARRIGHT));
-
-    raiseLeftRear = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
-    raiseLeftRear.whenPressed(new PulseLeg(stiltLeg.REARLEFT));
+    extendAllLegs = new POVButton(driveController, POVDirectionNames.NORTH.getValue());
+    extendAllLegs.whenPressed(new RaiseAll());
 
     retractFrontLegs = new POVButton(driveController, POVDirectionNames.EAST.getValue());
     retractFrontLegs.whenPressed(new RetractFrontLegs());
@@ -115,14 +110,6 @@ public class OI {
     retractRearLegs = new POVButton(driveController, POVDirectionNames.WEST.getValue());
     retractRearLegs.whenPressed(new RetractRearLegs());
 
-    SmartDashboard.putData("Extend Front Left", new RaiseFrontLeft());
-    SmartDashboard.putData("Extend Front Right", new RaiseFrontRight());
-    SmartDashboard.putData("Extend Rear Left", new RaiseRearLeft());
-    SmartDashboard.putData("Extend Rear Right", new RaiseRearRight());
-    SmartDashboard.putData("Retract Front Left", new RetractFrontLeft());
-    SmartDashboard.putData("Retract Front Right", new RetractFrontRight());
-    SmartDashboard.putData("Retract Rear Left", new RetractRearLeft());
-    SmartDashboard.putData("Retract Rear Right", new RetractRearRight());
     SmartDashboard.putData("Retract All", new RetractAll());
 
     driveController = new Joystick(0);

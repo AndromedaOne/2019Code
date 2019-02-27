@@ -6,8 +6,7 @@ import frc.robot.Robot;
 public class RetractFrontLegs extends Command {
 
   public void initialize() {
-    Robot.pneumaticStilts.retractFrontLeft();
-    Robot.pneumaticStilts.retractFrontRight();
+    Robot.pneumaticStilts.retractFrontLegs();
   }
 
   @Override

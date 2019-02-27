@@ -6,7 +6,7 @@ import frc.robot.Robot;
 public class PulseLeg extends Command {
 
   public enum stiltLeg {
-    FRONTRIGHT, FRONTLEFT, REARLEFT, REARRIGHT, STOPLEGS
+    FRONTLEGS, REARLEGS, STOPLEGS
   }
 
   private stiltLeg currentLeg = stiltLeg.STOPLEGS;
@@ -30,17 +30,11 @@ public class PulseLeg extends Command {
     long time = System.currentTimeMillis();
     System.out.println("time: " + time);
     switch (currentLeg) {
-    case FRONTLEFT:
-      Robot.pneumaticStilts.extendFrontLeft();
+    case FRONTLEGS:
+      Robot.pneumaticStilts.extendFrontLegs();
       currentLeg = stiltLeg.STOPLEGS;
-    case FRONTRIGHT:
-      Robot.pneumaticStilts.extendFrontRight();
-      currentLeg = stiltLeg.STOPLEGS;
-    case REARLEFT:
-      Robot.pneumaticStilts.extendRearLeft();
-      currentLeg = stiltLeg.STOPLEGS;
-    case REARRIGHT:
-      Robot.pneumaticStilts.extendRearRight();
+    case REARLEGS:
+      Robot.pneumaticStilts.extendRearLegs();
       currentLeg = stiltLeg.STOPLEGS;
     case STOPLEGS:
       if (currentHoldTime < time) {

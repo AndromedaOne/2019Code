@@ -7,10 +7,8 @@ import frc.robot.Robot;
 
 public class RealPneumaticStilts extends PneumaticStilts {
 
-  public static StiltLeg frontLeftStiltLeg;
-  public static StiltLeg frontRightStiltLeg;
-  public static StiltLeg rearLeftStiltLeg;
-  public static StiltLeg rearRightStiltLeg;
+  public static StiltLeg frontStiltLegs;
+  public static StiltLeg rearStiltLegs;
 
   private class StiltLeg {
     private DoubleSolenoid solenoid;
@@ -24,87 +22,55 @@ public class RealPneumaticStilts extends PneumaticStilts {
     }
 
     public void retractLeg() {
-      solenoid.set(DoubleSolenoid.Value.kForward);
+      solenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void extendLeg() {
-      solenoid.set(DoubleSolenoid.Value.kReverse);
+      solenoid.set(DoubleSolenoid.Value.kForward);
     }
 
   }
 
   public RealPneumaticStilts() {
 
+    System.out.println("Using Real Pneumatic Stilt Subsystem");
     Config portConf = Robot.getConfig().getConfig("ports.stilts");
-    frontLeftStiltLeg = new StiltLeg(
-        new DoubleSolenoid(portConf.getInt("frontLeft.forward"), portConf.getInt("frontLeft.backward")));
-    frontRightStiltLeg = new StiltLeg(
-        new DoubleSolenoid(portConf.getInt("frontRight.forward"), portConf.getInt("frontRight.backward")));
-    rearLeftStiltLeg = new StiltLeg(
-        new DoubleSolenoid(portConf.getInt("rearLeft.forward"), portConf.getInt("rearLeft.backward")));
-    rearRightStiltLeg = new StiltLeg(
-        new DoubleSolenoid(portConf.getInt("rearRight.forward"), portConf.getInt("rearRight.backward")));
+    frontStiltLegs = new StiltLeg(
+        new DoubleSolenoid(portConf.getInt("front.forward"), portConf.getInt("front.backward")));
+    rearStiltLegs = new StiltLeg(new DoubleSolenoid(portConf.getInt("rear.forward"), portConf.getInt("rear.backward")));
 
     stopAllLegs();
   }
 
   public void stopAllLegs() {
-    frontLeftStiltLeg.stopLeg();
-    frontRightStiltLeg.stopLeg();
-    rearLeftStiltLeg.stopLeg();
-    rearRightStiltLeg.stopLeg();
+    frontStiltLegs.stopLeg();
+    rearStiltLegs.stopLeg();
   }
 
-  public void extendFrontLeft() {
-    frontLeftStiltLeg.extendLeg();
+  public void extendFrontLegs() {
+    frontStiltLegs.extendLeg();
   }
 
-  public void extendFrontRight() {
-    frontRightStiltLeg.extendLeg();
+  public void extendRearLegs() {
+    rearStiltLegs.extendLeg();
   }
 
-  public void extendRearLeft() {
-    rearLeftStiltLeg.extendLeg();
+  public void stopFrontLegs() {
+    frontStiltLegs.stopLeg();
   }
 
-  public void extendRearRight() {
-    rearRightStiltLeg.extendLeg();
-  }
-
-  public void stopFrontLeft() {
-    frontLeftStiltLeg.stopLeg();
-  }
-
-  public void stopFrontRight() {
-    frontRightStiltLeg.stopLeg();
-  }
-
-  public void stopRearLeft() {
-    rearLeftStiltLeg.stopLeg();
-  }
-
-  public void stopRearRight() {
-    rearRightStiltLeg.stopLeg();
+  public void stopRearLegs() {
+    rearStiltLegs.stopLeg();
   }
 
   @Override
-  public void retractFrontLeft() {
-    frontLeftStiltLeg.retractLeg();
+  public void retractFrontLegs() {
+    frontStiltLegs.retractLeg();
   }
 
   @Override
-  public void retractFrontRight() {
-    frontRightStiltLeg.retractLeg();
-  }
-
-  @Override
-  public void retractRearLeft() {
-    rearLeftStiltLeg.retractLeg();
-  }
-
-  @Override
-  public void retractRearRight() {
-    rearRightStiltLeg.retractLeg();
+  public void retractRearLegs() {
+    rearStiltLegs.retractLeg();
   }
 
 }

@@ -20,7 +20,7 @@ public class RealIntake extends Intake {
     Config conf = Robot.getConfig();
 
     // TODO: only put ports in port config and put intake config in subsystem block
-    Config intakeConf = conf.getConfig("port.can");
+    Config intakeConf = conf.getConfig("ports.intake");
     rollerTalon = new WPI_TalonSRX(intakeConf.getInt("rollerTalon"));
     intakeArmTalon = new WPI_TalonSRX(intakeConf.getInt("intakeArm"));
     intakeDownDirection = intakeConf.getInt("intakeDownDirection");
