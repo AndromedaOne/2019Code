@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.telemetries.Trace;
 
-public class PIDControllerBase extends SendableBase{
+public class PIDControllerBase {
   protected static Trace trace;
   protected PIDMultiton pidMultiton;
   protected double outputRange = 1;
@@ -78,18 +78,6 @@ public class PIDControllerBase extends SendableBase{
     pidConfiguration.setLiveWindowName(subsytemName);
     pidConfiguration.setPIDName(pidName);
   }
-
-@Override
-public void initSendable(SendableBuilder builder) {
-	  builder.setSmartDashboardType("PIDController");
-    builder.setSafeState(this::reset);
-    builder.addDoubleProperty("p", this::getP, this::setP);
-    builder.addDoubleProperty("i", this::getI, this::setI);
-    builder.addDoubleProperty("d", this::getD, this::setD);
-    builder.addDoubleProperty("f", this::getF, this::setF);
-    builder.addDoubleProperty("setpoint", this::getSetpoint, this::setSetpoint);
-    builder.addBooleanProperty("enabled", this::isEnabled, this::setEnabled);
-}
 
   
 }
