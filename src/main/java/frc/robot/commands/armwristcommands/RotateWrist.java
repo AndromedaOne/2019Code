@@ -8,7 +8,8 @@ public class RotateWrist extends Command {
 
   private double encDegrees;
   private static boolean overrideAndFinishCommand = false;
-  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam){
+
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam) {
     overrideAndFinishCommand = overrideAndFinishCommandParam;
   }
 

@@ -1,7 +1,6 @@
 package frc.robot.groupcommands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
@@ -21,7 +20,7 @@ public class CargoShipAndLoadingCommand extends Command {
         Robot.operatorController);
     if (DriveClawMotorsSafely.hasBall) {
       (new CargoShipCargo(positiveWrist, sameSidePlacement, shoulderAngle)).start();
-      
+
     } else {
       (new LoadingStation(positiveWrist, sameSidePlacement, shoulderAngle)).start();
     }

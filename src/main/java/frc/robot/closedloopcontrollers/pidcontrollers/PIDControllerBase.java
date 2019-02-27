@@ -1,7 +1,5 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
-import edu.wpi.first.wpilibj.SendableBase;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.telemetries.Trace;
 
 public class PIDControllerBase {
@@ -79,5 +77,4 @@ public class PIDControllerBase {
     pidConfiguration.setPIDName(pidName);
   }
 
-  
 }

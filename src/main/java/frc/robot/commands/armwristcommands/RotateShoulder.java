@@ -10,7 +10,8 @@ public class RotateShoulder extends Command {
   ShoulderPIDController sPidController;
 
   private static boolean overrideAndFinishCommand = false;
-  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam){
+
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam) {
     overrideAndFinishCommand = overrideAndFinishCommandParam;
   }
 

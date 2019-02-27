@@ -21,7 +21,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 1.5 / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
     // PID loop will only return true if error is within 1.5 inches of setpoint
-    super.p = 5.0e-5;//1.0 * Math.pow(10, -4);
+    super.p = 5.0e-5;// 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 1.0e-4;
     super.subsytemName = "Extendable Arm and Wrist";
@@ -32,8 +32,10 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     super.trace = Trace.getInstance();
     armPIDSource = new ArmPIDSource();
     armPIDSource.putSensorOnLiveWindow(super.subsytemName, "Extension");
-    //topArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionTopEncoder");
-    //bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionBottomEncoder");
+    // topArmEncoder.putSensorOnLiveWindow(super.subsytemName,
+    // "ExtensionTopEncoder");
+    // bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName,
+    // "ExtensionBottomEncoder");
     armPIDOut = new ArmPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, super.pidConfiguration);

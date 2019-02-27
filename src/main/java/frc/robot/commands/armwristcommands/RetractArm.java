@@ -9,7 +9,8 @@ public class RetractArm extends Command {
   private double inchesExtension;
 
   private static boolean overrideAndFinishCommand = false;
-  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam){
+
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam) {
     overrideAndFinishCommand = overrideAndFinishCommandParam;
   }
 

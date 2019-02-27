@@ -10,7 +10,6 @@ import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.exceptions.ArmOutOfBoundsException;
-import frc.robot.utilities.ButtonsEnumerated;
 
 public class MoveArmAndWristSafely {
 
@@ -399,7 +398,7 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armExtension = false;
     }
     if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtensionInches - 1) {
-      
+
       // This safety is preventing the claw from hitting the elctronics when it
       // is being swung through the robot
       if (extensionIn > 15 && wristRotDeg < -95) {
@@ -431,9 +430,9 @@ public class MoveArmAndWristSafely {
       }
     }
 
-    if(shoulderRotDeg > -30 && shoulderRotDeg < -10){
-      if(wristRotDeg < -80 && extensionIn > maxExtensionInches - 10){
-        //TODO: Get the right number instead of 10 and set the safeArmMovements
+    if (shoulderRotDeg > -30 && shoulderRotDeg < -10) {
+      if (wristRotDeg < -80 && extensionIn > maxExtensionInches - 10) {
+        // TODO: Get the right number instead of 10 and set the safeArmMovements
         // we are hitting the shoulder cim motor
 
       }
