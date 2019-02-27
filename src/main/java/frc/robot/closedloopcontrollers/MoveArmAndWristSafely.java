@@ -43,6 +43,9 @@ public class MoveArmAndWristSafely {
   private static final double SHOULDEROFFSETFROMCENTER = 0.75;
   private static final double SHOULDERHEIGHT = 40;
   private static final double ELECTRONICSDANGERZONEHEIGHT = 14;
+  private static final double TOPSIDEBOXHEIGHT = 10;
+  private static final double TOPSIDEBOXWIDTH = 10;
+  private static final double RULEEXTENSIONBOX = 30;
   private static final double ROBOTLENGTH = 29.5;
   private static final double MAXARMLENGTH = 35.75;
   private static final double CLAWLENGTH = 20.5;
@@ -349,11 +352,13 @@ public class MoveArmAndWristSafely {
     SafeArmMovements safeArmMovements = new SafeArmMovements();
 
     checkSafetyConstraints(extensionIn, wristRotDeg, shoulderRotDeg, safeArmMovements);
-    if (teleOpModeActive) {
+    if (teleOpModeActive && false) {
+      // Temporary disabling until startup if sorted out
       checkTeleOpConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
     }
     checkZoneConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
-    //checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+    // checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower,
+    // shoulderPower, safeArmMovements);
 
     return safeArmMovements;
   }
@@ -398,10 +403,7 @@ public class MoveArmAndWristSafely {
    * 
    * 
    * 
-   *  _________________________________
-   * |
-   * |
-   * |___________________________
+   * _________________________________ | | |___________________________
    * 
    *
    *
@@ -500,12 +502,11 @@ public class MoveArmAndWristSafely {
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     checkButtEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
     checkClawEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
-    checkClawTipConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
   }
 
-/**
- * Implements a way to find the butt end of the arm on a coordinate system
- */
+  /**
+   * Implements a way to find the butt end of the arm on a coordinate system
+   */
   private static void checkButtEndConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
@@ -528,9 +529,10 @@ public class MoveArmAndWristSafely {
       safeArmMovements.armRetraction = false;
     }
   }
-/**
- * Implements a way to find the end of the arm on a coordinate system
- */
+
+  /**
+   * Implements a way to find the end of the arm on a coordinate system
+   */
   private static void checkClawEndConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
@@ -538,17 +540,45 @@ public class MoveArmAndWristSafely {
     double wristJointPositionX = extensionOut * Math.sin(shoulderRotationRadians) - SHOULDEROFFSETFROMCENTER;
     double wristJointPositionY = SHOULDERHEIGHT - (extensionOut * Math.cos(shoulderRotationRadians));
 
-  }
+    if (wristJointPositionX > RULEEXTENSIONBOX) {
+      safeArmMovements.armExtension = false;
+      if (shoulderRotDeg < 90) {
+        safeArmMovements.shoulderRotateClockwise = false;
+      } else {
+        safeArmMovements.shoulderRotateCounterClockwise = false;
+      }
+    }
+    if (wristJointPositionX < -RULEEXTENSIONBOX) {
+      safeArmMovements.armExtension = false;
+      if (shoulderRotDeg > -90) {
+        safeArmMovements.shoulderRotateCounterClockwise = false;
+      } else {
+        safeArmMovements.shoulderRotateClockwise = false;
+      }
 
-/**
- * Implements a way to find the claw tip on a coordinate system
- */
-  private static void checkClawTipConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
-  double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
-    double wristRotRelativeToFloor = wristRotDeg- (180-(shoulderRotDeg + 90));
-    double XPosRelativeToArmJoint = (CLAWLENGTH) * Math.cos(wristRotRelativeToFloor);
-    double YposRelativeToArmJoint = (CLAWLENGTH) * Math.sin(wristRotRelativeToFloor);
+    }
+    if (wristJointPositionY <= ELECTRONICSDANGERZONEHEIGHT) {
 
+      if (wristJointPositionX >= 0 && wristJointPositionX < (ROBOTLENGTH / 2)) {
+        safeArmMovements.armExtension = false;
+        safeArmMovements.shoulderRotateCounterClockwise = false;
+      }
+      if (wristJointPositionX < 0 && wristJointPositionX > (-ROBOTLENGTH / 2)) {
+        safeArmMovements.armExtension = false;
+        safeArmMovements.shoulderRotateCounterClockwise = false;
+      }
+    }
+    if (wristJointPositionY <= SHOULDERHEIGHT && wristJointPositionY >= (SHOULDERHEIGHT - TOPSIDEBOXHEIGHT)) {
+        if (wristJointPositionX >= 0 && wristJointPositionX <= TOPSIDEBOXWIDTH) {
+          safeArmMovements.armExtension = false;
+        }
+    }
+
+    double wristRotRelativeToFloor = wristRotDeg - (180 - (shoulderRotDeg + 90));
+    double xPosRelativeToArmJoint = (CLAWLENGTH) * Math.cos(wristRotRelativeToFloor);
+    double yPosRelativeToArmJoint = (CLAWLENGTH) * Math.sin(wristRotRelativeToFloor);
+    double clawTipXPos = wristJointPositionX + xPosRelativeToArmJoint;
+    double clawTipYPos = wristJointPositionY + yPosRelativeToArmJoint;
   }
 
   /**
