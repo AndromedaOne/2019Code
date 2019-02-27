@@ -1,6 +1,7 @@
 package frc.robot.sensors.ultrasonicsensor;
 
 import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RealUltrasonicSensor extends UltrasonicSensor {
   private Ultrasonic ultrasonic;
@@ -22,14 +23,13 @@ public class RealUltrasonicSensor extends UltrasonicSensor {
 
   @Override
   public double getDistanceInches() {
+    SmartDashboard.putNumber("Front Ultrasonic", ultrasonic.getRangeInches());
     double distance = ultrasonic.getRangeInches();
-    boolean isRangeValid = ultrasonic.isRangeValid();
     return distance;
   }
 
   @Override
   public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-    System.out.println("Real Ultrasonic");
     super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "Inches:", this::getDistanceInches);
   }
 }
