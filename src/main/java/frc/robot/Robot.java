@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
   public static double absoluteWristPositionError = 0.0;
   public static double absoluteArmPositionError = 0.0;
 
-  private OI oi;
+  public OI oi;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
