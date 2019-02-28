@@ -1,8 +1,10 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.telemetries.Trace;
 
-public class PIDControllerBase {
+public class PIDControllerBase implements Sendable {
   protected static Trace trace;
   protected PIDMultiton pidMultiton;
   protected double outputRange = 1;
@@ -75,6 +77,38 @@ public class PIDControllerBase {
     pidConfiguration.setMinimumOutput(-outputRange);
     pidConfiguration.setLiveWindowName(subsytemName);
     pidConfiguration.setPIDName(pidName);
+  }
+
+  @Override
+  public String getName() {
+    return null;
+  }
+
+  @Override
+  public void setName(String name) {
+
+  }
+
+  @Override
+  public String getSubsystem() {
+    return null;
+  }
+
+  @Override
+  public void setSubsystem(String subsystem) {
+
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("PIDController");
+    builder.setSafeState(this.pidMultiton.pidController::reset);
+    builder.addDoubleProperty("p", this.pidMultiton.pidController::getP, this.pidMultiton.pidController::setP);
+    builder.addDoubleProperty("i", this.pidMultiton.pidController::getI, this.pidMultiton.pidController::setI);
+    builder.addDoubleProperty("d", this.pidMultiton.pidController::getD, this.pidMultiton.pidController::setD);
+    builder.addDoubleProperty("f", this.pidMultiton.pidController::getF, this.pidMultiton.pidController::setF);
+    builder.addDoubleProperty("setpoint", this.pidMultiton.pidController::getSetpoint, this::setSetpoint);
+    builder.addBooleanProperty("enabled", this.pidMultiton.pidController::isEnabled, this.pidMultiton.pidController::setEnabled);
   }
 
 }

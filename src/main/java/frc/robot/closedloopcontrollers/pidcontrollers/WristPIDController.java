@@ -3,6 +3,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.SensorBase;
@@ -42,6 +43,8 @@ public class WristPIDController extends PIDControllerBase {
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(wristPIDSource, wristPIDOut, super.pidConfiguration);
     wristPIDOut.setContainer(super.pidMultiton);
+    this.setName(super.subsytemName, super.pidName);
+    LiveWindow.add(this);
   }
 
   private class WristPIDOut implements PIDOutput {

@@ -41,6 +41,8 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, super.pidConfiguration);
     armPIDOut.setContainer(super.pidMultiton);
+    this.setName(super.subsytemName, super.pidName);
+    LiveWindow.add(this);
   }
 
   private class ArmPIDOut implements PIDOutput {

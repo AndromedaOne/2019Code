@@ -3,6 +3,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
@@ -33,6 +34,8 @@ public class ShoulderPIDController extends PIDControllerBase {
     shoulderEncoder.putSensorOnLiveWindow(super.subsytemName, "ShoulderEncoder");
     super.pidMultiton = PIDMultiton.getInstance(shoulderPIDSrc, shoulderPIDOut, super.pidConfiguration);
     shoulderPIDOut.setContainer(super.pidMultiton);
+    this.setName(super.subsytemName, super.pidName);
+    LiveWindow.add(this);
   }
 
   private class ShoulderPIDOut implements PIDOutput {
