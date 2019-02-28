@@ -154,9 +154,6 @@ public class Robot extends TimedRobot {
 
     System.out.println("Here is my config: " + conf);
 
-    driveController = new Joystick(0);
-    armController = new Joystick(1);
-
     if (conf.hasPath("subsystems.armAndWrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
@@ -314,8 +311,11 @@ public class Robot extends TimedRobot {
     }
 
     if (conf.hasPath("subsystems.climber")) {
-      /*climbUltrasonicSensor = new RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
-          conf.getInt("subsystems.climber.ultrasonic.echo"));*/
+      /*
+       * climbUltrasonicSensor = new
+       * RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
+       * conf.getInt("subsystems.climber.ultrasonic.echo"));
+       */
       pneumaticStilts = new RealPneumaticStilts();
     } else {
       climbUltrasonicSensor = new MockUltrasonicSensor();
@@ -333,6 +333,10 @@ public class Robot extends TimedRobot {
     // constructed yet. Thus, their requires() statements may grab null
     // pointers. Bad news. Don't move it.
     OI.getInstance();
+
+    driveController = OI.getInstance().getDriveStick();
+    armController = OI.getInstance().getOperatorStick();
+
     robotInitDone = true;
   }
 

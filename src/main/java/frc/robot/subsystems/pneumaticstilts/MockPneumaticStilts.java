@@ -9,7 +9,7 @@ public class MockPneumaticStilts extends PneumaticStilts {
   public MockPneumaticStilts() {
     System.out.println("Using Mock Pneumatic Stilt Subsystem");
   }
-  
+
   public void stopAllLegs() {
     System.out.println("Stopping all legs.");
   }
