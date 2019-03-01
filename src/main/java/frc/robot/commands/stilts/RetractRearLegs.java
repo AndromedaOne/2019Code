@@ -7,6 +7,7 @@ import frc.robot.utilities.POVDirectionNames;
 public class RetractRearLegs extends Command {
 
   public void initialize() {
+    System.out.println("Retracting Rear Legs");
     Robot.pneumaticStilts.retractRearLegs();
   }
 
