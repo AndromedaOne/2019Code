@@ -21,9 +21,9 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 1.5 / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
     // PID loop will only return true if error is within 1.5 inches of setpoint
-    super.p = 1.0 * Math.pow(10, -4); //5.0e-5;
+    super.p = 1.0 * Math.pow(10, -4); // 5.0e-5;
     super.i = 0;
-    super.d = 0.0;//1.0e-4;
+    super.d = 0.0;// 1.0e-4;
     super.outputRange = 0.85;
     super.subsytemName = "Extendable Arm and Wrist";
     super.pidName = "Extension";
