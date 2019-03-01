@@ -408,6 +408,8 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_chooser.getSelected();
     gyro = NavXGyroSensor.getInstance();
     MoveArmAndWristSafely.stop();
+    pneumaticStilts.retractFrontLegs();
+    pneumaticStilts.retractRearLegs();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -436,6 +438,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    pneumaticStilts.retractFrontLegs();
+    pneumaticStilts.retractRearLegs();
     MoveArmAndWristSafely.stop();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
