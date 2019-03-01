@@ -16,9 +16,9 @@ public class IntakePIDController extends PIDControllerBase {
 
   private IntakePIDController() {
     super.absoluteTolerance = 0.05;
-    super.p = 15;
+    super.p = 5;
     super.i = 0;
-    super.d = 0.15;
+    super.d = 0.25;
     super.outputRange = 1;
     super.subsystemName = "Intake";
     super.pidName = "IntakePID";

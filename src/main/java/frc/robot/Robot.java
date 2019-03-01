@@ -408,6 +408,7 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_chooser.getSelected();
     gyro = NavXGyroSensor.getInstance();
     MoveArmAndWristSafely.stop();
+    driveTrain.shiftToLowGear();
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
 
@@ -444,7 +445,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
+    driveTrain.shiftToLowGear();
     gyroCorrectMove.setCurrentAngle();
   }
 
