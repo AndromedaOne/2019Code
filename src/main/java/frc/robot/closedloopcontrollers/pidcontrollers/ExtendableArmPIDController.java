@@ -18,7 +18,8 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private final MagEncoderSensor bottomArmEncoder;
 
   private ExtendableArmPIDController() {
-    super.absoluteTolerance = 3;
+    super.absoluteTolerance = 1.5 / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
+    // PID loop will only return true if error is within 1.5 inches of setpoint
     super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;

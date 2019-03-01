@@ -12,7 +12,7 @@ public class MoveDrivetrainGyroCorrect {
   private boolean gyroCorrect = false;
   private double currentDelay = 0;
   private static final double kDelay = 25;
-  private static final double kProportion = 0.05;
+  private static final double kProportion = 0.0;// 0.05;
 
   public MoveDrivetrainGyroCorrect(NavXGyroSensor theNavX, DriveTrain theDriveTrain) {
     navX = theNavX;
@@ -25,6 +25,7 @@ public class MoveDrivetrainGyroCorrect {
 
   public void stop() {
     moveUsingGyro(0, 0, false, false);
+    currentDelay = 0;
   }
 
   /**
