@@ -146,6 +146,7 @@ public class MoveArmAndWristSafely {
         isMovementSafe(0, 0, shoulderPower);
         shoulderPower = localPIDShoulderPower;
       }
+
     }
 
     double wristPower = 0;

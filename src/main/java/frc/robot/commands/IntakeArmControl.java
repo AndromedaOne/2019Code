@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import com.typesafe.config.Config;
-
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
@@ -18,20 +16,6 @@ public class IntakeArmControl extends Command {
   private MoveIntakeArmDirection directionToMove;
   private IntakeArmPositionsEnum nextIntakePosition;
 
-  private static double cargoPositionSetPoint;
-  private static double groundPositionSetPoint;
-  static {
-    Config conf = Robot.getConfig();
-    if (conf.hasPath("subsystems.intake")) {
-      Config intakeConf = conf.getConfig("subsystems.intake");
-      cargoPositionSetPoint = intakeConf.getDouble("CargoPositionSetpoint");
-      groundPositionSetPoint = intakeConf.getDouble("GroundPositionSetPoint");
-    } else {
-      cargoPositionSetPoint = 7;
-      groundPositionSetPoint = 6;
-    }
-  }
-
   /**
    * Construct an intake control command to make the intake arm go up or down
    * 
@@ -45,6 +29,7 @@ public class IntakeArmControl extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println(directionToMove.toString());
     switch (directionToMove) {
     case UP:
       setUpSetPoint();
@@ -54,6 +39,7 @@ public class IntakeArmControl extends Command {
       setDownSetpoint();
       break;
     }
+    System.out.println("Enabling Intake PID");
     intakePositionsPID.enable();
   }
 
@@ -65,19 +51,23 @@ public class IntakeArmControl extends Command {
     case STOWED:
       intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
+      System.out.println("We are in Stowed and trying to move to Stowed");
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setSetpoint(-cargoPositionSetPoint);
+      intakePositionsPID.setSetpoint(0);
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
+      System.out.println("We are in Cargoheight and trying to move to Stowed");
       break;
     case GROUNDHEIGHT:
-      intakePositionsPID.setSetpoint(cargoPositionSetPoint - groundPositionSetPoint);
+      intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
+      System.out.println("We are at the Ground trying to move to Cargoheight");
       break;
     case UNKNOWN:
       // TODO: Don't move
       intakePositionsPID.setSetpoint(0);
-      nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
+      nextIntakePosition = IntakeArmPositionsEnum.STOWED;
+      System.out.println("We have no idea where we are and we're going to stowed");
       break;
     }
   }
@@ -88,21 +78,25 @@ public class IntakeArmControl extends Command {
   private void setDownSetpoint() {
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
-      intakePositionsPID.setSetpoint(cargoPositionSetPoint);
+      intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
+      System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setSetpoint(groundPositionSetPoint - cargoPositionSetPoint);
+      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      System.out.println("We are at the cargoheight and trying to go to the ground");
       break;
     case GROUNDHEIGHT:
       intakePositionsPID.setSetpoint(0);
-      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      nextIntakePosition = IntakeArmPositionsEnum.STOWED;
+      System.out.println("We are at the ground and trying to stow");
       break;
     case UNKNOWN:
       // TODO: Don't move
       intakePositionsPID.setSetpoint(0);
-      nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
+      nextIntakePosition = IntakeArmPositionsEnum.STOWED;
+      System.out.println("We don't know where we are and we're trying to stow.");
       break;
     }
   }

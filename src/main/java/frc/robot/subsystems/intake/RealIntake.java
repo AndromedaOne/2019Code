@@ -1,8 +1,8 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
+import edu.wpi.first.wpilibj.PWMVictorSPX;
 import frc.robot.Robot;
 
 /* TODO
@@ -11,19 +11,28 @@ import frc.robot.Robot;
 * find actual values for CARGOPOSITION and ENDGAMEPOSITION
 */
 public class RealIntake extends Intake {
-  public static WPI_TalonSRX rollerTalon;
-  public static WPI_TalonSRX intakeArmTalon;
+  public static PWMVictorSPX rollerTalon;
+  public static PWMVictorSPX intakeArmTalon;
   private int intakeDownDirection;
   private IntakeArmPositionsEnum currentIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
+  private double cargoPositionSetPoint;
+  private double groundPositionSetPoint;
 
   public RealIntake() {
     Config conf = Robot.getConfig();
 
-    // TODO: only put ports in port config and put intake config in subsystem block
-    Config intakeConf = conf.getConfig("port.can");
-    rollerTalon = new WPI_TalonSRX(intakeConf.getInt("rollerTalon"));
-    intakeArmTalon = new WPI_TalonSRX(intakeConf.getInt("intakeArm"));
-    intakeDownDirection = intakeConf.getInt("intakeDownDirection");
+    Config intakeConf = conf.getConfig("ports.intake");
+    rollerTalon = new PWMVictorSPX(intakeConf.getInt("rollerTalon"));
+    intakeArmTalon = new PWMVictorSPX(intakeConf.getInt("intakeArm"));
+    intakeDownDirection = intakeConf.getInt("intakeDowndirection");
+    Config intakeSubConf = conf.getConfig("subsystems.intake");
+    cargoPositionSetPoint = intakeSubConf.getDouble("CargoPositionSetpoint");
+    groundPositionSetPoint = intakeSubConf.getDouble("GroundPositionSetPoint");
+
+    if (isAtLimitSwitch()) {
+      currentIntakePosition = IntakeArmPositionsEnum.STOWED;
+    }
+
   }
 
   @Override
@@ -34,12 +43,15 @@ public class RealIntake extends Intake {
 
   @Override
   public void moveIntakeArm(double speed) {
-    intakeArmTalon.set(speed * intakeDownDirection);
+    double sign = 1;
+    if (speed < 0) {
+      sign = -1;
+    }
+    intakeArmTalon.set(/* Math.pow(speed * intakeDownDirection, 2) * sign */ speed);
   }
 
   @Override
   protected void initDefaultCommand() {
-
   }
 
   @Override
@@ -51,6 +63,27 @@ public class RealIntake extends Intake {
   @Override
   public void setCurrentIntakeArmPosition(IntakeArmPositionsEnum position) {
     currentIntakePosition = position;
+  }
+
+  public boolean isAtLimitSwitch() {
+    return Robot.intakeStowedSwitch.isAtLimit();
+  }
+
+  public double getCargoSetpoint() {
+    return cargoPositionSetPoint;
+  }
+
+  public double getGroundSetpoint() {
+    return groundPositionSetPoint;
+  }
+
+  @Override
+  public boolean isAtGround() {
+    if (Robot.intakeAngleSensor.getAngle() > groundPositionSetPoint) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

@@ -16,6 +16,8 @@ import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.RollIntakeIn;
+import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.groupcommands.RollIntakeGroupCommandScheduler;
@@ -59,7 +61,6 @@ public class OI {
   // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
-
   private static OI instance;
 
   private POVButton intakeUp;
@@ -70,6 +71,8 @@ public class OI {
   private JoystickButton turnToEast;
   private JoystickButton turnToSouth;
   private JoystickButton turnToWest;
+  private JoystickButton runIntakeIn;
+  private JoystickButton runIntakeOut;
 
   private JoystickButton LowGamePieceButton;
   private JoystickButton MiddleGamePieceButton;
@@ -106,8 +109,14 @@ public class OI {
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
     SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
 
+    // TODO: Change these to actual buttons
+    runIntakeIn = new JoystickButton(operatorController, ButtonsEnumerated.RIGHTBUMPERBUTTON.getValue());
+    runIntakeIn.whileHeld(new RollIntakeIn());
+
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    SmartDashboard.putData("StowIntake", new StowIntakeArm());
+
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
     LowGamePieceButton = new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue());
@@ -146,6 +155,7 @@ public class OI {
     if (instance == null) {
       instance = new OI();
     }
+
     return instance;
   }
 
