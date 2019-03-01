@@ -19,7 +19,7 @@ public class IntakePIDController extends PIDControllerBase {
     super.p = 15;
     super.i = 0;
     super.d = 0.15;
-    super.outputRange = 0.9;
+    super.outputRange = 1;
     super.subsystemName = "Intake";
     super.pidName = "IntakePID";
 

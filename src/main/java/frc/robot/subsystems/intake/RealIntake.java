@@ -46,11 +46,7 @@ public class RealIntake extends Intake {
 
   @Override
   public void moveIntakeArm(double speed) {
-    double sign = 1;
-    if (speed < 0) {
-      sign = -1;
-    }
-    intakeArmTalon.set(/* Math.pow(speed * intakeDownDirection, 2) * sign */ speed);
+    intakeArmTalon.set(speed);
   }
 
   @Override
