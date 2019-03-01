@@ -217,7 +217,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using real intakeStowedSwitch");
       int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
       intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
-      intakeStowedSwitch.putSensorOnLiveWindow("Intake Limit", "Switch");
+      intakeStowedSwitch.putSensorOnLiveWindow("IntakeLimit", "Switch");
     } else {
       System.out.println("Using mock intakeStowedSwitch");
       intakeStowedSwitch = new MockLimitSwitchSensor();

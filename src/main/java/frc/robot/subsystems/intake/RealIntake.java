@@ -4,6 +4,7 @@ import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import frc.robot.Robot;
+import frc.robot.commands.TeleopIntake;
 
 /* TODO
 * Test to make sure speed is accurate in RAISEARMSPEED
@@ -17,6 +18,7 @@ public class RealIntake extends Intake {
   private IntakeArmPositionsEnum currentIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
   private double cargoPositionSetPoint;
   private double groundPositionSetPoint;
+  private double stowedPositionSetpoint;
 
   public RealIntake() {
     Config conf = Robot.getConfig();
@@ -27,7 +29,8 @@ public class RealIntake extends Intake {
     intakeDownDirection = intakeConf.getInt("intakeDowndirection");
     Config intakeSubConf = conf.getConfig("subsystems.intake");
     cargoPositionSetPoint = intakeSubConf.getDouble("CargoPositionSetpoint");
-    groundPositionSetPoint = intakeSubConf.getDouble("GroundPositionSetPoint");
+    groundPositionSetPoint = intakeSubConf.getDouble("GroundPositionSetpoint");
+    stowedPositionSetpoint = intakeSubConf.getDouble("StowedPositionSetpoint");
 
     if (isAtLimitSwitch()) {
       currentIntakePosition = IntakeArmPositionsEnum.STOWED;
@@ -52,6 +55,7 @@ public class RealIntake extends Intake {
 
   @Override
   protected void initDefaultCommand() {
+    setDefaultCommand(new TeleopIntake());
   }
 
   @Override
@@ -75,6 +79,10 @@ public class RealIntake extends Intake {
 
   public double getGroundSetpoint() {
     return groundPositionSetPoint;
+  }
+
+  public double getStowedSetpoint() {
+    return stowedPositionSetpoint;
   }
 
   @Override

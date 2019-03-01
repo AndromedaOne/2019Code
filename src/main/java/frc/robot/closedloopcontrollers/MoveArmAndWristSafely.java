@@ -373,7 +373,7 @@ public class MoveArmAndWristSafely {
       safeArmMovements.shoulderRotateClockwise = false;
       safeArmMovements.armRetraction = false;
     }
-    if (extensionIn < 13 && shoulderRotDeg > 68 && shoulderRotDeg < 127) {
+    if (extensionIn < 13 && shoulderRotDeg > 60 && shoulderRotDeg < 145) {
       //System.out.println("safety 4");
       // This safety prevents the arm from extrending over 30 inches out.
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((53 + 127) / 2);
@@ -388,7 +388,7 @@ public class MoveArmAndWristSafely {
       }
       safeArmMovements.armExtension = false;
     }
-    if (extensionIn < 13 && shoulderRotDeg < -68 && shoulderRotDeg > -127) {
+    if (extensionIn < 13 && shoulderRotDeg < -60 && shoulderRotDeg > -145) {
       //System.out.println("safety 5");
       // This safety prevents the arm from extrending over 30 inches out.
       boolean shoulderRotateDegreeBelowMiddleOfDeadzone = shoulderRotDeg < ((-53 + -127) / 2);

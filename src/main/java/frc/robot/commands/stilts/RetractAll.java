@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.utilities.POVDirectionNames;
 
 public class RetractAll extends Command {
 
@@ -16,7 +17,7 @@ public class RetractAll extends Command {
   @Override
   protected boolean isFinished() {
     System.out.println("Done Retracting All Legs");
-    return !ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, OI.getInstance().getDriveStick());
+    return !POVDirectionNames.getPOVSouth(Robot.driveController);
   }
 
 }

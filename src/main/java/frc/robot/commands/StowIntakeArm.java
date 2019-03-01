@@ -22,6 +22,7 @@ public class StowIntakeArm extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Stow intake command");
   }
 
   @Override

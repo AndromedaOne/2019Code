@@ -2,6 +2,8 @@ package frc.robot.commands.stilts;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.utilities.ButtonsEnumerated;
+import frc.robot.utilities.POVDirectionNames;
 
 public class RaiseBackLegs extends Command {
 
@@ -11,8 +13,10 @@ public class RaiseBackLegs extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false;// !POVDirectionNames.getPOVEast(Robot.driveController); This needs a button
-                 // assignment
+    if (!ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON,Robot.driveController)) {
+      Robot.pneumaticStilts.stopRearLegs();
+    }
+    return !ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, Robot.driveController);
   }
 
 }

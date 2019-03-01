@@ -49,12 +49,12 @@ public class IntakeArmControl extends Command {
   private void setUpSetPoint() {
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
-      intakePositionsPID.setSetpoint(0);
+      intakePositionsPID.setSetpoint(Robot.intake.getStowedSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
       System.out.println("We are in Stowed and trying to move to Stowed");
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setSetpoint(0);
+      intakePositionsPID.setSetpoint(Robot.intake.getStowedSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
       System.out.println("We are in Cargoheight and trying to move to Stowed");
       break;
@@ -65,7 +65,7 @@ public class IntakeArmControl extends Command {
       break;
     case UNKNOWN:
       // TODO: Don't move
-      intakePositionsPID.setSetpoint(0);
+      intakePositionsPID.setSetpoint(Robot.intake.getStowedSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
       System.out.println("We have no idea where we are and we're going to stowed");
       break;
@@ -88,13 +88,13 @@ public class IntakeArmControl extends Command {
       System.out.println("We are at the cargoheight and trying to go to the ground");
       break;
     case GROUNDHEIGHT:
-      intakePositionsPID.setSetpoint(0);
-      nextIntakePosition = IntakeArmPositionsEnum.STOWED;
-      System.out.println("We are at the ground and trying to stow");
+      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      System.out.println("We are at the ground and trying to ground");
       break;
     case UNKNOWN:
       // TODO: Don't move
-      intakePositionsPID.setSetpoint(0);
+      intakePositionsPID.setSetpoint(Robot.intake.getStowedSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.STOWED;
       System.out.println("We don't know where we are and we're trying to stow.");
       break;
