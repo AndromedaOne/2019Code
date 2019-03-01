@@ -27,6 +27,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
@@ -145,6 +146,10 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  public Robot() {
+    Trace.getInstance();
+  }
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -157,6 +162,7 @@ public class Robot extends TimedRobot {
     driveController = new Joystick(0);
     armController = new Joystick(1);
 
+    NavXGyroSensor.getInstance();
     if (conf.hasPath("subsystems.armAndWrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
@@ -176,6 +182,8 @@ public class Robot extends TimedRobot {
       double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;
       // shoulderEncoder.resetTo(initialShoulderPos /
       // MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
+      // topArmExtensionEncoder.resetTo((initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
       // topArmExtensionEncoder.resetTo((initialWristPos /
       // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
       // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
@@ -208,6 +216,15 @@ public class Robot extends TimedRobot {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
     compressor = new Compressor();
+    if (conf.hasPath("sensors.intakeStowedSwitch")) {
+      System.out.println("Using real intakeStowedSwitch");
+      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
+      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
+      intakeStowedSwitch.putSensorOnLiveWindow("Intake Limit", "Switch");
+    } else {
+      System.out.println("Using mock intakeStowedSwitch");
+      intakeStowedSwitch = new MockLimitSwitchSensor();
+    }
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
@@ -219,18 +236,12 @@ public class Robot extends TimedRobot {
       System.out.println("Using real intakeAngleSensor");
       int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
+      intakeAngleSensor.putSensorOnLiveWindow("Intake Sensor", "Angle");
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
     }
-    if (conf.hasPath("sensors.intakeStowedSwitch")) {
-      System.out.println("Using real intakeStowedSwitch");
-      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
-      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, false);
-    } else {
-      System.out.println("Using mock intakeStowedSwitch");
-      intakeStowedSwitch = new MockLimitSwitchSensor();
-    }
+
     if (conf.hasPath("sensors.fullyRetractedArmLimitSwitch")) {
       System.out.println("Using real fullyRetractedArmLimitSwitch");
       int fullyRetractedArmLimitSwitchPort = conf.getInt("sensors.fullyRetractedArmLimitSwitch.port");
@@ -300,6 +311,7 @@ public class Robot extends TimedRobot {
     shoulderPIDController = ShoulderPIDController.getInstance();
     extendableArmPIDController = ExtendableArmPIDController.getInstance();
     wristPIDController = WristPIDController.getInstance();
+    IntakePIDController.getInstance();
 
     // Camera Code
     if (conf.hasPath("cameras")) {
@@ -314,8 +326,11 @@ public class Robot extends TimedRobot {
     }
 
     if (conf.hasPath("subsystems.climber")) {
-      /*climbUltrasonicSensor = new RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
-          conf.getInt("subsystems.climber.ultrasonic.echo"));*/
+      /*
+       * climbUltrasonicSensor = new
+       * RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
+       * conf.getInt("subsystems.climber.ultrasonic.echo"));
+       */
       pneumaticStilts = new RealPneumaticStilts();
     } else {
       climbUltrasonicSensor = new MockUltrasonicSensor();
@@ -433,6 +448,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    if (intakeStowedSwitch.isAtLimit()) {
+      intakeAngleSensor.reset();
+    }
     Scheduler.getInstance().run();
   }
 
