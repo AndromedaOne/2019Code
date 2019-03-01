@@ -7,6 +7,11 @@ import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 public class RotateWrist extends Command {
 
   private double encDegrees;
+  private static boolean overrideAndFinishCommand = false;
+
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam) {
+    overrideAndFinishCommand = overrideAndFinishCommandParam;
+  }
 
   public RotateWrist(double angle) {
     encDegrees = angle;
@@ -34,7 +39,7 @@ public class RotateWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return !WristPIDController.getInstance().isEnabled() || WristPIDController.getInstance().isEnabled();
+    return overrideAndFinishCommand || WristPIDController.getInstance().isEnabled();
   }
 
 }

@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.utilities.ButtonsEnumerated;
 
 public class RollIntakeIn extends Command {
 
@@ -17,7 +19,7 @@ public class RollIntakeIn extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return !ButtonsEnumerated.getJoystickButton(OI.rollIntakeButton, Robot.operatorController).get();
   }
 
   protected void end() {

@@ -1,12 +1,12 @@
 package frc.robot.groupcommands.armwristcommands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.utilities.ButtonsEnumerated;
 
-public class HighGamePieceArmCommand extends CommandGroup {
+public class HighGamePieceArmCommand extends Command {
   public HighGamePieceArmCommand() {
     double shoulderAngle = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
     double wristAngle = MoveArmAndWristSafely.getWristRotDegrees(Robot.topArmExtensionEncoder.getDistanceTicks(),
@@ -16,9 +16,14 @@ public class HighGamePieceArmCommand extends CommandGroup {
     boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
         Robot.operatorController);
     if (DriveClawMotorsSafely.hasBall) {
-      addSequential(new HighCargo(positiveWrist, sameSidePlacement, shoulderAngle));
+      (new HighCargo(positiveWrist, sameSidePlacement, shoulderAngle)).start();
     } else {
-      addSequential(new HighHatch(positiveWrist, sameSidePlacement, shoulderAngle));
+      (new HighHatch(positiveWrist, sameSidePlacement, shoulderAngle)).start();
     }
+  }
+
+  @Override
+  protected boolean isFinished() {
+    return true;
   }
 }
