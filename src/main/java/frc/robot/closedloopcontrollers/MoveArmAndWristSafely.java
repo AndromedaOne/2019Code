@@ -10,6 +10,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.exceptions.ArmOutOfBoundsException;
+import frc.robot.utilities.ButtonsEnumerated;
 
 public class MoveArmAndWristSafely {
 
@@ -154,6 +155,7 @@ public class MoveArmAndWristSafely {
       wristPower = localTeleopWristPower;
       wristPIDSetpointSet = false;
     } else {
+      
       if (!wristPIDSetpointSet) {
         WristPIDController.getInstance().setSetpoint(wristRotDeg);
         WristPIDController.getInstance().enable();
@@ -162,6 +164,17 @@ public class MoveArmAndWristSafely {
       } else {
         isMovementSafe(0, localPIDWristPower, 0);
         wristPower = localPIDWristPower;
+      }
+      if(ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())) {
+        double wristSetpoint = 0;
+        if(shoulderRotDeg > 0) {
+          wristSetpoint = 90 - shoulderRotDeg;
+        }else {
+          wristSetpoint = -90 - shoulderRotDeg;
+        }
+        if(Math.abs(wristSetpoint - wristRotDeg) < 15) {
+          WristPIDController.getInstance().setSetpoint(wristSetpoint);
+        }
       }
     }
 
