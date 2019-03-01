@@ -8,6 +8,12 @@ public class RetractArm extends Command {
 
   private double inchesExtension;
 
+  private static boolean overrideAndFinishCommand = false;
+
+  public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam) {
+    overrideAndFinishCommand = overrideAndFinishCommandParam;
+  }
+
   public RetractArm(double inchesExtensionParam) {
     inchesExtension = inchesExtensionParam;
     requires(Robot.extendableArmAndWrist);
@@ -34,7 +40,7 @@ public class RetractArm extends Command {
 
   @Override
   protected boolean isFinished() {
-    return !ExtendableArmPIDController.getInstance().isEnabled() || ExtendableArmPIDController.getInstance().onTarget();
+    return overrideAndFinishCommand || ExtendableArmPIDController.getInstance().onTarget();
   }
 
 }

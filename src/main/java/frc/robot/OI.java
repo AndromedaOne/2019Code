@@ -19,7 +19,9 @@ import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
-import frc.robot.groupcommands.RollIntakeGroupCommand;
+import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
+import frc.robot.groupcommands.RollIntakeGroupCommandScheduler;
+import frc.robot.groupcommands.armwristcommands.TuckArm;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -83,6 +85,9 @@ public class OI {
   protected Joystick driveController; // TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController;
 
+  public static final ButtonsEnumerated overRideSafetiesButton = ButtonsEnumerated.BACKBUTTON;
+  public static final ButtonsEnumerated rollIntakeButton = ButtonsEnumerated.RIGHTBUMPERBUTTON;
+
   private OI() {
     System.out.println("Constructing OI");
     driveController = new Joystick(0);
@@ -114,14 +119,12 @@ public class OI {
 
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
+    LowGamePieceButton = new JoystickButton(operatorController, ButtonsEnumerated.ABUTTON.getValue());
+    LowGamePieceButton.whileHeld(new TuckArm(40, true));
     driveTrainPIDTest = new POVButton(driveController, POVDirectionNames.SOUTH.getValue());
     // driveTrainPIDTest.whileHeld(new DriveTrainPIDTest());
     driveTrainPIDTest.whileHeld(new DriveForward());
     /*
-     * LowGamePieceButton= new JoystickButton(operatorController,
-     * ButtonsEnumerated.ABUTTON.getValue()); LowGamePieceButton.whileHeld(new
-     * TestCommand() );
-     * 
      * CargoShipAndLoadingCommand = new JoystickButton(operatorController,
      * ButtonsEnumerated.BBUTTON.getValue());
      * CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());
@@ -135,7 +138,8 @@ public class OI {
      * HighGamePieceArmCommand());
      */
 
-    ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
+    rollIntakeButton.getJoystickButton(operatorController).whenPressed(new RollIntakeGroupCommandScheduler());
+    overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
 
   }
 
