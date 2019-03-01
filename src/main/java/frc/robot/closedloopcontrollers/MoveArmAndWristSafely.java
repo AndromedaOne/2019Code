@@ -237,9 +237,6 @@ public class MoveArmAndWristSafely {
 
     SafeArmMovements safeArmMovements = isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
         shoulderRotDeg + deltaShoulderRot, extensionVelocity, wristRotVelocity, shoulderRotVelocity);
-    boolean locationSafe = isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
-        shoulderRotDeg + deltaShoulderRot);
-    // System.out.println("locationSafe: " + locationSafe);
 
     if (Robot.wristLimitSwitchUp.isAtLimit()) {
       if (wristRotDeg > 0) {

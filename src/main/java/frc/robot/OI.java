@@ -59,7 +59,6 @@ public class OI {
   // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
-  static OI instance;
   private static OI instance;
 
   private POVButton intakeUp;
