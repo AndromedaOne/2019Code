@@ -138,7 +138,7 @@ public class OI {
      * HighGamePieceArmCommand());
      */
 
-    rollIntakeButton.getJoystickButton(operatorController).whenPressed(new RollIntakeGroupCommandScheduler());
+    // rollIntakeButton.getJoystickButton(operatorController).whenPressed(new RollIntakeGroupCommandScheduler());
     overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
 
   }

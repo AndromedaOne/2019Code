@@ -165,6 +165,7 @@ public class MoveArmAndWristSafely {
         isMovementSafe(0, localPIDWristPower, 0);
         wristPower = localPIDWristPower;
       }
+      
       if(ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())) {
         double wristSetpoint = 0;
         if(shoulderRotDeg > 0) {
