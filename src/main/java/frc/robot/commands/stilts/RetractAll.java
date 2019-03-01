@@ -5,7 +5,6 @@ import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.utilities.ButtonsEnumerated;
 
-
 public class RetractAll extends Command {
 
   public void initialize() {

@@ -30,7 +30,7 @@ public class WristPIDController extends PIDControllerBase {
     super.pidName = "Wrist";
 
     wristPIDSource = new WristPIDSource();
-    wristPIDSource.putSensorOnLiveWindow(super.subsytemName, "WristAngle");
+    wristPIDSource.putSensorOnLiveWindow(super.subsystemName, "WristAngle");
 
     topArmEncoder = Robot.topArmExtensionEncoder;
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;
