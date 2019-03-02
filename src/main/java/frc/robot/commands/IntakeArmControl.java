@@ -46,7 +46,7 @@ public class IntakeArmControl extends Command {
    * Tells intake to go up and does not try to go further when at Stowed
    */
   private void setUpSetPoint() {
-    intakePositionsPID.pidMultiton.setPIDTerms(5, 0, 0.15);
+    intakePositionsPID.pidMultiton.setPIDTerms(5, 0, 0.3);
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
       intakePositionsPID.setSetpoint(Robot.intake.getStowedSetpoint());
