@@ -31,7 +31,7 @@ public class IntakeArmControl extends Command {
   protected void initialize() {
     System.out.println(directionToMove.toString());
     setDownSetpoint();
-   switch (directionToMove) {
+    switch (directionToMove) {
     case UP:
       Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.STOWED);
       setUpSetPoint();

@@ -24,6 +24,7 @@ public class RaiseFrontLegs extends Command {
   protected void end() {
     Robot.pneumaticStilts.stopFrontLegs();
   }
+
   @Override
   protected void interrupted() {
     end();

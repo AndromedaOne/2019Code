@@ -5,14 +5,14 @@ import frc.robot.Robot;
 
 public class TeleopIntake extends Command {
 
-    public TeleopIntake() {
-        requires(Robot.intake);
+  public TeleopIntake() {
+    requires(Robot.intake);
 
-    }
+  }
 
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
 
 }

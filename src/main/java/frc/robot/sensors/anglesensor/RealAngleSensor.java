@@ -12,7 +12,7 @@ public class RealAngleSensor extends AngleSensor {
   @Override
   public double getAngle() {
     double sensorValue = angleSensor.getVoltage();
-    if(sensorValue < 0.94) {
+    if (sensorValue < 0.94) {
       sensorValue = (sensorValue - 0.316) + 2.85;
     }
     return sensorValue;
