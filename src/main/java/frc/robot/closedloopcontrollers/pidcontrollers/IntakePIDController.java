@@ -15,17 +15,17 @@ public class IntakePIDController extends PIDControllerBase {
   private AngleSensor intakeAngleSensor;
 
   private IntakePIDController() {
-    super.absoluteTolerance = 0.01;
-    super.p = 15;
+    super.absoluteTolerance = 0.05;
+    super.p = 5;
     super.i = 0;
-    super.d = 0;
-    super.outputRange = 0.9;
-    super.subsytemName = "Intake";
+    super.d = 0.25;
+    super.outputRange = 1;
+    super.subsystemName = "Intake";
     super.pidName = "IntakePID";
 
     intakeAngleSensor = Robot.intakeAngleSensor;
     super.trace = Trace.getInstance();
-    intakeAngleSensor.putSensorOnLiveWindow(super.subsytemName, "Intake");
+    intakeAngleSensor.putSensorOnLiveWindow(super.subsystemName, "Intake");
     intakePIDOut = new IntakePIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(intakeAngleSensor, intakePIDOut, super.pidConfiguration);

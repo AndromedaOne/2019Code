@@ -53,7 +53,6 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
-    shiftToLowGear();
     if (driveConf.getBoolean("useVelocityMode")) {
       setVelocityMode();
     }

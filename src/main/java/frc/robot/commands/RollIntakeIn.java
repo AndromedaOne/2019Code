@@ -7,14 +7,14 @@ import frc.robot.utilities.ButtonsEnumerated;
 
 public class RollIntakeIn extends Command {
 
-  private double mod = 0.5;
+  private double mod = -1;
 
   protected void initialize() {
 
   }
 
   protected void execute() {
-    Robot.intake.rollIntake(-0.75 * mod);
+    Robot.intake.rollIntake(mod);
   }
 
   @Override
