@@ -217,7 +217,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using real intakeStowedSwitch");
       int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
       intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
-      intakeStowedSwitch.putSensorOnLiveWindow("Intake Limit", "Switch");
+      intakeStowedSwitch.putSensorOnLiveWindow("IntakeLimit", "Switch");
     } else {
       System.out.println("Using mock intakeStowedSwitch");
       intakeStowedSwitch = new MockLimitSwitchSensor();
@@ -408,6 +408,7 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_chooser.getSelected();
     gyro = NavXGyroSensor.getInstance();
     MoveArmAndWristSafely.stop();
+    driveTrain.shiftToLowGear();
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
 
@@ -444,7 +445,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
+    driveTrain.shiftToLowGear();
     gyroCorrectMove.setCurrentAngle();
   }
 

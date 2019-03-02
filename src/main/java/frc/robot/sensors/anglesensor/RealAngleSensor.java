@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 public class RealAngleSensor extends AngleSensor {
   private AnalogInput angleSensor;
-  private double initialPosition;
 
   public RealAngleSensor(int port) {
     angleSensor = new AnalogInput(port);
@@ -12,12 +11,15 @@ public class RealAngleSensor extends AngleSensor {
 
   @Override
   public double getAngle() {
-    return angleSensor.getVoltage() - initialPosition;
+    double sensorValue = angleSensor.getVoltage();
+    if(sensorValue < 0.94) {
+      sensorValue = (sensorValue - 0.316) + 2.85;
+    }
+    return sensorValue;
   }
 
   @Override
   public void reset() {
-    initialPosition = angleSensor.getVoltage();
   }
 
   @Override

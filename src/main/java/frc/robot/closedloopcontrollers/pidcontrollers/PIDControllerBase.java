@@ -4,7 +4,7 @@ import frc.robot.telemetries.Trace;
 
 public class PIDControllerBase {
   protected static Trace trace;
-  protected PIDMultiton pidMultiton;
+  public PIDMultiton pidMultiton;
   protected double outputRange = 1;
   protected double absoluteTolerance = 0;
   protected PIDConfiguration pidConfiguration = new PIDConfiguration();
