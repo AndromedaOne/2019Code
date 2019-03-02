@@ -15,6 +15,7 @@ import com.typesafe.config.ConfigFactory;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -30,6 +31,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
+import frc.robot.commands.*;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
@@ -60,7 +62,11 @@ import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
+import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
+import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
 import frc.robot.telemetries.Trace;
+import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -70,6 +76,9 @@ import frc.robot.telemetries.Trace;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  public static PneumaticStilts pneumaticStilts;
+  public static NavXGyroSensor gyro;
   private boolean robotInitDone = false;
   public static Compressor compressor;
   public static Joystick driveController;
@@ -83,6 +92,7 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
+  public static UltrasonicSensor climbUltrasonicSensor;
   public static LineFollowerSensorBase lineFollowerSensorArray;
   public static Claw claw;
 
@@ -107,7 +117,7 @@ public class Robot extends TimedRobot {
   public static double absoluteWristPositionError = 0.0;
   public static double absoluteArmPositionError = 0.0;
 
-  private OI oi;
+  public OI oi;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -148,9 +158,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     System.out.println("Here is my config: " + conf);
-
-    driveController = new Joystick(0);
-    armController = new Joystick(1);
 
     NavXGyroSensor.getInstance();
     if (conf.hasPath("subsystems.armAndWrist")) {
@@ -210,7 +217,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using real intakeStowedSwitch");
       int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
       intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
-      intakeStowedSwitch.putSensorOnLiveWindow("Intake Limit", "Switch");
+      intakeStowedSwitch.putSensorOnLiveWindow("IntakeLimit", "Switch");
     } else {
       System.out.println("Using mock intakeStowedSwitch");
       intakeStowedSwitch = new MockLimitSwitchSensor();
@@ -287,6 +294,10 @@ public class Robot extends TimedRobot {
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
+
+    I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
+    I2C sunfounderbus = sunfounderdevice.getBus();
+
     driveController = new Joystick(0);
 
     if (conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
@@ -311,7 +322,21 @@ public class Robot extends TimedRobot {
       camera1.setFPS(10);
     }
 
+    if (conf.hasPath("subsystems.climber")) {
+      /*
+       * climbUltrasonicSensor = new
+       * RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
+       * conf.getInt("subsystems.climber.ultrasonic.echo"));
+       */
+      pneumaticStilts = new RealPneumaticStilts();
+    } else {
+      climbUltrasonicSensor = new MockUltrasonicSensor();
+      pneumaticStilts = new MockPneumaticStilts();
+    }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
+    // chooser.addOption("My Auto", new MyAutoCommand());
+    // SmartDashboard.putData("Auto mode", m_chooser);
+
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
 
@@ -320,6 +345,10 @@ public class Robot extends TimedRobot {
     // constructed yet. Thus, their requires() statements may grab null
     // pointers. Bad news. Don't move it.
     OI.getInstance();
+
+    driveController = OI.getInstance().getDriveStick();
+    armController = OI.getInstance().getOperatorStick();
+
     robotInitDone = true;
   }
 
@@ -345,6 +374,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    pneumaticStilts.stopAllLegs();
     if (robotInitDone) {
       PIDMultiton.resetDisableAll();
     }
@@ -376,7 +406,11 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
+    gyro = NavXGyroSensor.getInstance();
     MoveArmAndWristSafely.stop();
+    driveTrain.shiftToLowGear();
+    pneumaticStilts.retractFrontLegs();
+    pneumaticStilts.retractRearLegs();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -405,11 +439,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    pneumaticStilts.retractFrontLegs();
+    pneumaticStilts.retractRearLegs();
     MoveArmAndWristSafely.stop();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
+    driveTrain.shiftToLowGear();
     gyroCorrectMove.setCurrentAngle();
   }
 

@@ -49,4 +49,9 @@ public class MockIntake extends Intake {
     return 0;
   }
 
+  @Override
+  public double getStowedSetpoint() {
+    return 0;
+  }
+
 }

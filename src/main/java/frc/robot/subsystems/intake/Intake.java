@@ -18,4 +18,6 @@ public abstract class Intake extends Subsystem {
   public abstract double getCargoSetpoint();
 
   public abstract double getGroundSetpoint();
+
+  public abstract double getStowedSetpoint();
 }
