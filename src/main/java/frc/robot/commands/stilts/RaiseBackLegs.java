@@ -7,16 +7,28 @@ import frc.robot.utilities.POVDirectionNames;
 
 public class RaiseBackLegs extends Command {
 
+  public RaiseBackLegs() {
+    requires(Robot.pneumaticStilts);
+  }
+
   public void initialize() {
-    Robot.pneumaticStilts.retractFrontLegs();
+    System.out.println("Raising back legs");
+    Robot.pneumaticStilts.extendRearLegs();
   }
 
   @Override
   protected boolean isFinished() {
-    if (!ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON,Robot.driveController)) {
-      Robot.pneumaticStilts.stopRearLegs();
-    }
     return !ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, Robot.driveController);
+  }
+
+  @Override
+  protected void end() {
+    Robot.pneumaticStilts.stopRearLegs();
+  }
+
+  @Override
+  protected void interrupted() {
+    end();
   }
 
 }
