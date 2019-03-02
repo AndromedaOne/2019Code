@@ -27,18 +27,14 @@ public class IntakeArmControl extends Command {
     requires(Robot.intake);
   }
 
-  @Override
   protected void initialize() {
     System.out.println(directionToMove.toString());
-    setDownSetpoint();
     switch (directionToMove) {
     case UP:
-      Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.STOWED);
       setUpSetPoint();
       break;
 
     case DOWN:
-      Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.GROUNDHEIGHT);
       setDownSetpoint();
       break;
     }
@@ -88,8 +84,8 @@ public class IntakeArmControl extends Command {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
+      nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
       System.out.println("We are at the cargoheight and trying to go to the ground");
       break;
     case GROUNDHEIGHT:
@@ -118,9 +114,7 @@ public class IntakeArmControl extends Command {
   @Override
   protected void end() {
     intakePositionsPID.disable();
-    if (intakePositionsPID.onTarget()) {
-      Robot.intake.setCurrentIntakeArmPosition(nextIntakePosition);
-    }
+    Robot.intake.setCurrentIntakeArmPosition(nextIntakePosition);
   }
 
   @Override
