@@ -23,12 +23,12 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
     super.p = 0;
     super.i = 0;
     super.d = 0;
-    super.subsytemName = "UltrasonicPIDHeader";
+    super.subsystemName = "UltrasonicPIDHeader";
     super.pidName = "UltrasonicPID";
 
     ultrasonic = Robot.drivetrainFrontUltrasonic;
     super.trace = Trace.getInstance();
-    ultrasonic.putSensorOnLiveWindow(super.subsytemName, "Ultrasonic");
+    ultrasonic.putSensorOnLiveWindow(super.subsystemName, "Ultrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, super.pidConfiguration);

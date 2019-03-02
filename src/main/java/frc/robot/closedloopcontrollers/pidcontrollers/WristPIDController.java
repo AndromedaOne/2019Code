@@ -23,15 +23,15 @@ public class WristPIDController extends PIDControllerBase {
   private WristPIDController() {
     super.absoluteTolerance = 5 / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.0e-4; //5.0e-5; 
-    super.i = 0.0; //2.0e-6;
-    super.d = 0.0; //1.0e-5;
+    super.p = 1.0e-4; // 5.0e-5;
+    super.i = 0.0; // 2.0e-6;
+    super.d = 0.0; // 1.0e-5;
     super.outputRange = 0.6;
-    super.subsytemName = "Extendable Arm and Wrist";
+    super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "Wrist";
 
     wristPIDSource = new WristPIDSource();
-    wristPIDSource.putSensorOnLiveWindow(super.subsytemName, "WristAngle");
+    wristPIDSource.putSensorOnLiveWindow(super.subsystemName, "WristAngle");
 
     topArmEncoder = Robot.topArmExtensionEncoder;
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;

@@ -20,11 +20,11 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     super.p = 0.0001;
     super.i = 0.00001;
     super.d = 0;
-    super.subsytemName = "EncoderPIDHeader";
+    super.subsystemName = "EncoderPIDHeader";
     super.pidName = "EncoderPID";
 
     encoder = Robot.drivetrainLeftRearEncoder;
-    encoder.putSensorOnLiveWindow(super.subsytemName, "LeftRearEncoder");
+    encoder.putSensorOnLiveWindow(super.subsystemName, "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut();
     pidConfiguration = new PIDConfiguration();
     super.setPIDConfiguration(super.pidConfiguration);

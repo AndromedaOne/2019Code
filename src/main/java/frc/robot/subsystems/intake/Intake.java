@@ -10,4 +10,14 @@ public abstract class Intake extends Subsystem {
   public abstract IntakeArmPositionsEnum getCurrentIntakeArmPosition();
 
   public abstract void setCurrentIntakeArmPosition(IntakeArmPositionsEnum position);
+
+  public abstract boolean isAtLimitSwitch();
+
+  public abstract boolean isAtGround();
+
+  public abstract double getCargoSetpoint();
+
+  public abstract double getGroundSetpoint();
+
+  public abstract double getStowedSetpoint();
 }

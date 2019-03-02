@@ -23,7 +23,7 @@ public class ShoulderPIDController extends PIDControllerBase {
     super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
-    super.subsytemName = "Extendable Arm and Wrist";
+    super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "ShoulderPID";
 
     super.trace = Trace.getInstance();
@@ -31,7 +31,7 @@ public class ShoulderPIDController extends PIDControllerBase {
     shoulderEncoder = Robot.shoulderEncoder;
     shoulderPIDSrc = new ShoulderPIDSource();
     super.setPIDConfiguration(super.pidConfiguration);
-    shoulderEncoder.putSensorOnLiveWindow(super.subsytemName, "ShoulderEncoder");
+    shoulderEncoder.putSensorOnLiveWindow(super.subsystemName, "ShoulderEncoder");
     super.pidMultiton = PIDMultiton.getInstance(shoulderPIDSrc, shoulderPIDOut, super.pidConfiguration);
     shoulderPIDOut.setContainer(super.pidMultiton);
     this.setName(super.subsytemName, super.pidName);
