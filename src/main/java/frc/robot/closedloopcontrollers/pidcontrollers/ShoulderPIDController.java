@@ -1,9 +1,10 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
-import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -12,22 +13,25 @@ public class ShoulderPIDController extends PIDControllerBase {
 
   private static ShoulderPIDController instance;
   private ShoulderPIDOut shoulderPIDOut;
+  private ShoulderPIDSource shoulderPIDSrc;
   private MagEncoderSensor shoulderEncoder;
 
   private ShoulderPIDController() {
-    super.absoluteTolerance = 3;
+    super.absoluteTolerance = 5 / MoveArmAndWristSafely.SHOULDERDEGREESPERTICK;
+    // PID loop will only return true if error is within 5 degrees of setpoint
     super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
-    super.subsytemName = "Extendable Arm and Wrist";
+    super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "ShoulderPID";
 
     super.trace = Trace.getInstance();
     shoulderPIDOut = new ShoulderPIDOut();
+    shoulderEncoder = Robot.shoulderEncoder;
+    shoulderPIDSrc = new ShoulderPIDSource();
     super.setPIDConfiguration(super.pidConfiguration);
-    shoulderEncoder = Robot.armRotateEncoder1;
-    shoulderEncoder.putSensorOnLiveWindow(super.subsytemName, "ShoulderEncoder");
-    super.pidMultiton = PIDMultiton.getInstance(shoulderEncoder, shoulderPIDOut, super.pidConfiguration);
+    shoulderEncoder.putSensorOnLiveWindow(super.subsystemName, "ShoulderEncoder");
+    super.pidMultiton = PIDMultiton.getInstance(shoulderPIDSrc, shoulderPIDOut, super.pidConfiguration);
     shoulderPIDOut.setContainer(super.pidMultiton);
   }
 
@@ -40,14 +44,17 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Shoulder PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("Angle", shoulderEncoder.pidGet()));
-      try {
-        MoveArmAndWristSafely.move(0, 0, output);
-      } catch (ArmOutOfBoundsException e) {
-        System.out.println(e.getMessage());
-        container.disable();
-      }
+      trace.addTrace(true, "ShoulderPID", new TracePair("Output", output * 10000),
+          new TracePair("SetpointTicks", container.getSetpoint()),
+          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.SHOULDERDEGREESPERTICK),
+          new TracePair("AngleTicks", shoulderPIDSrc.pidGet()),
+          new TracePair("AngleDegrees", shoulderPIDSrc.pidGet() * MoveArmAndWristSafely.SHOULDERDEGREESPERTICK));
+      // try {
+      MoveArmAndWristSafely.setPidShoulderPower(output);
+      // } catch (ArmOutOfBoundsException e) {
+      // System.out.println(e.getMessage());
+      // container.disable();
+      // }
     }
   }
 
@@ -58,6 +65,38 @@ public class ShoulderPIDController extends PIDControllerBase {
       instance = new ShoulderPIDController();
     }
     return instance;
+  }
+
+  private class ShoulderPIDSource implements PIDSource {
+
+    @Override
+    /**
+     * Does not do anything
+     */
+    public void setPIDSourceType(PIDSourceType pidSource) {
+
+    }
+
+    @Override
+    /**
+     * @return kDisplacement because that is what we use for all of our PID
+     * Controllers
+     */
+    public PIDSourceType getPIDSourceType() {
+      return PIDSourceType.kDisplacement;
+    }
+
+    @Override
+    public double pidGet() {
+      double shoulderDegrees = MoveArmAndWristSafely.getShoulderRotDeg(shoulderEncoder.pidGet());
+      double shoulderTicks = shoulderDegrees / MoveArmAndWristSafely.SHOULDERDEGREESPERTICK;
+      return shoulderTicks;
+    }
+  }
+
+  @Override
+  public void setSetpoint(double setpoint) {
+    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.SHOULDERDEGREESPERTICK);
   }
 
 }

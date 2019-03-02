@@ -23,13 +23,13 @@ public class GyroPIDController extends PIDControllerBase {
     super.i = 0;
     super.d = 0;
     super.outputRange = 0.5;
-    super.subsytemName = "GyroPIDHeader";
+    super.subsystemName = "GyroPIDHeader";
     super.pidName = "GyroPID";
 
     navXGyroSensor = NavXGyroSensor.getInstance();
     super.trace = Trace.getInstance();
     gyroPIDOut = new GyroPIDOut();
-    navXGyroSensor.putSensorOnLiveWindow(super.subsytemName, "Gyro");
+    navXGyroSensor.putSensorOnLiveWindow(super.subsystemName, "Gyro");
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, super.pidConfiguration);
   }
@@ -42,8 +42,8 @@ public class GyroPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "GyroPID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("CurrentAngle", navXGyroSensor.pidGet()));
+      trace.addTrace(true, "GyroPID", new TracePair("Output", output),
+          new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("CurrentAngle", navXGyroSensor.pidGet()));
 
       Robot.gyroCorrectMove.moveUsingGyro(0, output, false, false);
     }

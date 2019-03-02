@@ -27,7 +27,11 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
+import frc.robot.commands.*;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
@@ -38,9 +42,8 @@ import frc.robot.sensors.infrareddistancesensor.RealInfraredDistanceSensor;
 import frc.robot.sensors.limitswitchsensor.LimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
-import frc.robot.sensors.linefollowersensor.BaseLineFollowerSensor;
-import frc.robot.sensors.linefollowersensor.LineFollowerSensorArray;
-import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
+import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
+import frc.robot.sensors.linefollowersensor.LineSensor4905;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
@@ -59,6 +62,9 @@ import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
+import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
+import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
 import frc.robot.telemetries.Trace;
 import frc.robot.utilities.I2CBusDriver;
 
@@ -70,6 +76,10 @@ import frc.robot.utilities.I2CBusDriver;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  public static PneumaticStilts pneumaticStilts;
+  public static NavXGyroSensor gyro;
+  private boolean robotInitDone = false;
   public static Compressor compressor;
   public static Joystick driveController;
   public static Joystick operatorController;
@@ -82,8 +92,8 @@ public class Robot extends TimedRobot {
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
-  public static BaseLineFollowerSensor lineFollowerSensorArray;
-
+  public static UltrasonicSensor climbUltrasonicSensor;
+  public static LineFollowerSensorBase lineFollowerSensorArray;
   public static Claw claw;
 
   public static MoveDrivetrainGyroCorrect gyroCorrectMove;
@@ -92,15 +102,22 @@ public class Robot extends TimedRobot {
   public static LimitSwitchSensor intakeStowedSwitch;
 
   public static InfraredDistanceSensor clawInfraredSensor;
-
-  public static MagEncoderSensor armExtensionEncoder1;
-  public static MagEncoderSensor armExtensionEncoder2;
-  public static MagEncoderSensor armRotateEncoder1;
+  public static LineFollowerSensorBase frontLineSensor4905;
+  public static MagEncoderSensor topArmExtensionEncoder;
+  public static MagEncoderSensor bottomArmExtensionEncoder;
+  public static MagEncoderSensor shoulderEncoder;
   public static LimitSwitchSensor fullyRetractedArmLimitSwitch;
   public static LimitSwitchSensor fullyExtendedArmLimitSwitch;
   public static LimitSwitchSensor wristLimitSwitchUp;
-  public static LimitSwitchSensor wristLimitSwitchDown;
+  public static LimitSwitchSensor shoulderLimitSwitch;
   public static ShoulderPIDController shoulderPIDController;
+  public static ExtendableArmPIDController extendableArmPIDController;
+  public static WristPIDController wristPIDController;
+  public static double absoluteShoulderPositionError = 0.0;
+  public static double absoluteWristPositionError = 0.0;
+  public static double absoluteArmPositionError = 0.0;
+
+  public OI oi;
 
   /**
    * This config should live on the robot and have hardware- specific configs.
@@ -129,6 +146,10 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  public Robot() {
+    Trace.getInstance();
+  }
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -138,45 +159,47 @@ public class Robot extends TimedRobot {
 
     System.out.println("Here is my config: " + conf);
 
-    driveController = new Joystick(0);
-    armController = new Joystick(1);
-
+    NavXGyroSensor.getInstance();
     if (conf.hasPath("subsystems.armAndWrist")) {
       System.out.println("Using real extendablearmandwrist");
       extendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
-      RealExtendableArmAndWrist rExtendableArmAndWrist = RealExtendableArmAndWrist.getInstance();
 
-      armExtensionEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getTopExtendableArmAndWristTalon());
+      topArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getTopExtendableArmAndWristTalon(), false,
+          true);
 
-      armExtensionEncoder2 = new RealMagEncoderSensor(rExtendableArmAndWrist.getBottomExtendableArmAndWristTalon());
+      bottomArmExtensionEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getBottomExtendableArmAndWristTalon(),
+          false, true);
 
-      armRotateEncoder1 = new RealMagEncoderSensor(rExtendableArmAndWrist.getShoulderJointTalon());
-      armRotateEncoder1.resetTo(157.35 / MoveArmAndWristSafely.SHOULDERTICKSTODEGRESS);
-      double initialWristPos = -7;
-      double initialArmExtension = 99;
-      armExtensionEncoder1.resetTo(initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
-          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
-      armExtensionEncoder2.resetTo(-initialWristPos * MoveArmAndWristSafely.WRISTTICKSTODEGREES / 2.0
-          + initialArmExtension * MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      shoulderEncoder = new RealMagEncoderSensor(extendableArmAndWrist.getShoulderJointTalon(), true, true);
+
+      absoluteShoulderPositionError = conf.getDouble("subsystems.armAndWrist.absoluteShoulderPositionError");
+      absoluteWristPositionError = conf.getDouble("subsystems.armAndWrist.absoluteWristPositionError");
+      absoluteArmPositionError = conf.getDouble("subsystems.armAndWrist.absoluteExtensionPositionError");
+
+      double initialArmExtension = MoveArmAndWristSafely.maxExtensionInches;
+      // shoulderEncoder.resetTo(initialShoulderPos /
+      // MoveArmAndWristSafely.SHOULDERTICKSTODEGREES);
+      // topArmExtensionEncoder.resetTo((initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // topArmExtensionEncoder.resetTo((initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+      // bottomArmExtensionEncoder.resetTo((-initialWristPos /
+      // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
+      // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
     } else {
-      armExtensionEncoder1 = new MockMagEncoderSensor();
+      topArmExtensionEncoder = new MockMagEncoderSensor();
 
-      armExtensionEncoder2 = new MockMagEncoderSensor();
+      bottomArmExtensionEncoder = new MockMagEncoderSensor();
 
-      armRotateEncoder1 = new MockMagEncoderSensor();
+      shoulderEncoder = new MockMagEncoderSensor();
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
-    if (conf.hasPath("sensors.drivetrainEncoders")) {
-      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon());
-    } else {
-      drivetrainLeftRearEncoder = new MockMagEncoderSensor();
-    }
-
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
-
+      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false);
     } else {
       System.out.println("Using fake drivetrain");
       driveTrain = new MockDriveTrain();
@@ -190,6 +213,15 @@ public class Robot extends TimedRobot {
       drivetrainFrontUltrasonic = new MockUltrasonicSensor();
     }
     compressor = new Compressor();
+    if (conf.hasPath("sensors.intakeStowedSwitch")) {
+      System.out.println("Using real intakeStowedSwitch");
+      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
+      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, true);
+      intakeStowedSwitch.putSensorOnLiveWindow("IntakeLimit", "Switch");
+    } else {
+      System.out.println("Using mock intakeStowedSwitch");
+      intakeStowedSwitch = new MockLimitSwitchSensor();
+    }
     if (conf.hasPath("subsystems.intake")) {
       System.out.println("Using real intake");
       intake = new RealIntake();
@@ -201,18 +233,12 @@ public class Robot extends TimedRobot {
       System.out.println("Using real intakeAngleSensor");
       int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
+      intakeAngleSensor.putSensorOnLiveWindow("Intake Sensor", "Angle");
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
     }
-    if (conf.hasPath("sensors.intakeStowedSwitch")) {
-      System.out.println("Using real intakeStowedSwitch");
-      int intakeStowedPort = conf.getInt("sensors.intakeStowedSwitch.port");
-      intakeStowedSwitch = new RealLimitSwitchSensor(intakeStowedPort, false);
-    } else {
-      System.out.println("Using mock intakeStowedSwitch");
-      intakeStowedSwitch = new MockLimitSwitchSensor();
-    }
+
     if (conf.hasPath("sensors.fullyRetractedArmLimitSwitch")) {
       System.out.println("Using real fullyRetractedArmLimitSwitch");
       int fullyRetractedArmLimitSwitchPort = conf.getInt("sensors.fullyRetractedArmLimitSwitch.port");
@@ -240,14 +266,14 @@ public class Robot extends TimedRobot {
       System.out.println("Using mock wristLimitSwitchUp");
       wristLimitSwitchUp = new MockLimitSwitchSensor();
     }
-    if (conf.hasPath("sensors.wristLimitSwitchDown")) {
-      System.out.println("Using real wristLimitSwitchDown");
-      int wristLimitSwitchDownPort = conf.getInt("sensors.wristLimitSwitchDown.port");
-      wristLimitSwitchDown = new RealLimitSwitchSensor(wristLimitSwitchDownPort, false);
-      wristLimitSwitchDown.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchDown");
+    if (conf.hasPath("sensors.shoulderLimitSwitch")) {
+      System.out.println("Using real shoulderLimitSwitch");
+      int shoulderLimitSwitchPort = conf.getInt("sensors.shoulderLimitSwitch.port");
+      shoulderLimitSwitch = new RealLimitSwitchSensor(shoulderLimitSwitchPort, false);
+      shoulderLimitSwitch.putSensorOnLiveWindow("ArmAndWrist", "wristLimitSwitchDown");
     } else {
-      System.out.println("Using mock wristLimitSwitchDown");
-      wristLimitSwitchDown = new MockLimitSwitchSensor();
+      System.out.println("Using mock shoulderLimitSwitch");
+      shoulderLimitSwitch = new MockLimitSwitchSensor();
     }
     // Check for existance of claw subsystem
     if (conf.hasPath("subsystems.claw")) {
@@ -268,19 +294,21 @@ public class Robot extends TimedRobot {
     encoderPID = DrivetrainEncoderPIDController.getInstance();
     ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
-    driveController = new Joystick(0);
+
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
     I2C sunfounderbus = sunfounderdevice.getBus();
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, 200, 10, 0.5, 8 /* TODO: Change these! */);
 
-    Config senseConf = conf.getConfig("sensors.lineFollowSensor");
-    lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
-        senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
-        senseConf.getInt("numSensors"));
+    driveController = new Joystick(0);
+
+    if (conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
+      frontLineSensor4905 = new LineSensor4905();
+    }
 
     // Creates first instance to put onto live window
-    ExtendableArmPIDController.getInstance();
     shoulderPIDController = ShoulderPIDController.getInstance();
+    extendableArmPIDController = ExtendableArmPIDController.getInstance();
+    wristPIDController = WristPIDController.getInstance();
+    IntakePIDController.getInstance();
 
     // Camera Code
     if (conf.hasPath("cameras")) {
@@ -294,17 +322,34 @@ public class Robot extends TimedRobot {
       camera1.setFPS(10);
     }
 
-    if (conf.hasPath("sensors.lineFollowSensor")) {
-      lineFollowerSensorArray = new LineFollowerSensorArray(sunfounderbus, senseConf.getInt("detectionThreshold"),
-          senseConf.getDouble("distanceToSensor"), senseConf.getDouble("distanceBtSensors"),
-          senseConf.getInt("numSensors"));
+    if (conf.hasPath("subsystems.climber")) {
+      /*
+       * climbUltrasonicSensor = new
+       * RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
+       * conf.getInt("subsystems.climber.ultrasonic.echo"));
+       */
+      pneumaticStilts = new RealPneumaticStilts();
     } else {
-      lineFollowerSensorArray = new MockLineFollowerSensorArray(sunfounderbus, 2, 10, 1, 8);
+      climbUltrasonicSensor = new MockUltrasonicSensor();
+      pneumaticStilts = new MockPneumaticStilts();
     }
-
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
     // chooser.addOption("My Auto", new MyAutoCommand());
     // SmartDashboard.putData("Auto mode", m_chooser);
+
+    // chooser.addOption("My Auto", new MyAutoCommand());
+    // SmartDashboard.putData("Auto mode", m_chooser);
+
+    // OI must be constructed after subsystems. If the OI creates Commands
+    // (which it very likely will), subsystems are not guaranteed to be
+    // constructed yet. Thus, their requires() statements may grab null
+    // pointers. Bad news. Don't move it.
+    OI.getInstance();
+
+    driveController = OI.getInstance().getDriveStick();
+    armController = OI.getInstance().getOperatorStick();
+
+    robotInitDone = true;
   }
 
   /**
@@ -329,11 +374,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    pneumaticStilts.stopAllLegs();
+    if (robotInitDone) {
+      PIDMultiton.resetDisableAll();
+    }
     Trace.getInstance().flushTraceFiles();
   }
 
   @Override
   public void disabledPeriodic() {
+    double topEncoderTicks = topArmExtensionEncoder.getDistanceTicks();
+    double bottomEncoderTicks = bottomArmExtensionEncoder.getDistanceTicks();
     Scheduler.getInstance().run();
     // System.out.println("Gyro reading: " +
     // NavXGyroSensor.getInstance().getZAngle());
@@ -355,6 +406,11 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
+    gyro = NavXGyroSensor.getInstance();
+    MoveArmAndWristSafely.stop();
+    driveTrain.shiftToLowGear();
+    pneumaticStilts.retractFrontLegs();
+    pneumaticStilts.retractRearLegs();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -383,10 +439,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    pneumaticStilts.retractFrontLegs();
+    pneumaticStilts.retractRearLegs();
+    MoveArmAndWristSafely.stop();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
+    driveTrain.shiftToLowGear();
     gyroCorrectMove.setCurrentAngle();
   }
 
@@ -395,7 +454,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    if (intakeStowedSwitch.isAtLimit()) {
+      intakeAngleSensor.reset();
+    }
     Scheduler.getInstance().run();
+  }
+
+  @Override
+  public void testInit() {
+    MoveArmAndWristSafely.stop();
+    super.testInit();
   }
 
   /**

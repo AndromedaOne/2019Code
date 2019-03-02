@@ -3,7 +3,6 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
-import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 
 public class DrivetrainEncoderPIDController extends PIDControllerBase {
@@ -17,16 +16,15 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
    * creates the encoderPID from the PIDMultiton class.
    */
   private DrivetrainEncoderPIDController() {
-    super.absoluteTolerance = 3;
-    super.p = 0;
-    super.i = 0;
+    super.absoluteTolerance = 100;
+    super.p = 0.0001;
+    super.i = 0.00001;
     super.d = 0;
-    super.subsytemName = "EncoderPIDHeader";
+    super.subsystemName = "EncoderPIDHeader";
     super.pidName = "EncoderPID";
 
     encoder = Robot.drivetrainLeftRearEncoder;
-    super.trace = Trace.getInstance();
-    encoder.putSensorOnLiveWindow(super.subsytemName, "LeftRearEncoder");
+    encoder.putSensorOnLiveWindow(super.subsystemName, "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut();
     pidConfiguration = new PIDConfiguration();
     super.setPIDConfiguration(super.pidConfiguration);
@@ -40,8 +38,8 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Encoder Drivetrain", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("EncoderTicks", encoder.pidGet()));
+      trace.addTrace(true, "EncoderDrivetrain", new TracePair("Output", output),
+          new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("EncoderTicks", encoder.pidGet()));
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
   }

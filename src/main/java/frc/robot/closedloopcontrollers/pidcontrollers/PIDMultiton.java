@@ -17,6 +17,15 @@ public class PIDMultiton {
     instances = new HashMap<>();
   }
 
+  public static void resetDisableAll() {
+
+    for (PIDMultiton a : instances.values()) {
+      a.disable();
+      a.reset();
+    }
+
+  }
+
   public static synchronized PIDMultiton getInstance(PIDSource source, PIDOutput output, PIDConfiguration config) {
 
     PIDName name = new PIDName(source, output);
@@ -64,6 +73,7 @@ public class PIDMultiton {
 
   private PIDController4905 pidController;
   private PIDConfiguration config;
+  // private PIDName name;
   private PIDName name;
 
   private PIDMultiton(PIDName name, PIDConfiguration config) {
@@ -78,6 +88,7 @@ public class PIDMultiton {
       config.setLiveWindowName(config.getLiveWindowName() + "Header");
     }
     pidController.setName(config.getLiveWindowName(), config.getPIDName());
+    System.out.println("PIDmultiton: adding live windows PID: " + config.getPIDName());
     LiveWindow.add(pidController);
 
   }
@@ -135,6 +146,16 @@ public class PIDMultiton {
 
   private PIDConfiguration gitConfig() {
     return config;
+  }
+
+  public double getSetpoint() {
+    return pidController.getSetpoint();
+  }
+
+  public void setPIDTerms(double p, double i, double d) {
+    pidController.setP(p);
+    pidController.setD(d);
+    pidController.setI(i);
   }
 
 }

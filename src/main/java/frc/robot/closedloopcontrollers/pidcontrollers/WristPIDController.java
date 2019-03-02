@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
-import frc.robot.exceptions.ArmOutOfBoundsException;
+import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -14,26 +14,30 @@ public class WristPIDController extends PIDControllerBase {
 
   private static WristPIDController instance;
   private WristPIDOut wristPIDOut;
-  private final MagEncoderSensor wristEncoder1;
-  private final MagEncoderSensor wristEncoder2;
+  private final MagEncoderSensor topArmEncoder;
+  private final MagEncoderSensor bottomArmEncoder;
 
   private static WristPIDSource wristPIDSource;
 
   private WristPIDController() {
-    super.absoluteTolerance = 3;
-    super.p = 0;
-    super.i = 0;
-    super.d = 0;
-    super.subsytemName = "Extendable Arm and Wrist";
-    super.pidName = "Arm Extension";
+    super.absoluteTolerance = 5 / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
+    // PID loop will only return true if error is within 5 degrees of setpoint
+    super.p = 1.0e-4; // 5.0e-5;
+    super.i = 0.0; // 2.0e-6;
+    super.d = 0.0; // 1.0e-5;
+    super.outputRange = 0.6;
+    super.subsystemName = "Extendable Arm and Wrist";
+    super.pidName = "Wrist";
 
     wristPIDSource = new WristPIDSource();
+    wristPIDSource.putSensorOnLiveWindow(super.subsystemName, "WristAngle");
 
-    wristEncoder1 = Robot.armExtensionEncoder1;
-    wristEncoder2 = Robot.armExtensionEncoder2;
+    topArmEncoder = Robot.topArmExtensionEncoder;
+    bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     super.trace = Trace.getInstance();
-    wristEncoder1.putSensorOnLiveWindow(super.subsytemName, "Arm");
-    wristEncoder2.putSensorOnLiveWindow(super.subsytemName, "Arm");
+    // topArmEncoder.putSensorOnLiveWindow(super.subsytemName, "WristTopEncoder");
+    // bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName,
+    // "WristBottomEncoder");
     wristPIDOut = new WristPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(wristPIDSource, wristPIDOut, super.pidConfiguration);
@@ -49,14 +53,17 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "Shoulder PID", new TracePair("Output", output), new TracePair("Setpoint", _setpoint),
-          new TracePair("Angle", wristEncoder1.pidGet()));
-      try {
-        MoveArmAndWristSafely.move(0, 0, output);
-      } catch (ArmOutOfBoundsException e) {
-        System.out.println(e.getMessage());
-        container.disable();
-      }
+      trace.addTrace(true, "WristPID", new TracePair("Output", output),
+          new TracePair("SetpointTicks", container.getSetpoint()),
+          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.WRISTDEGREESPERTICK),
+          new TracePair("TicksAngle", wristPIDSource.pidGet()), new TracePair("DegreeAngle",
+              MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
+      // try {
+      MoveArmAndWristSafely.setPidWristPower(output);
+      // } catch (ArmOutOfBoundsException e) {
+      // System.out.println(e.getMessage());
+      // container.disable();
+      // }
     }
   }
 
@@ -69,7 +76,7 @@ public class WristPIDController extends PIDControllerBase {
     return instance;
   }
 
-  private class WristPIDSource implements PIDSource {
+  private class WristPIDSource extends SensorBase implements PIDSource {
 
     @Override
     /**
@@ -90,8 +97,19 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double difference = (wristEncoder1.pidGet() - wristEncoder2.pidGet());
-      return difference;
+      double wristDegrees = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
+      double wristTicks = wristDegrees / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
+      return wristTicks;
     }
+
+    @Override
+    public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+      putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "PidGet", this::pidGet);
+    }
+  }
+
+  @Override
+  public void setSetpoint(double setpoint) {
+    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.WRISTDEGREESPERTICK);
   }
 }

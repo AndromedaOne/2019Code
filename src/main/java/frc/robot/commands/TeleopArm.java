@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
-import frc.robot.exceptions.ArmOutOfBoundsException;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -21,21 +20,24 @@ public class TeleopArm extends Command {
 
   @Override
   protected void execute() {
-    double armWristValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
-    double rotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
+    double extensionValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
+    double wristRotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
 
-    double actualArmWristVal = rotateValue * 0.5;
-    double extensionValue = -armWristValue;
-    double shoulderRotateValue = EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
+    wristRotateValue = -wristRotateValue * 0.5;
+    extensionValue = -extensionValue;
+    double shoulderRotateValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
     // System.out.println("extensionValue: " + extensionValue);
-    try {
-      MoveArmAndWristSafely.move(extensionValue, actualArmWristVal, shoulderRotateValue);
-    } catch (ArmOutOfBoundsException e) {
-      // System.out.println(e.getMessage());
-    }
+    // try {
+    // System.out.println("extensionValue: " + extensionValue);
+    MoveArmAndWristSafely.setTeleopExtensionPower(extensionValue);
+    MoveArmAndWristSafely.setTeleopShoulderPower(shoulderRotateValue);
+    MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);
+    // } catch (ArmOutOfBoundsException e) {
+    // System.out.println(e.getMessage());
+    // }
 
   }
 
@@ -51,11 +53,11 @@ public class TeleopArm extends Command {
 
   @Override
   protected void end() {
-    try {
-      MoveArmAndWristSafely.move(0, 0, 0);
-    } catch (ArmOutOfBoundsException e) {
-      System.out.println(e.getMessage());
-    }
+    // try {
+    MoveArmAndWristSafely.stop();
+    // } catch (ArmOutOfBoundsException e) {
+    // System.out.println(e.getMessage());
+    // }
   }
 
 }
