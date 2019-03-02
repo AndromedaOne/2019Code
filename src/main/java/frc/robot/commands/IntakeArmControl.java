@@ -114,6 +114,7 @@ public class IntakeArmControl extends Command {
   @Override
   protected void end() {
     intakePositionsPID.disable();
+    System.out.println("Next Intake Position: " + nextIntakePosition);
     Robot.intake.setCurrentIntakeArmPosition(nextIntakePosition);
   }
 
