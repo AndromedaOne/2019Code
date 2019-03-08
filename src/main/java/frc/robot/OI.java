@@ -19,6 +19,7 @@ import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.stilts.*;
+import frc.robot.groupcommands.RollIntakeGroupCommandScheduler;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -146,8 +147,8 @@ public class OI {
     SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
 
     // TODO: Change these to actual buttons
-    runIntakeIn = new JoystickButton(operatorController, ButtonsEnumerated.RIGHTBUMPERBUTTON.getValue());
-    runIntakeIn.whileHeld(new RollIntakeIn());
+    //runIntakeIn = new JoystickButton(operatorController, ButtonsEnumerated.RIGHTBUMPERBUTTON.getValue());
+    //runIntakeIn.whileHeld(new RollIntakeIn());
 
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
@@ -176,8 +177,7 @@ public class OI {
      * HighGamePieceArmCommand());
      */
 
-    // rollIntakeButton.getJoystickButton(operatorController).whenPressed(new
-    // //RollIntakeGroupCommandScheduler());
+    rollIntakeButton.getJoystickButton(operatorController).whenPressed(new RollIntakeGroupCommandScheduler());
     overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
 
   }

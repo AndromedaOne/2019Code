@@ -14,8 +14,8 @@ public class IntakeReady extends CommandGroup {
       addSequential(new RotateWrist(-90));
       addSequential(new RotateShoulder(-10.67));
     }
-    addSequential(new RotateWrist(43.57));
-    addSequential(new RetractArm(20.56));
-    addSequential(new RotateShoulder(10.67));
+    addSequential(new RotateWrist(-24.2));
+    addSequential(new RetractArm(20.13));
+    addSequential(new RotateShoulder(58.5));
   }
 }

@@ -10,6 +10,6 @@ public class RollIntakeGroupCommand extends CommandGroup {
   public RollIntakeGroupCommand() {
     boolean positiveShoulder = Robot.shoulderEncoder.getDistanceTicks() > 0;
     addSequential(new IntakeReady(positiveShoulder));
-    addSequential(new RollIntakeIn());
+    //addSequential(new RollIntakeIn());
   }
 }

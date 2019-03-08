@@ -34,8 +34,6 @@ public class ShoulderPIDController extends PIDControllerBase {
     shoulderEncoder.putSensorOnLiveWindow(super.subsystemName, "ShoulderEncoder");
     super.pidMultiton = PIDMultiton.getInstance(shoulderPIDSrc, shoulderPIDOut, super.pidConfiguration);
     shoulderPIDOut.setContainer(super.pidMultiton);
-    this.setName(super.subsytemName, super.pidName);
-    LiveWindow.add(this);
   }
 
   private class ShoulderPIDOut implements PIDOutput {
@@ -66,6 +64,8 @@ public class ShoulderPIDController extends PIDControllerBase {
     if (instance == null) {
       System.out.println("Creating new Shoulder PID Controller");
       instance = new ShoulderPIDController();
+      instance.setName(instance.subsystemName, instance.pidName);
+      LiveWindow.add(instance);
     }
     return instance;
   }

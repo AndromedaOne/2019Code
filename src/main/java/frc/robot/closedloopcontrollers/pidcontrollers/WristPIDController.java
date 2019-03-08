@@ -43,8 +43,6 @@ public class WristPIDController extends PIDControllerBase {
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(wristPIDSource, wristPIDOut, super.pidConfiguration);
     wristPIDOut.setContainer(super.pidMultiton);
-    this.setName(super.subsytemName, super.pidName);
-    LiveWindow.add(this);
   }
 
   private class WristPIDOut implements PIDOutput {
@@ -75,6 +73,8 @@ public class WristPIDController extends PIDControllerBase {
     if (instance == null) {
       System.out.println("Creating new Wrist PID Controller");
       instance = new WristPIDController();
+      instance.setName(instance.subsystemName, instance.pidName);
+      LiveWindow.add(instance);
     }
     return instance;
   }
