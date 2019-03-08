@@ -3,6 +3,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.SensorBase;
@@ -20,7 +21,7 @@ public class WristPIDController extends PIDControllerBase {
   private static WristPIDSource wristPIDSource;
 
   private WristPIDController() {
-    super.absoluteTolerance = 5 / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
+    super.absoluteTolerance = 5 / Robot.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
     super.p = 1.0e-4; // 5.0e-5;
     super.i = 0.0; // 2.0e-6;
@@ -53,11 +54,12 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
+      ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
       trace.addTrace(true, "WristPID", new TracePair("Output", output),
           new TracePair("SetpointTicks", container.getSetpoint()),
-          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.WRISTDEGREESPERTICK),
+          new TracePair("SetpointDegrees", container.getSetpoint() * Robot.WRISTDEGREESPERTICK),
           new TracePair("TicksAngle", wristPIDSource.pidGet()), new TracePair("DegreeAngle",
-              MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
+          currentArmPosition.getWristAngle()));
       // try {
       MoveArmAndWristSafely.setPidWristPower(output);
       // } catch (ArmOutOfBoundsException e) {
@@ -97,8 +99,8 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double wristDegrees = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      double wristTicks = wristDegrees / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
+      ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
+      double wristTicks = currentArmPosition.getWristAngle() / Robot.WRISTDEGREESPERTICK;
       return wristTicks;
     }
 

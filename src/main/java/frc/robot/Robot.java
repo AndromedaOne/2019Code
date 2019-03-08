@@ -117,6 +117,14 @@ public class Robot extends TimedRobot {
   public static double absoluteWristPositionError = 0.0;
   public static double absoluteArmPositionError = 0.0;
 
+  private static final double SHOULDERTICKSPERDEGREE = 916.2;
+  private static final double EXTENSIONTICKSPERINCH = 7204.0;
+  private static final double WRISTTICKSPERDEGREE = 444.922;
+
+  public static final double SHOULDERDEGREESPERTICK = 1.0 / SHOULDERTICKSPERDEGREE;
+  public static final double EXTENSIONINCHESPERTICK = 1.0 / EXTENSIONTICKSPERINCH;
+  public static final double WRISTDEGREESPERTICK = 1.0 / WRISTTICKSPERDEGREE;
+
   public OI oi;
 
   /**
@@ -484,5 +492,45 @@ public class Robot extends TimedRobot {
 
   public static boolean positiveWrist() {
     return false;
+  }
+
+  public static ArmPosition getCurrentArmPosition() {
+    double topArmExtensionTicks = topArmExtensionEncoder.getDistanceTicks();
+    double bottomArmExtensionTicks = bottomArmExtensionEncoder.getDistanceTicks();
+    double shoulderTicks = shoulderEncoder.getDistanceTicks();
+
+    double retraction = getExtensionIn(topArmExtensionTicks, bottomArmExtensionTicks);
+    double wristDegrees = getWristRotDegrees(topArmExtensionTicks, bottomArmExtensionTicks);
+    double shoulderDegrees = getShoulderRotDeg(shoulderTicks);
+
+    return new ArmPosition(shoulderDegrees, retraction, wristDegrees);
+  }
+
+  public static double getExtensionIn(double topEncoderTicks, double bottomEncoderTicks) {
+    return (bottomEncoderTicks - topEncoderTicks) / 2 * EXTENSIONINCHESPERTICK - Robot.absoluteArmPositionError;
+  }
+
+  public static double getWristRotDegrees(double topEncoderTicks, double bottomEncoderTicks) {
+    return -(bottomEncoderTicks + topEncoderTicks) * WRISTDEGREESPERTICK - Robot.absoluteWristPositionError;
+  }
+
+  public static double getShoulderRotDeg(double ticks) {
+    return ticks * SHOULDERDEGREESPERTICK - Robot.absoluteShoulderPositionError;
+  }
+
+  public static double getExtensionInVelocity() {
+    double topEncoderTicks = topArmExtensionEncoder.getVelocity();
+    double bottomEncoderTicks = bottomArmExtensionEncoder.getVelocity();
+    return (bottomEncoderTicks - topEncoderTicks) / 2 * EXTENSIONINCHESPERTICK;
+  }
+
+  public static double getWristRotDegreesVelocity() {
+    double topEncoderTicks = topArmExtensionEncoder.getVelocity();
+    double bottomEncoderTicks = bottomArmExtensionEncoder.getVelocity();
+    return -(bottomEncoderTicks + topEncoderTicks) * WRISTDEGREESPERTICK;
+  }
+
+  public static double getShoulderRotDegVelocity() {
+    return shoulderEncoder.getVelocity() * SHOULDERDEGREESPERTICK;
   }
 }
