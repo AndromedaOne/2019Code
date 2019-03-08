@@ -10,5 +10,29 @@ public class ArmPosition {
         armRetraction = armRetractionParam;
         wristAngle = wristAngleParam;
     }
+
+    public double getShoulderAngle() {
+        return shoulderAngle;
+    }
+
+    public void setShoulderAngle(double shoulderAngle) {
+        this.shoulderAngle = shoulderAngle;
+    }
+
+    public double getArmRetraction() {
+        return armRetraction;
+    }
+
+    public void setArmRetraction(double armRetraction) {
+        this.armRetraction = armRetraction;
+    }
+
+    public double getWristAngle() {
+        return wristAngle;
+    }
+
+    public void setWristAngle(double wristAngle) {
+        this.wristAngle = wristAngle;
+    }
 }
 
