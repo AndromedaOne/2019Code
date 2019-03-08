@@ -286,7 +286,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
       } else {
         result = P * error + D * (error - prevError) + feedForward;
         if (I != 0 && ((result < minimumOutput) || (result > maximumOutput))) {
-          totalError += error; //clamp(totalError + error, minimumOutput / I, maximumOutput / I);
+          totalError += error; // clamp(totalError + error, minimumOutput / I, maximumOutput / I);
         }
         result = P * error + I * totalError + D * (error - prevError) + feedForward;
       }
