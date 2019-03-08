@@ -1,12 +1,12 @@
 package frc.robot.groupcommands.armwristcommands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.utilities.ButtonsEnumerated;
 
-public class LowSameSideGamePieceArmCommand extends CommandGroup {
+public class LowGamePieceArmCommand extends Command {
   public LowSameSideGamePieceArmCommand() {
     System.out.println("Creating Low Game Piece command");
     double shoulderAngle = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
@@ -16,17 +16,18 @@ public class LowSameSideGamePieceArmCommand extends CommandGroup {
     
     System.out.println("Still Creating Low Game Piece Command");
     if (DriveClawMotorsSafely.hasBall) {
-      //addSequential(new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle));
+      (new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle)).start();
+      ;
     } else {
       System.out.println("creating low hatch command");
-      //addSequential(new LowHatch(positiveWrist, sameSidePlacement, shoulderAngle));
-    }
+      (new LowHatch(positiveWrist, sameSidePlacement, shoulderAngle)).start();
+      ;
+  }
   }
 
   @Override
-  protected void initialize() {
-    super.initialize();
-    boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
+  protected boolean isFinished() {
+    return true;
         Robot.operatorController);
     //setShoulderDirectionFactor();
   }

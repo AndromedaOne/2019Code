@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
+import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -20,18 +21,22 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 1.5 / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
     // PID loop will only return true if error is within 1.5 inches of setpoint
-    super.p = 1.0 * Math.pow(10, -4);
+    super.p = 1.0 * Math.pow(10, -4); // 5.0e-5;
     super.i = 0;
-    super.d = 0;
-    super.subsytemName = "Extendable Arm and Wrist";
+    super.d = 0.0;// 1.0e-4;
+    super.outputRange = 0.85;
+    super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "Extension";
 
     topArmEncoder = Robot.topArmExtensionEncoder;
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     super.trace = Trace.getInstance();
     armPIDSource = new ArmPIDSource();
-    topArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionTopEncoder");
-    bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName, "ExtensionBottomEncoder");
+    armPIDSource.putSensorOnLiveWindow(super.subsystemName, "Extension");
+    // topArmEncoder.putSensorOnLiveWindow(super.subsytemName,
+    // "ExtensionTopEncoder");
+    // bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName,
+    // "ExtensionBottomEncoder");
     armPIDOut = new ArmPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, super.pidConfiguration);
@@ -62,15 +67,15 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   }
 
   public static ExtendableArmPIDController getInstance() {
-    System.out.println(" --- Asking for Instance --- ");
+    System.out.println(" --- Asking for Instance ---  ArmPID");
     if (instance == null) {
-      System.out.println("Creating new Intake PID Controller");
+      System.out.println("Creating new ExtendableArm PID Controller");
       instance = new ExtendableArmPIDController();
     }
     return instance;
   }
 
-  private class ArmPIDSource implements PIDSource {
+  private class ArmPIDSource extends SensorBase implements PIDSource {
 
     @Override
     /**
@@ -94,6 +99,11 @@ public class ExtendableArmPIDController extends PIDControllerBase {
       double extensionInches = MoveArmAndWristSafely.getExtensionIn(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
       double extensionTicks = extensionInches / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
       return extensionTicks;
+    }
+
+    @Override
+    public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+      putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "PidGet", this::pidGet);
     }
 
   }

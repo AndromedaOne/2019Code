@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.MoveUsingFrontLineFollower;
-import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.RollIntakeIn;
+import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
-import frc.robot.groupcommands.RollIntakeGroupCommand;
+import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
+import frc.robot.commands.stilts.*;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -55,9 +57,20 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
 
   // Subsystem Controller and Buttons
+  JoystickButton raiseLeftFront;
+  JoystickButton raiseRightFront;
+  JoystickButton raiseLeftRear;
+  JoystickButton raiseRightRear;
+  private POVButton retractFrontLegs;
+  private POVButton retractRearLegs;
+  private POVButton extendAllLegs;
+  private POVButton retractAllLegs;
+  private JoystickButton extendFrontLegs;
+  private JoystickButton extendRearLegs;
+
+  // Subsystem Controller and Buttons
   Joystick subsystemController;
   JoystickButton raiseRobotButton;
-
   private static OI instance;
 
   private POVButton intakeUp;
@@ -68,6 +81,8 @@ public class OI {
   private JoystickButton turnToEast;
   private JoystickButton turnToSouth;
   private JoystickButton turnToWest;
+  private JoystickButton runIntakeIn;
+  private JoystickButton runIntakeOut;
 
   private JoystickButton LowGamePieceButton;
   private JoystickButton MiddleGamePieceButton;
@@ -80,8 +95,35 @@ public class OI {
   protected Joystick driveController; // TODO: Cleanup use of joysticks/controllers in the code.
   protected Joystick operatorController;
 
+  public static final ButtonsEnumerated overRideSafetiesButton = ButtonsEnumerated.BACKBUTTON;
+  public static final ButtonsEnumerated rollIntakeButton = ButtonsEnumerated.RIGHTBUMPERBUTTON;
+
   private OI() {
     System.out.println("Constructing OI");
+
+    driveController = new Joystick(0);
+    subsystemController = new Joystick(1);
+
+    retractAllLegs = new POVButton(driveController, POVDirectionNames.SOUTH.getValue());
+    retractAllLegs.whenPressed(new RetractAll());
+
+    extendAllLegs = new POVButton(driveController, POVDirectionNames.NORTH.getValue());
+    extendAllLegs.whenPressed(new RaiseAll());
+
+    extendFrontLegs = new JoystickButton(driveController, ButtonsEnumerated.STARTBUTTON.getValue());
+    extendFrontLegs.whenPressed(new RaiseFrontLegs());
+
+    extendRearLegs = new JoystickButton(driveController, ButtonsEnumerated.BACKBUTTON.getValue());
+    extendRearLegs.whenPressed(new RaiseBackLegs());
+
+    retractFrontLegs = new POVButton(driveController, POVDirectionNames.EAST.getValue());
+    retractFrontLegs.whenPressed(new RetractFrontLegs());
+
+    retractRearLegs = new POVButton(driveController, POVDirectionNames.WEST.getValue());
+    retractRearLegs.whenPressed(new RetractRearLegs());
+
+    SmartDashboard.putData("Retract All", new RetractAll());
+
     driveController = new Joystick(0);
     operatorController = new Joystick(1);
 
@@ -101,32 +143,41 @@ public class OI {
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
     SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
 
+    // TODO: Change these to actual buttons
+    runIntakeIn = new JoystickButton(operatorController, ButtonsEnumerated.RIGHTBUMPERBUTTON.getValue());
+    runIntakeIn.whileHeld(new RollIntakeIn());
+
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    SmartDashboard.putData("StowIntake", new StowIntakeArm());
+
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    driveTrainPIDTest = new POVButton(driveController, POVDirectionNames.SOUTH.getValue());
+    // LowGamePieceButton = new JoystickButton(operatorController,
+    // ButtonsEnumerated.ABUTTON.getValue());
+    // LowGamePieceButton.whileHeld(new TuckArm(40, true));
+    // driveTrainPIDTest = new POVButton(driveController,
+    // POVDirectionNames.SOUTH.getValue());
     // driveTrainPIDTest.whileHeld(new DriveTrainPIDTest());
-    driveTrainPIDTest.whileHeld(new DriveForward());
+    // driveTrainPIDTest.whileHeld(new DriveForward());
     /*
-     * LowGamePieceButton= new JoystickButton(operatorController,
-     * ButtonsEnumerated.ABUTTON.getValue()); LowGamePieceButton.whileHeld(new
-     * TestCommand() );
-     * 
      * CargoShipAndLoadingCommand = new JoystickButton(operatorController,
      * ButtonsEnumerated.BBUTTON.getValue());
      * CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());
-     * 
+     *
      * MiddleGamePieceButton = new JoystickButton(operatorController,
      * ButtonsEnumerated.XBUTTON.getValue()); MiddleGamePieceButton.whileHeld(new
      * MiddleGamePieceArmCommand());
-     * 
+     *
      * HighGamePieceButton = new JoystickButton(operatorController,
      * ButtonsEnumerated.YBUTTON.getValue()); HighGamePieceButton.whileHeld(new
      * HighGamePieceArmCommand());
      */
 
-    ButtonsEnumerated.RIGHTBUMPERBUTTON.getJoystickButton(operatorController).whileHeld(new RollIntakeGroupCommand());
+    // rollIntakeButton.getJoystickButton(operatorController).whenPressed(new
+    // //RollIntakeGroupCommandScheduler());
+    overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
+
   }
 
   public Joystick getDriveStick() {
@@ -141,6 +192,7 @@ public class OI {
     if (instance == null) {
       instance = new OI();
     }
+
     return instance;
   }
 

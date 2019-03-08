@@ -4,14 +4,14 @@ import frc.robot.telemetries.Trace;
 
 public class PIDControllerBase {
   protected static Trace trace;
-  protected PIDMultiton pidMultiton;
+  public PIDMultiton pidMultiton;
   protected double outputRange = 1;
   protected double absoluteTolerance = 0;
   protected PIDConfiguration pidConfiguration = new PIDConfiguration();
   protected double p = 0;
   protected double i = 0;
   protected double d = 0;
-  protected String subsytemName;
+  protected String subsystemName;
   protected String pidName;
 
   /**
@@ -73,7 +73,8 @@ public class PIDControllerBase {
     pidConfiguration.setAbsoluteTolerance(absoluteTolerance);
     pidConfiguration.setMaximumOutput(outputRange);
     pidConfiguration.setMinimumOutput(-outputRange);
-    pidConfiguration.setLiveWindowName(subsytemName);
+    pidConfiguration.setLiveWindowName(subsystemName);
     pidConfiguration.setPIDName(pidName);
   }
+
 }
