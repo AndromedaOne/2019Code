@@ -49,6 +49,9 @@ public class MoveArmAndWristSafely {
   private static final double ROBOTLENGTH = 29.5;
   private static final double MAXARMLENGTH = 35.75;
   private static final double CLAWLENGTH = 20.5;
+  private static final double HATCHWIDTH = 24;
+  private static final double HATCHPANELTIPANGLEOFFSET = Math.atan((HATCHWIDTH/2)/CLAWLENGTH);
+  private static final double HATCHPANELTIPDISTTOWRIST = Math.sqrt(Math.pow(CLAWLENGTH, 2) + Math.pow(HATCHWIDTH/2, 2));
 
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
@@ -501,7 +504,8 @@ public class MoveArmAndWristSafely {
   private static void checkZoneConstraintsNew(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     checkButtEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
-    checkClawEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+    checkClawEndConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, true, safeArmMovements);
+    
   }
 
   /**
@@ -534,7 +538,7 @@ public class MoveArmAndWristSafely {
    * Implements a way to find the end of the arm on a coordinate system
    */
   private static void checkClawEndConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
-      double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
+      double wristPower, double shoulderPower, boolean isHoldingHatchPanel, SafeArmMovements safeArmMovements) {
     double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
     double extensionOut = MAXARMLENGTH - extensionIn;
     double wristJointPositionX = extensionOut * Math.sin(shoulderRotationRadians) - SHOULDEROFFSETFROMCENTER;
@@ -574,11 +578,43 @@ public class MoveArmAndWristSafely {
         }
     }
 
+
     double wristRotRelativeToFloor = wristRotDeg - (180 - (shoulderRotDeg + 90));
     double xPosRelativeToArmJoint = (CLAWLENGTH) * Math.cos(wristRotRelativeToFloor);
     double yPosRelativeToArmJoint = (CLAWLENGTH) * Math.sin(wristRotRelativeToFloor);
     double clawTipXPos = wristJointPositionX + xPosRelativeToArmJoint;
     double clawTipYPos = wristJointPositionY + yPosRelativeToArmJoint;
+
+    if (clawTipXPos > RULEEXTENSIONBOX) {
+      safeArmMovements.armExtension = false;
+      if (shoulderRotDeg < 90) {
+        safeArmMovements.shoulderRotateClockwise = false;
+      } else {
+        safeArmMovements.shoulderRotateCounterClockwise = false;
+      }
+      if (wristRotRelativeToFloor < 90) {
+        safeArmMovements.wristRotateClockwise = false;
+      } else {
+        safeArmMovements.wristRotateCounterClockwise = false;
+      } 
+    }
+
+    if (isHoldingHatchPanel) {
+      double hatchTopAngleRelativeToFloor = wristRotRelativeToFloor + HATCHPANELTIPANGLEOFFSET;
+      double hatchBottomAngleRelativeToFloor = wristRotRelativeToFloor - HATCHPANELTIPANGLEOFFSET;
+      
+      double hatchTopRelativeXLength = HATCHPANELTIPDISTTOWRIST * Math.cos(hatchTopAngleRelativeToFloor);
+      double hatchTopRelativeYLength = HATCHPANELTIPDISTTOWRIST * Math.sin(hatchTopAngleRelativeToFloor);
+
+      double hatchBottomRelativeXLength = HATCHPANELTIPDISTTOWRIST * Math.cos(hatchBottomAngleRelativeToFloor);
+      double hatchBottomRelativeYLength = HATCHPANELTIPDISTTOWRIST * Math.sin(hatchBottomAngleRelativeToFloor);
+
+      double hatchTopXPos = clawTipXPos + hatchTopRelativeXLength;
+      double hatchTopYPos = clawTipYPos + hatchTopRelativeYLength;
+
+      double hatchBottomXPos = clawTipXPos + hatchBottomRelativeXLength;
+      double hatchBottomYPos = clawTipYPos + hatchBottomRelativeYLength;
+    }
   }
 
   /**
