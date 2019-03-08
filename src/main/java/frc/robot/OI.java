@@ -17,6 +17,7 @@ import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
+import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.stilts.*;
 import frc.robot.utilities.ButtonsEnumerated;
@@ -129,17 +130,14 @@ public class OI {
     SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
     // Claw buttons are temp until I figure out the D-Pad
 
-    /*
-     * turnToNorth = new JoystickButton(driveController,
-     * ButtonsEnumerated.YBUTTON.getValue()); turnToNorth.whenPressed(new
-     * TurnToCompassHeading(0)); turnToEast = new JoystickButton(driveController,
-     * ButtonsEnumerated.BBUTTON.getValue()); turnToEast.whenPressed(new
-     * TurnToCompassHeading(90)); turnToSouth = new JoystickButton(driveController,
-     * ButtonsEnumerated.ABUTTON.getValue()); turnToSouth.whenPressed(new
-     * TurnToCompassHeading(180)); turnToWest = new JoystickButton(driveController,
-     * ButtonsEnumerated.XBUTTON.getValue()); turnToWest.whenPressed(new
-     * TurnToCompassHeading(270));
-     */
+    turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
+    turnToNorth.whenPressed(new TurnToCompassHeading(0));
+    turnToEast = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
+    turnToEast.whenPressed(new TurnToCompassHeading(90));
+    turnToSouth = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
+    turnToSouth.whenPressed(new TurnToCompassHeading(180));
+    turnToWest = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
+    turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
