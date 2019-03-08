@@ -337,7 +337,7 @@ public class Robot extends TimedRobot {
        */
       pneumaticStilts = new RealPneumaticStilts();
     } else {
-      climbUltrasonicSensor = new MockUltrasonicSensor();
+      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
       pneumaticStilts = new MockPneumaticStilts();
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());

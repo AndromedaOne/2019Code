@@ -6,7 +6,7 @@ import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.utilities.ButtonsEnumerated;
 
-public class LowGamePieceArmCommand extends Command {
+public class LowSameSideGamePieceArmCommand extends Command {
   public LowSameSideGamePieceArmCommand() {
     System.out.println("Creating Low Game Piece command");
     double shoulderAngle = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
@@ -17,18 +17,14 @@ public class LowGamePieceArmCommand extends Command {
     System.out.println("Still Creating Low Game Piece Command");
     if (DriveClawMotorsSafely.hasBall) {
       (new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle)).start();
-      ;
     } else {
       System.out.println("creating low hatch command");
       (new LowHatch(positiveWrist, sameSidePlacement, shoulderAngle)).start();
-      ;
-  }
+    }
   }
 
   @Override
   protected boolean isFinished() {
     return true;
-        Robot.operatorController);
-    //setShoulderDirectionFactor();
   }
 }
