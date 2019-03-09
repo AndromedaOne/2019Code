@@ -22,6 +22,8 @@ import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.stilts.*;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
+import frc.robot.groupcommands.stilts.L3Climb;
+
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -123,6 +125,8 @@ public class OI {
     retractRearLegs.whenPressed(new RetractRearLegs());
 
     SmartDashboard.putData("Retract All", new RetractAll());
+
+    SmartDashboard.putData("Start Auto Assisted Climb", new L3Climb());
 
     driveController = new Joystick(0);
     operatorController = new Joystick(1);

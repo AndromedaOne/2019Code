@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.stilts.RaiseAll;
 import frc.robot.commands.stilts.RetractFrontLegs;
 import frc.robot.commands.stilts.RetractRearLegs;
-import frc.robot.Robot;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.L3RollIntakeIn;
