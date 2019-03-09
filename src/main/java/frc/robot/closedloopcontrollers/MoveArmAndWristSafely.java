@@ -97,7 +97,7 @@ public class MoveArmAndWristSafely {
   }
 
   public static void calculate() {
-    Robot robotInstance = Robot.getInstance();
+    /*Robot robotInstance = Robot.getInstance();
     if (robotInstance == null) {
       return;
     }
@@ -107,7 +107,7 @@ public class MoveArmAndWristSafely {
       extensionPIDSetpointSet = false;
       Robot.extendableArmAndWrist.moveArmWrist(0, 0, 0);
       return;
-    }
+    }*/
 
     ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
 

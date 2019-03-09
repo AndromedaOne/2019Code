@@ -13,7 +13,7 @@ public class IntakeReady extends CommandGroup {
   ArmPosition lowerLimit = new ArmPosition(-20, 15, -100);
   ArmPosition upperLimit = new ArmPosition(0, 25, -80);
 
-  public IntakeReady(boolean positiveWrist) {
+  public IntakeReady() {
     ArmPosition currentPosition = Robot.getCurrentArmPosition();
 
     if (currentPosition.isBetween(lowerLimit, upperLimit)) {
