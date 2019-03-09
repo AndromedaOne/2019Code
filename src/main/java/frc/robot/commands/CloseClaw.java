@@ -7,6 +7,7 @@ public class CloseClaw extends Command {
 
   protected void initialize() {
     requires(Robot.claw);
+    System.out.println("Closing claw...");
   }
 
   protected void execute() {
