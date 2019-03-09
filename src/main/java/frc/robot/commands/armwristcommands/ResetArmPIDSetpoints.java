@@ -8,6 +8,7 @@ public class ResetArmPIDSetpoints extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Resetting ArmPID setpoints");
     super.initialize();
     RetractArm.setOverrideAndFinishCommand(true);
     RotateShoulder.setOverrideAndFinishCommand(true);

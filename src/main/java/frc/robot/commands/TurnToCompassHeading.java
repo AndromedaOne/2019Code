@@ -13,6 +13,7 @@ public class TurnToCompassHeading extends Command {
   public TurnToCompassHeading(double theHeading) {
     requires(Robot.driveTrain);
     heading = theHeading;
+    System.out.println("Moving to heading " + theHeading + " using the NavX");
   }
 
   protected void initialize() {
