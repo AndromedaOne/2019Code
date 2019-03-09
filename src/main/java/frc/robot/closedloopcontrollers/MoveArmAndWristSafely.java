@@ -343,14 +343,13 @@ public class MoveArmAndWristSafely {
     SafeArmMovements safeArmMovements = new SafeArmMovements();
 
     checkSafetyConstraints(extensionIn, wristRotDeg, shoulderRotDeg, safeArmMovements);
-    checkZoneConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
-    // checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower,
-    // shoulderPower, safeArmMovements);
+    // checkZoneConstraintsOld(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
+    checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
 
     return safeArmMovements;
   }
 
-  private static void checkZoneConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
+  private static void checkZoneConstraintsOld(double extensionIn, double wristRotDeg, double shoulderRotDeg,
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     if (shoulderRotDeg > 180) {
       safeArmMovements.shoulderRotateClockwise = false;
@@ -482,6 +481,11 @@ public class MoveArmAndWristSafely {
     double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
     double buttPositionX = -extensionIn * Math.sin(shoulderRotationRadians) + BUTTCAPLENGTH - SHOULDEROFFSETFROMCENTER;
     double buttPositionY = SHOULDERHEIGHT + (extensionIn * Math.cos(shoulderRotationRadians) + BUTTCAPLENGTH);
+
+    SmartDashboard.putNumber("buttPositionX", buttPositionX);
+    SmartDashboard.putNumber("buttPositionY", buttPositionY);
+
+
     if (buttPositionY > ELECTRONICSDANGERZONEHEIGHT) {
       // We are safe
       return;
@@ -509,6 +513,9 @@ public class MoveArmAndWristSafely {
     double extensionOut = MAXARMLENGTH - extensionIn;
     double wristJointXPos = extensionOut * Math.sin(shoulderRotationRadians) - SHOULDEROFFSETFROMCENTER;
     double wristJointYPos = SHOULDERHEIGHT - (extensionOut * Math.cos(shoulderRotationRadians));
+
+    SmartDashboard.putNumber("wristJointXPos", wristJointXPos);
+    SmartDashboard.putNumber("wristJointYPos", wristJointYPos);
 
     if (wristJointXPos > THIRTY_INCH_RULE) {
       safeArmMovements.armExtension = false;
@@ -558,10 +565,17 @@ public class MoveArmAndWristSafely {
     }
 
     double wristRotRelativeToFloor = wristRotDeg - (180 - (shoulderRotDeg + 90));
+      SmartDashboard.putNumber("wristRotRelativeToFloor", wristRotRelativeToFloor);
     double xPosRelativeToArmJoint = (CLAWLENGTH) * Math.cos(wristRotRelativeToFloor);
+      SmartDashboard.putNumber("xPosRelativeToArmJoint", xPosRelativeToArmJoint);
     double yPosRelativeToArmJoint = (CLAWLENGTH) * Math.sin(wristRotRelativeToFloor);
+      SmartDashboard.putNumber("yPosRelativeToArmJoint", yPosRelativeToArmJoint);
     double clawTipXPos = wristJointXPos + xPosRelativeToArmJoint;
     double clawTipYPos = wristJointYPos + yPosRelativeToArmJoint;
+
+    SmartDashboard.putNumber("clawTipXPos", clawTipXPos);
+    SmartDashboard.putNumber("clawTipYPos", clawTipYPos);
+
 
     // If the arm is at the 30 inch box it prevents the arm from extending and
     // checks the other if statements inside
