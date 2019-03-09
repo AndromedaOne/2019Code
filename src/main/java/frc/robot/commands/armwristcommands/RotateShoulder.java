@@ -19,6 +19,7 @@ public class RotateShoulder extends Command {
     requires(Robot.extendableArmAndWrist);
     encDegrees = angle;
     sPidController = ShoulderPIDController.getInstance();
+    System.out.println("Rotating shoulder to " + angle);
   }
 
   @Override

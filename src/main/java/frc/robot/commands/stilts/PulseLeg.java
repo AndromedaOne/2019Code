@@ -17,6 +17,7 @@ public class PulseLeg extends Command {
 
   public PulseLeg(StiltLeg leg) {
     currentLeg = leg;
+    System.out.println("Pulsing legset: " + leg.toString());
   }
 
   public void initialize() {
