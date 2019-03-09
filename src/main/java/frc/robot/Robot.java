@@ -117,6 +117,9 @@ public class Robot extends TimedRobot {
   public static double absoluteWristPositionError = 0.0;
   public static double absoluteArmPositionError = 0.0;
 
+  public static UltrasonicSensor frontDownwardUltrasonic;
+  public static UltrasonicSensor rearDownwardUltrasonic;
+
   public OI oi;
 
   /**
@@ -284,6 +287,23 @@ public class Robot extends TimedRobot {
     } else {
       System.out.println("mock claw");
       claw = new MockClaw();
+    }
+
+    if (conf.hasPath("sensors.frontDownwardUltrasonic")) {
+      int ping = conf.getInt("sensors.frontDownwardUltrasonic.ping");
+      int echo = conf.getInt("sensors.frontDownwardUltrasonic.echo");
+      frontDownwardUltrasonic = new RealUltrasonicSensor(ping, echo);
+    } else {
+      System.out.println("Using mock frontDownwardUltrasonic");
+      frontDownwardUltrasonic = new MockUltrasonicSensor();
+    }
+    if (conf.hasPath("sensors.rearDownwardUltrasonic")) {
+      int ping = conf.getInt("sensors.rearDownwardUltrasonic.ping");
+      int echo = conf.getInt("sensors.rearDownwardUltrasonic.echo");
+      rearDownwardUltrasonic = new RealUltrasonicSensor(ping, echo);
+    } else {
+      System.out.println("Using mock rearDownwardUltrasonic");
+      rearDownwardUltrasonic = new MockUltrasonicSensor();
     }
 
     operatorController = new Joystick(1);
