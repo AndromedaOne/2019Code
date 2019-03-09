@@ -76,6 +76,7 @@ import frc.robot.utilities.I2CBusDriver;
  * project.
  */
 public class Robot extends TimedRobot {
+  private static Robot instance;
 
   public static PneumaticStilts pneumaticStilts;
   public static NavXGyroSensor gyro;
@@ -155,7 +156,12 @@ public class Robot extends TimedRobot {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   public Robot() {
+    instance = this;
     Trace.getInstance();
+  }
+
+  public static Robot getInstance() {
+    return instance;
   }
 
   /**
