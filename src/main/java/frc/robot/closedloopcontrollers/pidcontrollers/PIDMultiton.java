@@ -71,7 +71,7 @@ public class PIDMultiton {
 
   }
 
-  private PIDController4905 pidController;
+  public PIDController4905 pidController;
   private PIDConfiguration config;
   // private PIDName name;
   private PIDName name;
@@ -88,6 +88,7 @@ public class PIDMultiton {
       config.setLiveWindowName(config.getLiveWindowName() + "Header");
     }
     pidController.setName(config.getLiveWindowName(), config.getPIDName());
+    System.out.println("PIDmultiton: adding live windows PID: " + config.getPIDName());
     LiveWindow.add(pidController);
 
   }

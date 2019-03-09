@@ -53,7 +53,6 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
-    shiftToLowGear();
     if (driveConf.getBoolean("useVelocityMode")) {
       setVelocityMode();
     }
@@ -228,8 +227,8 @@ public class RealDriveTrain extends DriveTrain {
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
     Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
         new TracePair("Rotate", rotateAmount));
-    logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
-    logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
+    // logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
+    // logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
@@ -243,7 +242,7 @@ public class RealDriveTrain extends DriveTrain {
       System.out.println("TALON IS NULL!!! ");
     }
     double motorOutput = _talon.getMotorOutputPercent();
-    Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
+    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
         new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
         new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
         new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));

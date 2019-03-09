@@ -29,4 +29,29 @@ public class MockIntake extends Intake {
     System.out.println("Setting Position to " + position);
   }
 
+  @Override
+  public boolean isAtLimitSwitch() {
+    return false;
+  }
+
+  @Override
+  public boolean isAtGround() {
+    return false;
+  }
+
+  @Override
+  public double getCargoSetpoint() {
+    return 0;
+  }
+
+  @Override
+  public double getGroundSetpoint() {
+    return 0;
+  }
+
+  @Override
+  public double getStowedSetpoint() {
+    return 0;
+  }
+
 }
