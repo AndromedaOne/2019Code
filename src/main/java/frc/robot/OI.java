@@ -20,6 +20,7 @@ import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.ResetArmPIDSetpoints;
 import frc.robot.commands.stilts.*;
+import frc.robot.groupcommands.armwristcommands.*;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -153,29 +154,16 @@ public class OI {
 
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
-    // LowGamePieceButton = new JoystickButton(operatorController,
-    // ButtonsEnumerated.ABUTTON.getValue());
-    // LowGamePieceButton.whileHeld(new TuckArm(40, true));
-    // driveTrainPIDTest = new POVButton(driveController,
-    // POVDirectionNames.SOUTH.getValue());
-    // driveTrainPIDTest.whileHeld(new DriveTrainPIDTest());
-    // driveTrainPIDTest.whileHeld(new DriveForward());
-    /*
-     * CargoShipAndLoadingCommand = new JoystickButton(operatorController,
-     * ButtonsEnumerated.BBUTTON.getValue());
-     * CargoShipAndLoadingCommand.whileHeld(new CargoShipAndLoadingCommand());
-     *
-     * MiddleGamePieceButton = new JoystickButton(operatorController,
-     * ButtonsEnumerated.XBUTTON.getValue()); MiddleGamePieceButton.whileHeld(new
-     * MiddleGamePieceArmCommand());
-     *
-     * HighGamePieceButton = new JoystickButton(operatorController,
-     * ButtonsEnumerated.YBUTTON.getValue()); HighGamePieceButton.whileHeld(new
-     * HighGamePieceArmCommand());
-     */
+    ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
+
+    ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new CargoShipAndLoadingCommand());
+
+    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new MiddleGamePieceArmCommand());
+
+    ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new HighGamePieceArmCommand());
 
     // rollIntakeButton.getJoystickButton(operatorController).whenPressed(new
-    // //RollIntakeGroupCommandScheduler());
+    // RollIntakeGroupCommandScheduler());
     overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
 
   }
