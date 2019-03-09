@@ -1,27 +1,18 @@
 package frc.robot.groupcommands.armwristcommands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.ArmPosition;
 import frc.robot.commands.armwristcommands.*;
 
-public class CargoShipCargo extends CommandGroup {
+public class CargoShipCargo extends ArmWristMovementCommand {
   private final double shoulderPosition = 151;
   private final double wristPosition = -98.59;
   private final double extensionPosition = 20.92;
 
-  public CargoShipCargo(boolean positiveWristCurently, boolean sameSidePlacement, double shoulderAngle) {
-    double directionFactor = positiveWristCurently ? 1 : -1;
-    boolean positiveWristDestination = (-95.5 * directionFactor) > 0 ? true : false;
-    positiveWristDestination = sameSidePlacement ? positiveWristDestination : !positiveWristDestination;
+  protected static final ArmPosition setpoint = new ArmPosition(151, 20.92, -98.59);
+  protected static final ArmPosition lowLimit = new ArmPosition(141, 17.92, -108.59);
+  protected static final ArmPosition highLimit = new ArmPosition(161, 23.92, -88.59);
 
-    addSequential(new TuckArm(shoulderAngle, positiveWristDestination));
-    if (sameSidePlacement) {
-      addSequential(new RotateShoulder(shoulderPosition * directionFactor));
-      addSequential(new RotateWrist(wristPosition * directionFactor));
-      addSequential(new RetractArm(extensionPosition));
-    } else {
-      addSequential(new RotateShoulder(-shoulderPosition * directionFactor));
-      addSequential(new RotateWrist(-wristPosition * directionFactor));
-      addSequential(new RetractArm(extensionPosition));
-    }
+  public CargoShipCargo() {
+    super(lowLimit, highLimit, setpoint);
   }
 }

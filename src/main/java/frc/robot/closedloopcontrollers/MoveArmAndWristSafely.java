@@ -193,24 +193,14 @@ public class MoveArmAndWristSafely {
     if (Robot.wristLimitSwitchUp.isAtLimit()) {
       if (currentArmPosition.getWristAngle() > 0) {
         // wristRotDeg = maxWristRotDegrees;
-        double topEncoderPosition = (currentArmPosition.getArmRetraction() / EXTENSIONINCHESPERTICK)
-            + (maxWristRotDegrees / WRISTDEGREESPERTICK) / 2;
-        double bottomEncoderPosition = (currentArmPosition.getArmRetraction() / EXTENSIONINCHESPERTICK)
-            - (maxWristRotDegrees / WRISTDEGREESPERTICK) / 2;
-        // Robot.topArmExtensionEncoder.resetTo(topEncoderPosition);
-        // Robot.bottomArmExtensionEncoder.resetTo(bottomEncoderPosition);
+
         // if (wristRotVelocity > 0) {
         // wristRotVelocity = 0;
         // throw new ArmOutOfBoundsException(extensionIn, wristRotDeg, shoulderRotDeg);
         // }
       } else {
         // wristRotDeg = -maxWristRotDegrees;
-        double topEncoderPosition = (currentArmPosition.getArmRetraction() / EXTENSIONINCHESPERTICK)
-            - (maxWristRotDegrees / WRISTDEGREESPERTICK) / 2;
-        double bottomEncoderPosition = (currentArmPosition.getArmRetraction() / EXTENSIONINCHESPERTICK)
-            + (maxWristRotDegrees / WRISTDEGREESPERTICK) / 2;
-        // Robot.topArmExtensionEncoder.resetTo(topEncoderPosition);
-        // Robot.bottomArmExtensionEncoder.resetTo(bottomEncoderPosition);
+
         // if (wristRotVelocity < 0) {
         // wristRotVelocity = 0;
         // throw new ArmOutOfBoundsException(extensionIn, wristRotDeg, shoulderRotDeg);
@@ -259,21 +249,11 @@ public class MoveArmAndWristSafely {
 
   private static SafeArmMovements isMovementSafe(double extensionVelocity, double wristRotVelocity,
       double shoulderRotVelocity) {
-    double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
-    double bottomExtensionEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
-    double shoulderTicks = Robot.shoulderEncoder.getDistanceTicks();
+    ArmPosition armPosition = Robot.getCurrentArmPosition();
 
-    double extensionIn = getExtensionIn(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
-    double wristRotDeg = getWristRotDegrees(topExtensionEncoderTicks, bottomExtensionEncoderTicks);
-    double shoulderRotDeg = getShoulderRotDeg(shoulderTicks);
-
-    double topArmEncoderVelocity = Robot.topArmExtensionEncoder.getVelocity();
-    double bottomArmEncoderVelocity = Robot.bottomArmExtensionEncoder.getVelocity();
-    double shoulderEncoderVelocity = Robot.shoulderEncoder.getVelocity();
-
-    double extensionVelocityConversion = getExtensionInVelocity(topArmEncoderVelocity, bottomArmEncoderVelocity);
-    double wristRotVelocityConversion = getWristRotDegreesVelocity(topArmEncoderVelocity, bottomArmEncoderVelocity);
-    double shoulderRotVelocityConversion = getShoulderRotDegVelocity(shoulderEncoderVelocity);
+    double extensionVelocityConversion = Robot.getExtensionInVelocity();
+    double wristRotVelocityConversion = Robot.getWristRotDegreesVelocity();
+    double shoulderRotVelocityConversion = Robot.getShoulderRotDegVelocity();
 
     // multiplying by 1.0 to try to look into the future and see where the
     // deltaExtension can be if speed is increasing
@@ -281,8 +261,9 @@ public class MoveArmAndWristSafely {
     double deltaWristRot = wristRotVelocityConversion * deltaTime * 1.0;
     double deltaShoulderRot = shoulderRotVelocityConversion * deltaTime * 1.0;
 
-    SafeArmMovements safeArmMovements = isLocSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
-        shoulderRotDeg + deltaShoulderRot, extensionVelocity, wristRotVelocity, shoulderRotVelocity);
+    SafeArmMovements safeArmMovements = isLocSafe(armPosition.getArmRetraction() + deltaExtension,
+        armPosition.getWristAngle() + deltaWristRot, armPosition.getShoulderAngle() + deltaShoulderRot,
+        extensionVelocity, wristRotVelocity, shoulderRotVelocity);
 
     return safeArmMovements;
 

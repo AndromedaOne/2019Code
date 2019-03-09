@@ -58,8 +58,8 @@ public class WristPIDController extends PIDControllerBase {
       trace.addTrace(true, "WristPID", new TracePair("Output", output),
           new TracePair("SetpointTicks", container.getSetpoint()),
           new TracePair("SetpointDegrees", container.getSetpoint() * Robot.WRISTDEGREESPERTICK),
-          new TracePair("TicksAngle", wristPIDSource.pidGet()), new TracePair("DegreeAngle",
-          currentArmPosition.getWristAngle()));
+          new TracePair("TicksAngle", wristPIDSource.pidGet()),
+          new TracePair("DegreeAngle", currentArmPosition.getWristAngle()));
       // try {
       MoveArmAndWristSafely.setPidWristPower(output);
       // } catch (ArmOutOfBoundsException e) {
@@ -112,6 +112,6 @@ public class WristPIDController extends PIDControllerBase {
 
   @Override
   public void setSetpoint(double setpoint) {
-    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.WRISTDEGREESPERTICK);
+    pidMultiton.setSetpoint(setpoint / Robot.WRISTDEGREESPERTICK);
   }
 }
