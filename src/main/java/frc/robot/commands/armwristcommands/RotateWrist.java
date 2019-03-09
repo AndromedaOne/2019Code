@@ -20,6 +20,7 @@ public class RotateWrist extends Command {
 
   @Override
   protected void initialize() {
+    overrideAndFinishCommand = false;
     WristPIDController.getInstance().setSetpoint(encDegrees);
     WristPIDController.getInstance().enable();
   }

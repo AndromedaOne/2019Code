@@ -21,6 +21,7 @@ public class RetractArm extends Command {
 
   @Override
   protected void initialize() {
+    overrideAndFinishCommand = false;
     ExtendableArmPIDController.getInstance().setSetpoint(inchesExtension);
     ExtendableArmPIDController.getInstance().enable();
   }
