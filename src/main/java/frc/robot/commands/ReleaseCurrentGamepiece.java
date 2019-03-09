@@ -6,24 +6,24 @@ import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 
 public class ReleaseCurrentGamepiece extends Command {
 
-    public ReleaseCurrentGamepiece() {
-        requires(Robot.claw);
+  public ReleaseCurrentGamepiece() {
+    requires(Robot.claw);
+  }
+
+  public void initialize() {
+
+  }
+
+  public void execute() {
+    if (DriveClawMotorsSafely.hasBall) {
+      Robot.intake.rollIntake(-0.75);
     }
 
-    public void initialize() {
-        
-    }
+  }
 
-    public void execute() {
-        if(DriveClawMotorsSafely.hasBall) {
-            Robot.intake.rollIntake(-0.75);
-        }
-
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
 
 }

@@ -21,7 +21,7 @@ public class ClimberPIDController extends PIDControllerBase {
     super.d = 0;
     super.subsystemName = "ClimberUltrasonic";
     super.pidName = "ClimberPID";
-    ultrasonicSensor = Robot.climbUltrasonicSensor;
+    ultrasonicSensor = Robot.drivetrainFrontUltrasonic;
     super.trace = Trace.getInstance();
     ultrasonicSensor.putSensorOnLiveWindow(super.subsystemName, "ultrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();

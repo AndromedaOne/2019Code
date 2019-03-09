@@ -13,7 +13,9 @@ public class LowSameSideGamePieceArmCommand extends Command {
     double wristAngle = MoveArmAndWristSafely.getWristRotDegrees(Robot.topArmExtensionEncoder.getDistanceTicks(),
         Robot.bottomArmExtensionEncoder.getDistanceTicks());
     boolean positiveWrist = (shoulderAngle + wristAngle) > 0;
-    
+
+    boolean sameSidePlacement = ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON,
+        Robot.operatorController);
     System.out.println("Still Creating Low Game Piece Command");
     if (DriveClawMotorsSafely.hasBall) {
       (new RocketShipLowCargo(positiveWrist, sameSidePlacement, shoulderAngle)).start();

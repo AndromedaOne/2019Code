@@ -1,15 +1,15 @@
 package frc.robot.commands;
 
 import com.typesafe.config.Config;
+
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 
 public class MoveUsingEncoderPID extends MoveTurnBase {
 
   private Config config = Robot.getConfig().getConfig("subsystems");
   private int ticksPerInch = config.getInt("driveTrain.ticksToInches");
   private double setpoint = 0;
-  
+
   /**
    * Takes a Setpoint in inches
    */
