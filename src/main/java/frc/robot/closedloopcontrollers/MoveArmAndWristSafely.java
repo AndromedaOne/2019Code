@@ -59,7 +59,6 @@ public class MoveArmAndWristSafely {
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
   private static double teleopExtensionPower = 0;
-  private static boolean presetModeActive = false;
 
   /**
    * @param teleopShoulderPower the teleopShoulderPower to set
@@ -119,26 +118,6 @@ public class MoveArmAndWristSafely {
     mutex.unlock();
   }
 
-  /**
-   * Call this function when starting to execute a preset command Relaxes the arm
-   * extension limits
-   */
-  public static void setPresetModeActive() {
-    mutex.lock();
-    presetModeActive = true;
-    mutex.unlock();
-  }
-
-  /**
-   * Call this function when finished executing a preset command Resets the arm
-   * extension limits for Teleop
-   */
-  public static void clearPresetModeActive() {
-    mutex.lock();
-    presetModeActive = false;
-    mutex.unlock();
-  }
-
   public static void calculate() {
 
     double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
@@ -157,8 +136,6 @@ public class MoveArmAndWristSafely {
     double localPIDWristPower;
     double localPIDExtensionPower;
 
-    boolean teleOpModeActive;
-
     mutex.lock();
     localTeleopShoulderPower = teleopShoulderPower;
     localTeleopWristPower = teleopWristPower;
@@ -167,9 +144,6 @@ public class MoveArmAndWristSafely {
     localPIDShoulderPower = pidShoulderPower;
     localPIDWristPower = pidWristPower;
     localPIDExtensionPower = pidExtensionPower;
-
-    teleOpModeActive = !presetModeActive;
-
     mutex.unlock();
 
     double shoulderPower = 0;
@@ -184,7 +158,7 @@ public class MoveArmAndWristSafely {
         shoulderPIDSetpointSet = true;
         shoulderPower = 0;
       } else {
-        isMovementSafe(0, 0, shoulderPower, teleOpModeActive);
+        isMovementSafe(0, 0, shoulderPower);
         shoulderPower = localPIDShoulderPower;
       }
 
@@ -201,7 +175,7 @@ public class MoveArmAndWristSafely {
         wristPIDSetpointSet = true;
         wristPower = 0;
       } else {
-        isMovementSafe(0, localPIDWristPower, 0, teleOpModeActive);
+        isMovementSafe(0, localPIDWristPower, 0);
         wristPower = localPIDWristPower;
       }
     }
@@ -217,15 +191,14 @@ public class MoveArmAndWristSafely {
         extensionPIDSetpointSet = true;
         extensionPower = 0;
       } else {
-        isMovementSafe(localPIDExtensionPower, 0, 0, teleOpModeActive);
+        isMovementSafe(localPIDExtensionPower, 0, 0);
         extensionPower = localPIDExtensionPower;
       }
     }
     SafeArmMovements safeArmMovements = new SafeArmMovements();
 
     if (!OI.overRideSafetiesButton.isPressed(Robot.operatorController)) {
-      safeArmMovements = isMovementSafe(extensionPower, wristPower, shoulderPower, teleOpModeActive);
-
+      safeArmMovements = isMovementSafe(extensionPower, wristPower, shoulderPower);
     }
 
     if (extensionPower > 0 && !safeArmMovements.armRetraction) {
@@ -335,7 +308,7 @@ public class MoveArmAndWristSafely {
    */
 
   private static SafeArmMovements isMovementSafe(double extensionVelocity, double wristRotVelocity,
-      double shoulderRotVelocity, boolean teleOpModeActive) {
+      double shoulderRotVelocity) {
     double topExtensionEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
     double bottomExtensionEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
     double shoulderTicks = Robot.shoulderEncoder.getDistanceTicks();
@@ -359,55 +332,22 @@ public class MoveArmAndWristSafely {
     double deltaShoulderRot = shoulderRotVelocityConversion * deltaTime * 1.0;
 
     SafeArmMovements safeArmMovements = isNextMovementSafe(extensionIn + deltaExtension, wristRotDeg + deltaWristRot,
-        shoulderRotDeg + deltaShoulderRot, extensionVelocity, wristRotVelocity, shoulderRotVelocity, teleOpModeActive);
+        shoulderRotDeg + deltaShoulderRot, extensionVelocity, wristRotVelocity, shoulderRotVelocity);
 
     return safeArmMovements;
 
   }
 
   public static SafeArmMovements isNextMovementSafe(double extensionIn, double wristRotDeg, double shoulderRotDeg,
-      double extensionPower, double wristPower, double shoulderPower, boolean teleOpModeActive) {
+      double extensionPower, double wristPower, double shoulderPower) {
     SafeArmMovements safeArmMovements = new SafeArmMovements();
 
     checkSafetyConstraints(extensionIn, wristRotDeg, shoulderRotDeg, safeArmMovements);
-    if (teleOpModeActive && false) {
-      // Temporary disabling until startup if sorted out
-      checkTeleOpConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
-    }
     checkZoneConstraints(extensionIn, wristRotDeg, shoulderRotDeg, wristPower, shoulderPower, safeArmMovements);
     // checkZoneConstraintsNew(extensionIn, wristRotDeg, shoulderRotDeg, wristPower,
     // shoulderPower, safeArmMovements);
 
     return safeArmMovements;
-  }
-
-  /**
-   * When in TeleOp, don't allow arm to extend beyond 30 inches. This ensures that
-   * we are always within the 30 inch boundary of the robot. Ignores position of
-   * claw, so this does not allow arm to reach its full potential distance. Does
-   * not allow arm to swing through body
-   */
-  private static void checkTeleOpConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
-      double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
-    if (extensionIn <= 10) {
-      // Does not allow claw to extend if at boundary, it cant extent beyond the 30
-      // inch boundary
-      safeArmMovements.armExtension = false;
-    }
-    // Keeps the arm from going through the robot from the back to the front of the
-    // robot
-    // 40 degrees comes from the 15.5 inch long and 20.5 inch high deadzone on the
-    // back of the robot (Was 37, but rounded to 40 for wiggle room)
-    if (shoulderRotDeg >= -40) {
-      safeArmMovements.shoulderRotateClockwise = false;
-    }
-    // Keeps the arm from going through the robot from the front to the back of the
-    // robot
-    // 40 degrees comes from the 15.5 inch long and 20.5 inch high deadzone on the
-    // back of the robot (Was 37, but rounded to 40 for wiggle room)
-    if (shoulderRotDeg <= 40) {
-      safeArmMovements.shoulderRotateCounterClockwise = false;
-    }
   }
 
   private static void checkZoneConstraints(double extensionIn, double wristRotDeg, double shoulderRotDeg,
