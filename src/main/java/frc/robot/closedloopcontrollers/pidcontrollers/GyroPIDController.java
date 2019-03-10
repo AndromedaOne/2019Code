@@ -3,8 +3,6 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.sensors.NavXGyroSensor;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
 public class GyroPIDController extends PIDControllerBase {
   private static GyroPIDController instance;
@@ -27,7 +25,6 @@ public class GyroPIDController extends PIDControllerBase {
     super.pidName = "GyroPID";
 
     navXGyroSensor = NavXGyroSensor.getInstance();
-    super.trace = Trace.getInstance();
     gyroPIDOut = new GyroPIDOut();
     navXGyroSensor.putSensorOnLiveWindow(super.subsystemName, "Gyro");
     super.setPIDConfiguration(super.pidConfiguration);
@@ -42,8 +39,6 @@ public class GyroPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "GyroPID", new TracePair("Output", output),
-          new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("CurrentAngle", navXGyroSensor.pidGet()));
       System.out.println("P: " + getInstance().pidMultiton.pidController.getP());
       Robot.gyroCorrectMove.moveUsingGyro(0, output, false, false);
     }

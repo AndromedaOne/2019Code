@@ -7,8 +7,6 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
 public class WristPIDController extends PIDControllerBase {
 
@@ -34,7 +32,6 @@ public class WristPIDController extends PIDControllerBase {
 
     topArmEncoder = Robot.topArmExtensionEncoder;
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;
-    super.trace = Trace.getInstance();
     // topArmEncoder.putSensorOnLiveWindow(super.subsytemName, "WristTopEncoder");
     // bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName,
     // "WristBottomEncoder");
@@ -53,11 +50,7 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "WristPID", new TracePair("Output", output),
-          new TracePair("SetpointTicks", container.getSetpoint()),
-          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.WRISTDEGREESPERTICK),
-          new TracePair("TicksAngle", wristPIDSource.pidGet()), new TracePair("DegreeAngle",
-              MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
+      MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
       // try {
       MoveArmAndWristSafely.setPidWristPower(output);
       // } catch (ArmOutOfBoundsException e) {

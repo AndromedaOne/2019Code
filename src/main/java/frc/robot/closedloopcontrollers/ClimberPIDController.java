@@ -6,7 +6,6 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDCon
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDControllerBase;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
-import frc.robot.telemetries.Trace;
 
 public class ClimberPIDController extends PIDControllerBase {
 
@@ -22,7 +21,6 @@ public class ClimberPIDController extends PIDControllerBase {
     super.subsystemName = "ClimberUltrasonic";
     super.pidName = "ClimberPID";
     ultrasonicSensor = Robot.climbUltrasonicSensor;
-    super.trace = Trace.getInstance();
     ultrasonicSensor.putSensorOnLiveWindow(super.subsystemName, "ultrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
     super.setPIDConfiguration(pidConfiguration);
