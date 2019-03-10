@@ -9,17 +9,23 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 
 public class ArmWristMovementCommand extends CommandGroup {
 
-  protected ArmWristMovementCommand(ArmPosition lowLimit, ArmPosition highLimit, ArmPosition setpoint) {
+  protected ArmWristMovementCommand(ArmPosition lowLimit, ArmPosition highLimit, ArmPosition setpoint, boolean mirror) {
     ArmPosition currentPosition = Robot.getCurrentArmPosition();
 
     if (currentPosition.isBetween(lowLimit, highLimit)) {
       goTo(setpoint);
-    } else if (currentPosition.isBetween(highLimit.getMirror(), lowLimit.getMirror())) {
+    } else if (currentPosition.isBetween(highLimit.getMirror(), lowLimit.getMirror()) && mirror) {
       // the order of arguments is flipped above because everything is
       // negated when getMirror is called
       goTo(setpoint.getMirror());
     }
+  }
 
+  /**
+   * This will also go to the mirror position by default.
+   */
+  protected ArmWristMovementCommand(ArmPosition lowLimit, ArmPosition highLimit, ArmPosition setpoint) {
+    this(lowLimit, highLimit, setpoint, true);
   }
 
   protected void goTo(ArmPosition position) {
