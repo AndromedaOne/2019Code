@@ -12,7 +12,7 @@ public class Bay3Bay2FromHab extends CommandGroup {
    * calling false does the opposite. A Hatch Panel should be pre-loaded onto the
    * robot.
    */
-  public Bay3Bay2FromHab(boolean onRightSide, boolean onLevelTwo) {
+  public Bay3Bay2FromHab() {
 
     addSequential(new Bay3FromHab());
 

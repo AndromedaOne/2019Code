@@ -25,7 +25,11 @@ public class Bay3CargoBay2 extends CommandGroup {
      * While we move backwards, we swap the position of the robot arm so that it is
      * on the back side of the robot.
      */
-    addSequential(new TurnToFieldCenter());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     // Turns to the center of the field.
     addSequential(new MoveUsingEncoderPID(0));
     // Moves.
@@ -41,7 +45,11 @@ public class Bay3CargoBay2 extends CommandGroup {
     // Move forward.
     addParallel(new MiddleGamePieceArmCommand());
     // Swap sides while we move.
-    addSequential(new TurnToFieldOutside());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     // Turn to outside.
     addSequential(new MoveUsingEncoderPID(0));
     // Move.
@@ -49,7 +57,11 @@ public class Bay3CargoBay2 extends CommandGroup {
     // Turn to North.
     addSequential(new MoveUsingEncoderPID(0));
     // Move to be around Bay 2.
-    addSequential(new TurnToFieldCenter());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     // Turn to center.
     addSequential(new MoveUsingEncoderPID(0));
     // Move slightly to be around the tape.
