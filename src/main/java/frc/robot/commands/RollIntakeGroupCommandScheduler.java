@@ -1,6 +1,7 @@
-package frc.robot.groupcommands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.groupcommands.RollIntakeGroupCommand;
 
 public class RollIntakeGroupCommandScheduler extends Command {
 

@@ -1,7 +1,9 @@
-package frc.robot.groupcommands.armwristcommands;
+package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
+import frc.robot.groupcommands.armwristcommands.LowHatch;
+import frc.robot.groupcommands.armwristcommands.RocketShipLowCargo;
 
 public class LowGamePieceArmCommand extends Command {
   public LowGamePieceArmCommand() {
