@@ -41,7 +41,7 @@ public class RotateWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return overrideAndFinishCommand || WristPIDController.getInstance().isEnabled();
+    return overrideAndFinishCommand || WristPIDController.getInstance().onTarget();
   }
 
 }
