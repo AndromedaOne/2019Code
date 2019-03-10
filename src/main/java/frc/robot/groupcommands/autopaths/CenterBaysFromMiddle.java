@@ -16,7 +16,11 @@ public class CenterBaysFromMiddle extends CommandGroup {
     addSequential(new CloseClaw());
     // Move away from the wall
     addSequential(new MoveUsingFrontUltrasonic(15));
-    addSequential(new TurnToFieldOutside());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     addSequential(new MoveUsingEncoderPID(20));
     // Turn towards the loading station
     addSequential(new TurnToCompassHeading(0));
@@ -29,7 +33,11 @@ public class CenterBaysFromMiddle extends CommandGroup {
     // Drive forward away from the wall
     addSequential(new MoveUsingEncoderPID(10));
     addParallel(new LowOppositeSideGamePieceArmCommand());
-    addSequential(new TurnToFieldCenter());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     // Move to align with the center bay that hasn't been hatched™ yet - Devin
     addSequential(new MoveUsingEncoderPID(25));
     addSequential(new TurnToCompassHeading(0));

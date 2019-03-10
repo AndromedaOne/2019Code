@@ -12,7 +12,11 @@ public class LoadingStationFromBay3 extends CommandGroup {
     addSequential(new MoveUsingEncoderPID(-10));
     addSequential(new TurnToCompassHeading(0));
     addSequential(new MoveUsingEncoderPID(-15));
-    addSequential(new TurnToFieldCenter());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     addSequential(new MoveUsingEncoderPID(-10));
     addSequential(new TurnToCompassHeading(0));
     addSequential(new MoveUsingBackUltrasonic(17));

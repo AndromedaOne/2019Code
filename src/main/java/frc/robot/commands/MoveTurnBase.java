@@ -12,7 +12,6 @@ public class MoveTurnBase extends Command {
   private DrivetrainUltrasonicPIDController frontUltrasonic = DrivetrainUltrasonicPIDController.getInstance();
   private DrivetrainEncoderPIDController encoderPID = DrivetrainEncoderPIDController.getInstance();
   private GyroPIDController gyroPID = GyroPIDController.getInstance();
-
   public MoveTurnBase() {
     requires(Robot.driveTrain);
   }
@@ -41,41 +40,6 @@ public class MoveTurnBase extends Command {
     encoderPID.enable();
   }
 
-  public void turnToCompassHeading(double heading) {
-    double deltaAngle = heading - NavXGyroSensor.getInstance().getCompassHeading();
-    System.out.println("Raw Delta Angle: " + deltaAngle);
-    // This corrects turn that are over 180
-    if (deltaAngle > 180) {
-      deltaAngle = -(360 - deltaAngle);
-      System.out.println("Angle corrected for shortest method, New Delta: " + deltaAngle);
-    } else if (deltaAngle < -180) {
-      deltaAngle = 360 + deltaAngle;
-      System.out.println("Angle corrected for shortest method, New Delta: " + deltaAngle);
-    }
-
-    double setPoint = deltaAngle + NavXGyroSensor.getInstance().getZAngle();
-
-    if (Math.abs(deltaAngle) < gyroPID.getAbsoluteTolerance()) {
-      System.out.println("Delta is to small, not moving!");
-      setPoint = NavXGyroSensor.getInstance().getZAngle();
-    }
-
-    System.out.println(" - Turn to Compass Heading  - ");
-    System.out.println("Tolerance: " + gyroPID.getAbsoluteTolerance());
-    System.out.println("Heading: " + heading);
-    System.out.println("Delta Angle: " + deltaAngle);
-    System.out.println("SetPoint: " + setPoint);
-    System.out.println("Current Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
-    System.out.println("Current Z Angle: " + NavXGyroSensor.getInstance().getZAngle());
-    gyroPID.setSetpoint(setPoint);
-    gyroPID.enable();
-  }
-
-  public void deltaTurn(double setPoint) {
-    double currentPosition = NavXGyroSensor.getInstance().getZAngle();
-    gyroPID.setSetpoint(currentPosition + setPoint);
-    gyroPID.enable();
-  }
 
   public void end() {
     gyroPID.disable();

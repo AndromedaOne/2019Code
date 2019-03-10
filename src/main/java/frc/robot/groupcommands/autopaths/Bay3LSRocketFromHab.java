@@ -26,7 +26,11 @@ public class Bay3LSRocketFromHab extends CommandGroup {
     // Turn South.
     addSequential(new MoveUsingEncoderPID(0));
     // Move South.
-    addSequential(new TurnToFieldCenter());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     // Turn to face the center field direction.
     addSequential(new MoveUsingEncoderPID(0));
     // Move to avoid the rocket and be inline with the loading station.
@@ -39,7 +43,11 @@ public class Bay3LSRocketFromHab extends CommandGroup {
      */
     addSequential(new MoveUsingEncoderPID(0));
     // Move back.
-    addSequential(new TurnToFieldOutside());
+    if (AutoStartingConfig.onRightSide) {
+      addSequential(new TurnToCompassHeading(270));
+    } else {
+      addSequential(new TurnToCompassHeading(90));
+    }
     // Turn towards the rocket.
     addSequential(new MoveUsingEncoderPID(0));
     // Move to the line.
