@@ -23,6 +23,8 @@ public class RotateShoulder extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Running the Shoulder to: " + encDegrees);
+    overrideAndFinishCommand = false;
     sPidController.setSetpoint(encDegrees);
     sPidController.enable();
   }

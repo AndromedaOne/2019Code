@@ -1,30 +1,14 @@
 package frc.robot.groupcommands.armwristcommands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.armwristcommands.RetractArm;
-import frc.robot.commands.armwristcommands.RotateShoulder;
-import frc.robot.commands.armwristcommands.RotateWrist;
+import frc.robot.ArmPosition;
 
-public class HighHatch extends CommandGroup {
-  private final double shoulderPosition = 126.16;
-  private final double wristPosition = -89.39;
-  private final double extensionPosition = 0;
+public class HighHatch extends ArmWristMovementCommand {
 
-  public HighHatch(boolean positiveWristCurently, boolean sameSidePlacement, double shoulderAngle) {
-    double directionFactor = positiveWristCurently ? 1 : -1;
-    boolean positiveWristDestination = (wristPosition * directionFactor) > 0 ? true : false;
-    positiveWristDestination = sameSidePlacement ? positiveWristDestination : !positiveWristDestination;
+  protected static final ArmPosition setpoint = new ArmPosition(126.16, 0, -89.39);
+  protected static final ArmPosition lowLimit = new ArmPosition(116.16, -3, -99.39);
+  protected static final ArmPosition highLimit = new ArmPosition(136.16, 3, -79.39);
 
-    addSequential(new TuckArm(shoulderAngle, positiveWristDestination));
-    if (sameSidePlacement) {
-      addSequential(new RotateShoulder(shoulderPosition * directionFactor));
-      addSequential(new RotateWrist(wristPosition * directionFactor));
-      addSequential(new RetractArm(extensionPosition));
-
-    } else {
-      addSequential(new RotateShoulder(-shoulderPosition * -directionFactor));
-      addSequential(new RotateWrist(-wristPosition * -directionFactor));
-      addSequential(new RetractArm(extensionPosition));
-    }
+  public HighHatch() {
+    super(lowLimit, highLimit, setpoint);
   }
 }
