@@ -3,13 +3,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
-import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainRearUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.NavXGyroSensor;
 
 public class MoveTurnBase extends Command {
 
-  private DrivetrainUltrasonicPIDController frontUltrasonic = DrivetrainUltrasonicPIDController.getInstance();
+  private DrivetrainRearUltrasonicPIDController frontUltrasonic = DrivetrainRearUltrasonicPIDController.getInstance();
   private DrivetrainEncoderPIDController encoderPID = DrivetrainEncoderPIDController.getInstance();
   private GyroPIDController gyroPID = GyroPIDController.getInstance();
 

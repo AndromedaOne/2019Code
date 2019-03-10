@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
-import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainRearUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
@@ -48,7 +48,9 @@ import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
+import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
+import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.claw.MockClaw;
@@ -88,7 +90,7 @@ public class Robot extends TimedRobot {
   public static ExtendableArmAndWrist extendableArmAndWrist;
   public static Joystick armController;
   public static DrivetrainEncoderPIDController encoderPID;
-  public static DrivetrainUltrasonicPIDController ultrasonicPID;
+  public static DrivetrainRearUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
@@ -206,18 +208,26 @@ public class Robot extends TimedRobot {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
     if (conf.hasPath("sensors.drivetrainFrontUltrasonic")) {
-      int ping = conf.getInt("sensors.drivetrainFrontUltrasonic.ping");
-      int echo = conf.getInt("sensors.drivetrainFrontUltrasonic.echo");
-      drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
+      System.out.println("Using Real Front Ultrasonics");
+      int leftPing = conf.getInt("sensors.drivetrainFrontUltrasonic.leftPing");
+      int leftEcho = conf.getInt("sensors.drivetrainFrontUltrasonic.leftEcho");
+      int rightPing = conf.getInt("sensors.drivetrainFrontUltrasonic.rightPing");
+      int rightEcho = conf.getInt("sensors.drivetrainFrontUltrasonic.rightEcho");
+      drivetrainFrontUltrasonic = new RealUltrasonicSensorPair(leftPing, leftEcho, rightPing, rightEcho);
     } else {
-      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
+      System.out.println("Using Mock Front Ultrasonics");
+      drivetrainFrontUltrasonic = new MockUltrasonicSensorPair();
     }
     if (conf.hasPath("sensors.drivetrainRearUltrasonic")) {
-      int ping = conf.getInt("sensors.drivetrainRearUltrasonic.ping");
-      int echo = conf.getInt("sensors.drivetrainRearUltrasonic.echo");
-      drivetrainRearUltrasonic = new RealUltrasonicSensor(ping, echo);
+      System.out.println("Using Real Rear Ultrasonics");
+      int leftPing = conf.getInt("sensors.drivetrainRearUltrasonic.leftPing");
+      int leftEcho = conf.getInt("sensors.drivetrainRearUltrasonic.leftEcho");
+      int rightPing = conf.getInt("sensors.drivetrainRearUltrasonic.rightPing");
+      int rightEcho = conf.getInt("sensors.drivetrainRearUltrasonic.rightEcho");
+      drivetrainRearUltrasonic = new RealUltrasonicSensorPair(leftPing, leftEcho, rightPing, rightEcho);
     } else {
-      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
+      System.out.println("Using Mock Rear Ultrasonics");
+      drivetrainRearUltrasonic = new MockUltrasonicSensorPair();
     }
     compressor = new Compressor();
     if (conf.hasPath("sensors.intakeStowedSwitch")) {
@@ -299,7 +309,7 @@ public class Robot extends TimedRobot {
     gyroCorrectMove = new MoveDrivetrainGyroCorrect(NavXGyroSensor.getInstance(), driveTrain);
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
-    ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
+    ultrasonicPID = DrivetrainRearUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
 
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);

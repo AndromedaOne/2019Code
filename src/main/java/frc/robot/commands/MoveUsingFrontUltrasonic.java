@@ -1,10 +1,10 @@
 package frc.robot.commands;
 
-import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainRearUltrasonicPIDController;
 
 public class MoveUsingFrontUltrasonic extends MoveTurnBase {
 
-  private DrivetrainUltrasonicPIDController frontUltrasonic = DrivetrainUltrasonicPIDController.getInstance();
+  private DrivetrainRearUltrasonicPIDController frontUltrasonic = DrivetrainRearUltrasonicPIDController.getInstance();
   private double setpoint = 0;
 
   /**
