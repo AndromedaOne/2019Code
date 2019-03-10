@@ -100,6 +100,10 @@ public class Trace {
     m_startTime = System.currentTimeMillis();
     createNewTraceDir();
     redirectOutput();
+    createCommandTraceFile();
+  }
+
+  private void createCommandTraceFile() {
 
   }
 
@@ -307,5 +311,9 @@ public class Trace {
       System.err.println("ERROR: unable to open text file " + m_matchStartFname + " ;" + e.getMessage());
       e.printStackTrace();
     }
+  }
+
+  public static void logCommandStart(String commandName) {
+
   }
 }
