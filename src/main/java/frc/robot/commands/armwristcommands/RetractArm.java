@@ -22,6 +22,7 @@ public class RetractArm extends Command {
   @Override
   protected void initialize() {
     overrideAndFinishCommand = false;
+    System.out.println("Running the Arm to: " + inchesExtension);
     ExtendableArmPIDController.getInstance().setSetpoint(inchesExtension);
     ExtendableArmPIDController.getInstance().enable();
   }

@@ -18,7 +18,7 @@ public class ShoulderPIDController extends PIDControllerBase {
   private MagEncoderSensor shoulderEncoder;
 
   private ShoulderPIDController() {
-    super.absoluteTolerance = 5 / Robot.SHOULDERDEGREESPERTICK;
+    super.absoluteTolerance = 0.5 / Robot.SHOULDERDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
     super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
