@@ -9,6 +9,23 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 
 public class ArmWristMovementCommand extends CommandGroup {
 
+  protected ArmWristMovementCommand(ArmPosition setpoint, boolean mirror) {
+
+    this(setpoint, Robot.defaultShoulderPresetRange, Robot.defaultRetractionPresetRange, Robot.defaultWristPresetRange,
+        mirror);
+
+  }
+
+  protected ArmWristMovementCommand(ArmPosition setpoint, double shoulderAngleRange, double retractionRange,
+      double wristAngleRange, boolean mirror) {
+    this(
+        new ArmPosition(setpoint.getShoulderAngle() - shoulderAngleRange, setpoint.getArmRetraction() - retractionRange,
+            setpoint.getWristAngle() - wristAngleRange),
+        new ArmPosition(setpoint.getShoulderAngle() + shoulderAngleRange, setpoint.getArmRetraction() + retractionRange,
+            setpoint.getWristAngle() + wristAngleRange),
+        setpoint, mirror);
+  }
+
   protected ArmWristMovementCommand(ArmPosition lowLimit, ArmPosition highLimit, ArmPosition setpoint, boolean mirror) {
     ArmPosition currentPosition = Robot.getCurrentArmPosition();
 
@@ -19,13 +36,6 @@ public class ArmWristMovementCommand extends CommandGroup {
       // negated when getMirror is called
       goTo(setpoint.getMirror());
     }
-  }
-
-  /**
-   * This will also go to the mirror position by default.
-   */
-  protected ArmWristMovementCommand(ArmPosition lowLimit, ArmPosition highLimit, ArmPosition setpoint) {
-    this(lowLimit, highLimit, setpoint, true);
   }
 
   protected void goTo(ArmPosition position) {
