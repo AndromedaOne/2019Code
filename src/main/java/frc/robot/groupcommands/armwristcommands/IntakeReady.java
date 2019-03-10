@@ -9,9 +9,9 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 
 public class IntakeReady extends CommandGroup {
 
-  final static ArmPosition setpoint = new ArmPosition(62.5, 21.9, -38.6);
-  final static ArmPosition lowerLimit = new ArmPosition(45.0, 15.9, -55.0);
-  final static ArmPosition upperLimit = new ArmPosition(80.0, 29.0, -21.6);
+  protected static final ArmPosition setpoint = new ArmPosition(62.5, 21.9, -38.6);
+  protected static final ArmPosition lowerLimit = new ArmPosition(45.0, 15.9, -55.0);
+  protected static final ArmPosition upperLimit = new ArmPosition(80.0, 29.0, -21.6);
 
   public IntakeReady() {
     ArmPosition currentPosition = Robot.getCurrentArmPosition();

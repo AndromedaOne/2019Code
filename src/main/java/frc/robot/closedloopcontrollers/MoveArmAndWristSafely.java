@@ -97,17 +97,12 @@ public class MoveArmAndWristSafely {
   }
 
   public static void calculate() {
-    /*Robot robotInstance = Robot.getInstance();
-    if (robotInstance == null) {
-      return;
-    }
-    if (robotInstance.isDisabled()) {
-      shoulderPIDSetpointSet = false;
-      wristPIDSetpointSet = false;
-      extensionPIDSetpointSet = false;
-      Robot.extendableArmAndWrist.moveArmWrist(0, 0, 0);
-      return;
-    }*/
+    /*
+     * Robot robotInstance = Robot.getInstance(); if (robotInstance == null) {
+     * return; } if (robotInstance.isDisabled()) { shoulderPIDSetpointSet = false;
+     * wristPIDSetpointSet = false; extensionPIDSetpointSet = false;
+     * Robot.extendableArmAndWrist.moveArmWrist(0, 0, 0); return; }
+     */
 
     ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
 
