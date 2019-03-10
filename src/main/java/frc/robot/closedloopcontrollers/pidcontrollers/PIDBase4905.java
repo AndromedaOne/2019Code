@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.filters.LinearDigitalFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 /**
  * Class implements a PID Control Loop.
@@ -97,6 +99,8 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
 
   // The total error
   protected double m_totalError;
+
+  protected String m_pidName;
 
   // The tolerance object used to check if on target
   private Tolerance m_tolerance;
@@ -192,7 +196,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
    * @param output The PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDBase4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output) {
+  public PIDBase4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output, String pidName) {
     super(false);
     requireNonNull(source, "Null PIDSource was given");
     requireNonNull(output, "Null PIDOutput was given");
@@ -204,6 +208,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
     m_I = Ki;
     m_D = Kd;
     m_F = Kf;
+    m_pidName = pidName;
 
     // Save original source
     m_origSource = source;
@@ -230,8 +235,8 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
    * @param output the PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDBase4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output) {
-    this(Kp, Ki, Kd, 0.0, source, output);
+  public PIDBase4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output, String pidName) {
+    this(Kp, Ki, Kd, 0.0, source, output, pidName);
   }
 
   /**
@@ -319,6 +324,10 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
       } finally {
         m_pidWriteMutex.unlock();
       }
+      Trace.getInstance().addTrace(true, m_pidName, new TracePair("TotalError", m_totalError),
+          new TracePair("PError", m_pError), new TracePair("IError", m_iError), new TracePair("DError", m_dError),
+          new TracePair("FeedForward", m_feedForward), new TracePair("AccumError", m_accumError),
+          new TracePair("Input", input));
     }
   }
 
