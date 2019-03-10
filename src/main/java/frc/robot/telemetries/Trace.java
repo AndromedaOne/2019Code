@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
+import frc.robot.Robot;
+
 // utility to store trace information to a file on the roborio. this class uses the 
 // singleton pattern. on the first call to Trace.getInstance(), the utility will
 // create a trace directory in /home/lvuser/traceLogs/trace<next number>. the utility
@@ -210,6 +212,9 @@ public class Trace {
 
   private void addEntry(String fileName, TracePair... values) {
     try {
+      if (!Robot.getInstance().isEnabled()) {
+        return;
+      }
       if (m_pathOfTraceDir == null) {
         return;
       }
