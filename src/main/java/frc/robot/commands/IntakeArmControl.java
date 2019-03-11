@@ -60,8 +60,8 @@ public class IntakeArmControl extends Command {
       break;
     case GROUNDHEIGHT:
       intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
-      System.out.println("We are at the Ground trying to move to Cargoheight");
+      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      System.out.println("We are at the Ground, but we're not moving");
       break;
     case UNKNOWN:
       // TODO: Don't move
@@ -84,8 +84,8 @@ public class IntakeArmControl extends Command {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
+      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
       System.out.println("We are at the cargoheight and trying to go to the ground");
       break;
     case GROUNDHEIGHT:
