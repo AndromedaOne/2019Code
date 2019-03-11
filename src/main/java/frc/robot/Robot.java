@@ -126,6 +126,10 @@ public class Robot extends TimedRobot {
   public static final double EXTENSIONINCHESPERTICK = 1.0 / EXTENSIONTICKSPERINCH;
   public static final double WRISTDEGREESPERTICK = 1.0 / WRISTTICKSPERDEGREE;
 
+  public static double defaultShoulderPresetRange = 0;
+  public static double defaultRetractionPresetRange = 0;
+  public static double defaultWristPresetRange = 0;
+
   public OI oi;
 
   /**
@@ -201,6 +205,11 @@ public class Robot extends TimedRobot {
       // bottomArmExtensionEncoder.resetTo((-initialWristPos /
       // MoveArmAndWristSafely.WRISTTICKSTODEGREES) / 2.0
       // + initialArmExtension / MoveArmAndWristSafely.WRISTTICKSTODEGREES);
+
+      defaultShoulderPresetRange = getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.shoulder");
+      defaultRetractionPresetRange = Robot.getConfig()
+          .getDouble("subsystems.armAndWrist.defaultArmPresetRanges.retraction");
+      defaultWristPresetRange = Robot.getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.retraction");
     } else {
       topArmExtensionEncoder = new MockMagEncoderSensor();
 
