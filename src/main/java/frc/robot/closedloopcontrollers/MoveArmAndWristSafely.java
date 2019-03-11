@@ -148,7 +148,7 @@ public class MoveArmAndWristSafely {
       wristPower = localTeleopWristPower;
       wristPIDSetpointSet = false;
     } else {
-      
+
       if (!wristPIDSetpointSet) {
         WristPIDController.getInstance().setSetpoint(currentArmPosition.getWristAngle());
         WristPIDController.getInstance().enable();
@@ -158,15 +158,15 @@ public class MoveArmAndWristSafely {
         isMovementSafe(0, localPIDWristPower, 0);
         wristPower = localPIDWristPower;
       }
-      
-      if(ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())) {
+
+      if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())) {
         double wristSetpoint = 0;
-        if(shoulderRotDeg > 0) {
-          wristSetpoint = 90 - shoulderRotDeg;
-        }else {
-          wristSetpoint = -90 - shoulderRotDeg;
+        if (currentArmPosition.getShoulderAngle() > 0) {
+          wristSetpoint = 90 - currentArmPosition.getShoulderAngle();
+        } else {
+          wristSetpoint = -90 - currentArmPosition.getShoulderAngle();
         }
-        if(Math.abs(wristSetpoint - wristRotDeg) < 15) {
+        if (Math.abs(wristSetpoint - currentArmPosition.getWristAngle()) < 15) {
           WristPIDController.getInstance().setSetpoint(wristSetpoint);
         }
       }
