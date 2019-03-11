@@ -153,6 +153,9 @@ public class OI {
 
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
+    SmartDashboard.putData("RaiseFrontL2", new RaiseFrontLegsForL2());
+    SmartDashboard.putData("RaiseBackL2", new RaiseBackLegsForL2());
+
     // LowGamePieceButton = new JoystickButton(operatorController,
     // ButtonsEnumerated.ABUTTON.getValue());
     // LowGamePieceButton.whileHeld(new TuckArm(40, true));

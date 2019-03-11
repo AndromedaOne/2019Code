@@ -17,7 +17,9 @@ import frc.robot.telemetries.TracePair;
 public class NavXGyroSensor extends SensorBase implements PIDSource {
   AHRS gyro; /* Alternatives: SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   static NavXGyroSensor instance;
-  private double initialAngleReading = 0.0;
+  private double initialZAngleReading = 0.0;
+  private double initialXAngleReading = 0.0;
+  private double initialYAngleReading = 0.0;
   boolean angleReadingSet = false;
   private long kInitializeDelay = 3000;
   private long kDefaultPeriod = 50;
@@ -65,7 +67,9 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
     public void run() {
       System.out.println("Setting Initial Gyro Angle");
       if (!isCalibrating()) {
-        initialAngleReading = gyro.getAngle();
+        initialZAngleReading = gyro.getAngle();
+        initialXAngleReading = Math.toDegrees(gyro.getRoll());
+        initialYAngleReading = Math.toDegrees(gyro.getPitch());
         cancel();
       }
     }
@@ -94,7 +98,7 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
    * @return gyro.getAngle() - initialAngleReading
    */
   public double getZAngle() {
-    double correctedAngle = gyro.getAngle() - initialAngleReading;
+    double correctedAngle = gyro.getAngle() - initialZAngleReading;
     if ((robotAngleCount % 10) == 0) {
       SmartDashboard.putNumber("Raw Angle", gyro.getAngle());
       SmartDashboard.putNumber("Get Robot Angle", correctedAngle);
@@ -104,6 +108,16 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
         new TracePair("Corrected Angle", correctedAngle));
 
     return correctedAngle;
+  }
+
+  public double getXAngle() {
+    double xAngle = Math.toDegrees(gyro.getRoll()) - initialXAngleReading;
+    SmartDashboard.putNumber("X Angle", xAngle);
+    return xAngle;
+  }
+
+  public double getYAngle() {
+    return Math.toDegrees(gyro.getPitch()) - initialYAngleReading;
   }
 
   /**

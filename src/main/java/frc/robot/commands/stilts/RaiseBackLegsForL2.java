@@ -4,22 +4,21 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.sensors.NavXGyroSensor;
 
-public class RaiseFrontLegsForL2 extends Command {
+public class RaiseBackLegsForL2 extends Command {
 
-    private final double raiseAngleThreshold = 11.94;
-
-    public RaiseFrontLegsForL2() {
+    public RaiseBackLegsForL2() {
         requires(Robot.pneumaticStilts);
     }
 
     public void initialize() {
-        System.out.println("Raising front legs for L2");
+        System.out.println("Raising back legs for L2");
         Robot.pneumaticStilts.extendFrontLegs();
     }
 
     @Override
     protected boolean isFinished() {
-        return NavXGyroSensor.getInstance().getXAngle() > raiseAngleThreshold;
+        // This should level us out after rasing the front legs
+        return NavXGyroSensor.getInstance().getXAngle() < 0;
     }
 
     @Override

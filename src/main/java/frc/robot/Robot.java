@@ -382,6 +382,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // This is for constant tracing
     NavXGyroSensor.getInstance().getZAngle();
+    NavXGyroSensor.getInstance().getXAngle();
   }
 
   /**
