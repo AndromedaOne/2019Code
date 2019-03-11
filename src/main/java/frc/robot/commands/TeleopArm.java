@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
+import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
 public class TeleopArm extends Command {
@@ -29,15 +30,13 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    // System.out.println("extensionValue: " + extensionValue);
-    // try {
-    // System.out.println("extensionValue: " + extensionValue);
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, Robot.operatorController)) {
+      extensionValue = 0.25;
+    }
+
     MoveArmAndWristSafely.setTeleopExtensionPower(extensionValue);
     MoveArmAndWristSafely.setTeleopShoulderPower(shoulderRotateValue);
     MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);
-    // } catch (ArmOutOfBoundsException e) {
-    // System.out.println(e.getMessage());
-    // }
 
   }
 

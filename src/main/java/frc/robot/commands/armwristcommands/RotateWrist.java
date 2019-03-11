@@ -20,6 +20,8 @@ public class RotateWrist extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Running the wrist to: " + encDegrees);
+    overrideAndFinishCommand = false;
     WristPIDController.getInstance().setSetpoint(encDegrees);
     WristPIDController.getInstance().enable();
   }
@@ -39,7 +41,7 @@ public class RotateWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return overrideAndFinishCommand || WristPIDController.getInstance().isEnabled();
+    return overrideAndFinishCommand || WristPIDController.getInstance().onTarget();
   }
 
 }
