@@ -91,9 +91,9 @@ public class IntakeArmControl extends Command {
       break;
     case GROUNDHEIGHT:
       if (RaiseAll.isExtended) {
-      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
-      System.out.println("We are at the ground and trying to ground");
+        intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+        nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+        System.out.println("We are at the ground and trying to ground");
       }
       break;
     case UNKNOWN:
