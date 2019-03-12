@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
+import frc.robot.commands.stilts.RaiseAll;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
 
 public class IntakeArmControl extends Command {
@@ -89,9 +90,11 @@ public class IntakeArmControl extends Command {
       System.out.println("We are at the cargoheight and trying to go to the ground");
       break;
     case GROUNDHEIGHT:
+      if (RaiseAll.isExtended) {
       intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
       nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
       System.out.println("We are at the ground and trying to ground");
+      }
       break;
     case UNKNOWN:
       // TODO: Don't move
