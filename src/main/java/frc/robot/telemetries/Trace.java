@@ -67,7 +67,8 @@ public class Trace {
   private MultipleOutputStream m_out;
   private MultipleOutputStream m_err;
   private static String m_matchStartFname = "matchStarted";
-
+  private static String m_commandTraceFname = "CommandTrace";
+  private BufferedWriter m_commandTraceWriter;
   private static int m_dirNumb = 0;
 
   private class TraceEntry {
@@ -104,8 +105,20 @@ public class Trace {
   }
 
   private void createCommandTraceFile() {
-
+    if (m_pathOfTraceDir == null) {
+      return;
+    }
+    m_commandTraceWriter = null;
+    try {
+      String fullFileName = new String(m_pathOfTraceDir + "/" + m_commandTraceFname + ".txt");
+      FileWriter fstream = new FileWriter(fullFileName, false);
+      m_commandTraceWriter = new BufferedWriter(fstream);
+    } catch (IOException e) {
+      System.err.println("ERROR: unable to open text file " + m_commandTraceFname + " ;" + e.getMessage());
+      e.printStackTrace();
+    }
   }
+
 
   private String getDateStr() {
     DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy-HH-mm-ss");
@@ -269,6 +282,7 @@ public class Trace {
     try {
       m_out.flush();
       m_err.flush();
+      m_commandTraceWriter.flush();
     } catch (IOException e) {
       System.err.println("ERROR: Failed to Flush");
       e.printStackTrace();
@@ -313,7 +327,29 @@ public class Trace {
     }
   }
 
-  public static void logCommandStart(String commandName) {
+  private void logCommand(String commandName, String startEnd) {
+    if (m_commandTraceFname == null) {
+      return;
+    }
+    long correctedTime = System.currentTimeMillis() - m_startTime;
+    String line = new String(String.valueOf(correctedTime));
+    line += "\t" + commandName + " " + startEnd + "\n";
+    System.out.print(line);
+    try {
+      m_commandTraceWriter.write(line);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
 
+  public void logCommandStart(String commandName)
+  {
+    logCommand(commandName, "start");
+  }
+
+  public void logCommandStop(String commandName)
+  {
+    logCommand(commandName, "stop");
   }
 }

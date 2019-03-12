@@ -2,6 +2,7 @@ package frc.robot.commands.stilts;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.telemetries.Trace;
 
 public class PulseLeg extends Command {
 
@@ -20,6 +21,7 @@ public class PulseLeg extends Command {
   }
 
   public void initialize() {
+    Trace.getInstance().logCommandStart("PulseLeg");
     initTime = System.currentTimeMillis();
     currentHoldTime = initTime + kHoldTime;
     System.out.println("initTime: " + initTime);
@@ -47,6 +49,7 @@ public class PulseLeg extends Command {
 
   @Override
   protected boolean isFinished() {
+    Trace.getInstance().logCommandStop("PulseLeg");
     return done;
   }
 }
