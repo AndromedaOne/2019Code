@@ -209,7 +209,7 @@ public class Robot extends TimedRobot {
       defaultShoulderPresetRange = getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.shoulder");
       defaultRetractionPresetRange = Robot.getConfig()
           .getDouble("subsystems.armAndWrist.defaultArmPresetRanges.retraction");
-      defaultWristPresetRange = Robot.getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.retraction");
+      defaultWristPresetRange = Robot.getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.wrist");
     } else {
       topArmExtensionEncoder = new MockMagEncoderSensor();
 
