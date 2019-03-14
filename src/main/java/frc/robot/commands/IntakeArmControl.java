@@ -21,7 +21,7 @@ public class IntakeArmControl extends Command {
    * Construct an intake control command to make the intake arm go up or down
    * 
    * @param directionToMove - MoveIntakeArmDirection.UP or
-   * MoveIntakeArmDirection.DOWN
+   *                        MoveIntakeArmDirection.DOWN
    */
   public IntakeArmControl(MoveIntakeArmDirection directionToMove) {
     this.directionToMove = directionToMove;
@@ -85,16 +85,16 @@ public class IntakeArmControl extends Command {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
-      System.out.println("We are at the cargoheight and trying to go to the ground");
-      break;
-    case GROUNDHEIGHT:
       if (RaiseAll.isExtended) {
         intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
         nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
-        System.out.println("We are at the ground and trying to ground");
+        System.out.println("We are at the cargoheight and trying to go to the ground");
       }
+      break;
+    case GROUNDHEIGHT:
+      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      System.out.println("We are at the ground and trying to ground");
       break;
     case UNKNOWN:
       // TODO: Don't move
