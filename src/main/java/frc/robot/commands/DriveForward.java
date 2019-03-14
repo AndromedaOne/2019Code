@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.telemetries.Trace;
 
 public class DriveForward extends Command {
   /**
@@ -14,6 +15,7 @@ public class DriveForward extends Command {
 
   @Override
   protected void initialize() {
+    Trace.getInstance().logCommandStart("DriveForward");
   }
 
   @Override
@@ -28,6 +30,7 @@ public class DriveForward extends Command {
 
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("DriveForward");
     Robot.driveTrain.move(0, 0, false);
   }
 

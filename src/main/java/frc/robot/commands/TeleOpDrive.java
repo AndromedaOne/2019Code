@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -30,6 +31,7 @@ public class TeleOpDrive extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Trace.getInstance().logCommandStart("TeleOpDrive");
     mod = 1;
     slowMoEnabled = false;
     shifterDelayCounter = 0;
@@ -112,6 +114,7 @@ public class TeleOpDrive extends Command {
   @Override
   protected void end() {
     Robot.driveTrain.stop();
+    Trace.getInstance().logCommandStop("TeleOpDrive");
   }
 
   // Called when another command which requires one or more of the same

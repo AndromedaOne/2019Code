@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
+import frc.robot.telemetries.Trace;
 
 public class IntakeArmControl extends Command {
 
@@ -28,6 +29,7 @@ public class IntakeArmControl extends Command {
   }
 
   protected void initialize() {
+    Trace.getInstance().logCommandStart("IntakeArmControl");
     System.out.println(directionToMove.toString());
     switch (directionToMove) {
     case UP:
@@ -113,6 +115,7 @@ public class IntakeArmControl extends Command {
 
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("IntakeArmControl");
     intakePositionsPID.disable();
     System.out.println("Next Intake Position: " + nextIntakePosition);
     Robot.intake.setCurrentIntakeArmPosition(nextIntakePosition);

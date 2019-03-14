@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.EnumeratedRawAxis;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -13,7 +14,7 @@ public class TeleOpClaw extends Command {
   }
 
   protected void initialize() {
-
+    Trace.getInstance().logCommandStart("TeleOpClaw");
   }
 
   protected void execute() {
@@ -53,6 +54,7 @@ public class TeleOpClaw extends Command {
 
   protected void end() {
     Robot.claw.driveIntakeMotors(0);
+    Trace.getInstance().logCommandStop("TeleOpClaw");
   }
 
   protected void interupt() {

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -39,7 +40,10 @@ public class TeleopArm extends Command {
     MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);
 
   }
-
+  @Override
+  protected void initialize() {
+    Trace.getInstance().logCommandStart("TeleopArm");
+  }
   @Override
   protected boolean isFinished() {
     return false;
@@ -52,6 +56,7 @@ public class TeleopArm extends Command {
 
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("TeleopArm");
     // try {
     MoveArmAndWristSafely.stop();
     // } catch (ArmOutOfBoundsException e) {

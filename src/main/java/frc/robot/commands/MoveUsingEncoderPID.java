@@ -5,6 +5,7 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
+import frc.robot.telemetries.Trace;
 
 public class MoveUsingEncoderPID extends Command {
 
@@ -22,6 +23,7 @@ public class MoveUsingEncoderPID extends Command {
   }
 
   public void initialize() {
+    Trace.getInstance().logCommandStart("MoveUsingEncoderPID");
     System.out.println(" -- Called! -- ");
     drivetrainEncoder.setRelativeSetpoint(setpoint);
     drivetrainEncoder.enable();
@@ -35,6 +37,7 @@ public class MoveUsingEncoderPID extends Command {
   }
 
   public void end() {
+    Trace.getInstance().logCommandStop("MoveUsingEncoderPID");
     drivetrainEncoder.disable();
   }
 

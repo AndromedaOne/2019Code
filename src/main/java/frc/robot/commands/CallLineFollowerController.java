@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.LineFollowerController;
+import frc.robot.telemetries.Trace;
 
 /**
  *
@@ -20,6 +21,7 @@ public class CallLineFollowerController extends Command {
 
   @Override
   protected void initialize() {
+    Trace.getInstance().logCommandStart("CallLineFollowerController");
     controller.initialize();
   }
 
@@ -36,6 +38,7 @@ public class CallLineFollowerController extends Command {
 
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("CallLineFollowerController");
     controller.stop();
   }
 

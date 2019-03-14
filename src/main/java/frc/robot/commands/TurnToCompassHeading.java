@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.NavXGyroSensor;
+import frc.robot.telemetries.Trace;
 
 public class TurnToCompassHeading extends Command {
 
@@ -16,6 +17,7 @@ public class TurnToCompassHeading extends Command {
   }
 
   protected void initialize() {
+    Trace.getInstance().logCommandStart("TurnToCompassHeading");
     double deltaAngle = heading - NavXGyroSensor.getInstance().getCompassHeading();
     System.out.println("Raw Delta Angle: " + deltaAngle);
     // This corrects turn that are over 180
@@ -50,6 +52,7 @@ public class TurnToCompassHeading extends Command {
     System.out.println("Ending Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
     System.out.println("Ending Z Angle: " + NavXGyroSensor.getInstance().getZAngle());
     gyroPID.reset();
+    Trace.getInstance().logCommandStop("TurnToCompassHeading");
   }
 
   @Override
