@@ -25,6 +25,7 @@ public class TeleOpDrive extends Command {
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
+    System.out.println("Initializing Teleop Drivetrain Control...");
   }
 
   // Called just before this Command runs the first time

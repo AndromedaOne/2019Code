@@ -17,6 +17,7 @@ public class TeleopArm extends Command {
 
   public TeleopArm() {
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Initializing teleop arm control");
   }
 
   @Override

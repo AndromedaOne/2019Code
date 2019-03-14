@@ -5,18 +5,19 @@ import frc.robot.Robot;
 
 public class PulseLeg extends Command {
 
-  public enum stiltLeg {
+  public enum StiltLeg {
     FRONTLEGS, REARLEGS, STOPLEGS
   }
 
-  private stiltLeg currentLeg = stiltLeg.STOPLEGS;
+  private StiltLeg currentLeg = StiltLeg.STOPLEGS;
   private long initTime = 0;
   private long kHoldTime = 10;
   private long currentHoldTime = 0;
   private boolean done = false;
 
-  public PulseLeg(stiltLeg leg) {
+  public PulseLeg(StiltLeg leg) {
     currentLeg = leg;
+    System.out.println("Pulsing legset: " + leg.toString());
   }
 
   public void initialize() {
@@ -32,10 +33,10 @@ public class PulseLeg extends Command {
     switch (currentLeg) {
     case FRONTLEGS:
       Robot.pneumaticStilts.extendFrontLegs();
-      currentLeg = stiltLeg.STOPLEGS;
+      currentLeg = StiltLeg.STOPLEGS;
     case REARLEGS:
       Robot.pneumaticStilts.extendRearLegs();
-      currentLeg = stiltLeg.STOPLEGS;
+      currentLeg = StiltLeg.STOPLEGS;
     case STOPLEGS:
       if (currentHoldTime < time) {
         Robot.pneumaticStilts.stopAllLegs();

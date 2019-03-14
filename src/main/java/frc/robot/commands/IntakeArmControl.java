@@ -28,7 +28,7 @@ public class IntakeArmControl extends Command {
   }
 
   protected void initialize() {
-    System.out.println(directionToMove.toString());
+    System.out.println("Initializing Intake Arm Control...");
     switch (directionToMove) {
     case UP:
       setUpSetPoint();
