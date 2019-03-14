@@ -264,7 +264,7 @@ public class RealDriveTrain extends DriveTrain {
   public void shiftToLowGear() {
     System.out.println("Shifting to low gear");
     if (shifterSolenoid != null) {
-      shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
+      shifterSolenoid.set(DoubleSolenoid.Value.kForward);
     }
     maxSpeed = lowGearMaxSpeed;
     driveTrainLeftMaster.selectProfileSlot(kLowGearPIDSlot, 0);
@@ -275,7 +275,7 @@ public class RealDriveTrain extends DriveTrain {
   public void shiftToHighGear() {
     System.out.println("Shifting to high gear");
     if (shifterSolenoid != null) {
-      shifterSolenoid.set(DoubleSolenoid.Value.kForward);
+      shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
       maxSpeed = highGearMaxSpeed;
       driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
       driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
