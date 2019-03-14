@@ -3,14 +3,13 @@ package frc.robot.groupcommands.autopaths;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.*;
 import frc.robot.groupcommands.armwristcommands.LowOppositeSideGamePieceArmCommand;
-import frc.robot.groupcommands.armwristcommands.LowSameSideGamePieceArmCommand;
 
 public class CenterBaysFromMiddle extends CommandGroup {
 
   public CenterBaysFromMiddle() {
     // Move forward to Center Bay Wall, while we move the arm into placing position
     addSequential(new MoveUsingFrontUltrasonic(2));
-    addParallel(new LowSameSideGamePieceArmCommand());
+    // addParallel(new LowSameSideGamePieceArmCommand());
     // This releases the hatch, If we are having trouble lining up we can add
     // A line follow sequential here
     addSequential(new CloseClaw());

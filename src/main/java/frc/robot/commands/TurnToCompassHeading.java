@@ -8,6 +8,7 @@ import frc.robot.sensors.NavXGyroSensor;
 public class TurnToCompassHeading extends Command {
   private double heading = 0;
   private GyroPIDController gyroPID = GyroPIDController.getInstance();
+
   public TurnToCompassHeading(double theHeading) {
     heading = theHeading;
     requires(Robot.driveTrain);

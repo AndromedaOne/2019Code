@@ -5,13 +5,13 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainRearUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
-import frc.robot.sensors.NavXGyroSensor;
 
 public class MoveTurnBase extends Command {
 
   private DrivetrainRearUltrasonicPIDController frontUltrasonic = DrivetrainRearUltrasonicPIDController.getInstance();
   private DrivetrainEncoderPIDController encoderPID = DrivetrainEncoderPIDController.getInstance();
   private GyroPIDController gyroPID = GyroPIDController.getInstance();
+
   public MoveTurnBase() {
     requires(Robot.driveTrain);
   }
@@ -39,7 +39,6 @@ public class MoveTurnBase extends Command {
     encoderPID.setRelativeSetpoint(setpoint);
     encoderPID.enable();
   }
-
 
   public void end() {
     gyroPID.disable();

@@ -43,7 +43,7 @@ public class Bay3CargoBay2 extends CommandGroup {
     // Grab cargo.
     addSequential(new MoveUsingEncoderPID(0));
     // Move forward.
-    addParallel(new MiddleGamePieceArmCommand());
+    // addParallel(new MiddleGamePieceArmCommand());
     // Swap sides while we move.
     if (AutoStartingConfig.onRightSide) {
       addSequential(new TurnToCompassHeading(270));

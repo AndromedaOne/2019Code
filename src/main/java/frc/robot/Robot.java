@@ -49,7 +49,6 @@ import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensorPair;
-import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.claw.Claw;

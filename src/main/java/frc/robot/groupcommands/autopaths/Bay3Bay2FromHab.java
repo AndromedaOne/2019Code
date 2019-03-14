@@ -39,7 +39,7 @@ public class Bay3Bay2FromHab extends CommandGroup {
     // Close the claw to release the Hatch Panel.
     addSequential(new MoveUsingFrontLineFollower());
     // Move to the end of the line.
-    addSequential(new LowSameSideGamePieceArmCommand());
+    // addSequential(new LowSameSideGamePieceArmCommand());
     // Move the arm to the front of the robot.
     // This is the end of the auto.
   }
