@@ -111,10 +111,10 @@ public class OI {
     extendAllLegs.whenPressed(new RaiseAll());
 
     extendFrontLegs = new JoystickButton(driveController, ButtonsEnumerated.STARTBUTTON.getValue());
-    extendFrontLegs.whenPressed(new RaiseFrontLegs());
+    extendFrontLegs.whenPressed(new RaiseFrontLegsForL2());
 
     extendRearLegs = new JoystickButton(driveController, ButtonsEnumerated.BACKBUTTON.getValue());
-    extendRearLegs.whenPressed(new RaiseBackLegs());
+    extendRearLegs.whenPressed(new RaiseBackLegsForL2());
 
     retractFrontLegs = new POVButton(driveController, POVDirectionNames.EAST.getValue());
     retractFrontLegs.whenPressed(new RetractFrontLegs());

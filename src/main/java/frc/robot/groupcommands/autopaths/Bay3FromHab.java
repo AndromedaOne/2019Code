@@ -26,11 +26,17 @@ public class Bay3FromHab extends CommandGroup {
     } else {
       addSequential(new TurnToCompassHeading(90));
     }
-    // Moves us a set distance from the wall
-    // This corrects for any lateral error and gives the line sensor
-    // Amply room to work
-    addSequential(new MoveUsingFrontUltrasonic(17));
-    addSequential(new MoveUsingFrontLineFollower());
+    // This gives us different paths depending on if we have a line follower
+    if (AutoStartingConfig.hasLineFollower) {
+      // Moves us a set distance from the wall 
+      // This corrects for any lateral error and gives the line sensor
+      // Amply room to work
+      addSequential(new MoveUsingFrontUltrasonic(17));
+      addSequential(new MoveUsingFrontLineFollower());
+    } else {
+      // Moves us up to the wall
+      addSequential(new MoveUsingBackUltrasonic(3));
+    }
     addSequential(new ReleaseCurrentGamepiece());
     // moves us away from the wall after we place the game piece
     addSequential(new MoveUsingFrontUltrasonic(3));
