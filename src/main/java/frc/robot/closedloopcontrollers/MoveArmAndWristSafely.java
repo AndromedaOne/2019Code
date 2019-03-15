@@ -33,7 +33,7 @@ public class MoveArmAndWristSafely {
   private static boolean shoulderPIDSetpointSet = false;
   private static boolean wristPIDSetpointSet = false;
   private static boolean extensionPIDSetpointSet = false;
-
+  //@formatter:off
   private static final double deltaTime = 0.02;
   private static final double BUTTCAPLENGTH = 2;
   private static final double SHOULDEROFFSETFROMCENTER = 0.75;
@@ -48,13 +48,34 @@ public class MoveArmAndWristSafely {
   private static final double CLAWLENGTH = 20.5;
   private static final double HATCHWIDTH = 24;
   private static final double HATCHPANELTIPANGLEOFFSET = Math.atan((HATCHWIDTH / 2) / CLAWLENGTH);
-  private static final double HATCHPANELTIPDISTTOWRIST = Math
-      .sqrt(Math.pow(CLAWLENGTH, 2) + Math.pow(HATCHWIDTH / 2, 2));
-
+  private static final double HATCHPANELTIPDISTTOWRIST = Math.sqrt(Math.pow(CLAWLENGTH, 2) + Math.pow(HATCHWIDTH / 2, 2));
+  //@formatter:on
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
   private static double teleopExtensionPower = 0;
 
+  //@formatter:off
+  /**
+   * Point in Sean's coordinate system.
+   * 
+   * Sean's coorindate system looks like this:
+   *         
+   *         / \ y
+   *          |
+   *          |
+   * x        |       -x
+   * <------- 0 -------->
+   *          |
+   *          |
+   *          |
+   *         \ / -y
+   * 
+   * YES THAT MEANS THAT X IS GOING TO THE LEFT NOT RIGHT!!!
+   * THAT'S JUST THE WAY IT IS.
+   * Keep this in mind when thinking about things in terms
+   * of left and right.
+   */
+  //@formatter:on
   public static class Point {
     double x;
     double y;
@@ -72,6 +93,25 @@ public class MoveArmAndWristSafely {
         SmartDashboard.putNumber(name + ".x", x);
         SmartDashboard.putNumber(name + ".y", y);
       }
+    }
+
+    public boolean isAbove(double yLine) {
+      return (y > yLine);
+    }
+    public boolean isBelow(double yLine) {
+      return (y < yLine);
+    }
+    public boolean isLeftOf(double xLine) {
+      return (x > xLine);
+    }
+    public boolean isRightOf(double xLine) {
+      return (x < xLine);
+    }
+    public boolean isHorizontallyBetween(double xLow, double xHigh) {
+      return (x >= xLow && x < xHigh);
+    }
+    public boolean isVerticallyBetween(double yLow, double yHigh) {
+      return (y >= yLow && y < yHigh);
     }
   }
 
@@ -462,17 +502,17 @@ public class MoveArmAndWristSafely {
     buttPosition.y = SHOULDERHEIGHT + ((extensionIn + BUTTCAPLENGTH) * Math.cos(shoulderRotationRadians));
     buttPosition.putOnSmartDashboard();
 
-    if (buttPosition.y > ELECTRONICSDANGERZONEHEIGHT) {
+    if (buttPosition.isAbove(ELECTRONICSDANGERZONEHEIGHT)) {
       // We are safe
       return;
     }
-    if (buttPosition.x >= 0 && buttPosition.x < ROBOTLENGTH / 2) {
+    if (buttPosition.isHorizontallyBetween(0, ROBOTLENGTH / 2)) {
       // This is when the arm is retracted enough that when it is swung through
       // the robot the "butt" of the arm will hit the electronics
       safeArmMovements.shoulderRotateCounterClockwise = false;
       safeArmMovements.armRetraction = false;
     }
-    if (buttPosition.x > -ROBOTLENGTH / 2 && buttPosition.x < 0) {
+    if (buttPosition.isHorizontallyBetween(-ROBOTLENGTH / 2, 0)) {
       // This is when the arm is retracted enough that when it is swung through
       // the robot the "butt" of the arm will hit the electronics
       safeArmMovements.shoulderRotateClockwise = false;
@@ -492,7 +532,7 @@ public class MoveArmAndWristSafely {
     wristJointPos.y = SHOULDERHEIGHT - (extensionOut * Math.cos(shoulderRotRadians));
     wristJointPos.putOnSmartDashboard();
 
-    if (wristJointPos.x > THIRTY_INCH_RULE) {
+    if (wristJointPos.isLeftOf(THIRTY_INCH_RULE)) {
       safeArmMovements.armExtension = false;
       if (shoulderRotDeg < 90) {
         safeArmMovements.shoulderRotateClockwise = false;
@@ -500,7 +540,7 @@ public class MoveArmAndWristSafely {
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
     }
-    if (wristJointPos.x < -THIRTY_INCH_RULE) {
+    if (wristJointPos.isRightOf(-THIRTY_INCH_RULE)) {
       safeArmMovements.armExtension = false;
       if (shoulderRotDeg > -90) {
         safeArmMovements.shoulderRotateCounterClockwise = false;
@@ -509,13 +549,14 @@ public class MoveArmAndWristSafely {
       }
 
     }
-    if (wristJointPos.y <= ELECTRONICSDANGERZONEHEIGHT) {
 
-      if (wristJointPos.x >= 0 && wristJointPos.x < (ROBOTLENGTH / 2)) {
+    if (wristJointPos.isBelow(ELECTRONICSDANGERZONEHEIGHT)) {
+
+      if (wristJointPos.isHorizontallyBetween(0, ROBOTLENGTH / 2)) {
         safeArmMovements.armExtension = false;
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
-      if (wristJointPos.x < 0 && wristJointPos.x > (-ROBOTLENGTH / 2)) {
+      if (wristJointPos.isHorizontallyBetween(-ROBOTLENGTH / 2, 0)) {
         safeArmMovements.armExtension = false;
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
