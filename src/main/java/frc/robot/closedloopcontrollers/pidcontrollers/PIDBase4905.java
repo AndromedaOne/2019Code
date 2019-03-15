@@ -83,7 +83,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
   protected double m_prevError;
 
   // The sum of the errors for use in the integral calc
-  protected double m_accumError;
+  protected double m_accumError = 0;
 
 // P*Error
   protected double m_pError;
@@ -802,6 +802,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
     m_thisMutex.lock();
     try {
       m_prevError = 0;
+      m_accumError = 0;
       m_totalError = 0;
       m_result = 0;
     } finally {
