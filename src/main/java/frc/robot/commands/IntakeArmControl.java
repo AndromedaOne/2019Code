@@ -21,7 +21,7 @@ public class IntakeArmControl extends Command {
    * Construct an intake control command to make the intake arm go up or down
    * 
    * @param directionToMove - MoveIntakeArmDirection.UP or
-   *                        MoveIntakeArmDirection.DOWN
+   * MoveIntakeArmDirection.DOWN
    */
   public IntakeArmControl(MoveIntakeArmDirection directionToMove) {
     this.directionToMove = directionToMove;
