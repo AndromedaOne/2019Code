@@ -19,6 +19,7 @@ public class MoveUsingEncoderPID extends Command {
    */
   public MoveUsingEncoderPID(int distanceInInches) {
     setpoint = distanceInInches * ticksPerInch;
+    System.out.println("Moving " + distanceInInches + " in inches using the encoders");
   }
 
   public void initialize() {
