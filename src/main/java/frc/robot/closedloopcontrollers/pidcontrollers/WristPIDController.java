@@ -20,9 +20,9 @@ public class WristPIDController extends PIDControllerBase {
   private static WristPIDSource wristPIDSource;
 
   private WristPIDController() {
-    super.absoluteTolerance = 0.5 / Robot.WRISTDEGREESPERTICK;
+    super.absoluteTolerance = 3.0 / Robot.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.0e-4; // 5.0e-5;
+    super.p = 1.125e-4; // 5.0e-5;
     super.i = 0.0; // 2.0e-6;
     super.d = 0.0; // 1.0e-5;
     super.outputRange = 0.6;
@@ -68,7 +68,7 @@ public class WristPIDController extends PIDControllerBase {
   }
 
   public static WristPIDController getInstance() {
-    System.out.println(" --- Asking for Instance --- ");
+    System.out.println(" --- Asking for WristPID Instance --- ");
     if (instance == null) {
       System.out.println("Creating new Wrist PID Controller");
       instance = new WristPIDController();
