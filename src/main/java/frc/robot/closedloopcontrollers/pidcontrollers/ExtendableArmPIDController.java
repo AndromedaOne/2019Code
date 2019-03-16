@@ -68,7 +68,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   }
 
   public static ExtendableArmPIDController getInstance() {
-    System.out.println(" --- Asking for Instance ---  ArmPID");
+    System.out.println(" --- Asking for Extendable Arm PID Instance ---");
     if (instance == null) {
       System.out.println("Creating new ExtendableArm PID Controller");
       instance = new ExtendableArmPIDController();
