@@ -19,6 +19,7 @@ public class StowIntakeArm extends Command {
    */
   public StowIntakeArm() {
     requires(Robot.intake);
+    System.out.println("Stowing Intake");
   }
 
   @Override

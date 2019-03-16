@@ -11,6 +11,7 @@ public class DriveForward extends Command {
    */
   public DriveForward() {
     requires(Robot.driveTrain);
+    System.out.println("Driving forward automatically");
   }
 
   @Override

@@ -8,6 +8,7 @@ public class TeleopIntake extends Command {
 
   public TeleopIntake() {
     requires(Robot.intake);
+    System.out.println("Initializing Teleop Intake Arm Control...");
 
   }
 

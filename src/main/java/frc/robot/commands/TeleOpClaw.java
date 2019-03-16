@@ -11,6 +11,7 @@ public class TeleOpClaw extends Command {
 
   public TeleOpClaw() {
     requires(Robot.claw);
+    System.out.println("Initializing Teleop Claw Control...");
   }
 
   protected void initialize() {

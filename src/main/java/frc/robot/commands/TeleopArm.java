@@ -18,6 +18,7 @@ public class TeleopArm extends Command {
 
   public TeleopArm() {
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Initializing teleop arm control");
   }
 
   @Override
@@ -31,7 +32,7 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, Robot.operatorController)) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.STARTBUTTON, Robot.operatorController)) {
       extensionValue = 0.25;
     }
 

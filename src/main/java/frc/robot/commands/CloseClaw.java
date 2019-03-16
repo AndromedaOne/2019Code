@@ -9,6 +9,7 @@ public class CloseClaw extends Command {
   protected void initialize() {
     Trace.getInstance().logCommandStart("CloseClaw");
     requires(Robot.claw);
+    System.out.println("Closing claw...");
   }
 
   protected void execute() {

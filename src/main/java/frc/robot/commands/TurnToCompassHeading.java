@@ -7,13 +7,13 @@ import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.telemetries.Trace;
 
 public class TurnToCompassHeading extends Command {
-
   private double heading = 0;
-  private static GyroPIDController gyroPID = GyroPIDController.getInstance();
+  private GyroPIDController gyroPID = GyroPIDController.getInstance();
 
   public TurnToCompassHeading(double theHeading) {
-    requires(Robot.driveTrain);
     heading = theHeading;
+    requires(Robot.driveTrain);
+    System.out.println("Moving to heading " + theHeading + " using the NavX");
   }
 
   protected void initialize() {
@@ -47,17 +47,10 @@ public class TurnToCompassHeading extends Command {
     gyroPID.enable();
   }
 
-  protected void end() {
-    System.out.println("Turn to Compass Heading Finished");
-    System.out.println("Ending Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
-    System.out.println("Ending Z Angle: " + NavXGyroSensor.getInstance().getZAngle());
-    gyroPID.reset();
     Trace.getInstance().logCommandStop("TurnToCompassHeading");
-  }
-
   @Override
   protected boolean isFinished() {
-    return gyroPID.onTarget();
+    return false;
   }
 
 }

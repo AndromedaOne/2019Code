@@ -8,6 +8,7 @@ public class OpenClaw extends Command {
 
   public OpenClaw() {
     requires(Robot.claw);
+    System.out.println("Opening claw...");
   }
 
   protected void initialize() {
