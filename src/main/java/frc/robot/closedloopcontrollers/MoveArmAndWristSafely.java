@@ -34,7 +34,7 @@ public class MoveArmAndWristSafely {
   private static boolean extensionPIDSetpointSet = false;
 
   private static final double deltaTime = 0.02;
-  private static final double EXTENSIONPLANE = 12;
+  private static final double EXTENSIONPLANE = 5;
 
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
