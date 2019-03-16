@@ -187,7 +187,7 @@ public class MoveArmAndWristSafely {
         isMovementSafe(localPIDExtensionPower, 0, 0);
         extensionPower = localPIDExtensionPower;
       }
-      if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())) {
+      if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick()) && Math.abs(currentArmPosition.getShoulderAngle()) >= 50) {
         double retractionSetpoint = 0;
         if (currentArmPosition.getShoulderAngle() > 0) {
           retractionSetpoint = maxExtensionInches - Math.abs(EXTENSIONPLANE/Math.cos((90 - currentArmPosition.getShoulderAngle())*Math.PI/180.0));
