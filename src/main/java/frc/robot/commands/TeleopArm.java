@@ -8,6 +8,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
+import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
 public class TeleopArm extends Command {
@@ -22,6 +23,7 @@ public class TeleopArm extends Command {
 
   public TeleopArm() {
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Initializing teleop arm control");
   }
 
   @Override
@@ -35,10 +37,10 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    double topArmEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
-    double bottomArmEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, Robot.operatorController)) {
+      extensionValue = 0.25;
+    }
 
-    double currentWristPosition = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoderTicks, bottomArmEncoderTicks);
     double currentExtensionPosition = MoveArmAndWristSafely.getExtensionIn(topArmEncoderTicks, bottomArmEncoderTicks);
     double currentShoulderPosition = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
 

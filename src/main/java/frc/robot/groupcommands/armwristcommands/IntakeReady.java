@@ -1,21 +1,12 @@
 package frc.robot.groupcommands.armwristcommands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.armwristcommands.RetractArm;
-import frc.robot.commands.armwristcommands.RotateShoulder;
-import frc.robot.commands.armwristcommands.RotateWrist;
+import frc.robot.ArmPosition;
 
-public class IntakeReady extends CommandGroup {
+public class IntakeReady extends ArmWristMovementCommand {
 
-  public IntakeReady(boolean positiveWrist) {
+  protected static final ArmPosition setpoint = new ArmPosition(62.5, 21.9, -38.6);
 
-    if (!positiveWrist) {
-      addSequential(new RetractArm(20.56));
-      addSequential(new RotateWrist(-90));
-      addSequential(new RotateShoulder(-10.67));
-    }
-    addSequential(new RotateWrist(-24.2));
-    addSequential(new RetractArm(20.13));
-    addSequential(new RotateShoulder(58.5));
+  public IntakeReady() {
+    super(setpoint, false);
   }
 }

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
@@ -18,7 +19,7 @@ public class ShoulderPIDController extends PIDControllerBase {
   private MagEncoderSensor shoulderEncoder;
 
   private ShoulderPIDController() {
-    super.absoluteTolerance = 5 / MoveArmAndWristSafely.SHOULDERDEGREESPERTICK;
+    super.absoluteTolerance = 0.5 / Robot.SHOULDERDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
     super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
@@ -47,9 +48,9 @@ public class ShoulderPIDController extends PIDControllerBase {
     public void pidWrite(double output) {
       trace.addTrace(true, "ShoulderPID", new TracePair("Output", output * 10000),
           new TracePair("SetpointTicks", container.getSetpoint()),
-          new TracePair("SetpointDegrees", container.getSetpoint() * MoveArmAndWristSafely.SHOULDERDEGREESPERTICK),
+          new TracePair("SetpointDegrees", container.getSetpoint() * Robot.SHOULDERDEGREESPERTICK),
           new TracePair("AngleTicks", shoulderPIDSrc.pidGet()),
-          new TracePair("AngleDegrees", shoulderPIDSrc.pidGet() * MoveArmAndWristSafely.SHOULDERDEGREESPERTICK));
+          new TracePair("AngleDegrees", shoulderPIDSrc.pidGet() * Robot.SHOULDERDEGREESPERTICK));
       // try {
       MoveArmAndWristSafely.setPidShoulderPower(output);
       // } catch (ArmOutOfBoundsException e) {
@@ -91,15 +92,15 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double shoulderDegrees = MoveArmAndWristSafely.getShoulderRotDeg(shoulderEncoder.pidGet());
-      double shoulderTicks = shoulderDegrees / MoveArmAndWristSafely.SHOULDERDEGREESPERTICK;
+      ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
+      double shoulderTicks = currentArmPosition.getShoulderAngle() / Robot.SHOULDERDEGREESPERTICK;
       return shoulderTicks;
     }
   }
 
   @Override
   public void setSetpoint(double setpoint) {
-    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.SHOULDERDEGREESPERTICK);
+    pidMultiton.setSetpoint(setpoint / Robot.SHOULDERDEGREESPERTICK);
   }
 
 }

@@ -16,10 +16,13 @@ public class RotateWrist extends Command {
   public RotateWrist(double angle) {
     encDegrees = angle;
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Rotating wrist to " + angle);
   }
 
   @Override
   protected void initialize() {
+    System.out.println("Running the wrist to: " + encDegrees);
+    overrideAndFinishCommand = false;
     WristPIDController.getInstance().setSetpoint(encDegrees);
     WristPIDController.getInstance().enable();
   }
@@ -39,7 +42,7 @@ public class RotateWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return overrideAndFinishCommand || WristPIDController.getInstance().isEnabled();
+    return overrideAndFinishCommand || WristPIDController.getInstance().onTarget();
   }
 
 }
