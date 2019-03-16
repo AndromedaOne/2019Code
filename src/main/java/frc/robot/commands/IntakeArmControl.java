@@ -1,12 +1,15 @@
 package frc.robot.commands;
 
+import java.sql.Time;
+
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.commands.stilts.RaiseAll;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
 
-public class IntakeArmControl extends Command {
+public class IntakeArmControl extends TimedCommand {
 
   public enum MoveIntakeArmDirection {
     UP, DOWN
@@ -24,6 +27,7 @@ public class IntakeArmControl extends Command {
    * MoveIntakeArmDirection.DOWN
    */
   public IntakeArmControl(MoveIntakeArmDirection directionToMove) {
+    super(1.0);
     this.directionToMove = directionToMove;
     requires(Robot.intake);
   }
@@ -32,10 +36,12 @@ public class IntakeArmControl extends Command {
     System.out.println("Initializing Intake Arm Control...");
     switch (directionToMove) {
     case UP:
+      System.out.println("Setting to move up");
       setUpSetPoint();
       break;
 
     case DOWN:
+      System.out.println("Setting to move down");
       setDownSetpoint();
       break;
     }
@@ -85,11 +91,10 @@ public class IntakeArmControl extends Command {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      if (RaiseAll.isExtended) {
-        intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
-        nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
-        System.out.println("We are at the cargoheight and trying to go to the ground");
-      }
+      System.out.println("RaiseAll.isExtended: " + RaiseAll.isExtended);
+      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      System.out.println("We are at the cargoheight and trying to go to the ground");
       break;
     case GROUNDHEIGHT:
       intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
