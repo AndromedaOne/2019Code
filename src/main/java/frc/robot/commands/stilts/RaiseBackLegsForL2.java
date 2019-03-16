@@ -12,19 +12,19 @@ public class RaiseBackLegsForL2 extends Command {
 
   public void initialize() {
     System.out.println("Raising back legs for L2");
-    Robot.pneumaticStilts.extendFrontLegs();
+    Robot.pneumaticStilts.extendRearLegs();
   }
 
   @Override
   protected boolean isFinished() {
     // This should level us out after rasing the front legs
-    return NavXGyroSensor.getInstance().getXAngle() < 0;
+    return NavXGyroSensor.getInstance().getXAngle() < 5;
   }
 
   @Override
   protected void end() {
     System.out.println(" - We have reached our angle - ");
-    Robot.pneumaticStilts.stopFrontLegs();
+    Robot.pneumaticStilts.stopRearLegs();
   }
 
   @Override

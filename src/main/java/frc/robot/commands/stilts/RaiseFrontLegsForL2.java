@@ -6,7 +6,7 @@ import frc.robot.sensors.NavXGyroSensor;
 
 public class RaiseFrontLegsForL2 extends Command {
 
-  private final double raiseAngleThreshold = 11.94;
+  private final double raiseAngleThreshold = 6;
 
   public RaiseFrontLegsForL2() {
     requires(Robot.pneumaticStilts);

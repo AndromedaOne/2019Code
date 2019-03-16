@@ -68,8 +68,8 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
       System.out.println("Setting Initial Gyro Angle");
       if (!isCalibrating()) {
         initialZAngleReading = gyro.getAngle();
-        initialXAngleReading = Math.toDegrees(gyro.getRoll());
-        initialYAngleReading = Math.toDegrees(gyro.getPitch());
+        initialXAngleReading = gyro.getPitch();
+        initialYAngleReading = gyro.getRoll();
         cancel();
       }
     }
@@ -111,13 +111,13 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
   }
 
   public double getXAngle() {
-    double xAngle = Math.toDegrees(gyro.getRoll()) - initialXAngleReading;
-    SmartDashboard.putNumber("X Angle", xAngle);
+    double xAngle = gyro.getPitch() - initialXAngleReading;
+    SmartDashboard.putNumber("Pitch Angle", xAngle);
     return xAngle;
   }
 
   public double getYAngle() {
-    return Math.toDegrees(gyro.getPitch()) - initialYAngleReading;
+    return gyro.getRoll() - initialYAngleReading;
   }
 
   /**
