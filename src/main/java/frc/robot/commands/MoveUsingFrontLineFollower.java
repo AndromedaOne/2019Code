@@ -8,11 +8,11 @@ import frc.robot.closedloopcontrollers.LineFollowerController;
 /**
  *
  */
-public class CallLineFollowerController extends Command {
+public class MoveUsingFrontLineFollower extends Command {
   private LineFollowerController controller;
   private int counter = 0;
 
-  public CallLineFollowerController() {
+  public MoveUsingFrontLineFollower() {
     controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.frontLineSensor4905);
     requires(Robot.driveTrain);
     System.out.println("Calling the linefollower controller, moving to line...");

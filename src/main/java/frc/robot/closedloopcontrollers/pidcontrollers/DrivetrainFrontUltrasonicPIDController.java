@@ -6,9 +6,9 @@ import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 
-public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
+public class DrivetrainFrontUltrasonicPIDController extends PIDControllerBase {
 
-  private static DrivetrainUltrasonicPIDController instance;
+  private static DrivetrainFrontUltrasonicPIDController instance;
   private UltrasonicPIDOut ultrasonicPIDOut;
   private UltrasonicSensor ultrasonic;
 
@@ -18,17 +18,17 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
    * trace, and pidConfiguration variables. Also creates the ultrasonicPID from
    * the PIDMultiton class.
    */
-  private DrivetrainUltrasonicPIDController() {
+  private DrivetrainFrontUltrasonicPIDController() {
     super.absoluteTolerance = 3;
     super.p = 0;
     super.i = 0;
     super.d = 0;
-    super.subsystemName = "UltrasonicPIDHeader";
-    super.pidName = "UltrasonicPID";
+    super.subsystemName = "FrontUltrasonicPIDHeader";
+    super.pidName = "FrontUltrasonicPID";
 
     ultrasonic = Robot.drivetrainFrontUltrasonic;
     super.trace = Trace.getInstance();
-    ultrasonic.putSensorOnLiveWindow(super.subsystemName, "Ultrasonic");
+    ultrasonic.putSensorOnLiveWindow(super.subsystemName, "FrontUltrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
     super.pidMultiton = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, super.pidConfiguration);
@@ -42,10 +42,10 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "UltrasonicDrivetrain", new TracePair("Output", output),
+      trace.addTrace(true, "FrontUltrasonicDrivetrain", new TracePair("Output", output),
           new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("DistanceInches", ultrasonic.pidGet()));
 
-      Robot.gyroCorrectMove.moveUsingGyro(-output, 0, false, false);
+      Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
 
   }
@@ -55,11 +55,11 @@ public class DrivetrainUltrasonicPIDController extends PIDControllerBase {
    * 
    * @return instance
    */
-  public static DrivetrainUltrasonicPIDController getInstance() {
+  public static DrivetrainFrontUltrasonicPIDController getInstance() {
     System.out.println(" ---Asking for Instance --- ");
     if (instance == null) {
-      System.out.println("Creating new Drivetrain Ultrasonic PID Controller");
-      instance = new DrivetrainUltrasonicPIDController();
+      System.out.println("Creating New Drivetrain Front Ultrasonic PID Controller");
+      instance = new DrivetrainFrontUltrasonicPIDController();
     }
     return instance;
   }
