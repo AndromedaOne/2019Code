@@ -43,7 +43,7 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-        trace.addTrace(true, "ShoulderPID", new TracePair("Output", output * 10000),
+      trace.addTrace(true, "ShoulderPID", new TracePair("Output", output * 10000),
           new TracePair("SetpointTicks", container.getSetpoint()),
           new TracePair("SetpointDegrees", container.getSetpoint() * Robot.SHOULDERDEGREESPERTICK),
           new TracePair("AngleTicks", shoulderPIDSrc.pidGet()),

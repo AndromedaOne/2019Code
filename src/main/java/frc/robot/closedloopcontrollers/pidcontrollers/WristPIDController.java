@@ -52,11 +52,12 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-        trace.addTrace(true, "WristPID", new TracePair("Output", output),
+      ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
+      trace.addTrace(true, "WristPID", new TracePair("Output", output),
           new TracePair("SetpointTicks", container.getSetpoint()),
           new TracePair("SetpointDegrees", container.getSetpoint() * Robot.WRISTDEGREESPERTICK),
-          new TracePair("TicksAngle", wristPIDSource.pidGet()), new TracePair("DegreeAngle",
-              MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet())));
+          new TracePair("TicksAngle", wristPIDSource.pidGet()),
+          new TracePair("DegreeAngle", currentArmPosition.getWristAngle()));
       // try {
       MoveArmAndWristSafely.setPidWristPower(output);
       // } catch (ArmOutOfBoundsException e) {
@@ -96,8 +97,8 @@ public class WristPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double wristDegrees = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      double wristTicks = wristDegrees / MoveArmAndWristSafely.WRISTDEGREESPERTICK;
+      ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
+      double wristTicks = currentArmPosition.getWristAngle() / Robot.WRISTDEGREESPERTICK;
       return wristTicks;
     }
 

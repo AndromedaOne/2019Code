@@ -1,7 +1,5 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.sensors.NavXGyroSensor;
@@ -41,7 +39,7 @@ public class GyroPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      if ((output > 0) && (output < 0.1))   {
+      if ((output > 0) && (output < 0.1)) {
         output = 0.1;
       } else if ((output < 0) && (output > -0.1)) {
         output = -0.1;
