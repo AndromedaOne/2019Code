@@ -32,10 +32,12 @@ public class IntakeArmControl extends Command {
     System.out.println("Initializing Intake Arm Control...");
     switch (directionToMove) {
     case UP:
+      System.out.println("Setting to move up");
       setUpSetPoint();
       break;
 
     case DOWN:
+      System.out.println("Setting to move down");
       setDownSetpoint();
       break;
     }
