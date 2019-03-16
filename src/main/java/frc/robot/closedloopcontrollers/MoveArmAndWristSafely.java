@@ -166,7 +166,7 @@ public class MoveArmAndWristSafely {
         } else {
           wristSetpoint = -90 - currentArmPosition.getShoulderAngle();
         }
-        if (Math.abs(wristSetpoint - currentArmPosition.getWristAngle()) < 15) {
+        if (Math.abs(wristSetpoint - currentArmPosition.getWristAngle()) < 25) {
           WristPIDController.getInstance().setSetpoint(wristSetpoint);
         }
       }
