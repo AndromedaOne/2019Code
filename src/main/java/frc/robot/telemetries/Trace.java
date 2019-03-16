@@ -119,7 +119,6 @@ public class Trace {
     }
   }
 
-
   private String getDateStr() {
     DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy-HH-mm-ss");
     Date date = new Date();
@@ -343,13 +342,11 @@ public class Trace {
     }
   }
 
-  public void logCommandStart(String commandName)
-  {
+  public void logCommandStart(String commandName) {
     logCommand(commandName, "start");
   }
 
-  public void logCommandStop(String commandName)
-  {
+  public void logCommandStop(String commandName) {
     logCommand(commandName, "stop");
   }
 }

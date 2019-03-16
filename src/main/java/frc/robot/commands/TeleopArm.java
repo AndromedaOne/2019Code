@@ -40,10 +40,12 @@ public class TeleopArm extends Command {
     MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);
 
   }
+
   @Override
   protected void initialize() {
     Trace.getInstance().logCommandStart("TeleopArm");
   }
+
   @Override
   protected boolean isFinished() {
     return false;

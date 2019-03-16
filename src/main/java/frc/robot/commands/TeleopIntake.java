@@ -10,6 +10,7 @@ public class TeleopIntake extends Command {
     requires(Robot.intake);
 
   }
+
   @Override
   protected void initialize() {
     Trace.getInstance().logCommandStart("TeleopIntake");
@@ -19,6 +20,7 @@ public class TeleopIntake extends Command {
   protected boolean isFinished() {
     return false;
   }
+
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("TeleopIntake");
