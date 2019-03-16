@@ -2,14 +2,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
+import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
 public class TeleopArm extends Command {
 
+  private static final double WRISTSTICKVALUETODEGREES = 0;
+  private static final double SHOULDERSTICKVALUETODEGREES = 0;
+  private static final double EXTENSIONSTICKVALUETOINCHES = 0;
   Joystick armController = Robot.armController;
   ExtendableArmAndWrist extendableArmAndWrist = Robot.extendableArmAndWrist;
   final double sinPi4 = Math.sin(Math.PI / 4);
@@ -34,8 +41,10 @@ public class TeleopArm extends Command {
     if (ButtonsEnumerated.isPressed(ButtonsEnumerated.STARTBUTTON, Robot.operatorController)) {
       extensionValue = 0.25;
     }
+
+    ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
     
-    double wristSetpoint = currentWristPosition + wristRotateValue*WRISTSTICKVALUETODEGREES;
+    double wristSetpoint = currentArmPosition.getWristAngle() + wristRotateValue*WRISTSTICKVALUETODEGREES;
     if(wristSetpoint > MoveArmAndWristSafely.maxWristRotDegrees) {
       wristSetpoint = MoveArmAndWristSafely.maxWristRotDegrees;
     }
@@ -43,7 +52,7 @@ public class TeleopArm extends Command {
       wristSetpoint = -MoveArmAndWristSafely.maxWristRotDegrees;
     }
 
-    double shoulderSetpoint = currentShoulderPosition + shoulderRotateValue*SHOULDERSTICKVALUETODEGREES;
+    double shoulderSetpoint = currentArmPosition.getShoulderAngle() + shoulderRotateValue*SHOULDERSTICKVALUETODEGREES;
     if(shoulderSetpoint > MoveArmAndWristSafely.maxShoulderRotDegrees) {
       shoulderSetpoint = MoveArmAndWristSafely.maxShoulderRotDegrees;
     }
@@ -51,7 +60,7 @@ public class TeleopArm extends Command {
       shoulderSetpoint = -MoveArmAndWristSafely.maxShoulderRotDegrees;
     }
 
-    double extensionSetpoint = currentExtensionPosition + extensionValue*EXTENSIONSTICKVALUETOINCHES;
+    double extensionSetpoint = currentArmPosition.getShoulderAngle() + extensionValue*EXTENSIONSTICKVALUETOINCHES;
     if(extensionSetpoint > MoveArmAndWristSafely.maxShoulderRotDegrees) {
       extensionSetpoint = MoveArmAndWristSafely.maxShoulderRotDegrees;
     }
@@ -63,9 +72,9 @@ public class TeleopArm extends Command {
     WristPIDController.getInstance().setSetpoint(wristSetpoint);
     ShoulderPIDController.getInstance().setSetpoint(shoulderSetpoint);
 
-    MoveArmAndWristSafely.setTeleopExtensionPower(extensionValue);
+    /*MoveArmAndWristSafely.setTeleopExtensionPower(extensionValue);
     MoveArmAndWristSafely.setTeleopShoulderPower(shoulderRotateValue);
-    MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);
+    MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);*/
 
   }
 
