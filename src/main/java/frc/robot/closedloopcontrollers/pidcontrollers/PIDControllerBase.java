@@ -1,7 +1,5 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
-import frc.robot.telemetries.Trace;
-
 public class PIDControllerBase {
   public PIDMultiton pidMultiton;
   protected double outputRange = 1;

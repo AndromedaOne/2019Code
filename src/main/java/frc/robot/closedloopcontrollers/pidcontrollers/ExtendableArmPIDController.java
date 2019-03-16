@@ -8,8 +8,6 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
 public class ExtendableArmPIDController extends PIDControllerBase {
 
@@ -52,11 +50,14 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-     /* Trace.getInstance().addTrace(true, "ExtensionPID", new TracePair("Output", output),
-          new TracePair("SetpointTicks", pidMultiton.getSetpoint()),
-          new TracePair("SetpointInches", pidMultiton.getSetpoint() * Robot.EXTENSIONINCHESPERTICK),
-          new TracePair("ExtensionTicks", armPIDSource.pidGet()),
-          new TracePair("ExtensionInches", armPIDSource.pidGet() * Robot.EXTENSIONINCHESPERTICK));*/
+      /*
+       * Trace.getInstance().addTrace(true, "ExtensionPID", new TracePair("Output",
+       * output), new TracePair("SetpointTicks", pidMultiton.getSetpoint()), new
+       * TracePair("SetpointInches", pidMultiton.getSetpoint() *
+       * Robot.EXTENSIONINCHESPERTICK), new TracePair("ExtensionTicks",
+       * armPIDSource.pidGet()), new TracePair("ExtensionInches",
+       * armPIDSource.pidGet() * Robot.EXTENSIONINCHESPERTICK));
+       */
       // try {
       MoveArmAndWristSafely.setPidExtensionPower(output);
       // } catch (ArmOutOfBoundsException e) {
