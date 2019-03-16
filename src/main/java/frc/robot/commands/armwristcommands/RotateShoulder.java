@@ -39,6 +39,7 @@ public class RotateShoulder extends Command {
   }
 
   protected void end() {
+    System.out.println("Done with the Shoulder");
     sPidController.disable();
   }
 
