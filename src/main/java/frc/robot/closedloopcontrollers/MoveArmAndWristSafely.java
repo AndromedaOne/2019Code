@@ -187,16 +187,19 @@ public class MoveArmAndWristSafely {
         isMovementSafe(localPIDExtensionPower, 0, 0);
         extensionPower = localPIDExtensionPower;
       }
-      if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick()) && Math.abs(currentArmPosition.getShoulderAngle()) >= 50) {
+      if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())
+          && Math.abs(currentArmPosition.getShoulderAngle()) >= 50) {
         double retractionSetpoint = 0;
         if (currentArmPosition.getShoulderAngle() > 0) {
-          retractionSetpoint = maxExtensionInches - Math.abs(EXTENSIONPLANE/Math.cos((90 - currentArmPosition.getShoulderAngle())*Math.PI/180.0));
+          retractionSetpoint = maxExtensionInches
+              - Math.abs(EXTENSIONPLANE / Math.cos((90 - currentArmPosition.getShoulderAngle()) * Math.PI / 180.0));
         } else {
-          retractionSetpoint = maxExtensionInches - Math.abs(EXTENSIONPLANE/Math.cos((-90 - currentArmPosition.getShoulderAngle())*Math.PI/180.0));
+          retractionSetpoint = maxExtensionInches
+              - Math.abs(EXTENSIONPLANE / Math.cos((-90 - currentArmPosition.getShoulderAngle()) * Math.PI / 180.0));
         }
-        if(retractionSetpoint > maxExtensionInches) {
+        if (retractionSetpoint > maxExtensionInches) {
           retractionSetpoint = maxExtensionInches;
-        }else if(retractionSetpoint < 0 ) {
+        } else if (retractionSetpoint < 0) {
           retractionSetpoint = 0;
         }
         if (Math.abs(retractionSetpoint - currentArmPosition.getArmRetraction()) < 4) {
