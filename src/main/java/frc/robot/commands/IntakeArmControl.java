@@ -77,7 +77,7 @@ public class IntakeArmControl extends Command {
    * Tells intake to go down and does not try to go further when at Groundheight
    */
   private void setDownSetpoint() {
-    intakePositionsPID.pidMultiton.setPIDTerms(5, 0, 0.25);
+    intakePositionsPID.pidMultiton.setPIDTerms(5, 0, 0.30);
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
       intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());

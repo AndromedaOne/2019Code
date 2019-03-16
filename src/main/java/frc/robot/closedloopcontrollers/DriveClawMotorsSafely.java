@@ -45,4 +45,7 @@ public class DriveClawMotorsSafely {
 
   }
 
+  public boolean robotHasBall() {
+    return hasBall;
+  }
 }
