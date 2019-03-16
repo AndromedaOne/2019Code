@@ -34,6 +34,34 @@ public class TeleopArm extends Command {
     if (ButtonsEnumerated.isPressed(ButtonsEnumerated.STARTBUTTON, Robot.operatorController)) {
       extensionValue = 0.25;
     }
+    
+    double wristSetpoint = currentWristPosition + wristRotateValue*WRISTSTICKVALUETODEGREES;
+    if(wristSetpoint > MoveArmAndWristSafely.maxWristRotDegrees) {
+      wristSetpoint = MoveArmAndWristSafely.maxWristRotDegrees;
+    }
+    if(wristSetpoint < -MoveArmAndWristSafely.maxWristRotDegrees) {
+      wristSetpoint = -MoveArmAndWristSafely.maxWristRotDegrees;
+    }
+
+    double shoulderSetpoint = currentShoulderPosition + shoulderRotateValue*SHOULDERSTICKVALUETODEGREES;
+    if(shoulderSetpoint > MoveArmAndWristSafely.maxShoulderRotDegrees) {
+      shoulderSetpoint = MoveArmAndWristSafely.maxShoulderRotDegrees;
+    }
+    if(shoulderSetpoint < -MoveArmAndWristSafely.maxShoulderRotDegrees) {
+      shoulderSetpoint = -MoveArmAndWristSafely.maxShoulderRotDegrees;
+    }
+
+    double extensionSetpoint = currentExtensionPosition + extensionValue*EXTENSIONSTICKVALUETOINCHES;
+    if(extensionSetpoint > MoveArmAndWristSafely.maxShoulderRotDegrees) {
+      extensionSetpoint = MoveArmAndWristSafely.maxShoulderRotDegrees;
+    }
+    if(extensionSetpoint < 0) {
+      extensionSetpoint = 0;
+    }
+
+    ExtendableArmPIDController.getInstance().setSetpoint(extensionSetpoint);
+    WristPIDController.getInstance().setSetpoint(wristSetpoint);
+    ShoulderPIDController.getInstance().setSetpoint(shoulderSetpoint);
 
     MoveArmAndWristSafely.setTeleopExtensionPower(extensionValue);
     MoveArmAndWristSafely.setTeleopShoulderPower(shoulderRotateValue);
