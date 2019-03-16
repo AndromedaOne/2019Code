@@ -22,6 +22,8 @@ public class TeleOpDrive extends Command {
   private boolean shiftButtonPressed = false;
   private boolean slowModeButtonPressed = false;
   private double kSlowModeModifier = 0.6;
+  private int slowModeCounter = 0;
+  private double kSlowModeSlope = 1.0/50.0;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -83,18 +85,27 @@ public class TeleOpDrive extends Command {
       Robot.driveTrain.changeControlMode(NeutralMode.Brake);
     }
 
+    // This adds one tick everytime time after we last clicked the slow mode button
+    slowModeCounter++;
     if (ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick()) && !slowModeButtonPressed) {
+
+      slowModeCounter = 0;
       slowModeButtonPressed = true;
       if (!slowMoEnabled) {
-        mod = kSlowModeModifier;
         slowMoEnabled = true;
         System.out.println("Slow Mode IS enabled!");
       } else {
-        mod = 1;
         slowMoEnabled = false;
         System.out.println("SLOW MODE HAS ENDED!");
       }
     }
+
+    if(slowMoEnabled) {
+      mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
+    } else {
+      mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);
+    }
+
     // This stops you from switching in slow over and over again while holding the
     // button
     if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
