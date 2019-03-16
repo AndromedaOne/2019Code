@@ -3,6 +3,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.SensorBase;
@@ -17,7 +18,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private final MagEncoderSensor bottomArmEncoder;
 
   private ExtendableArmPIDController() {
-    super.absoluteTolerance = 1.5 / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
+    super.absoluteTolerance = 0.5 / Robot.EXTENSIONINCHESPERTICK;
     // PID loop will only return true if error is within 1.5 inches of setpoint
     super.p = 1.0 * Math.pow(10, -4); // 5.0e-5;
     super.i = 0;
@@ -49,6 +50,8 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
+          new TracePair("SetpointInches", pidMultiton.getSetpoint() * Robot.EXTENSIONINCHESPERTICK),
+          new TracePair("ExtensionInches", armPIDSource.pidGet() * Robot.EXTENSIONINCHESPERTICK));
       // try {
       MoveArmAndWristSafely.setPidExtensionPower(output);
       // } catch (ArmOutOfBoundsException e) {
@@ -88,8 +91,8 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      double extensionInches = MoveArmAndWristSafely.getExtensionIn(topArmEncoder.pidGet(), bottomArmEncoder.pidGet());
-      double extensionTicks = extensionInches / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK;
+      ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
+      double extensionTicks = currentArmPosition.getArmRetraction() / Robot.EXTENSIONINCHESPERTICK;
       return extensionTicks;
     }
 
@@ -102,7 +105,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
   @Override
   public void setSetpoint(double setpoint) {
-    pidMultiton.setSetpoint(setpoint / MoveArmAndWristSafely.EXTENSIONINCHESPERTICK);
+    pidMultiton.setSetpoint(setpoint / Robot.EXTENSIONINCHESPERTICK);
   }
 
 }

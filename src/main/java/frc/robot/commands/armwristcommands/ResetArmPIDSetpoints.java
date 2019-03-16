@@ -1,29 +1,25 @@
 package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.ArmPosition;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 
 public class ResetArmPIDSetpoints extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Resetting ArmPID setpoints");
     super.initialize();
     RetractArm.setOverrideAndFinishCommand(true);
     RotateShoulder.setOverrideAndFinishCommand(true);
     RotateWrist.setOverrideAndFinishCommand(true);
 
-    double topArmEncoderTicks = Robot.topArmExtensionEncoder.getDistanceTicks();
-    double bottomArmEncoderTicks = Robot.bottomArmExtensionEncoder.getDistanceTicks();
-    double extendableArmCurrentPosition = MoveArmAndWristSafely.getExtensionIn(topArmEncoderTicks,
-        bottomArmEncoderTicks);
-    Robot.extendableArmPIDController.setSetpoint(extendableArmCurrentPosition);
+    ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
+    Robot.extendableArmPIDController.setSetpoint(currentArmPosition.getArmRetraction());
 
-    double wristCurrentPosition = MoveArmAndWristSafely.getWristRotDegrees(topArmEncoderTicks, bottomArmEncoderTicks);
-    Robot.wristPIDController.setSetpoint(wristCurrentPosition);
+    Robot.wristPIDController.setSetpoint(currentArmPosition.getWristAngle());
 
-    double shoulderCurrentPosition = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
-    Robot.shoulderPIDController.setSetpoint(shoulderCurrentPosition);
+    Robot.shoulderPIDController.setSetpoint(currentArmPosition.getShoulderAngle());
   }
 
   @Override
