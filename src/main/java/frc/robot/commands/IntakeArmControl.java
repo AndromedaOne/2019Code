@@ -1,12 +1,15 @@
 package frc.robot.commands;
 
+import java.sql.Time;
+
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.commands.stilts.RaiseAll;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
 
-public class IntakeArmControl extends Command {
+public class IntakeArmControl extends TimedCommand {
 
   public enum MoveIntakeArmDirection {
     UP, DOWN
@@ -24,6 +27,7 @@ public class IntakeArmControl extends Command {
    * MoveIntakeArmDirection.DOWN
    */
   public IntakeArmControl(MoveIntakeArmDirection directionToMove) {
+    super(1.0);
     this.directionToMove = directionToMove;
     requires(Robot.intake);
   }
