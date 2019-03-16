@@ -3,7 +3,6 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import frc.robot.telemetries.Trace;
 
 public class PIDControllerBase {
-  protected static Trace trace;
   public PIDMultiton pidMultiton;
   protected double outputRange = 1;
   protected double absoluteTolerance = 0;

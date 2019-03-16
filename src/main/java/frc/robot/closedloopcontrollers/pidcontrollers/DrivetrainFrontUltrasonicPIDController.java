@@ -27,7 +27,6 @@ public class DrivetrainFrontUltrasonicPIDController extends PIDControllerBase {
     super.pidName = "FrontUltrasonicPID";
 
     ultrasonic = Robot.drivetrainFrontUltrasonic;
-    super.trace = Trace.getInstance();
     ultrasonic.putSensorOnLiveWindow(super.subsystemName, "FrontUltrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
@@ -42,7 +41,7 @@ public class DrivetrainFrontUltrasonicPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "FrontUltrasonicDrivetrain", new TracePair("Output", output),
+      Trace.getInstance().addTrace(true, "FrontUltrasonicDrivetrain", new TracePair("Output", output),
           new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("DistanceInches", ultrasonic.pidGet()));
 
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
