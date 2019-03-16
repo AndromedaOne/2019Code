@@ -22,23 +22,5 @@ public class MoveUsingEncoderPID extends MoveTurnBase {
   public void initialize() {
     Trace.getInstance().logCommandStart("MoveUsingEncoderPID");
     System.out.println(" -- Called! -- ");
-    drivetrainEncoder.setRelativeSetpoint(setpoint);
-    drivetrainEncoder.enable();
-  }
-
-  public void execute() {
-  }
-
-  public boolean isFinished() {
-    return drivetrainEncoder.onTarget();
-  }
-
-  public void end() {
-    Trace.getInstance().logCommandStop("MoveUsingEncoderPID");
-    drivetrainEncoder.disable();
-  }
-
-  public void interrupt() {
-    drivetrainEncoder.disable();
   }
 }
