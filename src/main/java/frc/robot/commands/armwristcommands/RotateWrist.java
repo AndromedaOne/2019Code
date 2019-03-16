@@ -16,6 +16,7 @@ public class RotateWrist extends Command {
   public RotateWrist(double angle) {
     encDegrees = angle;
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Rotating wrist to " + angle);
   }
 
   @Override
@@ -36,6 +37,7 @@ public class RotateWrist extends Command {
   }
 
   protected void end() {
+    System.out.println("Done with the wrist");
     WristPIDController.getInstance().disable();
   }
 

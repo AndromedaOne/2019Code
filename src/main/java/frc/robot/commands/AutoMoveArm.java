@@ -13,6 +13,8 @@ public class AutoMoveArm extends Command {
     this.level = level;
     this.hatchOrCargo = hatchOrCargo;
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Beginning execution of automatic arm control.");
+    System.out.println("Moving to: " + level.toString() + " with a " + hatchOrCargo.toString());
   }
 
   @Override

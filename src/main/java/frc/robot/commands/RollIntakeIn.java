@@ -10,7 +10,7 @@ public class RollIntakeIn extends Command {
   private double mod = -1;
 
   protected void initialize() {
-
+    System.out.println("Rolling intake...");
   }
 
   protected void execute() {

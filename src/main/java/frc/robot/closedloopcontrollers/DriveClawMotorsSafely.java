@@ -34,13 +34,8 @@ public class DriveClawMotorsSafely {
         initialTime = Instant.now();
         initialTimeSet = true;
       }
-      if (speed >= 0) {// && (Duration.between(initialTime, Instant.now()).toMillis() >
-                       // deltaTimeThreshhold)) {
-        Robot.claw.stop();
-      } else {
-        initialTimeSet = false;
-        Robot.claw.driveIntakeMotors(speed);
-      }
+      initialTimeSet = false;
+      Robot.claw.driveIntakeMotors(speed);
       hasBall = true;
     } else {
       initialTimeSet = false;

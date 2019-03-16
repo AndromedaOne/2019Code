@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
+import frc.robot.commands.stilts.RaiseAll;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
 
 public class IntakeArmControl extends Command {
@@ -28,7 +29,7 @@ public class IntakeArmControl extends Command {
   }
 
   protected void initialize() {
-    System.out.println(directionToMove.toString());
+    System.out.println("Initializing Intake Arm Control...");
     switch (directionToMove) {
     case UP:
       setUpSetPoint();
@@ -59,9 +60,9 @@ public class IntakeArmControl extends Command {
       System.out.println("We are in Cargoheight and trying to move to Stowed");
       break;
     case GROUNDHEIGHT:
-      intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
-      System.out.println("We are at the Ground trying to move to Cargoheight");
+      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      System.out.println("We are at the Ground, but we're not moving");
       break;
     case UNKNOWN:
       // TODO: Don't move
@@ -76,7 +77,7 @@ public class IntakeArmControl extends Command {
    * Tells intake to go down and does not try to go further when at Groundheight
    */
   private void setDownSetpoint() {
-    intakePositionsPID.pidMultiton.setPIDTerms(5, 0, 0.15);
+    intakePositionsPID.pidMultiton.setPIDTerms(5, 0, 0.30);
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
       intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
@@ -84,9 +85,11 @@ public class IntakeArmControl extends Command {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.CARGOHEIGHT;
-      System.out.println("We are at the cargoheight and trying to go to the ground");
+      if (RaiseAll.isExtended) {
+        intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+        nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+        System.out.println("We are at the cargoheight and trying to go to the ground");
+      }
       break;
     case GROUNDHEIGHT:
       intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());

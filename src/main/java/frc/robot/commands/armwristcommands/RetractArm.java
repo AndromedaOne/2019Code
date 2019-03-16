@@ -17,6 +17,7 @@ public class RetractArm extends Command {
   public RetractArm(double inchesExtensionParam) {
     inchesExtension = inchesExtensionParam;
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Retracting Arm...");
   }
 
   @Override
@@ -37,6 +38,7 @@ public class RetractArm extends Command {
   }
 
   protected void end() {
+    System.out.println("Done with the Retraction");
     ExtendableArmPIDController.getInstance().disable();
   }
 
