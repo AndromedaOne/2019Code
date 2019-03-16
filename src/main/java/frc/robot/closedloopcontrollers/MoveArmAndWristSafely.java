@@ -194,6 +194,11 @@ public class MoveArmAndWristSafely {
         } else {
           retractionSetpoint = maxExtensionInches - Math.abs(EXTENSIONPLANE/Math.cos((-90 - currentArmPosition.getShoulderAngle())*Math.PI/180.0));
         }
+        if(retractionSetpoint > maxExtensionInches) {
+          retractionSetpoint = maxExtensionInches;
+        }else if(retractionSetpoint < 0 ) {
+          retractionSetpoint = 0;
+        }
         if (Math.abs(retractionSetpoint - currentArmPosition.getArmRetraction()) < 4) {
           ExtendableArmPIDController.getInstance().setSetpoint(retractionSetpoint);
         }
