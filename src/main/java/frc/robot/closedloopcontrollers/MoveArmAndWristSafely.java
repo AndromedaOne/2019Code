@@ -25,7 +25,7 @@ public class MoveArmAndWristSafely {
 
     m_controlLoop.startPeriodic(0.05);
   }
-  public static final double maxWristRotDegrees = 1000;
+  public static final double maxWristRotDegrees = 120;
   public static final double maxExtensionInches = 28.5;
   public static final double maxShoulderRotDegrees = 180;
 
