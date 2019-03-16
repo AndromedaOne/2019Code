@@ -7,6 +7,7 @@ import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
+import frc.robot.telemetries.TracePair;
 
 public class ShoulderPIDController extends PIDControllerBase {
 
@@ -42,7 +43,10 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
+        trace.addTrace(true, "ShoulderPID", new TracePair("Output", output * 10000),
+          new TracePair("SetpointTicks", container.getSetpoint()),
           new TracePair("SetpointDegrees", container.getSetpoint() * Robot.SHOULDERDEGREESPERTICK),
+          new TracePair("AngleTicks", shoulderPIDSrc.pidGet()),
           new TracePair("AngleDegrees", shoulderPIDSrc.pidGet() * Robot.SHOULDERDEGREESPERTICK));
       // try {
       MoveArmAndWristSafely.setPidShoulderPower(output);
