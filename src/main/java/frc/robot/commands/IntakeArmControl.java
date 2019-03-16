@@ -85,11 +85,10 @@ public class IntakeArmControl extends Command {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      if (RaiseAll.isExtended) {
-        intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
-        nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
-        System.out.println("We are at the cargoheight and trying to go to the ground");
-      }
+      System.out.println("RaiseAll.isExtended: " + RaiseAll.isExtended);
+      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+      System.out.println("We are at the cargoheight and trying to go to the ground");
       break;
     case GROUNDHEIGHT:
       intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
