@@ -34,6 +34,7 @@ public class MoveArmAndWristSafely {
   private static boolean extensionPIDSetpointSet = false;
 
   private static final double deltaTime = 0.02;
+  private static final double EXTENSIONPLANE = 12;
 
   private static double teleopShoulderPower = 0;
   private static double teleopWristPower = 0;
@@ -185,6 +186,17 @@ public class MoveArmAndWristSafely {
       } else {
         isMovementSafe(localPIDExtensionPower, 0, 0);
         extensionPower = localPIDExtensionPower;
+      }
+      if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())) {
+        double retractionSetpoint = 0;
+        if (currentArmPosition.getShoulderAngle() > 0) {
+          retractionSetpoint = maxExtensionInches - Math.abs(EXTENSIONPLANE/Math.cos((90 - currentArmPosition.getShoulderAngle())*Math.PI/180.0));
+        } else {
+          retractionSetpoint = maxExtensionInches - Math.abs(EXTENSIONPLANE/Math.cos((-90 - currentArmPosition.getShoulderAngle())*Math.PI/180.0));
+        }
+        if (Math.abs(retractionSetpoint - currentArmPosition.getArmRetraction()) < 4) {
+          ExtendableArmPIDController.getInstance().setSetpoint(retractionSetpoint);
+        }
       }
     }
     SafeArmMovements safeArmMovements = new SafeArmMovements();
