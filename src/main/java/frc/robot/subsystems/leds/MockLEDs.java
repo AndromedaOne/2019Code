@@ -23,7 +23,7 @@ public class MockLEDs extends LEDs {
     }
 
     @Override
-    public void setYellow(double brightness) {
+    public void setWhite(double brightness) {
 
     }
 

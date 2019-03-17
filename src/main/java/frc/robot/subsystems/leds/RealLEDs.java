@@ -53,10 +53,11 @@ public class RealLEDs extends LEDs {
     /**
      * This method takes a brightness value from 0 - 1 for yellow
      */
-    public void setYellow(double brightness) {
+    public void setWhite(double brightness) {
         clearColor();
         red.updateDutyCycle(validateBrightness(brightness));
         green.updateDutyCycle(validateBrightness(brightness));
+        blue.updateDutyCycle(validateBrightness(brightness));
     }
 
     /**

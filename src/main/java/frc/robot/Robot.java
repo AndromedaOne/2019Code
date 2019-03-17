@@ -497,6 +497,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     driveTrain.shiftToLowGear();
+    // This is to set the LEDs to the correct color for what mode we are in
+    leds.setWhite(1.0);
     gyroCorrectMove.setCurrentAngle();
   }
 

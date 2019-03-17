@@ -128,7 +128,7 @@ public class TeleOpDrive extends Command {
     } else if (!slowMoEnabled && shifterHigh) {
       Robot.leds.setGreen(1.0);
     } else {
-      Robot.leds.setYellow(1.0);
+      Robot.leds.setWhite(1.0);
     }
   }
 

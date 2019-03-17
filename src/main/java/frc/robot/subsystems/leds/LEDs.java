@@ -12,7 +12,7 @@ public abstract class LEDs extends Subsystem {
 
     public abstract void setBlue(double brightness);
 
-    public abstract void setYellow(double brightness);
+    public abstract void setWhite(double brightness);
 
     public abstract void setPurple(double brightness);
 
