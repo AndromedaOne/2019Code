@@ -9,7 +9,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.commands.stilts.RaiseAll;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
 
-public class IntakeArmControl extends TimedCommand {
+public class IntakeArmControl extends Command {
 
   public enum MoveIntakeArmDirection {
     UP, DOWN
@@ -20,6 +20,9 @@ public class IntakeArmControl extends TimedCommand {
   private MoveIntakeArmDirection directionToMove;
   private IntakeArmPositionsEnum nextIntakePosition;
 
+  private int counter = 0;
+  private boolean isFinished = false;
+
   /**
    * Construct an intake control command to make the intake arm go up or down
    * 
@@ -27,12 +30,14 @@ public class IntakeArmControl extends TimedCommand {
    * MoveIntakeArmDirection.DOWN
    */
   public IntakeArmControl(MoveIntakeArmDirection directionToMove) {
-    super(1.0);
+    //super(1.0);
     this.directionToMove = directionToMove;
     requires(Robot.intake);
   }
 
   protected void initialize() {
+    isFinished = false;
+    counter = 0;
     System.out.println("Initializing Intake Arm Control...");
     switch (directionToMove) {
     case UP:
@@ -91,10 +96,12 @@ public class IntakeArmControl extends TimedCommand {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      System.out.println("RaiseAll.isExtended: " + RaiseAll.isExtended);
-      intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
-      nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
-      System.out.println("We are at the cargoheight and trying to go to the ground");
+      if(RaiseAll.isExtended){
+        System.out.println("RaiseAll.isExtended: " + RaiseAll.isExtended);
+        intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
+        nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
+        System.out.println("We are at the cargoheight and trying to go to the ground");
+      }
       break;
     case GROUNDHEIGHT:
       intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
@@ -112,11 +119,15 @@ public class IntakeArmControl extends TimedCommand {
 
   @Override
   protected void execute() {
+    counter++;
+    if(counter >= 50) {
+      isFinished = true;
+    }
   }
 
   @Override
   protected boolean isFinished() {
-    return intakePositionsPID.onTarget() || !intakePositionsPID.isEnabled();
+    return intakePositionsPID.onTarget() || !intakePositionsPID.isEnabled() || isFinished;
   }
 
   @Override
