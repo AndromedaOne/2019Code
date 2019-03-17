@@ -428,6 +428,7 @@ public class Robot extends TimedRobot {
     if (robotInitDone) {
       PIDMultiton.resetDisableAll();
     }
+    leds.setPurple(1.0);
     Trace.getInstance().flushTraceFiles();
   }
 

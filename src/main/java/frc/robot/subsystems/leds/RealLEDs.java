@@ -13,10 +13,14 @@ public class RealLEDs extends LEDs {
     public RealLEDs() {
         Config conf = Robot.getConfig();
 
-        red = new DigitalOutput(conf.getInt("susbsystems.led.red"));
-        green = new DigitalOutput(conf.getInt("susbsystems.led.green"));
-        blue = new DigitalOutput(conf.getInt("susbsystems.led.blue"));
-
+        red = new DigitalOutput(conf.getInt("subsystems.led.red"));
+        red.enablePWM(0);
+        System.out.println("Red Port: " + conf.getInt("subsystems.led.red"));
+        green = new DigitalOutput(conf.getInt("subsystems.led.green"));
+        green.enablePWM(0);
+        blue = new DigitalOutput(conf.getInt("subsystems.led.blue"));
+        blue.enablePWM(0);
+        System.out.println("Set Purple");
         setPurple(1.0);
     }
 
@@ -85,6 +89,7 @@ public class RealLEDs extends LEDs {
     @Override
     public void setPurple(double brightness) {
         clearColor();
+        System.out.println("Setting purple to: " + validateBrightness(brightness));
         blue.updateDutyCycle(validateBrightness(brightness));
         red.updateDutyCycle(validateBrightness(brightness));
     }
