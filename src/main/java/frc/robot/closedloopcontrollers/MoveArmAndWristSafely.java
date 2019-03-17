@@ -375,7 +375,7 @@ public class MoveArmAndWristSafely {
       }
       safeArmMovements.armExtension = false;
     }
-    if (shoulderRotDeg < 50 && shoulderRotDeg > -50 && extensionIn < maxExtensionInches - 1) {
+    if (shoulderRotDeg < 30 && shoulderRotDeg > -50 && extensionIn < maxExtensionInches - 1) {
 
       // This safety is preventing the claw from hitting the elctronics when it
       // is being swung through the robot
