@@ -223,7 +223,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
-    if(conf.hasPath("subsystems.led")) {
+    if (conf.hasPath("subsystems.led")) {
       System.out.println("Using Real LEDs");
       leds = new RealLEDs();
     } else {
