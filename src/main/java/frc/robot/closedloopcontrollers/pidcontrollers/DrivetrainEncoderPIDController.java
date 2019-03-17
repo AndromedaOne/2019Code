@@ -3,7 +3,6 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
-import frc.robot.telemetries.TracePair;
 
 public class DrivetrainEncoderPIDController extends PIDControllerBase {
 
@@ -38,8 +37,6 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "EncoderDrivetrain", new TracePair("Output", output),
-          new TracePair("Setpoint", pidMultiton.getSetpoint()), new TracePair("EncoderTicks", encoder.pidGet()));
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
   }

@@ -40,7 +40,7 @@ public class RotateWrist extends Command {
 
   protected void end() {
     System.out.println("Done with the wrist");
-    WristPIDController.getInstance().disable();
+    // WristPIDController.getInstance().disable();
   }
 
   @Override

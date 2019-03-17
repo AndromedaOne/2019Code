@@ -18,6 +18,9 @@ public class IntakeArmControl extends Command {
   private MoveIntakeArmDirection directionToMove;
   private IntakeArmPositionsEnum nextIntakePosition;
 
+  private int counter = 0;
+  private boolean isFinished = false;
+
   /**
    * Construct an intake control command to make the intake arm go up or down
    * 
@@ -25,18 +28,23 @@ public class IntakeArmControl extends Command {
    * MoveIntakeArmDirection.DOWN
    */
   public IntakeArmControl(MoveIntakeArmDirection directionToMove) {
+    // super(1.0);
     this.directionToMove = directionToMove;
     requires(Robot.intake);
   }
 
   protected void initialize() {
+    isFinished = false;
     Trace.getInstance().logCommandStart("IntakeArmControl");
+    counter = 0;
     switch (directionToMove) {
     case UP:
+      System.out.println("Setting to move up");
       setUpSetPoint();
       break;
 
     case DOWN:
+      System.out.println("Setting to move down");
       setDownSetpoint();
       break;
     }
@@ -87,6 +95,7 @@ public class IntakeArmControl extends Command {
       break;
     case CARGOHEIGHT:
       if (RaiseAll.isExtended) {
+        System.out.println("RaiseAll.isExtended: " + RaiseAll.isExtended);
         intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
         nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
         System.out.println("We are at the cargoheight and trying to go to the ground");
@@ -108,11 +117,15 @@ public class IntakeArmControl extends Command {
 
   @Override
   protected void execute() {
+    counter++;
+    if (counter >= 50) {
+      isFinished = true;
+    }
   }
 
   @Override
   protected boolean isFinished() {
-    return intakePositionsPID.onTarget() || !intakePositionsPID.isEnabled();
+    return intakePositionsPID.onTarget() || !intakePositionsPID.isEnabled() || isFinished;
   }
 
   @Override
