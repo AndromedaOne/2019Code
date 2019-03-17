@@ -42,12 +42,12 @@ public class RotateShoulder extends Command {
 
   protected void end() {
     Trace.getInstance().logCommandStop("RotateShoulder");
-    
+
   }
 
   @Override
   protected boolean isFinished() {
-    
+
     return overrideAndFinishCommand || sPidController.onTarget();
   }
 

@@ -19,4 +19,8 @@ public class RetractFrontLegs extends Command {
     return !POVDirectionNames.getPOVEast(Robot.driveController);
   }
 
+  @Override
+  protected void end() {
+    Trace.getInstance().logCommandStop("RetractFrontLegs");
+  }
 }
