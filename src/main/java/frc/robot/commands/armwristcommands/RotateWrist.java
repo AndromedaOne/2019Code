@@ -46,13 +46,13 @@ public class RotateWrist extends Command {
   }
 
   protected void end() {
-    System.out.println("Done with the wrist");
-    // WristPIDController.getInstance().disable();
+    Trace.getInstance().logCommandStop("RotateWrist");
+    
   }
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("RotateWrist");
+    
     return overrideAndFinishCommand || WristPIDController.getInstance().onTarget() || isFinished;
   }
 

@@ -40,13 +40,13 @@ public class RetractArm extends Command {
   }
 
   protected void end() {
-    System.out.println("Done with the Retraction");
-    // ExtendableArmPIDController.getInstance().disable();
+    Trace.getInstance().logCommandStop("RetractArm");
+    
   }
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("RetractArm");
+    
     return overrideAndFinishCommand || ExtendableArmPIDController.getInstance().onTarget();
   }
 

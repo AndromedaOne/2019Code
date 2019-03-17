@@ -41,13 +41,13 @@ public class RotateShoulder extends Command {
   }
 
   protected void end() {
-    System.out.println("Done with the Shoulder");
-    // sPidController.disable();
+    Trace.getInstance().logCommandStop("RotateShoulder");
+    
   }
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("RotateShoulder");
+    
     return overrideAndFinishCommand || sPidController.onTarget();
   }
 
