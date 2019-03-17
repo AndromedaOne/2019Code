@@ -18,4 +18,9 @@ public class RetractRearLegs extends Command {
     Trace.getInstance().logCommandStop("RetractRearLegs");
     return !POVDirectionNames.getPOVWest(Robot.driveController);
   }
+
+  @Override
+  protected void end() {
+    Trace.getInstance().logCommandStop("RetractRearLegs");
+  }
 }

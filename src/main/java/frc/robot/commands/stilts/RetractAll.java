@@ -16,9 +16,12 @@ public class RetractAll extends Command {
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("RetractAll");
-    System.out.println("Done Retracting All Legs");
+
     return !POVDirectionNames.getPOVSouth(Robot.driveController);
   }
 
+  @Override
+  protected void end() {
+    Trace.getInstance().logCommandStop("RetractAll");
+  }
 }
