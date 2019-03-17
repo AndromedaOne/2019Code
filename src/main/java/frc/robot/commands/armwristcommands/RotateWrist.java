@@ -8,6 +8,8 @@ public class RotateWrist extends Command {
 
   private double encDegrees;
   private static boolean overrideAndFinishCommand = false;
+  private int counter = 0;
+  private boolean isFinished = false;
 
   public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam) {
     overrideAndFinishCommand = overrideAndFinishCommandParam;
@@ -21,6 +23,8 @@ public class RotateWrist extends Command {
 
   @Override
   protected void initialize() {
+    counter = 0;
+    isFinished = false;
     System.out.println("Running the wrist to: " + encDegrees);
     overrideAndFinishCommand = false;
     WristPIDController.getInstance().setSetpoint(encDegrees);
@@ -28,7 +32,10 @@ public class RotateWrist extends Command {
   }
 
   protected void execute() {
-
+    counter++;
+    if(counter > 50) {
+      isFinished = true;
+    }
   }
 
   @Override
@@ -43,7 +50,7 @@ public class RotateWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return overrideAndFinishCommand || WristPIDController.getInstance().onTarget();
+    return overrideAndFinishCommand || WristPIDController.getInstance().onTarget() || isFinished;
   }
 
 }
