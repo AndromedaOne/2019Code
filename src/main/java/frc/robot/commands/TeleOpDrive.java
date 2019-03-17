@@ -52,6 +52,8 @@ public class TeleOpDrive extends Command {
         && (shifterDelayCounter >= delay) && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
       shifterDelayCounter = 0;
       shiftButtonPressed = true;
+      slowModeCounter = 0;
+      slowModeButtonPressed = true;
       Robot.driveTrain.changeControlMode(NeutralMode.Coast);
       Robot.gyroCorrectMove.stop();
       if (shifterHigh) {
@@ -59,6 +61,7 @@ public class TeleOpDrive extends Command {
         Robot.driveTrain.shiftToLowGear();
         shifterHigh = false;
       } else {
+        slowMoEnabled = true;
         System.out.println(" - Shifting to High Gear - ");
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
