@@ -23,7 +23,7 @@ public class TeleOpDrive extends Command {
   private boolean slowModeButtonPressed = false;
   private double kSlowModeModifier = 0.6;
   private int slowModeCounter = 0;
-  private double kSlowModeSlope = 1.0/50.0;
+  private double kSlowModeSlope = 1.0 / 50.0;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -100,7 +100,7 @@ public class TeleOpDrive extends Command {
       }
     }
 
-    if(slowMoEnabled) {
+    if (slowMoEnabled) {
       mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
     } else {
       mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);

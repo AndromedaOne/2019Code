@@ -1,9 +1,6 @@
 package frc.robot.commands;
 
-import java.sql.Time;
-
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.TimedCommand;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
 import frc.robot.commands.stilts.RaiseAll;
@@ -30,7 +27,7 @@ public class IntakeArmControl extends Command {
    * MoveIntakeArmDirection.DOWN
    */
   public IntakeArmControl(MoveIntakeArmDirection directionToMove) {
-    //super(1.0);
+    // super(1.0);
     this.directionToMove = directionToMove;
     requires(Robot.intake);
   }
@@ -96,7 +93,7 @@ public class IntakeArmControl extends Command {
       System.out.println("We are stowed and trying to go to Cargoheight");
       break;
     case CARGOHEIGHT:
-      if(RaiseAll.isExtended){
+      if (RaiseAll.isExtended) {
         System.out.println("RaiseAll.isExtended: " + RaiseAll.isExtended);
         intakePositionsPID.setSetpoint(Robot.intake.getGroundSetpoint());
         nextIntakePosition = IntakeArmPositionsEnum.GROUNDHEIGHT;
@@ -120,7 +117,7 @@ public class IntakeArmControl extends Command {
   @Override
   protected void execute() {
     counter++;
-    if(counter >= 50) {
+    if (counter >= 50) {
       isFinished = true;
     }
   }
