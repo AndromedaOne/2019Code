@@ -41,12 +41,12 @@ public class RetractArm extends Command {
 
   protected void end() {
     Trace.getInstance().logCommandStop("RetractArm");
-    
+
   }
 
   @Override
   protected boolean isFinished() {
-    
+
     return overrideAndFinishCommand || ExtendableArmPIDController.getInstance().onTarget();
   }
 

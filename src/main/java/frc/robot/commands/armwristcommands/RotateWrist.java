@@ -47,12 +47,12 @@ public class RotateWrist extends Command {
 
   protected void end() {
     Trace.getInstance().logCommandStop("RotateWrist");
-    
+
   }
 
   @Override
   protected boolean isFinished() {
-    
+
     return overrideAndFinishCommand || WristPIDController.getInstance().onTarget() || isFinished;
   }
 
