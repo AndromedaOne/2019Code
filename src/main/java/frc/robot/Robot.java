@@ -63,6 +63,9 @@ import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.MockLEDs;
+import frc.robot.subsystems.leds.RealLEDs;
 import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
@@ -102,7 +105,7 @@ public class Robot extends TimedRobot {
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
-
+  public static LEDs leds;
   public static InfraredDistanceSensor clawInfraredSensor;
   public static LineFollowerSensorBase frontLineSensor4905;
   public static MagEncoderSensor topArmExtensionEncoder;
@@ -219,6 +222,13 @@ public class Robot extends TimedRobot {
       shoulderEncoder = new MockMagEncoderSensor();
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
+    }
+    if(conf.hasPath("subsystems.led")) {
+      System.out.println("Using Real LEDs");
+      leds = new RealLEDs();
+    } else {
+      System.out.println("Using Fake LEDs");
+      leds = new MockLEDs();
     }
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
