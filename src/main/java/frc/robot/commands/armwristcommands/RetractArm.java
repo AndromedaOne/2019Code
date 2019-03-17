@@ -41,7 +41,7 @@ public class RetractArm extends Command {
 
   protected void end() {
     System.out.println("Done with the Retraction");
-    ExtendableArmPIDController.getInstance().disable();
+    // ExtendableArmPIDController.getInstance().disable();
   }
 
   @Override

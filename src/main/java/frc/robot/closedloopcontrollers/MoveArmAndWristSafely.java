@@ -162,9 +162,9 @@ public class MoveArmAndWristSafely {
       if (ButtonsEnumerated.LEFTBUMPERBUTTON.isPressed(OI.getInstance().getOperatorStick())) {
         double wristSetpoint = 0;
         if (currentArmPosition.getShoulderAngle() > 0) {
-          wristSetpoint = 90 - currentArmPosition.getShoulderAngle();
+          wristSetpoint = 98 - currentArmPosition.getShoulderAngle();
         } else {
-          wristSetpoint = -90 - currentArmPosition.getShoulderAngle();
+          wristSetpoint = -98 - currentArmPosition.getShoulderAngle();
         }
         if (Math.abs(wristSetpoint - currentArmPosition.getWristAngle()) < 25) {
           WristPIDController.getInstance().setSetpoint(wristSetpoint);
