@@ -3,6 +3,7 @@ package frc.robot.commands.stilts;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.sensors.NavXGyroSensor;
+import frc.robot.telemetries.Trace;
 
 public class RaiseBackLegsForL2 extends Command {
 
@@ -11,7 +12,7 @@ public class RaiseBackLegsForL2 extends Command {
   }
 
   public void initialize() {
-    System.out.println("Raising back legs for L2");
+    Trace.getInstance().logCommandStart("RaiseBackLegsForL2");
     Robot.pneumaticStilts.extendRearLegs();
   }
 
@@ -23,7 +24,7 @@ public class RaiseBackLegsForL2 extends Command {
 
   @Override
   protected void end() {
-    System.out.println(" - We have reached our angle - ");
+    Trace.getInstance().logCommandStop("RaiseBackLegsForL2");
     Robot.pneumaticStilts.stopRearLegs();
   }
 

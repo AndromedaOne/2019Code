@@ -18,8 +18,12 @@ public class RaiseAll extends Command {
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("RaiseAll");
     return !POVDirectionNames.getPOVNorth(Robot.driveController);
+  }
+
+  @Override
+  protected void end() {
+    Trace.getInstance().logCommandStop("RaiseAll");
   }
 
 }

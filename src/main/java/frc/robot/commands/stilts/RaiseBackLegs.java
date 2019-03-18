@@ -19,12 +19,12 @@ public class RaiseBackLegs extends Command {
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("RaiseBackLegs");
     return !ButtonsEnumerated.isPressed(ButtonsEnumerated.BACKBUTTON, Robot.driveController);
   }
 
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("RaiseBackLegs");
     Robot.pneumaticStilts.stopRearLegs();
   }
 

@@ -26,9 +26,12 @@ public class AutoMoveArm extends Command {
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("AutoMoveArm");
     // return Robot.extendableArmAndWrist.moveIsDone();
     return true;
+  }
+
+  protected void end() {
+    Trace.getInstance().logCommandStop("AutoMoveArm");
   }
 
 }

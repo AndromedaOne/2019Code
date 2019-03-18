@@ -19,7 +19,6 @@ public class RaiseFrontLegsForL2 extends Command {
 
   @Override
   protected boolean isFinished() {
-    Trace.getInstance().logCommandStop("RaiseFrontLegsForL2");
     return NavXGyroSensor.getInstance().getXAngle() > raiseAngleThreshold;
   }
 
