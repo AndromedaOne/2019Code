@@ -8,6 +8,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -37,7 +38,7 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, Robot.operatorController)) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.STARTBUTTON, Robot.operatorController)) {
       extensionValue = 0.25;
     }
 
@@ -74,6 +75,11 @@ public class TeleopArm extends Command {
   }
 
   @Override
+  protected void initialize() {
+    Trace.getInstance().logCommandStart("TeleopArm");
+  }
+
+  @Override
   protected boolean isFinished() {
     return false;
   }
@@ -85,6 +91,7 @@ public class TeleopArm extends Command {
 
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("TeleopArm");
     // try {
     MoveArmAndWristSafely.stop();
     // } catch (ArmOutOfBoundsException e) {

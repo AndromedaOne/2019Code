@@ -43,8 +43,8 @@ public class PIDController4905 extends PIDBase4905 implements Controller {
    */
   @SuppressWarnings("ParameterName")
   public PIDController4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output,
-      double period) {
-    super(Kp, Ki, Kd, Kf, source, output);
+      double period, String pidName) {
+    super(Kp, Ki, Kd, Kf, source, output, pidName);
     m_controlLoop.startPeriodic(period);
   }
 
@@ -61,8 +61,9 @@ public class PIDController4905 extends PIDBase4905 implements Controller {
    * default is 0.05 (50ms).
    */
   @SuppressWarnings("ParameterName")
-  public PIDController4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output, double period) {
-    this(Kp, Ki, Kd, 0.0, source, output, period);
+  public PIDController4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output, double period,
+      String pidName) {
+    this(Kp, Ki, Kd, 0.0, source, output, period, pidName);
   }
 
   /**
@@ -76,8 +77,8 @@ public class PIDController4905 extends PIDBase4905 implements Controller {
    * @param output The PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDController4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output) {
-    this(Kp, Ki, Kd, source, output, kDefaultPeriod);
+  public PIDController4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output, String pidName) {
+    this(Kp, Ki, Kd, source, output, kDefaultPeriod, pidName);
   }
 
   /**
@@ -92,8 +93,9 @@ public class PIDController4905 extends PIDBase4905 implements Controller {
    * @param output The PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDController4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output) {
-    this(Kp, Ki, Kd, Kf, source, output, kDefaultPeriod);
+  public PIDController4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output,
+      String pidName) {
+    this(Kp, Ki, Kd, Kf, source, output, kDefaultPeriod, pidName);
   }
 
   @Override

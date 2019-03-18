@@ -3,6 +3,7 @@ package frc.robot.commands.armwristcommands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
+import frc.robot.telemetries.Trace;
 
 public class RetractArm extends Command {
 
@@ -22,6 +23,7 @@ public class RetractArm extends Command {
 
   @Override
   protected void initialize() {
+    Trace.getInstance().logCommandStart("RetractArm");
     overrideAndFinishCommand = false;
     System.out.println("Running the Arm to: " + inchesExtension);
     ExtendableArmPIDController.getInstance().setSetpoint(inchesExtension);
@@ -38,11 +40,13 @@ public class RetractArm extends Command {
   }
 
   protected void end() {
-    ExtendableArmPIDController.getInstance().disable();
+    Trace.getInstance().logCommandStop("RetractArm");
+
   }
 
   @Override
   protected boolean isFinished() {
+
     return overrideAndFinishCommand || ExtendableArmPIDController.getInstance().onTarget();
   }
 

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.ButtonsEnumerated;
 
 public class RollIntakeIn extends Command {
@@ -10,7 +11,7 @@ public class RollIntakeIn extends Command {
   private double mod = -1;
 
   protected void initialize() {
-    System.out.println("Rolling intake...");
+    Trace.getInstance().logCommandStart("RollIntakeIn");
   }
 
   protected void execute() {
@@ -24,6 +25,7 @@ public class RollIntakeIn extends Command {
 
   protected void end() {
     Robot.intake.rollIntake(0);
+    Trace.getInstance().logCommandStop("RollIntakeIn");
 
   }
 

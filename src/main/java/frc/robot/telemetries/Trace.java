@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
+import frc.robot.Robot;
+
 // utility to store trace information to a file on the roborio. this class uses the 
 // singleton pattern. on the first call to Trace.getInstance(), the utility will
 // create a trace directory in /home/lvuser/traceLogs/trace<next number>. the utility
@@ -65,7 +67,8 @@ public class Trace {
   private MultipleOutputStream m_out;
   private MultipleOutputStream m_err;
   private static String m_matchStartFname = "matchStarted";
-
+  private static String m_commandTraceFname = "CommandTrace";
+  private BufferedWriter m_commandTraceWriter;
   private static int m_dirNumb = 0;
 
   private class TraceEntry {
@@ -98,7 +101,22 @@ public class Trace {
     m_startTime = System.currentTimeMillis();
     createNewTraceDir();
     redirectOutput();
+    createCommandTraceFile();
+  }
 
+  private void createCommandTraceFile() {
+    if (m_pathOfTraceDir == null) {
+      return;
+    }
+    m_commandTraceWriter = null;
+    try {
+      String fullFileName = new String(m_pathOfTraceDir + "/" + m_commandTraceFname + ".txt");
+      FileWriter fstream = new FileWriter(fullFileName, false);
+      m_commandTraceWriter = new BufferedWriter(fstream);
+    } catch (IOException e) {
+      System.err.println("ERROR: unable to open text file " + m_commandTraceFname + " ;" + e.getMessage());
+      e.printStackTrace();
+    }
   }
 
   private String getDateStr() {
@@ -210,6 +228,9 @@ public class Trace {
 
   private void addEntry(String fileName, TracePair... values) {
     try {
+      if (!Robot.getInstance().isEnabled()) {
+        return;
+      }
       if (m_pathOfTraceDir == null) {
         return;
       }
@@ -260,6 +281,7 @@ public class Trace {
     try {
       m_out.flush();
       m_err.flush();
+      m_commandTraceWriter.flush();
     } catch (IOException e) {
       System.err.println("ERROR: Failed to Flush");
       e.printStackTrace();
@@ -302,5 +324,29 @@ public class Trace {
       System.err.println("ERROR: unable to open text file " + m_matchStartFname + " ;" + e.getMessage());
       e.printStackTrace();
     }
+  }
+
+  private void logCommand(String commandName, String startEnd) {
+    if (m_commandTraceFname == null) {
+      return;
+    }
+    long correctedTime = System.currentTimeMillis() - m_startTime;
+    String line = new String(String.valueOf(correctedTime));
+    line += "\t" + commandName + " " + startEnd + "\n";
+    System.out.print(line);
+    try {
+      m_commandTraceWriter.write(line);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public void logCommandStart(String commandName) {
+    logCommand(commandName, "start");
+  }
+
+  public void logCommandStop(String commandName) {
+    logCommand(commandName, "stop");
   }
 }

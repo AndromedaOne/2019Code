@@ -79,7 +79,8 @@ public class PIDMultiton {
   private PIDMultiton(PIDName name, PIDConfiguration config) {
     this.name = name;
     this.config = config;
-    pidController = new PIDController4905(config.getP(), config.getI(), config.getD(), name.source, name.output);
+    pidController = new PIDController4905(config.getP(), config.getI(), config.getD(), name.source, name.output,
+        config.getPIDName());
     pidController.setOutputRange(config.getMinimumOutput(), config.getMaximumOutput());
 
     pidController.setAbsoluteTolerance(config.getAbsoluteTolerance(), 6);

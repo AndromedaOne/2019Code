@@ -2,10 +2,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.telemetries.Trace;
 
 public class CloseClaw extends Command {
 
   protected void initialize() {
+    Trace.getInstance().logCommandStart("CloseClaw");
     requires(Robot.claw);
     System.out.println("Closing claw...");
   }
@@ -21,6 +23,7 @@ public class CloseClaw extends Command {
   }
 
   protected void end() {
+    Trace.getInstance().logCommandStop("CloseClaw");
 
   }
 

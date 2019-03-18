@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.filters.LinearDigitalFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 /**
  * Class implements a PID Control Loop.
@@ -42,46 +44,63 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
 
   // Factor for "proportional" control
   @SuppressWarnings("MemberName")
-  private double m_P;
+  protected double m_P;
 
   // Factor for "integral" control
   @SuppressWarnings("MemberName")
-  private double m_I;
+  protected double m_I;
 
   // Factor for "derivative" control
   @SuppressWarnings("MemberName")
-  private double m_D;
+  protected double m_D;
 
   // Factor for "feed forward" control
   @SuppressWarnings("MemberName")
-  private double m_F;
+  protected double m_F;
 
   // |maximum output|
-  private double m_maximumOutput = 1.0;
+  protected double m_maximumOutput = 1.0;
 
   // |minimum output|
-  private double m_minimumOutput = -1.0;
+  protected double m_minimumOutput = -1.0;
 
   // Maximum input - limit setpoint to this
-  private double m_maximumInput;
+  protected double m_maximumInput;
 
   // Minimum input - limit setpoint to this
-  private double m_minimumInput;
+  protected double m_minimumInput;
 
   // Input range - difference between maximum and minimum
-  private double m_inputRange;
+  protected double m_inputRange;
 
   // Do the endpoints wrap around? (e.g., absolute encoder)
-  private boolean m_continuous;
+  protected boolean m_continuous;
 
   // Is the PID controller enabled
   protected boolean m_enabled;
 
   // The prior error (used to compute velocity)
-  private double m_prevError;
+  protected double m_prevError;
 
   // The sum of the errors for use in the integral calc
-  private double m_totalError;
+  protected double m_accumError = 0;
+
+// P*Error
+  protected double m_pError;
+
+// I*AccumError
+  protected double m_iError;
+
+// D*DeltaError
+  protected double m_dError;
+
+// F*setpoint
+  protected double m_feedForward;
+
+  // The total error
+  protected double m_totalError;
+
+  protected String m_pidName;
 
   // The tolerance object used to check if on target
   private Tolerance m_tolerance;
@@ -177,7 +196,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
    * @param output The PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDBase4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output) {
+  public PIDBase4905(double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output, String pidName) {
     super(false);
     requireNonNull(source, "Null PIDSource was given");
     requireNonNull(output, "Null PIDOutput was given");
@@ -189,6 +208,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
     m_I = Ki;
     m_D = Kd;
     m_F = Kf;
+    m_pidName = pidName;
 
     // Save original source
     m_origSource = source;
@@ -215,8 +235,8 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
    * @param output the PIDOutput object that is set to the output percentage
    */
   @SuppressWarnings("ParameterName")
-  public PIDBase4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output) {
-    this(Kp, Ki, Kd, 0.0, source, output);
+  public PIDBase4905(double Kp, double Ki, double Kd, PIDSource source, PIDOutput output, String pidName) {
+    this(Kp, Ki, Kd, 0.0, source, output, pidName);
   }
 
   /**
@@ -247,14 +267,13 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
       double P;
       double I;
       double D;
-      double feedForward = calculateFeedForward();
+      m_feedForward = calculateFeedForward();
       double minimumOutput;
       double maximumOutput;
 
       // Storage for function input-outputs
       double prevError;
       double error;
-      double totalError;
 
       m_thisMutex.lock();
       try {
@@ -269,29 +288,22 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
 
         prevError = m_prevError;
         error = getContinuousError(m_setpoint - input);
-        totalError = m_totalError;
       } finally {
         m_thisMutex.unlock();
       }
 
       // Storage for function outputs
-      double result;
-
-      if (pidSourceType.equals(PIDSourceType.kRate)) {
-        if (P != 0) {
-          totalError = clamp(totalError + error, minimumOutput / P, maximumOutput / P);
-        }
-
-        result = P * totalError + D * error + feedForward;
-      } else {
-        result = P * error + D * (error - prevError) + feedForward;
-        if (I != 0 && ((result < minimumOutput) || (result > maximumOutput))) {
-          totalError += error; // clamp(totalError + error, minimumOutput / I, maximumOutput / I);
-        }
-        result = P * error + I * totalError + D * (error - prevError) + feedForward;
+      m_pError = P * error;
+      m_iError = I * m_accumError;
+      m_dError = D * (error - prevError);
+      m_feedForward = calculateFeedForward();
+      m_totalError = m_pError + m_iError + m_dError + m_feedForward;
+      if (I != 0 && ((m_totalError > minimumOutput) && (m_totalError < maximumOutput))) {
+        // We're preventing Integral wind-up
+        m_accumError += error;
       }
 
-      result = clamp(result, minimumOutput, maximumOutput);
+      m_totalError = clamp(m_totalError, minimumOutput, maximumOutput);
 
       // Ensures m_enabled check and pidWrite() call occur atomically
       m_pidWriteMutex.lock();
@@ -302,7 +314,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
             // Don't block other PIDController operations on pidWrite()
             m_thisMutex.unlock();
 
-            m_pidOutput.pidWrite(result);
+            m_pidOutput.pidWrite(m_totalError);
           }
         } finally {
           if (m_thisMutex.isHeldByCurrentThread()) {
@@ -312,16 +324,10 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
       } finally {
         m_pidWriteMutex.unlock();
       }
-
-      m_thisMutex.lock();
-      try {
-        m_prevError = error;
-        m_error = error;
-        m_totalError = totalError;
-        m_result = result;
-      } finally {
-        m_thisMutex.unlock();
-      }
+      Trace.getInstance().addTrace(true, m_pidName, new TracePair("TotalError", m_totalError),
+          new TracePair("PError", m_pError), new TracePair("IError", m_iError), new TracePair("DError", m_dError),
+          new TracePair("FeedForward", m_feedForward), new TracePair("AccumError", m_accumError),
+          new TracePair("Input", input), new TracePair("Setpoint", m_setpoint));
     }
   }
 
@@ -796,6 +802,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
     m_thisMutex.lock();
     try {
       m_prevError = 0;
+      m_accumError = 0;
       m_totalError = 0;
       m_result = 0;
     } finally {

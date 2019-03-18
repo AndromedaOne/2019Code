@@ -2,10 +2,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import frc.robot.telemetries.Trace;
-
 public class PIDControllerBase implements Sendable {
-  protected static Trace trace;
   public PIDMultiton pidMultiton;
   protected double outputRange = 1;
   protected double absoluteTolerance = 0;
