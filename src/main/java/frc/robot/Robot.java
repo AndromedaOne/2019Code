@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
@@ -33,6 +34,10 @@ import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
 import frc.robot.commands.*;
 import frc.robot.commands.TeleOpDrive;
+import frc.robot.groupcommands.autopaths.Bay3Bay2FromHab;
+import frc.robot.groupcommands.autopaths.Bay3FromHab;
+import frc.robot.groupcommands.autopaths.CenterBaysFromMiddle;
+import frc.robot.groupcommands.autopaths.DoNothing;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.sensors.anglesensor.AngleSensor;
 import frc.robot.sensors.anglesensor.MockAngleSensor;
@@ -131,6 +136,8 @@ public class Robot extends TimedRobot {
   public static double defaultRetractionPresetRange = 0;
   public static double defaultWristPresetRange = 0;
 
+  private SendableChooser<Command> autoPathChooser =  new SendableChooser<Command>();
+
   public OI oi;
 
   /**
@@ -177,6 +184,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     System.out.println("Here is my config: " + conf);
+
+    // This adds all the choosers to smartdashboard
+    createSmartdashboardAutoConfig();
 
     NavXGyroSensor.getInstance();
     if (conf.hasPath("subsystems.armAndWrist")) {
@@ -389,6 +399,14 @@ public class Robot extends TimedRobot {
     armController = OI.getInstance().getOperatorStick();
 
     robotInitDone = true;
+  }
+
+  // This is all the choosers for the autos
+  private void createSmartdashboardAutoConfig() {
+    autoPathChooser.setDefaultOption("0. Do Nothing", new DoNothing());
+    autoPathChooser.addOption("1. Bay3", new Bay3FromHab());
+    autoPathChooser.addOption("2. CenterBayFromMiddleHab", new CenterBaysFromMiddle());
+    autoPathChooser.addOption("3. Bay3LoadingStationBay2", new Bay3Bay2FromHab());
   }
 
   /**
