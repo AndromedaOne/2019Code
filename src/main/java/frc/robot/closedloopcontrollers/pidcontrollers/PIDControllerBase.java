@@ -2,6 +2,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+
 public class PIDControllerBase implements Sendable {
   public PIDMultiton pidMultiton;
   protected double outputRange = 1;
@@ -105,7 +106,8 @@ public class PIDControllerBase implements Sendable {
     builder.addDoubleProperty("d", this.pidMultiton.pidController::getD, this.pidMultiton.pidController::setD);
     builder.addDoubleProperty("f", this.pidMultiton.pidController::getF, this.pidMultiton.pidController::setF);
     builder.addDoubleProperty("setpoint", this.pidMultiton.pidController::getSetpoint, this::setSetpoint);
-    builder.addBooleanProperty("enabled", this.pidMultiton.pidController::isEnabled, this.pidMultiton.pidController::setEnabled);
+    builder.addBooleanProperty("enabled", this.pidMultiton.pidController::isEnabled,
+        this.pidMultiton.pidController::setEnabled);
   }
 
 }

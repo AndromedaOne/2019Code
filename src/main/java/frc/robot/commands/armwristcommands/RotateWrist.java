@@ -21,7 +21,8 @@ public class RotateWrist extends Command {
   public RotateWrist(double angle) {
     requires(Robot.extendableArmAndWrist);
     System.out.println("Rotating wrist to " + angle);
-    incrementalPidSetpoint = new IncrementalPidSetpoint(angle, SAFESETPOINTDELTA, Robot.getCurrentArmPosition()::getWristAngle);
+    incrementalPidSetpoint = new IncrementalPidSetpoint(angle, SAFESETPOINTDELTA,
+        Robot.getCurrentArmPosition()::getWristAngle);
   }
 
   @Override
@@ -31,7 +32,7 @@ public class RotateWrist extends Command {
     isFinished = false;
     System.out.println("Running the wrist to: " + incrementalPidSetpoint.getFinalAngleSetpoint());
     overrideAndFinishCommand = false;
-    
+
   }
 
   protected void execute() {
@@ -55,7 +56,9 @@ public class RotateWrist extends Command {
   @Override
   protected boolean isFinished() {
 
-    return overrideAndFinishCommand || (incrementalPidSetpoint.isSetpointFinalSetpoint() && WristPIDController.getInstance().onTarget()) || isFinished;
+    return overrideAndFinishCommand
+        || (incrementalPidSetpoint.isSetpointFinalSetpoint() && WristPIDController.getInstance().onTarget())
+        || isFinished;
   }
 
 }

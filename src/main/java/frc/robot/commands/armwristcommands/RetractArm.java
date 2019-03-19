@@ -18,10 +18,11 @@ public class RetractArm extends Command {
   private IncrementalPidSetpoint incrementalPidSetpoint;
 
   public RetractArm(double inchesExtension) {
-    
+
     requires(Robot.extendableArmAndWrist);
     System.out.println("Retracting Arm...");
-    incrementalPidSetpoint = new IncrementalPidSetpoint(inchesExtension, SAFESETPOINTDELTA, Robot.getCurrentArmPosition()::getArmRetraction);
+    incrementalPidSetpoint = new IncrementalPidSetpoint(inchesExtension, SAFESETPOINTDELTA,
+        Robot.getCurrentArmPosition()::getArmRetraction);
   }
 
   @Override
@@ -29,8 +30,7 @@ public class RetractArm extends Command {
     Trace.getInstance().logCommandStart("RetractArm");
     overrideAndFinishCommand = false;
     System.out.println("Running the Arm to: " + incrementalPidSetpoint.getFinalAngleSetpoint());
-    
-  
+
   }
 
   protected void execute() {
@@ -50,7 +50,8 @@ public class RetractArm extends Command {
   @Override
   protected boolean isFinished() {
 
-    return overrideAndFinishCommand || (incrementalPidSetpoint.isSetpointFinalSetpoint() && ExtendableArmPIDController.getInstance().onTarget());
+    return overrideAndFinishCommand
+        || (incrementalPidSetpoint.isSetpointFinalSetpoint() && ExtendableArmPIDController.getInstance().onTarget());
   }
 
 }

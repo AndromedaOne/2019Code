@@ -1,7 +1,6 @@
 package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.IncrementalPidSetpoint;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
@@ -21,10 +20,11 @@ public class RotateShoulder extends Command {
 
   public RotateShoulder(double angle) {
     requires(Robot.extendableArmAndWrist);
-    
+
     sPidController = ShoulderPIDController.getInstance();
     System.out.println("Rotating shoulder to " + angle);
-    incrementalPidSetpoint = new IncrementalPidSetpoint(angle, SAFESETPOINTDELTA, Robot.getCurrentArmPosition()::getShoulderAngle);
+    incrementalPidSetpoint = new IncrementalPidSetpoint(angle, SAFESETPOINTDELTA,
+        Robot.getCurrentArmPosition()::getShoulderAngle);
   }
 
   @Override

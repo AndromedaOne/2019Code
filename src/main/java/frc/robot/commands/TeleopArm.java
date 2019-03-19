@@ -43,12 +43,12 @@ public class TeleopArm extends Command {
       extensionValue = 0.25;
     }
     ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
-  
-    double wristSetpoint = currentArmPosition.getWristAngle() + wristRotateValue*WRISTSTICKVALUETODEGREES;
 
-    double shoulderSetpoint = currentArmPosition.getShoulderAngle() + shoulderRotateValue*SHOULDERSTICKVALUETODEGREES;
+    double wristSetpoint = currentArmPosition.getWristAngle() + wristRotateValue * WRISTSTICKVALUETODEGREES;
 
-    double extensionSetpoint = currentArmPosition.getArmRetraction() + extensionValue*EXTENSIONSTICKVALUETOINCHES;
+    double shoulderSetpoint = currentArmPosition.getShoulderAngle() + shoulderRotateValue * SHOULDERSTICKVALUETODEGREES;
+
+    double extensionSetpoint = currentArmPosition.getArmRetraction() + extensionValue * EXTENSIONSTICKVALUETOINCHES;
 
     ExtendableArmPIDController.getInstance().setSetpoint(extensionSetpoint);
     WristPIDController.getInstance().setSetpoint(wristSetpoint);

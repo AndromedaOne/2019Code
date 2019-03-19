@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.*;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class PIDMultiton {
 
