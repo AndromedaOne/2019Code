@@ -1,14 +1,17 @@
 package frc.robot.commands.armwristcommands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.ArmPosition;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.pidcontrollers.IncrementalPidSetpoint;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.telemetries.Trace;
 
 public class RotateShoulder extends Command {
 
-  private double encDegrees;
+  private static final double SAFESETPOINTDELTA = 1;
   ShoulderPIDController sPidController;
+  private IncrementalPidSetpoint incrementalPidSetpoint;
 
   private static boolean overrideAndFinishCommand = false;
 
@@ -18,22 +21,21 @@ public class RotateShoulder extends Command {
 
   public RotateShoulder(double angle) {
     requires(Robot.extendableArmAndWrist);
-    encDegrees = angle;
+    
     sPidController = ShoulderPIDController.getInstance();
     System.out.println("Rotating shoulder to " + angle);
+    incrementalPidSetpoint = new IncrementalPidSetpoint(angle, SAFESETPOINTDELTA, Robot.getCurrentArmPosition()::getShoulderAngle);
   }
 
   @Override
   protected void initialize() {
     Trace.getInstance().logCommandStart("RotateShoulder");
-    System.out.println("Running the Shoulder to: " + encDegrees);
+    System.out.println("Running the Shoulder to: " + incrementalPidSetpoint.getFinalAngleSetpoint());
     overrideAndFinishCommand = false;
-    sPidController.setSetpoint(encDegrees);
-    sPidController.enable();
   }
 
   protected void execute() {
-
+    sPidController.setSetpoint(incrementalPidSetpoint.getSetpoint());
   }
 
   protected void interrupted() {
@@ -42,13 +44,11 @@ public class RotateShoulder extends Command {
 
   protected void end() {
     Trace.getInstance().logCommandStop("RotateShoulder");
-
   }
 
   @Override
   protected boolean isFinished() {
-
-    return overrideAndFinishCommand || sPidController.onTarget();
+    return overrideAndFinishCommand || (incrementalPidSetpoint.isSetpointFinalSetpoint() && sPidController.onTarget());
   }
 
 }

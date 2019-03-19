@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
@@ -41,33 +42,13 @@ public class TeleopArm extends Command {
     if (ButtonsEnumerated.isPressed(ButtonsEnumerated.STARTBUTTON, Robot.operatorController)) {
       extensionValue = 0.25;
     }
+    ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
+  
+    double wristSetpoint = currentArmPosition.getWristAngle() + wristRotateValue*WRISTSTICKVALUETODEGREES;
 
-    double currentExtensionPosition = MoveArmAndWristSafely.getExtensionIn(topArmEncoderTicks, bottomArmEncoderTicks);
-    double currentShoulderPosition = MoveArmAndWristSafely.getShoulderRotDeg(Robot.shoulderEncoder.getDistanceTicks());
+    double shoulderSetpoint = currentArmPosition.getShoulderAngle() + shoulderRotateValue*SHOULDERSTICKVALUETODEGREES;
 
-    double wristSetpoint = currentWristPosition + wristRotateValue*WRISTSTICKVALUETODEGREES;
-    if(wristSetpoint > MoveArmAndWristSafely.maxWristRotDegrees) {
-      wristSetpoint = MoveArmAndWristSafely.maxWristRotDegrees;
-    }
-    if(wristSetpoint < -MoveArmAndWristSafely.maxWristRotDegrees) {
-      wristSetpoint = -MoveArmAndWristSafely.maxWristRotDegrees;
-    }
-
-    double shoulderSetpoint = currentShoulderPosition + shoulderRotateValue*SHOULDERSTICKVALUETODEGREES;
-    if(shoulderSetpoint > MoveArmAndWristSafely.maxShoulderRotDegrees) {
-      shoulderSetpoint = MoveArmAndWristSafely.maxShoulderRotDegrees;
-    }
-    if(shoulderSetpoint < -MoveArmAndWristSafely.maxShoulderRotDegrees) {
-      shoulderSetpoint = -MoveArmAndWristSafely.maxShoulderRotDegrees;
-    }
-
-    double extensionSetpoint = currentExtensionPosition + extensionValue*EXTENSIONSTICKVALUETOINCHES;
-    if(extensionSetpoint > MoveArmAndWristSafely.maxShoulderRotDegrees) {
-      extensionSetpoint = MoveArmAndWristSafely.maxShoulderRotDegrees;
-    }
-    if(extensionSetpoint < 0) {
-      extensionSetpoint = 0;
-    }
+    double extensionSetpoint = currentArmPosition.getArmRetraction() + extensionValue*EXTENSIONSTICKVALUETOINCHES;
 
     ExtendableArmPIDController.getInstance().setSetpoint(extensionSetpoint);
     WristPIDController.getInstance().setSetpoint(wristSetpoint);
