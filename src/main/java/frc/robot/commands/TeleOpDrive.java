@@ -68,6 +68,7 @@ public class TeleOpDrive extends Command {
         Robot.driveTrain.shiftToHighGear();
         shifterHigh = true;
       }
+      switchingLEDMode();
     }
 
     // This stops you from shifting over and over again while holding the button
@@ -93,7 +94,6 @@ public class TeleOpDrive extends Command {
     // This adds one tick everytime time after we last clicked the slow mode button
     slowModeCounter++;
     if (ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick()) && !slowModeButtonPressed) {
-
       slowModeCounter = 0;
       slowModeButtonPressed = true;
       if (!slowMoEnabled) {
@@ -103,6 +103,7 @@ public class TeleOpDrive extends Command {
         slowMoEnabled = false;
         System.out.println("SLOW MODE HAS ENDED!");
       }
+      switchingLEDMode();
     }
 
     if (slowMoEnabled) {
@@ -117,6 +118,18 @@ public class TeleOpDrive extends Command {
       slowModeButtonPressed = false;
     }
 
+  }
+
+  private void switchingLEDMode() {
+    if (slowMoEnabled && shifterHigh) {
+      Robot.leds.setBlue(1.0);
+    } else if (slowMoEnabled && !shifterHigh) {
+      Robot.leds.setRed(1.0);
+    } else if (!slowMoEnabled && shifterHigh) {
+      Robot.leds.setGreen(1.0);
+    } else {
+      Robot.leds.setWhite(1.0);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
