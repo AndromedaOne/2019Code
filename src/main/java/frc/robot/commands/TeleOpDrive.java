@@ -23,8 +23,12 @@ public class TeleOpDrive extends Command {
   private boolean shiftButtonPressed = false;
   private boolean slowModeButtonPressed = false;
   private double kSlowModeModifier = 0.6;
+  private double kAccelerationModifier = 0.6;
   private int slowModeCounter = 0;
   private double kSlowModeSlope = 1.0 / 50.0;
+  private double previousSpeed = 0;
+  private final double kAccelerationSlope = 1 / 25;
+
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -44,6 +48,7 @@ public class TeleOpDrive extends Command {
   @Override
   protected void execute() {
     Joystick driveController = Robot.driveController;
+    
 
     // This is the shifting code
     // This switches the motors coast and sets the move to zero
@@ -80,12 +85,6 @@ public class TeleOpDrive extends Command {
 
     double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
 
-    if (shifterDelayCounter >= delay) {
-      Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
-    } else {
-      Robot.gyroCorrectMove.stop();
-    }
-
     if (shifterDelayCounter == delay) {
       Robot.driveTrain.changeControlMode(NeutralMode.Brake);
     }
@@ -117,6 +116,18 @@ public class TeleOpDrive extends Command {
       slowModeButtonPressed = false;
     }
 
+    double requestedSpeed = forwardBackwardStickValue * mod;
+    if (requestedSpeed > previousSpeed) {
+      previousSpeed += kAccelerationSlope;
+    } else {
+      previousSpeed -= kAccelerationSlope;
+    }
+    
+    if (shifterDelayCounter >= delay) {
+      Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
+    } else {
+      Robot.gyroCorrectMove.stop();
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
