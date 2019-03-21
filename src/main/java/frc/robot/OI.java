@@ -16,11 +16,11 @@ import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.MoveUsingFrontLineFollower;
 import frc.robot.commands.RollIntakeGroupCommandScheduler;
+import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
-import frc.robot.groupcommands.RollIntakeGroupCommandScheduler;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -146,7 +146,7 @@ public class OI {
 
     // TODO: Change these to actual buttons
     runIntakeIn = new JoystickButton(operatorController, rollIntakeButton.getValue());
-    // runIntakeIn.whileHeld(new RollIntakeIn());
+    runIntakeIn.whileHeld(new RollIntakeIn());
 
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
     intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
