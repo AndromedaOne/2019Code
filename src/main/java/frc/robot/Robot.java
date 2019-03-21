@@ -578,4 +578,11 @@ public class Robot extends TimedRobot {
   public static double getShoulderRotDegVelocity() {
     return shoulderEncoder.getVelocity() * SHOULDERDEGREESPERTICK;
   }
+
+  public static boolean robotHasBall() {
+
+    double threshold = conf.getDouble("ports.claw.infrared.threshold");
+    return (clawInfraredSensor.getInfraredDistance() >= threshold);
+  }
+
 }

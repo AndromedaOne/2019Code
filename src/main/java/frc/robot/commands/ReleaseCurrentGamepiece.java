@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.closedloopcontrollers.DriveClawMotorsSafely;
 
 public class ReleaseCurrentGamepiece extends Command {
 
@@ -15,7 +14,7 @@ public class ReleaseCurrentGamepiece extends Command {
   }
 
   public void execute() {
-    if (DriveClawMotorsSafely.hasBall) {
+    if (Robot.robotHasBall()) {
       Robot.intake.rollIntake(-0.75);
     }
 
