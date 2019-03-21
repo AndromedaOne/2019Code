@@ -8,7 +8,7 @@ public class CenterBaysFromMiddle extends CommandGroup {
 
   public CenterBaysFromMiddle() {
     // Move forward to Center Bay Wall, while we move the arm into placing position
-    addSequential(new MoveUsingFrontUltrasonic(2));
+    addSequential(new MoveUsingFrontUltrasonic(140));
     // addParallel(new LowSameSideGamePieceArmCommand());
     // This releases the hatch, If we are having trouble lining up we can add
     // A line follow sequential here

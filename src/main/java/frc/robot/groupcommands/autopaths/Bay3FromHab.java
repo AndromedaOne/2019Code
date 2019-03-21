@@ -16,9 +16,9 @@ public class Bay3FromHab extends CommandGroup {
       addSequential(new TurnToCompassHeading(0));
     }
     // This should bring us to a relatively known location
-    addSequential(new MoveUsingBackUltrasonic(18));
+    addSequential(new MoveUsingBackUltrasonic(48));
     // Moving up to the line
-    addSequential(new MoveUsingEncoderPID(10));
+    addSequential(new MoveUsingEncoderPID(150));
     // addParallel(new LowSameSideGamePieceArmCommand());
     if (AutoStartingConfig.onRightSide) {
       addSequential(new TurnToCompassHeading(270));
