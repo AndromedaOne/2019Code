@@ -10,11 +10,16 @@ public class UnstowArm extends CommandGroup {
 
   public UnstowArm() {
     double armRetractAmount = 0;
-    double shoulderRotateAmount = Robot.robotHasBall() ? 0 : 1;
-    double wristRotateAmount = Robot.robotHasBall() ? 2 : 3;
+    double shoulderRotateAmount = Robot.robotHasBall() ? CargoShipCargo.setpoint.getShoulderAngle()
+        : LowHatch.setpoint.getShoulderAngle();
+    double wristRotateAmount = Robot.robotHasBall() ? CargoShipCargo.setpoint.getWristAngle()
+        : LowHatch.setpoint.getWristAngle();
+    double finalRetractAmount = Robot.robotHasBall() ? CargoShipCargo.setpoint.getArmRetraction()
+        : LowHatch.setpoint.getArmRetraction();
     // do stuff
     addSequential(new RetractArm(armRetractAmount));
     addParallel(new RotateShoulder(shoulderRotateAmount));
     addSequential(new RotateWrist(wristRotateAmount));
+    addSequential(new RetractArm(finalRetractAmount));
   }
 }
