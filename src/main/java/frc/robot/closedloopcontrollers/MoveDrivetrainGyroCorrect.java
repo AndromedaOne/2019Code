@@ -1,5 +1,6 @@
 package frc.robot.closedloopcontrollers;
 
+import frc.robot.Robot;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
 
@@ -13,8 +14,12 @@ public class MoveDrivetrainGyroCorrect {
   private double currentDelay = 0;
   private static final double kDelay = 25;
   private static final double kProportion = 0.05;
+  private boolean invertGyroCorrect = false;
 
   public MoveDrivetrainGyroCorrect(NavXGyroSensor theNavX, DriveTrain theDriveTrain) {
+    if (Robot.getConfig().hasPath("subsystems.driveTrain.invertGyroCorrect")){
+      invertGyroCorrect = Robot.getConfig().getBoolean("subsystems.driveTrain.invertGyroCorrect");    
+    }
     navX = theNavX;
     driveTrain = theDriveTrain;
   }
@@ -71,6 +76,9 @@ public class MoveDrivetrainGyroCorrect {
 
     if (gyroCorrect) {
       double correctionEquation = (savedAngle - robotAngle) * kProportion;
+      if(invertGyroCorrect) {
+        correctionEquation = -correctionEquation;
+      }
       newRotateValue = correctionEquation;
     } else {
       newRotateValue = rotation;
