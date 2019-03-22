@@ -90,7 +90,7 @@ public class LineSensor4905 extends LineFollowerSensorBase {
           b = b << 8;
         }
       }
-      readingBuf[sensorNumber] = -b;
+      readingBuf[sensorNumber] = b;
       System.out.print(b + " : ");
     }
     System.out.println("");
