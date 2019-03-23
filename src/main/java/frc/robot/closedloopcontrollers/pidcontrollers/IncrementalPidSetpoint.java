@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 public class IncrementalPidSetpoint {
   private double finalAngleSetpoint;
+  private double previousSetpoint;
 
   public double getFinalAngleSetpoint() {
     return finalAngleSetpoint;
@@ -20,15 +21,24 @@ public class IncrementalPidSetpoint {
   }
 
   public double getSetpoint() {
-    double currentPosition = currentPositionSupplier.getAsDouble();
-    double signOfMovement = Math.signum(finalAngleSetpoint - currentPosition);
-
-    double setpoint = currentPosition + safeSetpointDelta * signOfMovement;
-
-    if (Math.signum(finalAngleSetpoint - setpoint) != signOfMovement) {
-      setpoint = finalAngleSetpoint;
+    if(previousSetpoint == null){
+      previousSetpoint = currentPositionSupplier.getAsDouble();
     }
-    return setpoint;
+    if(previousSetpoint != finalAngleSetpoint){
+      double signOfMovement = Math.signum(finalAngleSetpoint - previousSetpoint);
+
+      double setpoint = previousSetpoint + safeSetpointDelta * signOfMovement;
+
+      if (Math.signum(finalAngleSetpoint - setpoint) != signOfMovement) {
+        setpoint = finalAngleSetpoint;
+      }else if(setpoint == finalAngleSetpoint) {
+        setpoint = finalAngleSetpoint;
+      }
+      previousSetpoint = setpoint;
+      return setpoint;
+    }else{
+      return finalAngleSetpoint;
+    }
   }
 
   public boolean isSetpointFinalSetpoint() {
