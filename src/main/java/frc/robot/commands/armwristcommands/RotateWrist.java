@@ -33,7 +33,7 @@ public class RotateWrist extends Command {
 
   protected void execute() {
     counter++;
-    if(counter > 50) {
+    if (counter > 50) {
       isFinished = true;
     }
   }
