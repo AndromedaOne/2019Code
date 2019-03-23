@@ -20,7 +20,7 @@ public class IncrementalPidSetpoint {
   }
 
   public double getSetpoint() {
-    double currentPosition = currentPositionSupplier.getAsDouble();
+    /*double currentPosition = currentPositionSupplier.getAsDouble();
     double signOfMovement = Math.signum(finalAngleSetpoint - currentPosition);
 
     double setpoint = currentPosition + safeSetpointDelta * signOfMovement;
@@ -28,7 +28,8 @@ public class IncrementalPidSetpoint {
     if (Math.signum(finalAngleSetpoint - setpoint) != signOfMovement) {
       setpoint = finalAngleSetpoint;
     }
-    return setpoint;
+    return setpoint;*/
+    return finalAngleSetpoint;
   }
 
   public boolean isSetpointFinalSetpoint() {
