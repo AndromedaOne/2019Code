@@ -80,7 +80,7 @@ public class LineSensor4905 extends LineFollowerSensorBase {
       averageCounter = 0;
     }
 
-    // This calulates the deconstructed bytes that come from the arduino
+    // This calulates the deconstructed bytes that come from the arduino 
     for (int sensorNumber = 0; sensorNumber < NUM_SENSORS; ++sensorNumber) {
       int b = 0;
       for (int count = 0; count < 2; ++count) {
@@ -90,9 +90,8 @@ public class LineSensor4905 extends LineFollowerSensorBase {
           b = b << 8;
         }
       }
-      readingBuf[sensorNumber] = b;
-      System.out.print(b + " : ");
+      //These should be negative, please don't change it if we work on this again. 
+      readingBuf[sensorNumber] = -b;
     }
-    System.out.println("");
   }
 }

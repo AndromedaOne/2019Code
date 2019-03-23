@@ -23,7 +23,7 @@ public abstract class LineFollowerSensorBase {
   protected double distanceBtSensors;
   protected int detectionThreshold;
   protected int numSensors;
-  protected double threadTime = 0;
+  protected double threadTime = 0.02;
   protected int[] sensorReadingBuffer;
   private boolean sensorsReadLeftToRight = true;
 
@@ -65,7 +65,6 @@ public abstract class LineFollowerSensorBase {
             new TracePair("DistFromCenter", currentDistanceFromCenter),
             new TracePair("LineAngle", findLine().lineAngle));
         Timer.delay(threadTime);
-        System.out.println("Reading sensor.");
       }
     }
 
