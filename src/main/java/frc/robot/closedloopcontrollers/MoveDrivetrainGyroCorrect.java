@@ -17,8 +17,8 @@ public class MoveDrivetrainGyroCorrect {
   private boolean invertGyroCorrect = false;
 
   public MoveDrivetrainGyroCorrect(NavXGyroSensor theNavX, DriveTrain theDriveTrain) {
-    if (Robot.getConfig().hasPath("subsystems.driveTrain.invertGyroCorrect")){
-      invertGyroCorrect = Robot.getConfig().getBoolean("subsystems.driveTrain.invertGyroCorrect");    
+    if (Robot.getConfig().hasPath("subsystems.driveTrain.invertGyroCorrect")) {
+      invertGyroCorrect = Robot.getConfig().getBoolean("subsystems.driveTrain.invertGyroCorrect");
     }
     navX = theNavX;
     driveTrain = theDriveTrain;
@@ -76,7 +76,7 @@ public class MoveDrivetrainGyroCorrect {
 
     if (gyroCorrect) {
       double correctionEquation = (savedAngle - robotAngle) * kProportion;
-      if(invertGyroCorrect) {
+      if (invertGyroCorrect) {
         correctionEquation = -correctionEquation;
       }
       newRotateValue = correctionEquation;
