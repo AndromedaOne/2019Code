@@ -12,6 +12,7 @@ public class IncrementalPidSetpoint {
   private double safeSetpointDelta;
   private DoubleSupplier currentPositionSupplier;
 
+  
   public IncrementalPidSetpoint(double finalAngleSetpoint, double safeSetpointDelta,
       DoubleSupplier currentPositionSupplier) {
     this.finalAngleSetpoint = finalAngleSetpoint;
