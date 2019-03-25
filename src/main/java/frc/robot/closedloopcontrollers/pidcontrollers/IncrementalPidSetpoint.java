@@ -18,27 +18,26 @@ public class IncrementalPidSetpoint {
     this.finalAngleSetpoint = finalAngleSetpoint;
     this.safeSetpointDelta = safeSetpointDelta;
     this.currentPositionSupplier = currentPositionSupplier;
+
+    previousSetpoint = Double.NaN;
   }
 
   public double getSetpoint() {
-    if(previousSetpoint == null){
+    if(Double.isNaN(previousSetpoint)){
       previousSetpoint = currentPositionSupplier.getAsDouble();
     }
-    if(previousSetpoint != finalAngleSetpoint){
-      double signOfMovement = Math.signum(finalAngleSetpoint - previousSetpoint);
+    double signOfMovement = Math.signum(finalAngleSetpoint - previousSetpoint);
 
-      double setpoint = previousSetpoint + safeSetpointDelta * signOfMovement;
+    double setpoint = previousSetpoint + safeSetpointDelta * signOfMovement;
 
-      if (Math.signum(finalAngleSetpoint - setpoint) != signOfMovement) {
-        setpoint = finalAngleSetpoint;
-      }else if(setpoint == finalAngleSetpoint) {
-        setpoint = finalAngleSetpoint;
-      }
-      previousSetpoint = setpoint;
-      return setpoint;
-    }else{
-      return finalAngleSetpoint;
+    if (Math.signum(finalAngleSetpoint - setpoint) != signOfMovement) {
+      setpoint = finalAngleSetpoint;
+    }else {
+      // This means that the calculated setpoint is correct
     }
+    previousSetpoint = setpoint;
+    return setpoint;
+  
   }
 
   public boolean isSetpointFinalSetpoint() {
