@@ -22,8 +22,8 @@ public class WristPIDController extends PIDControllerBase {
   private WristPIDController() {
     super.absoluteTolerance = 3.0 / Robot.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.125e-4; // 5.0e-5;
-    super.i = 0.0; // 2.0e-6;
+    super.p = 5.0e-5; // 5.0e-5;
+    super.i = 1.5e-6; // 2.0e-6;
     super.d = 0.0; // 1.0e-5;
     super.outputRange = 0.6;
     super.subsystemName = "Extendable Arm and Wrist";
@@ -107,14 +107,22 @@ public class WristPIDController extends PIDControllerBase {
       return wristTicks;
     }
 
+    public double pidGetDegrees() {
+      return pidGet() * Robot.WRISTDEGREESPERTICK;
+    }
+
     @Override
     public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-      putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "PidGet", this::pidGet);
+      putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "PidGet", this::pidGetDegrees);
     }
   }
 
   @Override
   public void setSetpoint(double setpoint) {
-    pidMultiton.setSetpoint(setpoint / Robot.WRISTDEGREESPERTICK);
+    double ticksSetpoint = setpoint / Robot.WRISTDEGREESPERTICK;
+    super.currentSetpoint = setpoint; 
+
+    System.out.println("Here is the Wrist setpoint: " + setpoint);
+    pidMultiton.setSetpoint(ticksSetpoint);
   }
 }

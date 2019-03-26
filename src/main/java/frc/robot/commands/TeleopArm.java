@@ -19,21 +19,23 @@ public class TeleopArm extends Command {
   ExtendableArmAndWrist extendableArmAndWrist = Robot.extendableArmAndWrist;
   final double sinPi4 = Math.sin(Math.PI / 4);
   final double cosPi4 = Math.cos(Math.PI / 4);
-  private final double WRISTSTICKVALUETODEGREES = 1;
-  private final double SHOULDERSTICKVALUETODEGREES = 1;
-  private final double EXTENSIONSTICKVALUETOINCHES = 1;
+  private final double WRISTSTICKVALUETODEGREES = 8;
+  private final double SHOULDERSTICKVALUETODEGREES = 15
+  ;
+  private final double EXTENSIONSTICKVALUETOINCHES = 6;
 
   public TeleopArm() {
     requires(Robot.extendableArmAndWrist);
     System.out.println("Initializing teleop arm control");
   }
 
+
   @Override
   protected void execute() {
     double extensionValue = EnumeratedRawAxis.LEFTSTICKHORIZONTAL.getRawAxis(armController);
     double wristRotateValue = EnumeratedRawAxis.RIGHTSTICKVERTICAL.getRawAxis(armController);
 
-    wristRotateValue = -wristRotateValue * 0.5;
+    wristRotateValue = -wristRotateValue;
     extensionValue = -extensionValue;
     double shoulderRotateValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(armController);
     if (Math.abs(shoulderRotateValue) < 0.01) {
@@ -44,15 +46,24 @@ public class TeleopArm extends Command {
     }
     ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
 
-    double wristSetpoint = currentArmPosition.getWristAngle() + wristRotateValue * WRISTSTICKVALUETODEGREES;
+    if(Math.abs(wristRotateValue) >= 0.2){
+      
+      double wristSetpoint = currentArmPosition.getWristAngle() + wristRotateValue * WRISTSTICKVALUETODEGREES;
+      System.out.println("wristSetpoint: " + wristSetpoint);
+      WristPIDController.getInstance().setSetpoint(wristSetpoint);
+    }
 
-    double shoulderSetpoint = currentArmPosition.getShoulderAngle() + shoulderRotateValue * SHOULDERSTICKVALUETODEGREES;
+    if(Math.abs(shoulderRotateValue) >= 0.2){
+      double shoulderSetpoint = currentArmPosition.getShoulderAngle() + shoulderRotateValue * SHOULDERSTICKVALUETODEGREES;
+      System.out.println("shoulderSetpoint: " + shoulderSetpoint);
+      ShoulderPIDController.getInstance().setSetpoint(shoulderSetpoint);
+    }
 
-    double extensionSetpoint = currentArmPosition.getArmRetraction() + extensionValue * EXTENSIONSTICKVALUETOINCHES;
-
-    ExtendableArmPIDController.getInstance().setSetpoint(extensionSetpoint);
-    WristPIDController.getInstance().setSetpoint(wristSetpoint);
-    ShoulderPIDController.getInstance().setSetpoint(shoulderSetpoint);
+    if(Math.abs(extensionValue) >= 0.2){
+      double extensionSetpoint = currentArmPosition.getArmRetraction() + extensionValue * EXTENSIONSTICKVALUETOINCHES;
+      System.out.println("extensionSetpoint: " + extensionSetpoint);
+      ExtendableArmPIDController.getInstance().setSetpoint(extensionSetpoint);
+    }
   }
 
   @Override

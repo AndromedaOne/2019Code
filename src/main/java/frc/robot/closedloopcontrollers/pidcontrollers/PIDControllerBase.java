@@ -13,6 +13,7 @@ public class PIDControllerBase implements Sendable {
   protected double d = 0;
   protected String subsystemName;
   protected String pidName;
+  protected double currentSetpoint = 0;
 
   /**
    * Sets the setpoint for pidController
@@ -22,6 +23,12 @@ public class PIDControllerBase implements Sendable {
   public void setSetpoint(double setpoint) {
     pidMultiton.setSetpoint(setpoint);
   }
+
+  public 
+  double getCurrentSetpoint() {
+    return currentSetpoint;
+  }
+
 
   public void setRelativeSetpoint(double delta) {
     pidMultiton.setRelativeSetpoint(delta);
@@ -79,22 +86,22 @@ public class PIDControllerBase implements Sendable {
 
   @Override
   public String getName() {
-    return null;
+    return pidName;
   }
 
   @Override
   public void setName(String name) {
-
+    pidName = name;
   }
 
   @Override
   public String getSubsystem() {
-    return null;
+    return subsystemName;
   }
 
   @Override
   public void setSubsystem(String subsystem) {
-
+    subsystemName = subsystem;
   }
 
   @Override
@@ -105,7 +112,7 @@ public class PIDControllerBase implements Sendable {
     builder.addDoubleProperty("i", this.pidMultiton.pidController::getI, this.pidMultiton.pidController::setI);
     builder.addDoubleProperty("d", this.pidMultiton.pidController::getD, this.pidMultiton.pidController::setD);
     builder.addDoubleProperty("f", this.pidMultiton.pidController::getF, this.pidMultiton.pidController::setF);
-    builder.addDoubleProperty("setpoint", this.pidMultiton.pidController::getSetpoint, this::setSetpoint);
+    builder.addDoubleProperty("setpoint", this::getCurrentSetpoint, this::setSetpoint);
     builder.addBooleanProperty("enabled", this.pidMultiton.pidController::isEnabled,
         this.pidMultiton.pidController::setEnabled);
   }
