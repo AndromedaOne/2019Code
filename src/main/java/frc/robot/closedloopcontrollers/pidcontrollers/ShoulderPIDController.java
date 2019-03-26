@@ -19,7 +19,7 @@ public class ShoulderPIDController extends PIDControllerBase {
   private ShoulderPIDController() {
     super.absoluteTolerance = 1.5 / Robot.SHOULDERDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.0 * Math.pow(10, -4);
+    super.p = 0.9 * Math.pow(10, -4);
     super.i = 0;
     super.d = 0;
     super.subsystemName = "Extendable Arm and Wrist";

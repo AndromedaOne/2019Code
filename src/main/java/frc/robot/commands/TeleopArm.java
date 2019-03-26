@@ -19,8 +19,8 @@ public class TeleopArm extends Command {
   ExtendableArmAndWrist extendableArmAndWrist = Robot.extendableArmAndWrist;
   final double sinPi4 = Math.sin(Math.PI / 4);
   final double cosPi4 = Math.cos(Math.PI / 4);
-  private final double WRISTSTICKVALUETODEGREES = 8;
-  private final double SHOULDERSTICKVALUETODEGREES = 15
+  private final double WRISTSTICKVALUETODEGREES = 10;
+  private final double SHOULDERSTICKVALUETODEGREES = 22;
   ;
   private final double EXTENSIONSTICKVALUETOINCHES = 6;
 
