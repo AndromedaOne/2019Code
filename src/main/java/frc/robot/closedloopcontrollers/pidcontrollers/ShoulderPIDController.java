@@ -7,8 +7,6 @@ import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
 public class ShoulderPIDController extends PIDControllerBase {
 
@@ -18,7 +16,7 @@ public class ShoulderPIDController extends PIDControllerBase {
   private MagEncoderSensor shoulderEncoder;
 
   private ShoulderPIDController() {
-    super.absoluteTolerance = 0.5 / Robot.SHOULDERDEGREESPERTICK;
+    super.absoluteTolerance = 1.5 / Robot.SHOULDERDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
     super.p = 1.0 * Math.pow(10, -4);
     super.i = 0;
@@ -26,7 +24,6 @@ public class ShoulderPIDController extends PIDControllerBase {
     super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "ShoulderPID";
 
-    super.trace = Trace.getInstance();
     shoulderPIDOut = new ShoulderPIDOut();
     shoulderEncoder = Robot.shoulderEncoder;
     shoulderPIDSrc = new ShoulderPIDSource();
@@ -45,11 +42,14 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      trace.addTrace(true, "ShoulderPID", new TracePair("Output", output * 10000),
-          new TracePair("SetpointTicks", container.getSetpoint()),
-          new TracePair("SetpointDegrees", container.getSetpoint() * Robot.SHOULDERDEGREESPERTICK),
-          new TracePair("AngleTicks", shoulderPIDSrc.pidGet()),
-          new TracePair("AngleDegrees", shoulderPIDSrc.pidGet() * Robot.SHOULDERDEGREESPERTICK));
+      /*
+       * Trace.getInstance().addTrace(true, "ShoulderPID", new TracePair("Output",
+       * output * 10000), new TracePair("SetpointTicks", pidMultiton.getSetpoint()),
+       * new TracePair("SetpointDegrees", pidMultiton.getSetpoint() *
+       * Robot.SHOULDERDEGREESPERTICK), new TracePair("AngleTicks",
+       * shoulderPIDSrc.pidGet()), new TracePair("AngleDegrees",
+       * shoulderPIDSrc.pidGet() * Robot.SHOULDERDEGREESPERTICK));
+       */
       // try {
       MoveArmAndWristSafely.setPidShoulderPower(output);
       // } catch (ArmOutOfBoundsException e) {
@@ -60,7 +60,7 @@ public class ShoulderPIDController extends PIDControllerBase {
   }
 
   public static ShoulderPIDController getInstance() {
-    System.out.println(" --- Asking for Instance --- ");
+    System.out.println(" --- Asking for Shoulder PID Instance --- ");
     if (instance == null) {
       System.out.println("Creating new Shoulder PID Controller");
       instance = new ShoulderPIDController();

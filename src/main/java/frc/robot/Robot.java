@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
-import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainUltrasonicPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainRearUltrasonicPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
@@ -48,7 +48,8 @@ import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
-import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensor;
+import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensorPair;
+import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.claw.MockClaw;
@@ -62,6 +63,9 @@ import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.MockLEDs;
+import frc.robot.subsystems.leds.RealLEDs;
 import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
@@ -89,11 +93,11 @@ public class Robot extends TimedRobot {
   public static ExtendableArmAndWrist extendableArmAndWrist;
   public static Joystick armController;
   public static DrivetrainEncoderPIDController encoderPID;
-  public static DrivetrainUltrasonicPIDController ultrasonicPID;
+  public static DrivetrainRearUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
-  public static UltrasonicSensor climbUltrasonicSensor;
+  public static UltrasonicSensor drivetrainRearUltrasonic;
   public static LineFollowerSensorBase lineFollowerSensorArray;
   public static Claw claw;
 
@@ -101,7 +105,7 @@ public class Robot extends TimedRobot {
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
-
+  public static LEDs leds;
   public static InfraredDistanceSensor clawInfraredSensor;
   public static LineFollowerSensorBase frontLineSensor4905;
   public static MagEncoderSensor topArmExtensionEncoder;
@@ -209,7 +213,7 @@ public class Robot extends TimedRobot {
       defaultShoulderPresetRange = getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.shoulder");
       defaultRetractionPresetRange = Robot.getConfig()
           .getDouble("subsystems.armAndWrist.defaultArmPresetRanges.retraction");
-      defaultWristPresetRange = Robot.getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.retraction");
+      defaultWristPresetRange = Robot.getConfig().getDouble("subsystems.armAndWrist.defaultArmPresetRanges.wrist");
     } else {
       topArmExtensionEncoder = new MockMagEncoderSensor();
 
@@ -218,6 +222,13 @@ public class Robot extends TimedRobot {
       shoulderEncoder = new MockMagEncoderSensor();
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
+    }
+    if (conf.hasPath("subsystems.led")) {
+      System.out.println("Using Real LEDs");
+      leds = new RealLEDs();
+    } else {
+      System.out.println("Using Fake LEDs");
+      leds = new MockLEDs();
     }
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
@@ -229,11 +240,26 @@ public class Robot extends TimedRobot {
       drivetrainLeftRearEncoder = new MockMagEncoderSensor();
     }
     if (conf.hasPath("sensors.drivetrainFrontUltrasonic")) {
-      int ping = conf.getInt("sensors.drivetrainFrontUltrasonic.ping");
-      int echo = conf.getInt("sensors.drivetrainFrontUltrasonic.echo");
-      drivetrainFrontUltrasonic = new RealUltrasonicSensor(ping, echo);
+      System.out.println("Using Real Front Ultrasonics");
+      int leftPing = conf.getInt("sensors.drivetrainFrontUltrasonic.leftPing");
+      int leftEcho = conf.getInt("sensors.drivetrainFrontUltrasonic.leftEcho");
+      int rightPing = conf.getInt("sensors.drivetrainFrontUltrasonic.rightPing");
+      int rightEcho = conf.getInt("sensors.drivetrainFrontUltrasonic.rightEcho");
+      drivetrainFrontUltrasonic = new RealUltrasonicSensorPair(leftPing, leftEcho, rightPing, rightEcho);
     } else {
-      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
+      System.out.println("Using Mock Front Ultrasonics");
+      drivetrainFrontUltrasonic = new MockUltrasonicSensorPair();
+    }
+    if (conf.hasPath("sensors.drivetrainRearUltrasonic")) {
+      System.out.println("Using Real Rear Ultrasonics");
+      int leftPing = conf.getInt("sensors.drivetrainRearUltrasonic.leftPing");
+      int leftEcho = conf.getInt("sensors.drivetrainRearUltrasonic.leftEcho");
+      int rightPing = conf.getInt("sensors.drivetrainRearUltrasonic.rightPing");
+      int rightEcho = conf.getInt("sensors.drivetrainRearUltrasonic.rightEcho");
+      drivetrainRearUltrasonic = new RealUltrasonicSensorPair(leftPing, leftEcho, rightPing, rightEcho);
+    } else {
+      System.out.println("Using Mock Rear Ultrasonics");
+      drivetrainRearUltrasonic = new MockUltrasonicSensorPair();
     }
     compressor = new Compressor();
     if (conf.hasPath("sensors.intakeStowedSwitch")) {
@@ -315,7 +341,7 @@ public class Robot extends TimedRobot {
     gyroCorrectMove = new MoveDrivetrainGyroCorrect(NavXGyroSensor.getInstance(), driveTrain);
 
     encoderPID = DrivetrainEncoderPIDController.getInstance();
-    ultrasonicPID = DrivetrainUltrasonicPIDController.getInstance();
+    ultrasonicPID = DrivetrainRearUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
 
     I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
@@ -353,7 +379,7 @@ public class Robot extends TimedRobot {
        */
       pneumaticStilts = new RealPneumaticStilts();
     } else {
-      climbUltrasonicSensor = new MockUltrasonicSensor();
+      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
       pneumaticStilts = new MockPneumaticStilts();
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
@@ -388,6 +414,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // This is for constant tracing
     NavXGyroSensor.getInstance().getZAngle();
+    NavXGyroSensor.getInstance().getXAngle();
   }
 
   /**
@@ -401,6 +428,7 @@ public class Robot extends TimedRobot {
     if (robotInitDone) {
       PIDMultiton.resetDisableAll();
     }
+    leds.setPurple(1.0);
     Trace.getInstance().flushTraceFiles();
   }
 
@@ -469,6 +497,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     driveTrain.shiftToLowGear();
+    // This is to set the LEDs to the correct color for what mode we are in
+    leds.setWhite(1.0);
     gyroCorrectMove.setCurrentAngle();
   }
 

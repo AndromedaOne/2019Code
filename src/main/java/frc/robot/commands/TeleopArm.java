@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.subsystems.extendablearmandwrist.ExtendableArmAndWrist;
+import frc.robot.telemetries.Trace;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.EnumeratedRawAxis;
 
@@ -17,6 +18,7 @@ public class TeleopArm extends Command {
 
   public TeleopArm() {
     requires(Robot.extendableArmAndWrist);
+    System.out.println("Initializing teleop arm control");
   }
 
   @Override
@@ -30,7 +32,7 @@ public class TeleopArm extends Command {
     if (Math.abs(shoulderRotateValue) < 0.01) {
       shoulderRotateValue = 0.0;
     }
-    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, Robot.operatorController)) {
+    if (ButtonsEnumerated.isPressed(ButtonsEnumerated.STARTBUTTON, Robot.operatorController)) {
       extensionValue = 0.25;
     }
 
@@ -38,6 +40,11 @@ public class TeleopArm extends Command {
     MoveArmAndWristSafely.setTeleopShoulderPower(shoulderRotateValue);
     MoveArmAndWristSafely.setTeleopWristPower(wristRotateValue);
 
+  }
+
+  @Override
+  protected void initialize() {
+    Trace.getInstance().logCommandStart("TeleopArm");
   }
 
   @Override
@@ -52,6 +59,7 @@ public class TeleopArm extends Command {
 
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("TeleopArm");
     // try {
     MoveArmAndWristSafely.stop();
     // } catch (ArmOutOfBoundsException e) {

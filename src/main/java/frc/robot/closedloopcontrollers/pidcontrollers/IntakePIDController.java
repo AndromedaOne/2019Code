@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveIntakeSafely;
 import frc.robot.sensors.anglesensor.AngleSensor;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
 public class IntakePIDController extends PIDControllerBase {
 
@@ -24,7 +22,6 @@ public class IntakePIDController extends PIDControllerBase {
     super.pidName = "IntakePID";
 
     intakeAngleSensor = Robot.intakeAngleSensor;
-    super.trace = Trace.getInstance();
     intakeAngleSensor.putSensorOnLiveWindow(super.subsystemName, "Intake");
     intakePIDOut = new IntakePIDOut();
     super.setPIDConfiguration(super.pidConfiguration);
@@ -42,14 +39,12 @@ public class IntakePIDController extends PIDControllerBase {
     @Override
     public void pidWrite(double output) {
       output = -output;
-      trace.addTrace(true, "IntakePID", new TracePair("Output", output),
-          new TracePair("Setpoint", container.getSetpoint()), new TracePair("Angle", intakeAngleSensor.pidGet()));
       MoveIntakeSafely.moveIntake(output);
     }
   }
 
   public static IntakePIDController getInstance() {
-    System.out.println(" --- Asking for Instance ---  IntakePID");
+    System.out.println(" --- Asking for Intake PID Instance ---");
     if (instance == null) {
       System.out.println("Creating new Intake PID Controller");
       instance = new IntakePIDController();

@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.CallLineFollowerController;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.MoveUsingFrontLineFollower;
 import frc.robot.commands.RollIntakeGroupCommandScheduler;
 import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
@@ -112,10 +112,10 @@ public class OI {
     extendAllLegs.whenPressed(new RaiseAll());
 
     extendFrontLegs = new JoystickButton(driveController, ButtonsEnumerated.STARTBUTTON.getValue());
-    extendFrontLegs.whenPressed(new RaiseFrontLegs());
+    extendFrontLegs.whenPressed(new RaiseFrontLegsForL2());
 
     extendRearLegs = new JoystickButton(driveController, ButtonsEnumerated.BACKBUTTON.getValue());
-    extendRearLegs.whenPressed(new RaiseBackLegs());
+    extendRearLegs.whenPressed(new RaiseBackLegsForL2());
 
     retractFrontLegs = new POVButton(driveController, POVDirectionNames.EAST.getValue());
     retractFrontLegs.whenPressed(new RetractFrontLegs());
@@ -128,7 +128,7 @@ public class OI {
     driveController = new Joystick(0);
     operatorController = new Joystick(1);
 
-    SmartDashboard.putData("CallLineFollowerController", new CallLineFollowerController());
+    SmartDashboard.putData("CallFrontLineFollowerController", new MoveUsingFrontLineFollower());
     // Claw buttons are temp until I figure out the D-Pad
 
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
@@ -154,6 +154,9 @@ public class OI {
 
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
+    SmartDashboard.putData("RaiseFrontL2", new RaiseFrontLegsForL2());
+    SmartDashboard.putData("RaiseBackL2", new RaiseBackLegsForL2());
+
     ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
 
     ButtonsEnumerated.BBUTTON.getJoystickButton(operatorController).whenPressed(new CargoShipAndLoadingCommand());
@@ -162,7 +165,8 @@ public class OI {
 
     ButtonsEnumerated.XBUTTON.getJoystickButton(operatorController).whenPressed(new HighGamePieceArmCommand());
 
-    rollIntakeButton.getJoystickButton(operatorController).whenPressed(new RollIntakeGroupCommandScheduler());
+    ButtonsEnumerated.RIGHTSTICKBUTTON.getJoystickButton(operatorController)
+        .whenPressed(new RollIntakeGroupCommandScheduler());
     overRideSafetiesButton.getJoystickButton(operatorController).whenPressed(new ResetArmPIDSetpoints());
 
   }

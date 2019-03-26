@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.telemetries.Trace;
 
 public class DriveTrainPIDTest extends Command {
   private int counter;
@@ -28,6 +29,7 @@ public class DriveTrainPIDTest extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Trace.getInstance().logCommandStart("DriveTrainPIDTest");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -58,6 +60,7 @@ public class DriveTrainPIDTest extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Trace.getInstance().logCommandStop("DriveTrainPIDTest");
     Robot.driveTrain.move(0, 0, false);
   }
 

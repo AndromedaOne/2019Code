@@ -4,18 +4,20 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.NavXGyroSensor;
+import frc.robot.telemetries.Trace;
 
 public class TurnToCompassHeading extends Command {
-
   private double heading = 0;
-  private static GyroPIDController gyroPID = GyroPIDController.getInstance();
+  private GyroPIDController gyroPID = GyroPIDController.getInstance();
 
   public TurnToCompassHeading(double theHeading) {
-    requires(Robot.driveTrain);
     heading = theHeading;
+    requires(Robot.driveTrain);
+    System.out.println("Moving to heading " + theHeading + " using the NavX");
   }
 
   protected void initialize() {
+    Trace.getInstance().logCommandStart("TurnToCompassHeading");
     double deltaAngle = heading - NavXGyroSensor.getInstance().getCompassHeading();
     System.out.println("Raw Delta Angle: " + deltaAngle);
     // This corrects turn that are over 180
@@ -45,16 +47,13 @@ public class TurnToCompassHeading extends Command {
     gyroPID.enable();
   }
 
-  protected void end() {
-    System.out.println("Turn to Compass Heading Finished");
-    System.out.println("Ending Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
-    System.out.println("Ending Z Angle: " + NavXGyroSensor.getInstance().getZAngle());
-    gyroPID.reset();
-  }
-
   @Override
   protected boolean isFinished() {
-    return gyroPID.onTarget();
+    return false;
+  }
+
+  protected void end() {
+    Trace.getInstance().logCommandStop("TurnToCompassHeading");
   }
 
 }

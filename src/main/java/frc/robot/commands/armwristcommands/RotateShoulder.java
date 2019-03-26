@@ -3,6 +3,7 @@ package frc.robot.commands.armwristcommands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
+import frc.robot.telemetries.Trace;
 
 public class RotateShoulder extends Command {
 
@@ -19,10 +20,12 @@ public class RotateShoulder extends Command {
     requires(Robot.extendableArmAndWrist);
     encDegrees = angle;
     sPidController = ShoulderPIDController.getInstance();
+    System.out.println("Rotating shoulder to " + angle);
   }
 
   @Override
   protected void initialize() {
+    Trace.getInstance().logCommandStart("RotateShoulder");
     System.out.println("Running the Shoulder to: " + encDegrees);
     overrideAndFinishCommand = false;
     sPidController.setSetpoint(encDegrees);
@@ -38,11 +41,13 @@ public class RotateShoulder extends Command {
   }
 
   protected void end() {
-    sPidController.disable();
+    Trace.getInstance().logCommandStop("RotateShoulder");
+
   }
 
   @Override
   protected boolean isFinished() {
+
     return overrideAndFinishCommand || sPidController.onTarget();
   }
 

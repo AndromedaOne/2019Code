@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveIntakeSafely;
 import frc.robot.subsystems.intake.IntakeArmPositionsEnum;
+import frc.robot.telemetries.Trace;
 
 public class StowIntakeArm extends Command {
 
@@ -18,10 +19,12 @@ public class StowIntakeArm extends Command {
    */
   public StowIntakeArm() {
     requires(Robot.intake);
+    System.out.println("Stowing Intake");
   }
 
   @Override
   protected void initialize() {
+    Trace.getInstance().logCommandStart("StowIntakeArm");
     System.out.println("Stow intake command");
   }
 
@@ -40,6 +43,7 @@ public class StowIntakeArm extends Command {
   protected void end() {
     Robot.intake.setCurrentIntakeArmPosition(IntakeArmPositionsEnum.STOWED);
     Robot.intake.moveIntakeArm(0);
+    Trace.getInstance().logCommandStop("StowIntakeArm");
   }
 
   @Override
