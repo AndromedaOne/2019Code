@@ -118,17 +118,25 @@ public class TeleOpDrive extends Command {
       slowModeButtonPressed = false;
     }
 
+    if(Robot.frontLineSensor4905.findLine().lineFound) {
+      if(Robot.frontLineSensor4905.findLine().lineAngle > 0) {
+        //blink left side
+      } else {
+        //blink right side
+      }
+    }
+
   }
 
   private void switchingLEDMode() {
     if (slowMoEnabled && shifterHigh) {
-      Robot.leds.setBlue(1.0);
+      Robot.rightLeds.setBlue(1.0);
     } else if (slowMoEnabled && !shifterHigh) {
-      Robot.leds.setRed(1.0);
+      Robot.rightLeds.setRed(1.0);
     } else if (!slowMoEnabled && shifterHigh) {
-      Robot.leds.setGreen(1.0);
+      Robot.rightLeds.setGreen(1.0);
     } else {
-      Robot.leds.setWhite(1.0);
+      Robot.rightLeds.setWhite(1.0);
     }
   }
 
