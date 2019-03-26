@@ -32,17 +32,19 @@ public class LineFollowerController {
   public void run() {
     double frontUltrasonicRange = Robot.drivetrainFrontUltrasonic.getDistanceInches();
     values = sensor.findLine();
+    double rotate = 0;
     SmartDashboard.putBoolean("IsLineFound", values.lineFound);
     SmartDashboard.putNumber("Angle", values.lineAngle);
     if (values.lineFound && frontUltrasonicRange > kDistanceFromWall) {
       lineNotFoundCounter = 0;
       if (values.lineAngle <= -kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);
+        rotate = kRotateScaleFactor * values.lineAngle;
       } else if (values.lineAngle >= kMinimumLineAngle) {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, kRotateScaleFactor * values.lineAngle, true, false);
+        rotate = kRotateScaleFactor * values.lineAngle;
       } else {
-        gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, true, false);
+        rotate = 0;
       }
+      gyroCorrectMove.moveUsingGyro(kForwardSpeed, rotate, true, false);
     } else {
       lineNotFoundCounter++;
       if (lineNotFoundCounter >= 10) {
@@ -51,10 +53,12 @@ public class LineFollowerController {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, true, false);
       }
     }
-    Trace.getInstance().addTrace(true, "LineFollowerController", new TracePair<>("UltrasonicRange", frontUltrasonicRange), 
-    new TracePair<>("IsLineFound", values.lineFound), new TracePair<>("LineAngle", values.lineAngle),
-    new TracePair<>("LineNotFoundCounter", lineNotFoundCounter));
-    System.out.println("Front Ultrasonic: " + frontUltrasonicRange + ", Line Angle: " + values.lineAngle + ", Line not found Counter: " + lineNotFoundCounter);
+    Trace.getInstance().addTrace(true, "LineFollowerController",
+        new TracePair<>("UltrasonicRange", frontUltrasonicRange), new TracePair<>("IsLineFound", values.lineFound),
+        new TracePair<>("LineAngle", values.lineAngle), new TracePair<>("LineNotFoundCounter", lineNotFoundCounter),
+        new TracePair<>("Rotate", rotate));
+    System.out.println("Front Ultrasonic: " + frontUltrasonicRange + ", Line Angle: " + values.lineAngle
+        + ", Line not found Counter: " + lineNotFoundCounter);
   }
 
   public void reset() {
