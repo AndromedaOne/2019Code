@@ -118,11 +118,13 @@ public class TeleOpDrive extends Command {
       slowModeButtonPressed = false;
     }
 
+    // This code will blink the lights on the side of the robot that the line is on
     if(Robot.frontLineSensor4905.findLine().lineFound) {
       if(Robot.frontLineSensor4905.findLine().lineAngle > 0) {
-        //blink left side
+        // Blink left side
+        
       } else {
-        //blink right side
+        // Blink right side
       }
     }
 
@@ -131,12 +133,16 @@ public class TeleOpDrive extends Command {
   private void switchingLEDMode() {
     if (slowMoEnabled && shifterHigh) {
       Robot.rightLeds.setBlue(1.0);
+      Robot.leftLeds.setBlue(1.0);
     } else if (slowMoEnabled && !shifterHigh) {
       Robot.rightLeds.setRed(1.0);
+      Robot.leftLeds.setRed(1.0);
     } else if (!slowMoEnabled && shifterHigh) {
       Robot.rightLeds.setGreen(1.0);
+      Robot.leftLeds.setGreen(1.0);
     } else {
       Robot.rightLeds.setWhite(1.0);
+      Robot.leftLeds.setWhite(1.0);
     }
   }
 

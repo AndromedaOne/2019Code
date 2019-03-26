@@ -23,6 +23,13 @@ public abstract class LEDs extends Subsystem {
     }
     return brightness;
   }
+  /**
+   * This method takes in a time in milliseconds
+   * You cannot go below 20ms
+   */
+  public void blinkLEDs() {
+
+  }
 
   /**
    * This method takes a brightness value from 0 - 1 for each color
