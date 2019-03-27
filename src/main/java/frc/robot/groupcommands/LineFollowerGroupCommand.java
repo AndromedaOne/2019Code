@@ -11,7 +11,8 @@ import frc.robot.commands.TurnToDeltaAngle;
 public class LineFollowerGroupCommand extends CommandGroup {
 
   public LineFollowerGroupCommand(double deltaAngle) {
-    addSequential(new TurnToDeltaAngle(deltaAngle));
+    double deltaAngleDegrees = deltaAngle * (180 / Math.PI);
+    addSequential(new TurnToDeltaAngle(deltaAngleDegrees));
     addSequential(new MoveUsingFrontLineFollower());
 
   }

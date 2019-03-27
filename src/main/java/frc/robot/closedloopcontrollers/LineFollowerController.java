@@ -12,11 +12,11 @@ public class LineFollowerController {
   private LineFollowerSensorBase sensor;
   private LineFollowArraySensorReading values;
   private final double kMinimumLineAngle = Math.toRadians(2); // appx. 0.035 Radians.
-  private final double kForwardSpeed = .15;
-  private final double kRotateScaleFactor = .5; // all constants are currently placeholders
+  private final double kForwardSpeed = .25;
+  private final double kRotateScaleFactor = 5.5; // 6
   private final double kDistanceFromWall = 3; // Inches
   private int lineNotFoundCounter = 0;
-  private double minDistanceToWall = 3;
+  private double minDistanceToWall = 4;
 
   public LineFollowerController(MoveDrivetrainGyroCorrect theGyroCorrectMove,
       LineFollowerSensorBase lineFollowerSensorArray) {
@@ -30,7 +30,7 @@ public class LineFollowerController {
   }
 
   public void run() {
-    double frontUltrasonicRange = Robot.drivetrainFrontUltrasonic.getDistanceInches();
+    double frontUltrasonicRange = Robot.drivetrainFrontUltrasonic.getMinDistanceInches();
     values = sensor.findLine();
     double rotate = 0;
     SmartDashboard.putBoolean("IsLineFound", values.lineFound);
@@ -75,7 +75,7 @@ public class LineFollowerController {
   }
 
   public boolean isDone() {
-    if ((lineNotFoundCounter >= 10) || (minDistanceToWall >= Robot.drivetrainFrontUltrasonic.getDistanceInches())) {
+    if ((lineNotFoundCounter >= 10) || (minDistanceToWall >= Robot.drivetrainFrontUltrasonic.getMinDistanceInches())) {
       return true;
     } else {
       return false;

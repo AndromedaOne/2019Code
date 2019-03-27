@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
+import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.telemetries.Trace;
 
 public class TurnToDeltaAngle extends Command {
@@ -16,8 +17,9 @@ public class TurnToDeltaAngle extends Command {
 
   @Override
   protected void initialize() {
+    double setPoint = NavXGyroSensor.getInstance().getZAngle() + deltaAngle;
     Trace.getInstance().logCommandStart("TurnToDeltaAngle");
-    gyroPID.setSetpoint(deltaAngle);
+    gyroPID.setSetpoint(setPoint);
     gyroPID.enable();
   }
 

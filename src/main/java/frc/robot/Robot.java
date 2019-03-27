@@ -81,7 +81,6 @@ public class Robot extends TimedRobot {
   private static Robot instance;
 
   public static PneumaticStilts pneumaticStilts;
-  public static NavXGyroSensor gyro;
   private boolean robotInitDone = false;
   public static Compressor compressor;
   public static Joystick driveController;
@@ -447,7 +446,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
-    gyro = NavXGyroSensor.getInstance();
     MoveArmAndWristSafely.stop();
     driveTrain.shiftToLowGear();
     pneumaticStilts.retractFrontLegs();
