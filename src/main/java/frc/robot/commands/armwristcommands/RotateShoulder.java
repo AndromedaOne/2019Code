@@ -12,6 +12,9 @@ public class RotateShoulder extends Command {
 
   private static boolean overrideAndFinishCommand = false;
 
+  private double counter = 0;
+  private boolean isFinished = false;
+
   public static void setOverrideAndFinishCommand(boolean overrideAndFinishCommandParam) {
     overrideAndFinishCommand = overrideAndFinishCommandParam;
   }
@@ -25,14 +28,24 @@ public class RotateShoulder extends Command {
 
   @Override
   protected void initialize() {
+
+    isFinished = false;
     Trace.getInstance().logCommandStart("RotateShoulder");
     System.out.println("Running the Shoulder to: " + encDegrees);
     overrideAndFinishCommand = false;
     sPidController.setSetpoint(encDegrees);
     sPidController.enable();
+
+    counter = 0;
   }
 
   protected void execute() {
+
+    counter++;
+
+    if(counter >= 50) {
+      isFinished = true;
+    }
 
   }
 
@@ -48,7 +61,7 @@ public class RotateShoulder extends Command {
   @Override
   protected boolean isFinished() {
 
-    return overrideAndFinishCommand || sPidController.onTarget();
+    return overrideAndFinishCommand || sPidController.onTarget() || isFinished;
   }
 
 }

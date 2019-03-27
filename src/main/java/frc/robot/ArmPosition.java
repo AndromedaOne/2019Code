@@ -5,6 +5,8 @@ public class ArmPosition {
   private double armRetraction = 0;
   private double wristAngle = 0;
 
+  
+
   public ArmPosition(double shoulderAngle, double armRetraction, double wristAngle) {
     this.shoulderAngle = shoulderAngle;
     this.armRetraction = armRetraction;
