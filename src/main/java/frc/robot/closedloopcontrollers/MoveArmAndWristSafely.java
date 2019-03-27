@@ -36,7 +36,7 @@ public class MoveArmAndWristSafely {
   private static boolean extensionPIDSetpointSet = false;
   //@formatter:off
   private static final double deltaTime = 0.02;
-  private static final double BUTTCAPLENGTH = 2;
+  private static final double OFFSET_TO_BUTT = 10;
   private static final double SHOULDEROFFSETFROMCENTER = 0.75;
   private static final double SHOULDER_HEIGHT = 40;
   private static final double ELECTRONICSDANGERZONEHEIGHT = 14;
@@ -45,7 +45,8 @@ public class MoveArmAndWristSafely {
   private static final double RULEEXTENSIONBOX = 30;
   private static final double ROBOTLENGTH = 29.5;
   private static final double THIRTY_INCH_RULE = ROBOTLENGTH / 2 + RULEEXTENSIONBOX;
-  private static final double MAXARMLENGTH = 35.75;
+  private static final double MAXARMLENGTH = 36.5;
+  private static final double OFFSET_TO_TIP = 2;
   private static final double CLAWLENGTH = 20.5;
   private static final double HATCHWIDTH = 24;
   private static final double HATCH_PANEL_TIP_ANGLE_OFFSET = Math.atan((HATCHWIDTH / 2) / CLAWLENGTH);
@@ -518,8 +519,8 @@ public class MoveArmAndWristSafely {
       double wristPower, double shoulderPower, SafeArmMovements safeArmMovements) {
     double shoulderRotationRadians = Math.toRadians(shoulderRotDeg);
     Point buttPosition = new Point("buttPosition");
-    buttPosition.x = -(extensionIn + BUTTCAPLENGTH) * Math.sin(shoulderRotationRadians) - SHOULDEROFFSETFROMCENTER;
-    buttPosition.y = SHOULDER_HEIGHT + ((extensionIn + BUTTCAPLENGTH) * Math.cos(shoulderRotationRadians));
+    buttPosition.x = -(extensionIn + OFFSET_TO_BUTT) * Math.sin(shoulderRotationRadians) - SHOULDEROFFSETFROMCENTER;
+    buttPosition.y = SHOULDER_HEIGHT + ((extensionIn + OFFSET_TO_BUTT) * Math.cos(shoulderRotationRadians));
     buttPosition.putOnSmartDashboard();
 
     if (buttPosition.isAbove(ELECTRONICSDANGERZONEHEIGHT)) {
@@ -551,8 +552,12 @@ public class MoveArmAndWristSafely {
     wristJointPos.x = extensionOut * Math.sin(shoulderRotRadians) - SHOULDEROFFSETFROMCENTER;
     wristJointPos.y = SHOULDER_HEIGHT - (extensionOut * Math.cos(shoulderRotRadians));
     wristJointPos.putOnSmartDashboard();
+    Point armTipPos = new Point("armTipPos");
+    armTipPos.x = (extensionOut + OFFSET_TO_TIP) * Math.sin(shoulderRotRadians) - SHOULDEROFFSETFROMCENTER;
+    armTipPos.y = SHOULDER_HEIGHT - ((extensionOut + OFFSET_TO_TIP) * Math.cos(shoulderRotRadians));
+    armTipPos.putOnSmartDashboard();
 
-    if (wristJointPos.isLeftOf(THIRTY_INCH_RULE)) {
+    if (armTipPos.isLeftOf(THIRTY_INCH_RULE)) {
       safeArmMovements.armExtension = false;
       if (shoulderRotDeg < 90) {
         safeArmMovements.shoulderRotateClockwise = false;
@@ -560,7 +565,7 @@ public class MoveArmAndWristSafely {
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
     }
-    if (wristJointPos.isRightOf(-THIRTY_INCH_RULE)) {
+    if (armTipPos.isRightOf(-THIRTY_INCH_RULE)) {
       safeArmMovements.armExtension = false;
       if (shoulderRotDeg > -90) {
         safeArmMovements.shoulderRotateCounterClockwise = false;
@@ -570,10 +575,10 @@ public class MoveArmAndWristSafely {
 
     }
 
-    if (wristJointPos.isBelow(ELECTRONICSDANGERZONEHEIGHT)) {
-      if (wristJointPos.isHorizontallyBetween(0, ROBOTLENGTH / 2)) {
+    if (armTipPos.isBelow(ELECTRONICSDANGERZONEHEIGHT)) {
+      if (armTipPos.isHorizontallyBetween(0, ROBOTLENGTH / 2)) {
         //Checks distance to the top of the box and the side of the box and cant extend if the distance to the side is longer
-        if(ROBOTLENGTH / 2 - Math.abs(wristJointPos.x) >= ELECTRONICSDANGERZONEHEIGHT - wristJointPos.y) {
+        if(ROBOTLENGTH / 2 - Math.abs(armTipPos.x) >= ELECTRONICSDANGERZONEHEIGHT - armTipPos.y) {
           safeArmMovements.armExtension = false;
         } else {
         //Checks distance to the top of the box and the side of the box and cant retract if the distance to the top is longer
@@ -581,9 +586,9 @@ public class MoveArmAndWristSafely {
         }
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
-      if (wristJointPos.isHorizontallyBetween(-ROBOTLENGTH / 2, 0)) {
+      if (armTipPos.isHorizontallyBetween(-ROBOTLENGTH / 2, 0)) {
         //Checks distance to the top of the box and the side of the box and cant extend if the distance to the side is longer
-        if(ROBOTLENGTH / 2 - Math.abs(wristJointPos.x) >= ELECTRONICSDANGERZONEHEIGHT - wristJointPos.y) {
+        if(ROBOTLENGTH / 2 - Math.abs(armTipPos.x) >= ELECTRONICSDANGERZONEHEIGHT - armTipPos.y) {
           safeArmMovements.armExtension = false;
         } else {
         //Checks distance to the top of the box and the side of the box and cant retract if the distance to the top is longer
@@ -592,20 +597,20 @@ public class MoveArmAndWristSafely {
         safeArmMovements.shoulderRotateClockwise = false;
       }
     }
-    if (wristJointPos.isVerticallyBetween(SHOULDER_HEIGHT - TOP_SIDE_BOX_HEIGHT, SHOULDER_HEIGHT)) {
-      if (wristJointPos.isHorizontallyBetween(0, TOP_SIDE_BOX_WIDTH)) {
+    if (armTipPos.isVerticallyBetween(SHOULDER_HEIGHT - TOP_SIDE_BOX_HEIGHT, SHOULDER_HEIGHT)) {
+      if (armTipPos.isHorizontallyBetween(0, TOP_SIDE_BOX_WIDTH)) {
         safeArmMovements.armExtension = false;
       }
     }
 
-    if (wristJointPos.isHorizontallyBetween(0, TOP_SIDE_BOX_WIDTH)) {
-      if (wristJointPos.isVerticallyBetween(SHOULDER_HEIGHT - TOP_SIDE_BOX_HEIGHT, SHOULDER_HEIGHT)) {
+    if (armTipPos.isHorizontallyBetween(0, TOP_SIDE_BOX_WIDTH)) {
+      if (armTipPos.isVerticallyBetween(SHOULDER_HEIGHT - TOP_SIDE_BOX_HEIGHT, SHOULDER_HEIGHT)) {
         safeArmMovements.armRetraction = false;
         safeArmMovements.shoulderRotateCounterClockwise = false;
       }
     }
-    if (wristJointPos.isHorizontallyBetween(0, -TOP_SIDE_BOX_WIDTH / 2)) {
-      if (wristJointPos.isVerticallyBetween(SHOULDER_HEIGHT - TOP_SIDE_BOX_HEIGHT, SHOULDER_HEIGHT)) {
+    if (armTipPos.isHorizontallyBetween(0, -TOP_SIDE_BOX_WIDTH / 2)) {
+      if (armTipPos.isVerticallyBetween(SHOULDER_HEIGHT - TOP_SIDE_BOX_HEIGHT, SHOULDER_HEIGHT)) {
         safeArmMovements.armRetraction = false;
         safeArmMovements.shoulderRotateClockwise = false;
       }
@@ -615,18 +620,18 @@ public class MoveArmAndWristSafely {
 
     double wristRotRelativeToFloorRadians = Math.toRadians(wristRotRelativeToFloor);
 
-    double ClawXPosRelativeToArmJoint = (CLAWLENGTH) * Math.cos(wristRotRelativeToFloorRadians);
+    double clawXPosRelativeToArmJoint = (CLAWLENGTH) * Math.cos(wristRotRelativeToFloorRadians);
 
-    double ClawYPosRelativeToArmJoint = (CLAWLENGTH) * Math.sin(wristRotRelativeToFloorRadians);
+    double clawYPosRelativeToArmJoint = (CLAWLENGTH) * Math.sin(wristRotRelativeToFloorRadians);
     Point clawTipPos = new Point("clawTipPos");
-    clawTipPos.x = wristJointPos.x + ClawXPosRelativeToArmJoint;
-    clawTipPos.y = wristJointPos.y + ClawYPosRelativeToArmJoint;
+    clawTipPos.x = wristJointPos.x + clawXPosRelativeToArmJoint;
+    clawTipPos.y = wristJointPos.y + clawYPosRelativeToArmJoint;
     clawTipPos.putOnSmartDashboard();
 
     if (ENABLE_SMARTDASHBOARD_DEBUG) {
-      SmartDashboard.putNumber("ClawXPosRelativeToArmJoint", ClawXPosRelativeToArmJoint);
+      SmartDashboard.putNumber("clawXPosRelativeToArmJoint", clawXPosRelativeToArmJoint);
       SmartDashboard.putNumber("wristRotRelativeToFloor", wristRotRelativeToFloor);
-      SmartDashboard.putNumber("ClawYPosRelativeToArmJoint", ClawYPosRelativeToArmJoint);
+      SmartDashboard.putNumber("clawYPosRelativeToArmJoint", clawYPosRelativeToArmJoint);
     }
 
     // If the arm is at the 30 inch box it prevents the arm from extending and
