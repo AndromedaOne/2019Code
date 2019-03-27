@@ -29,7 +29,6 @@ public class TeleOpDrive extends Command {
   private double previousSpeed = 0;
   private final double kAccelerationSlope = 1 / 25;
 
-
   public TeleOpDrive() {
     requires(Robot.driveTrain);
     System.out.println("Initializing Teleop Drivetrain Control...");
@@ -48,7 +47,6 @@ public class TeleOpDrive extends Command {
   @Override
   protected void execute() {
     Joystick driveController = Robot.driveController;
-    
 
     // This is the shifting code
     // This switches the motors coast and sets the move to zero
@@ -123,7 +121,7 @@ public class TeleOpDrive extends Command {
     } else {
       previousSpeed -= kAccelerationSlope;
     }
-    
+
     if (shifterDelayCounter >= delay) {
       Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
     } else {

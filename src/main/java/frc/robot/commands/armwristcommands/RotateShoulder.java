@@ -43,7 +43,7 @@ public class RotateShoulder extends Command {
 
     counter++;
 
-    if(counter >= 50) {
+    if (counter >= 50) {
       isFinished = true;
     }
 
