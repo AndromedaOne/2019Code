@@ -18,18 +18,19 @@ public class Bay3Bay2FromHab extends CommandGroup {
 
     addSequential(new LoadingStationFromBay3());
 
+    //TODO: Add real values.
     // - Logic for placing hatch on Bay 2 from Loading Station -
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(-167));
     // Move back.
-    addSequential(new TurnToCompassHeading(0));
+    addSequential(new TurnToCompassHeading(-90));
     // Turn.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(91);
     // Avoid the rocket.
     addSequential(new TurnToCompassHeading(0));
     // Turn.
     addParallel(new LowOppositeSideGamePieceArmCommand());
     // Swap sides of the arm while we move.
-    addSequential(new TurnToCompassHeading(0));
+    addSequential(new TurnToCompassHeading(107));
     // Turn.
     addSequential(new MoveUsingEncoderPID(0));
     // Move onto the line.

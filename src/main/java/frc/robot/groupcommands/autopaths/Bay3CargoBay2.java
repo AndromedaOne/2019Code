@@ -14,11 +14,11 @@ public class Bay3CargoBay2 extends CommandGroup {
     // TODO: Add real values.
     addSequential(new Bay3FromHab());
     // Moves to Bay 3 and deposits the game piece.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(-91));
     // Moves back.
     addSequential(new TurnToCompassHeading(0));
     // Turns north so we can go backwards.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(-134));
     // Moves backwards.
     addParallel(new LowOppositeSideGamePieceArmCommand());
     /*
