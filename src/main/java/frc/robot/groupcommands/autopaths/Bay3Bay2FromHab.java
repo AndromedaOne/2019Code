@@ -24,13 +24,13 @@ public class Bay3Bay2FromHab extends CommandGroup {
     // Move back.
     addSequential(new TurnToCompassHeading(-90));
     // Turn.
-    addSequential(new MoveUsingEncoderPID(91);
+    addSequential(new MoveUsingEncoderPID(91));
     // Avoid the rocket.
     addSequential(new TurnToCompassHeading(0));
     // Turn.
     addParallel(new LowOppositeSideGamePieceArmCommand());
     // Swap sides of the arm while we move.
-    addSequential(new TurnToCompassHeading(107));
+    addSequential(new TurnToCompassHeading(105));
     // Turn.
     addSequential(new MoveUsingEncoderPID(0));
     // Move onto the line.
