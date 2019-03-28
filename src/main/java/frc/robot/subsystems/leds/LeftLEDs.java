@@ -10,15 +10,25 @@ public class LeftLEDs extends LEDs {
     public LeftLEDs() {
         Config conf = Robot.getConfig();
 
-        red = new DigitalOutput(conf.getInt("subsystems.led.red"));
+        red = new DigitalOutput(conf.getInt("subsystems.led.leftRed"));
         red.enablePWM(0);
-        System.out.println("Red Port: " + conf.getInt("subsystems.led.red"));
-        green = new DigitalOutput(conf.getInt("subsystems.led.green"));
+        green = new DigitalOutput(conf.getInt("subsystems.led.leftGreen"));
         green.enablePWM(0);
-        blue = new DigitalOutput(conf.getInt("subsystems.led.blue"));
+        blue = new DigitalOutput(conf.getInt("subsystems.led.leftBlue"));
         blue.enablePWM(0);
-        System.out.println("Set Purple");
         setPurple(1.0);
+    }
+
+    @Override
+    public void updateLEDs() {
+        if (Robot.frontLineSensor4905.findLine().lineFound) {
+            blinkCounter++;
+            if (blinkCounter > Robot.drivetrainFrontUltrasonic.getDistanceInches() * kBlinkSpeedMultiplier) {
+                toggleLEDs();
+            }
+        } else {
+            toggleLEDsOn();
+        }
     }
 
     @Override

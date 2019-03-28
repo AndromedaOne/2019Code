@@ -423,6 +423,7 @@ public class Robot extends TimedRobot {
       PIDMultiton.resetDisableAll();
     }
     rightLeds.setPurple(1.0);
+    leftLeds.setPurple(1.0);
     Trace.getInstance().flushTraceFiles();
   }
 
@@ -456,6 +457,8 @@ public class Robot extends TimedRobot {
     driveTrain.shiftToLowGear();
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
+    rightLeds.setPurple(1.0);
+    leftLeds.setPurple(1.0);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -493,6 +496,7 @@ public class Robot extends TimedRobot {
     driveTrain.shiftToLowGear();
     // This is to set the LEDs to the correct color for what mode we are in
     rightLeds.setWhite(1.0);
+    leftLeds.setWhite(1.0);
     gyroCorrectMove.setCurrentAngle();
   }
 
@@ -505,10 +509,14 @@ public class Robot extends TimedRobot {
       intakeAngleSensor.reset();
     }
     Scheduler.getInstance().run();
+    leftLeds.updateLEDs();
+    rightLeds.updateLEDs();
   }
 
   @Override
   public void testInit() {
+    leftLeds.setPurple(1.0);
+    rightLeds.setPurple(1.0);
     MoveArmAndWristSafely.stop();
     super.testInit();
   }

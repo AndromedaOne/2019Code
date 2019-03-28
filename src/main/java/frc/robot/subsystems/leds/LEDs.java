@@ -2,33 +2,72 @@ package frc.robot.subsystems.leds;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 
 public abstract class LEDs extends Subsystem {
 
   protected DigitalOutput red;
   protected DigitalOutput green;
   protected DigitalOutput blue;
+  protected final double kBlinkSpeedMultiplier = 0.1;
+  protected int blinkCounter = 0;
+  private double redValue = 0;
+  private double greenValue = 0;
+  private double blueValue = 0;
+  private boolean ledsOn = false;
 
+  /**
+   * This updates wether or not the LEDs should be blinking depending on wether we
+   * see a line This is called periodically in teleop periodic
+   */
+  public abstract void updateLEDs();
+
+
+
+  /**
+   * This turns the LEDs off and clears the saved color
+   */
   public void clearColor() {
+    ledsOn = false;
     red.updateDutyCycle(0);
     green.updateDutyCycle(0);
     blue.updateDutyCycle(0);
+    redValue = 0;
+    blueValue = 0;
+    greenValue = 0;
+  }
+
+  // This difference between toggle and clear color is that toggling
+  // the LEDs will save the last color value so you can toggle them back
+  // on with the same color
+  protected void toggleLEDs() {
+    if(ledsOn) {
+      red.updateDutyCycle(0);
+      green.updateDutyCycle(0);
+      blue.updateDutyCycle(0);
+      ledsOn = false;
+    } else {
+      red.updateDutyCycle(redValue);
+      green.updateDutyCycle(greenValue);
+      blue.updateDutyCycle(blueValue);
+      ledsOn = true;
+    }
+  }
+
+  protected void toggleLEDsOn() {
+    if(!ledsOn) {
+      toggleLEDs();
+    }
   }
 
   protected double validateBrightness(double brightness) {
+    ledsOn = true;
     if (brightness > 1.0) {
       brightness = 1;
     } else if (brightness < 0) {
       brightness = 0;
     }
     return brightness;
-  }
-  /**
-   * This method takes in a time in milliseconds
-   * You cannot go below 20ms
-   */
-  public void blinkLEDs() {
-
   }
 
   /**
@@ -39,6 +78,9 @@ public abstract class LEDs extends Subsystem {
     this.red.updateDutyCycle(validateBrightness(red));
     this.green.updateDutyCycle(validateBrightness(green));
     this.blue.updateDutyCycle(validateBrightness(blue));
+    redValue = red;
+    greenValue = green;
+    blueValue = blue;
   }
 
   /**
@@ -46,6 +88,7 @@ public abstract class LEDs extends Subsystem {
    */
   public void setRed(double brightness) {
     clearColor();
+    redValue = brightness;
     red.updateDutyCycle(validateBrightness(brightness));
   }
 
@@ -54,6 +97,7 @@ public abstract class LEDs extends Subsystem {
    */
   public void setGreen(double brightness) {
     clearColor();
+    greenValue = brightness;
     green.updateDutyCycle(validateBrightness(brightness));
   }
 
@@ -62,6 +106,7 @@ public abstract class LEDs extends Subsystem {
    */
   public void setBlue(double brightness) {
     clearColor();
+    blueValue = brightness;
     blue.updateDutyCycle(validateBrightness(brightness));
   }
 
@@ -73,6 +118,9 @@ public abstract class LEDs extends Subsystem {
     red.updateDutyCycle(validateBrightness(brightness));
     green.updateDutyCycle(validateBrightness(brightness));
     blue.updateDutyCycle(validateBrightness(brightness));
+    redValue = brightness;
+    greenValue = brightness;
+    blueValue = brightness;
   }
 
   /**
@@ -83,6 +131,8 @@ public abstract class LEDs extends Subsystem {
     System.out.println("Setting purple to: " + validateBrightness(brightness));
     blue.updateDutyCycle(validateBrightness(brightness));
     red.updateDutyCycle(validateBrightness(brightness));
+    redValue = brightness;
+    blueValue = brightness;
   }
 
 }
