@@ -175,8 +175,11 @@ public class PIDController4905 extends PIDBase4905 implements Controller {
   @Override
   public void reset() {
     disable();
-
     super.reset();
+  }
+
+  public void zeroAccumulatedError() {
+    super.zeroAccumulatedError();
   }
 
   @Override

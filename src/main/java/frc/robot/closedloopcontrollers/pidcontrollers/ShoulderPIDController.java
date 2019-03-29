@@ -100,6 +100,7 @@ public class ShoulderPIDController extends PIDControllerBase {
 
   @Override
   public void setSetpoint(double setpoint) {
+    pidMultiton.zeroAccumulatedError();
     pidMultiton.setSetpoint(setpoint / Robot.SHOULDERDEGREESPERTICK);
   }
 

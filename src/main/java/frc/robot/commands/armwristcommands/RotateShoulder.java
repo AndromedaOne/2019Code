@@ -32,10 +32,11 @@ public class RotateShoulder extends Command {
     Trace.getInstance().logCommandStart("RotateShoulder");
     System.out.println("Running the Shoulder to: " + incrementalPidSetpoint.getFinalAngleSetpoint());
     overrideAndFinishCommand = false;
+    sPidController.setSetpoint(incrementalPidSetpoint.getSetpoint());
   }
 
   protected void execute() {
-    sPidController.setSetpoint(incrementalPidSetpoint.getSetpoint());
+    
   }
 
   protected void interrupted() {

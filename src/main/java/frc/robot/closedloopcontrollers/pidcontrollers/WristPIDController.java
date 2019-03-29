@@ -119,10 +119,12 @@ public class WristPIDController extends PIDControllerBase {
 
   @Override
   public void setSetpoint(double setpoint) {
+    pidMultiton.zeroAccumulatedError();
     double ticksSetpoint = setpoint / Robot.WRISTDEGREESPERTICK;
     super.currentSetpoint = setpoint; 
 
     System.out.println("Here is the Wrist setpoint: " + setpoint);
     pidMultiton.setSetpoint(ticksSetpoint);
+    
   }
 }

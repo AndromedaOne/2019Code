@@ -128,6 +128,10 @@ public class PIDMultiton {
     pidController.reset();
   }
 
+  public void zeroAccumulatedError() {
+    pidController.zeroAccumulatedError();
+  }
+
   /**
    * Stops the pidController
    */

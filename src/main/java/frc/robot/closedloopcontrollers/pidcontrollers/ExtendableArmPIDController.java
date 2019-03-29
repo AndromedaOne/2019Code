@@ -114,7 +114,9 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
   @Override
   public void setSetpoint(double setpoint) {
+    pidMultiton.zeroAccumulatedError();
     pidMultiton.setSetpoint(setpoint / Robot.EXTENSIONINCHESPERTICK);
+
   }
 
 }

@@ -810,6 +810,17 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
     }
   }
 
+
+  public void zeroAccumulatedError() {
+    m_thisMutex.lock();
+    try {
+      m_accumError = 0;
+    }finally {
+      m_thisMutex.unlock();
+    }
+
+  }
+
   /**
    * Passes the output directly to setSetpoint().
    *

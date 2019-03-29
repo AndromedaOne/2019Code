@@ -30,11 +30,12 @@ public class RetractArm extends Command {
     Trace.getInstance().logCommandStart("RetractArm");
     overrideAndFinishCommand = false;
     System.out.println("Running the Arm to: " + incrementalPidSetpoint.getFinalAngleSetpoint());
+    ExtendableArmPIDController.getInstance().setSetpoint(incrementalPidSetpoint.getSetpoint());
 
   }
 
   protected void execute() {
-    ExtendableArmPIDController.getInstance().setSetpoint(incrementalPidSetpoint.getSetpoint());
+    
   }
 
   @Override

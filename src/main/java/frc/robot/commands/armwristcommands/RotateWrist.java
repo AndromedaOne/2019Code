@@ -32,11 +32,12 @@ public class RotateWrist extends Command {
     isFinished = false;
     System.out.println("Running the wrist to: " + incrementalPidSetpoint.getFinalAngleSetpoint());
     overrideAndFinishCommand = false;
+    WristPIDController.getInstance().setSetpoint(incrementalPidSetpoint.getSetpoint());
 
   }
 
   protected void execute() {
-    WristPIDController.getInstance().setSetpoint(incrementalPidSetpoint.getSetpoint());
+    
     counter++;
     if (counter > 50) {
       isFinished = true;
