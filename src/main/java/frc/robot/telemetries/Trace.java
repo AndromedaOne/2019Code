@@ -67,6 +67,7 @@ public class Trace {
   private MultipleOutputStream m_out;
   private MultipleOutputStream m_err;
   private static String m_matchStartFname = "matchStarted";
+  private static boolean m_matchStarted = false;
   private static String m_commandTraceFname = "CommandTrace";
   private BufferedWriter m_commandTraceWriter;
   private static int m_dirNumb = 0;
@@ -89,7 +90,7 @@ public class Trace {
     }
   }
 
-  public static Trace getInstance() {
+  public synchronized static Trace getInstance() {
     if (m_instance == null) {
       m_instance = new Trace();
     }
@@ -203,13 +204,20 @@ public class Trace {
     if (m_pathOfTraceDir == null) {
       return;
     }
+    TraceEntry traceEntry = getTraceEntry(fileName, header);
+    addEntry(traceEntry, header);
+  }
+
+  private synchronized TraceEntry getTraceEntry(String fileName, TracePair... header) {
+    TraceEntry traceEntry = null;
     try {
       if (!m_traces.containsKey(fileName)) {
         BufferedWriter outputFile = null;
-        String fullFileName = new String(m_pathOfTraceDir + "/" + fileName + (m_dirNumb - 1) + ".csv");
+        String fullFileName = new String(m_pathOfTraceDir + "/" + fileName + ".csv");
         FileWriter fstream = new FileWriter(fullFileName, false);
         outputFile = new BufferedWriter(fstream);
-        m_traces.put(fileName, new TraceEntry(outputFile, header.length));
+        traceEntry = new TraceEntry(outputFile, header.length);
+        m_traces.put(fileName, traceEntry);
         String line = new String("Time");
         for (TracePair pair : header) {
           line += "," + pair.getColumnName();
@@ -217,16 +225,17 @@ public class Trace {
         outputFile.write(line);
         outputFile.newLine();
         System.out.println("Opened trace file " + m_pathOfTraceDir + "/" + fileName);
+      } else {
+        traceEntry = m_traces.get(fileName);
       }
-      addEntry(fileName, header);
     } catch (IOException e) {
       System.err.println("ERROR: unable to open/write to trace file " + fileName + " ;" + e.getMessage());
       e.printStackTrace();
-      return;
     }
+    return traceEntry;
   }
 
-  private void addEntry(String fileName, TracePair... values) {
+  private void addEntry(TraceEntry traceEntry, TracePair... values) {
     try {
       if (!Robot.getInstance().isEnabled()) {
         return;
@@ -234,14 +243,11 @@ public class Trace {
       if (m_pathOfTraceDir == null) {
         return;
       }
-      if (!m_traces.containsKey(fileName)) {
-        String err = new String("Warning: trace file " + fileName);
-        err += " has not been added to the Trace instance";
-        throw (new Exception(err));
+      if (traceEntry == null) {
+        return;
       }
-      TraceEntry traceEntry = m_traces.get(fileName);
       if (values.length != traceEntry.getNumbOfValues()) {
-        String err = new String("ERROR: trace entry for " + fileName + " has ");
+        String err = new String("ERROR: duplicate trace entries: trace entry has ");
         err += String.valueOf(values.length) + " but should have ";
         err += String.valueOf(traceEntry.getNumbOfValues());
         throw (new Exception(err));
@@ -262,7 +268,7 @@ public class Trace {
     }
   }
 
-  public void flushTraceFiles() {
+  public synchronized void flushTraceFiles() {
     if (m_pathOfTraceDir == null) {
       return;
     }
@@ -308,6 +314,9 @@ public class Trace {
   }
 
   public void matchStarted() {
+    if (m_matchStarted) {
+      return;
+    }
     if (m_pathOfTraceDir == null) {
       return;
     }
@@ -337,7 +346,7 @@ public class Trace {
     try {
       m_commandTraceWriter.write(line);
     } catch (IOException e) {
-      // TODO Auto-generated catch block
+      System.err.println("ERROR: failed to log command: " + e.getMessage());
       e.printStackTrace();
     }
   }

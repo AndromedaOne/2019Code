@@ -15,6 +15,7 @@ import com.typesafe.config.ConfigFactory;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -424,6 +425,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     pneumaticStilts.stopAllLegs();
     if (robotInitDone) {
       PIDMultiton.resetDisableAll();
@@ -455,6 +459,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
     gyro = NavXGyroSensor.getInstance();
@@ -490,6 +497,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
     MoveArmAndWristSafely.stop();
