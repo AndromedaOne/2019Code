@@ -47,7 +47,7 @@ public class MoveArmAndWristSafely {
   private static final double THIRTY_INCH_RULE = ROBOTLENGTH / 2 + RULEEXTENSIONBOX;
   private static final double MAXARMLENGTH = 36.5;
   private static final double OFFSET_TO_TIP = 2;
-  private static final double CLAWLENGTH = 20.5;
+  private static final double CLAWLENGTH = 18.5;
   private static final double HATCHWIDTH = 24;
   private static final double HATCH_PANEL_TIP_ANGLE_OFFSET = Math.atan((HATCHWIDTH / 2) / CLAWLENGTH);
   private static final double HATCH_PANEL_TIP_DIST_TO_WRIST = Math.sqrt(Math.pow(CLAWLENGTH, 2) + Math.pow(HATCHWIDTH / 2, 2));
