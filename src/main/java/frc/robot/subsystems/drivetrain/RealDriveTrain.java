@@ -37,10 +37,24 @@ public class RealDriveTrain extends DriveTrain {
     return shifterPresentFlag;
   }
 
+  private class VelocityPIDParamaters {
+    double maxSpeed;
+    double p;
+    double i;
+    double d;
+
+    public VelocityPIDParamaters(Config conf){
+      maxSpeed = conf.getDouble("maxSpeed");
+      p = conf.getDouble("P");
+      i = conf.getDouble("I");
+      d = conf.getDouble("D");
+    }
+  }
+
   public RealDriveTrain() {
     Config conf = Robot.getConfig();
     Config driveSubConfig = conf.getConfig("subsystems.driveTrain");
-    Config drivePortConf= conf.getConfig("ports.driveTrain");
+    Config drivePortConf = conf.getConfig("ports.driveTrain");
     driveTrainLeftMaster = initTalonMaster(drivePortConf, driveSubConfig, "left");
     driveTrainLeftSlave = initTalonSlave(drivePortConf, "leftSlave", driveTrainLeftMaster,
         drivePortConf.getBoolean("leftSideInverted"));
@@ -58,7 +72,7 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid = new DoubleSolenoid(drivePortConf.getInt("pneumatics.forwardChannel"),
           drivePortConf.getInt("pneumatics.backwardsChannel"));
     }
-    if (drivePortConf.getBoolean("useVelocityMode")) {
+    if (driveSubConfig.getBoolean("useVelocityMode")) {
       setVelocityMode();
     }
   }
