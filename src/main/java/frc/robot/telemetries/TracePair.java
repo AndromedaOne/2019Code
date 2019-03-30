@@ -1,7 +1,7 @@
 package frc.robot.telemetries;
 
-public class TracePair {
-  public TracePair(String columnName, Double value) {
+public class TracePair<T> {
+  public TracePair(String columnName, T value) {
     m_columnName = columnName;
     m_value = value;
   }
@@ -10,10 +10,10 @@ public class TracePair {
     return m_columnName;
   }
 
-  public Double getValue() {
+  public T getValue() {
     return m_value;
   }
 
   private String m_columnName;
-  private Double m_value;
+  private T m_value;
 }

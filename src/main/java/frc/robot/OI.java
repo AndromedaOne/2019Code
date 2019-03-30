@@ -12,15 +12,16 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.DriverOveride;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
-import frc.robot.commands.MoveUsingFrontLineFollower;
 import frc.robot.commands.RollIntakeGroupCommandScheduler;
 import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
+import frc.robot.groupcommands.LineFollowerGroupCommandScheduler;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -84,6 +85,7 @@ public class OI {
   private JoystickButton turnToWest;
   private JoystickButton runIntakeIn;
   private JoystickButton runIntakeOut;
+  private JoystickButton driverOveride;
 
   private JoystickButton LowGamePieceButton;
   private JoystickButton MiddleGamePieceButton;
@@ -123,12 +125,15 @@ public class OI {
     retractRearLegs = new POVButton(driveController, POVDirectionNames.WEST.getValue());
     retractRearLegs.whenPressed(new RetractRearLegs());
 
+    driverOveride = new JoystickButton(driveController, ButtonsEnumerated.RIGHTSTICKBUTTON.getValue());
+    driverOveride.whenPressed(new DriverOveride());
+
     SmartDashboard.putData("Retract All", new RetractAll());
 
     driveController = new Joystick(0);
     operatorController = new Joystick(1);
 
-    SmartDashboard.putData("CallFrontLineFollowerController", new MoveUsingFrontLineFollower());
+    SmartDashboard.putData("LineFollowerGroupCommandSchedulerCaller", new LineFollowerGroupCommandScheduler());
     // Claw buttons are temp until I figure out the D-Pad
 
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
