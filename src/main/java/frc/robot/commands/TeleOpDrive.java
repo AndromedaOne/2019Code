@@ -117,17 +117,6 @@ public class TeleOpDrive extends Command {
     if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
     }
-
-    // This code will blink the lights on the side of the robot that the line is on
-    if(Robot.frontLineSensor4905.findLine().lineFound) {
-      if(Robot.frontLineSensor4905.findLine().lineAngle > 0) {
-        // Blink left side
-        
-      } else {
-        // Blink right side
-      }
-    }
-
   }
 
   private void switchingLEDMode() {
