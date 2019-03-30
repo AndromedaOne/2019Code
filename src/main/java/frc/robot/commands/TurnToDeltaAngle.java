@@ -13,6 +13,9 @@ public class TurnToDeltaAngle extends Command {
   public TurnToDeltaAngle(double theDeltaAngle) {
     deltaAngle = theDeltaAngle;
     requires(Robot.driveTrain);
+    if (Robot.getConfig().hasPath("sensors.lineFollowSensor.lineFollowSensor4905.invertRotation")) {
+      deltaAngle *= -1;
+    }
   }
 
   @Override
