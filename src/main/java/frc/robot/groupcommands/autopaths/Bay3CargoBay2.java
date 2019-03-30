@@ -14,7 +14,7 @@ public class Bay3CargoBay2 extends CommandGroup {
     // TODO: Add real values.
     addSequential(new Bay3FromHab());
     // Moves to Bay 3 and deposits the game piece.
-    addSequential(new MoveUsingEncoderPID(-91));
+    addSequential(new MoveUsingEncoderPID(-56));
     // Moves back.
     addSequential(new TurnToCompassHeading(0));
     // Turns north so we can go backwards.
@@ -31,17 +31,17 @@ public class Bay3CargoBay2 extends CommandGroup {
       addSequential(new TurnToCompassHeading(90));
     }
     // Turns to the center of the field.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(-28));
     // Moves.
     addSequential(new TurnToCompassHeading(0));
     // Turns north.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(-155));
     // Move backwards, as we are still facing the back.
     addParallel(new OpenClaw());
     // While we move, we open the claw in preparation for grabbing the cargo.
     addSequential(new CloseClaw());
     // Grab cargo.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(155));
     // Move forward.
     // addParallel(new MiddleGamePieceArmCommand());
     // Swap sides while we move.
@@ -51,11 +51,11 @@ public class Bay3CargoBay2 extends CommandGroup {
       addSequential(new TurnToCompassHeading(90));
     }
     // Turn to outside.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(28));
     // Move.
     addSequential(new TurnToCompassHeading(0));
     // Turn to North.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(101));
     // Move to be around Bay 2.
     if (AutoStartingConfig.onRightSide) {
       addSequential(new TurnToCompassHeading(270));
@@ -63,7 +63,7 @@ public class Bay3CargoBay2 extends CommandGroup {
       addSequential(new TurnToCompassHeading(90));
     }
     // Turn to center.
-    addSequential(new MoveUsingEncoderPID(0));
+    addSequential(new MoveUsingEncoderPID(10));
     // Move slightly to be around the tape.
     addSequential(new MoveUsingFrontLineFollower());
     // Follow the line
