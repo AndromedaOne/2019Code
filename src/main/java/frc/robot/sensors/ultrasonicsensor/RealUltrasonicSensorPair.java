@@ -52,7 +52,6 @@ public class RealUltrasonicSensorPair extends UltrasonicSensor {
     SmartDashboard.putNumber("Right Ultrasonic", rightUltrasonicDist);
     // This defaults to average the two ultrasonics to get a distance
     double distance = (leftUltrasonicDist + rightUltrasonicDist) / 2;
-
     if (Math.abs(leftUltrasonicDist - rightUltrasonicDist) > outlierDetectionThreshold) {
       distance = Math.min(leftUltrasonicDist, rightUltrasonicDist);
     }
@@ -63,5 +62,9 @@ public class RealUltrasonicSensorPair extends UltrasonicSensor {
   @Override
   public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
     super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "Inches:", this::getDistanceInches);
+  }
+
+  public double getMinDistanceInches() {
+    return Math.min(leftUltrasonic.getRangeInches(), rightUltrasonic.getRangeInches());
   }
 }
