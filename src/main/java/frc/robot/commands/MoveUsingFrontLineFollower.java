@@ -14,7 +14,7 @@ public class MoveUsingFrontLineFollower extends Command {
   private int counter = 0;
 
   public MoveUsingFrontLineFollower() {
-    controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.frontLineSensor4905);
+    controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.frontLineSensor);
     requires(Robot.driveTrain);
     System.out.println("Calling the linefollower controller, moving to line...");
 

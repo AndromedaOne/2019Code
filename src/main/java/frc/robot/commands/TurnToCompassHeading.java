@@ -49,7 +49,7 @@ public class TurnToCompassHeading extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return gyroPID.onTarget();
   }
 
   protected void end() {

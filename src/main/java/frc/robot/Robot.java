@@ -15,7 +15,6 @@ import com.typesafe.config.ConfigFactory;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -44,10 +43,10 @@ import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
 import frc.robot.sensors.linefollowersensor.LineSensor4905;
+import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
-import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
@@ -70,7 +69,6 @@ import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
 import frc.robot.telemetries.Trace;
-import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -83,7 +81,6 @@ public class Robot extends TimedRobot {
   private static Robot instance;
 
   public static PneumaticStilts pneumaticStilts;
-  public static NavXGyroSensor gyro;
   private boolean robotInitDone = false;
   public static Compressor compressor;
   public static Joystick driveController;
@@ -98,7 +95,6 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static UltrasonicSensor drivetrainRearUltrasonic;
-  public static LineFollowerSensorBase lineFollowerSensorArray;
   public static Claw claw;
 
   public static MoveDrivetrainGyroCorrect gyroCorrectMove;
@@ -107,7 +103,7 @@ public class Robot extends TimedRobot {
   public static LimitSwitchSensor intakeStowedSwitch;
   public static LEDs leds;
   public static InfraredDistanceSensor clawInfraredSensor;
-  public static LineFollowerSensorBase frontLineSensor4905;
+  public static LineFollowerSensorBase frontLineSensor;
   public static MagEncoderSensor topArmExtensionEncoder;
   public static MagEncoderSensor bottomArmExtensionEncoder;
   public static MagEncoderSensor shoulderEncoder;
@@ -344,13 +340,12 @@ public class Robot extends TimedRobot {
     ultrasonicPID = DrivetrainRearUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
 
-    I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
-    I2C sunfounderbus = sunfounderdevice.getBus();
-
     driveController = new Joystick(0);
 
     if (conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
-      frontLineSensor4905 = new LineSensor4905();
+      frontLineSensor = new LineSensor4905();
+    } else {
+      frontLineSensor = new MockLineFollowerSensorArray();
     }
 
     // Creates first instance to put onto live window
@@ -372,14 +367,8 @@ public class Robot extends TimedRobot {
     }
 
     if (conf.hasPath("subsystems.climber")) {
-      /*
-       * climbUltrasonicSensor = new
-       * RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
-       * conf.getInt("subsystems.climber.ultrasonic.echo"));
-       */
       pneumaticStilts = new RealPneumaticStilts();
     } else {
-      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
       pneumaticStilts = new MockPneumaticStilts();
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
@@ -457,7 +446,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
-    gyro = NavXGyroSensor.getInstance();
     MoveArmAndWristSafely.stop();
     driveTrain.shiftToLowGear();
     pneumaticStilts.retractFrontLegs();
