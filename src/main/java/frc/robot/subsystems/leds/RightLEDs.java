@@ -9,7 +9,7 @@ public class RightLEDs extends LEDs {
 
   public RightLEDs() {
     Config conf = Robot.getConfig();
-    red = new DigitalOutput(conf.getInt("subsystems.led.red"));
+    red = new DigitalOutput(conf.getInt("subsystems.led.rightRed"));
     red.enablePWM(0);
     green = new DigitalOutput(conf.getInt("subsystems.led.rightGreen"));
     green.enablePWM(0);
