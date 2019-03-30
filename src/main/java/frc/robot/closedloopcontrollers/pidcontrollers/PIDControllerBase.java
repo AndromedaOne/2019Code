@@ -1,6 +1,6 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
-public class PIDControllerBase{
+public class PIDControllerBase {
   public PIDMultiton pidMultiton;
   protected double outputRange = 1;
   protected double absoluteTolerance = 0;
