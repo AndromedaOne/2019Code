@@ -114,7 +114,6 @@ public class TeleOpDrive extends Command {
     if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
     }
-
     double requestedSpeed = forwardBackwardStickValue * mod;
     if (requestedSpeed > previousSpeed) {
       previousSpeed += kAccelerationSlope;
@@ -131,13 +130,17 @@ public class TeleOpDrive extends Command {
 
   private void switchingLEDMode() {
     if (slowMoEnabled && shifterHigh) {
-      Robot.leds.setBlue(1.0);
+      Robot.rightLeds.setBlue(1.0);
+      Robot.leftLeds.setBlue(1.0);
     } else if (slowMoEnabled && !shifterHigh) {
-      Robot.leds.setRed(1.0);
+      Robot.rightLeds.setRed(1.0);
+      Robot.leftLeds.setRed(1.0);
     } else if (!slowMoEnabled && shifterHigh) {
-      Robot.leds.setGreen(1.0);
+      Robot.rightLeds.setGreen(1.0);
+      Robot.leftLeds.setGreen(1.0);
     } else {
-      Robot.leds.setWhite(1.0);
+      Robot.rightLeds.setWhite(1.0);
+      Robot.leftLeds.setWhite(1.0);
     }
   }
 
