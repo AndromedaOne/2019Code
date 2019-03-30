@@ -26,7 +26,9 @@ public class LineFollowerController {
       minDistanceToWall = Robot.getConfig().getDouble("sensors.lineFollowSensor.lineFollowSensor4905.minDistToWall");
       System.out.println("Setting Line Follower Controller to " + minDistanceToWall + "...");
     }
-   
+    if (Robot.getConfig().hasPath("sensors.lineFollowSensor.lineFollowSensor4905.invertRotation")) {
+      rotateScaleFactor *= -1;
+    }
   }
 
   public void run() {
