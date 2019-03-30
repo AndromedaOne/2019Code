@@ -63,4 +63,8 @@ public class RealUltrasonicSensorPair extends UltrasonicSensor {
   public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
     super.putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "Inches:", this::getDistanceInches);
   }
+
+  public double getMinDistanceInches() {
+    return Math.min(leftUltrasonic.getRangeInches(), rightUltrasonic.getRangeInches());
+  }
 }

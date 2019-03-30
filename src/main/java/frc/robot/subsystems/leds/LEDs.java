@@ -2,7 +2,6 @@ package frc.robot.subsystems.leds;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Robot;
 
 public abstract class LEDs extends Subsystem {
 
@@ -22,8 +21,6 @@ public abstract class LEDs extends Subsystem {
    */
   public abstract void updateLEDs();
 
-
-
   /**
    * This turns the LEDs off and clears the saved color
    */
@@ -41,7 +38,7 @@ public abstract class LEDs extends Subsystem {
   // the LEDs will save the last color value so you can toggle them back
   // on with the same color
   protected void toggleLEDs() {
-    if(ledsOn) {
+    if (ledsOn) {
       red.updateDutyCycle(0);
       green.updateDutyCycle(0);
       blue.updateDutyCycle(0);
@@ -55,7 +52,7 @@ public abstract class LEDs extends Subsystem {
   }
 
   protected void toggleLEDsOn() {
-    if(!ledsOn) {
+    if (!ledsOn) {
       toggleLEDs();
     }
   }

@@ -20,7 +20,7 @@ public class RightLEDs extends LEDs {
 
   @Override
   public void updateLEDs() {
-    if (Robot.frontLineSensor4905.findLine().lineFound) {
+    if (Robot.frontLineSensor.findLine().lineFound) {
       blinkCounter++;
       if (blinkCounter > Robot.drivetrainFrontUltrasonic.getDistanceInches() * kBlinkSpeedMultiplier) {
         toggleLEDs();
