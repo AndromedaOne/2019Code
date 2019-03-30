@@ -39,13 +39,14 @@ public class RealDriveTrain extends DriveTrain {
 
   public RealDriveTrain() {
     Config conf = Robot.getConfig();
-    Config driveConf = conf.getConfig("ports.driveTrain");
-    driveTrainLeftMaster = initTalonMaster(driveConf, "left");
-    driveTrainLeftSlave = initTalonSlave(driveConf, "leftSlave", driveTrainLeftMaster,
-        driveConf.getBoolean("leftSideInverted"));
-    driveTrainRightMaster = initTalonMaster(driveConf, "right");
-    driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
-        driveConf.getBoolean("rightSideInverted"));
+    Config driveSubConfig = conf.getConfig("subsystems.driveTrain");
+    Config drivePortConf= conf.getConfig("ports.driveTrain");
+    driveTrainLeftMaster = initTalonMaster(drivePortConf, driveSubConfig, "left");
+    driveTrainLeftSlave = initTalonSlave(drivePortConf, "leftSlave", driveTrainLeftMaster,
+        drivePortConf.getBoolean("leftSideInverted"));
+    driveTrainRightMaster = initTalonMaster(drivePortConf, driveSubConfig, "right");
+    driveTrainRightSlave = initTalonSlave(drivePortConf, "rightSlave", driveTrainRightMaster,
+        drivePortConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
     if (conf.hasPath("subsystems.driveTrain.invertTurning")) {
       invertTurning = conf.getBoolean("subsystems.driveTrain.invertTurning");
@@ -54,10 +55,10 @@ public class RealDriveTrain extends DriveTrain {
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
       shifterPresentFlag = true;
-      shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
-          driveConf.getInt("pneumatics.backwardsChannel"));
+      shifterSolenoid = new DoubleSolenoid(drivePortConf.getInt("pneumatics.forwardChannel"),
+          drivePortConf.getInt("pneumatics.backwardsChannel"));
     }
-    if (driveConf.getBoolean("useVelocityMode")) {
+    if (drivePortConf.getBoolean("useVelocityMode")) {
       setVelocityMode();
     }
   }
@@ -145,14 +146,14 @@ public class RealDriveTrain extends DriveTrain {
   // Inspired by
   // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
   // and
-  private ArbitraryModeWPI_TalonSRX initTalonMaster(Config driveConf, String side) {
-    ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(driveConf.getInt(side + "Master"));
+  private ArbitraryModeWPI_TalonSRX initTalonMaster(Config drivePortConf, Config driveSubsystemConf, String side) {
+    ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(drivePortConf.getInt(side + "Master"));
     final double closedLoopNeutralToMaxSpeedSeconds = 0.0;
 
     /* Factory Default all hardware to prevent unexpected behaviour */
     _talon.configFactoryDefault();
-    _talon.setInverted(driveConf.getBoolean(side + "SideInverted"));
-    _talon.setSensorPhase(driveConf.getBoolean(side + "SideSensorInverted"));
+    _talon.setInverted(drivePortConf.getBoolean(side + "SideInverted"));
+    _talon.setSensorPhase(drivePortConf.getBoolean(side + "SideSensorInverted"));
 
     /* Config sensor used for Primary PID [Velocity] */
 
@@ -163,15 +164,15 @@ public class RealDriveTrain extends DriveTrain {
     double highGearI = 0.0;
     double highGearD = 0.0;
 
-    lowGearMaxSpeed = readPIDConfigItem(driveConf, side, "LowGearMaxSpeed", 1);
-    lowGearP = readPIDConfigItem(driveConf, side, "LowGearP", 0);
-    lowGearI = readPIDConfigItem(driveConf, side, "LowGearI", 0);
-    lowGearD = readPIDConfigItem(driveConf, side, "LowGearD", 0);
+    lowGearMaxSpeed = readPIDConfigItem(drivePortConf, side, "LowGearMaxSpeed", 1);
+    lowGearP = readPIDConfigItem(drivePortConf, side, "LowGearP", 0);
+    lowGearI = readPIDConfigItem(drivePortConf, side, "LowGearI", 0);
+    lowGearD = readPIDConfigItem(drivePortConf, side, "LowGearD", 0);
 
-    highGearMaxSpeed = readPIDConfigItem(driveConf, side, "HighGearMaxSpeed", 1);
-    highGearP = readPIDConfigItem(driveConf, side, "HighGearP", 0);
-    highGearI = readPIDConfigItem(driveConf, side, "HighGearI", 0);
-    highGearD = readPIDConfigItem(driveConf, side, "HighGearD", 0);
+    highGearMaxSpeed = readPIDConfigItem(drivePortConf, side, "HighGearMaxSpeed", 1);
+    highGearP = readPIDConfigItem(drivePortConf, side, "HighGearP", 0);
+    highGearI = readPIDConfigItem(drivePortConf, side, "HighGearI", 0);
+    highGearD = readPIDConfigItem(drivePortConf, side, "HighGearD", 0);
 
     _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
     /**
@@ -201,17 +202,17 @@ public class RealDriveTrain extends DriveTrain {
     return _talon;
   }
 
-  private double readPIDConfigItem(Config driveConf, String side, String configItem, double defaultValue) {
+  private double readPIDConfigItem(Config drivePortConf, String side, String configItem, double defaultValue) {
     double configValue = defaultValue;
-    if (driveConf.hasPath(side + "Side" + configItem)) {
-      configValue = driveConf.getDouble(side + "Side" + configItem);
+    if (drivePortConf.hasPath(side + "Side" + configItem)) {
+      configValue = drivePortConf.getDouble(side + "Side" + configItem);
     }
     System.out.println(side + "Side" + configItem + "=" + configValue);
     return configValue;
   }
 
-  private WPI_TalonSRX initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
-    WPI_TalonSRX slaveMotor = new WPI_TalonSRX(driveConf.getInt(motorName));
+  private WPI_TalonSRX initTalonSlave(Config drivePortConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
+    WPI_TalonSRX slaveMotor = new WPI_TalonSRX(drivePortConf.getInt(motorName));
     slaveMotor.configFactoryDefault();
     slaveMotor.follow(master);
     slaveMotor.setInverted(isInverted);
