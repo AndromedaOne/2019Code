@@ -17,6 +17,7 @@ public class TurnToDeltaAngle extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Running TTDA");
     double setPoint = NavXGyroSensor.getInstance().getZAngle() + deltaAngle;
     Trace.getInstance().logCommandStart("TurnToDeltaAngle");
     gyroPID.setSetpoint(setPoint);
