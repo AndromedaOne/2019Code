@@ -37,28 +37,44 @@ public class RealDriveTrain extends DriveTrain {
     return shifterPresentFlag;
   }
 
-  private class VelocityPIDParamaters {
+  private class VelocityPIDParameters {
     double maxSpeed;
     double p;
     double i;
     double d;
 
-    public VelocityPIDParamaters(Config conf){
-      maxSpeed = conf.getDouble("maxSpeed");
-      p = conf.getDouble("P");
-      i = conf.getDouble("I");
-      d = conf.getDouble("D");
+    public VelocityPIDParameters(Config driveSubsystemConf, String gear) {
+      final String CONFIG_PATH = gear + ".velocityPIDParameters";
+      if (driveSubsystemConf.hasPath(CONFIG_PATH)) {
+        Config conf = driveSubsystemConf.getConfig(CONFIG_PATH);
+        maxSpeed = conf.getDouble("maxSpeed");
+        p = conf.getDouble("P");
+        i = conf.getDouble("I");
+        d = conf.getDouble("D");
+      } else {
+        maxSpeed = 1;
+        p = 0;
+        i = 0;
+        d = 0;
+      }
     }
   }
 
   public RealDriveTrain() {
     Config conf = Robot.getConfig();
-    Config driveSubConfig = conf.getConfig("subsystems.driveTrain");
     Config drivePortConf = conf.getConfig("ports.driveTrain");
-    driveTrainLeftMaster = initTalonMaster(drivePortConf, driveSubConfig, "left");
+
+    Config driveSubConfig = conf.getConfig("subsystems.driveTrain");
+    VelocityPIDParameters lowGearPidParams = new VelocityPIDParameters(driveSubConfig, "lowGear");
+    VelocityPIDParameters highGearPidParams = new VelocityPIDParameters(driveSubConfig, "highGear");
+    lowGearMaxSpeed = lowGearPidParams.maxSpeed;
+    highGearMaxSpeed = highGearPidParams.maxSpeed;
+    
+    
+    driveTrainLeftMaster = initTalonMaster(drivePortConf, lowGearPidParams, highGearPidParams, "left");
     driveTrainLeftSlave = initTalonSlave(drivePortConf, "leftSlave", driveTrainLeftMaster,
         drivePortConf.getBoolean("leftSideInverted"));
-    driveTrainRightMaster = initTalonMaster(drivePortConf, driveSubConfig, "right");
+    driveTrainRightMaster = initTalonMaster(drivePortConf, lowGearPidParams, highGearPidParams, "right");
     driveTrainRightSlave = initTalonSlave(drivePortConf, "rightSlave", driveTrainRightMaster,
         drivePortConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
@@ -135,21 +151,25 @@ public class RealDriveTrain extends DriveTrain {
     }
   }
 
+  private boolean usingVelocityMode = false;
   public void setVBusMode() {
     setVBusMode(driveTrainLeftMaster);
     setVBusMode(driveTrainRightMaster);
     differentialDrive.setMaxOutput(1.0);
+    usingVelocityMode = false;
   }
 
   private void setVBusMode(ArbitraryModeWPI_TalonSRX talon) {
     talon.setControlMode(ControlMode.PercentOutput);
   }
 
+
   public void setVelocityMode() {
     setVelocityMode(driveTrainLeftMaster);
     setVelocityMode(driveTrainRightMaster);
     differentialDrive.setMaxOutput(maxSpeed);
     System.out.println("maxSpeed set to " + maxSpeed);
+    usingVelocityMode = true;
   }
 
   private void setVelocityMode(ArbitraryModeWPI_TalonSRX talon) {
@@ -160,7 +180,7 @@ public class RealDriveTrain extends DriveTrain {
   // Inspired by
   // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
   // and
-  private ArbitraryModeWPI_TalonSRX initTalonMaster(Config drivePortConf, Config driveSubsystemConf, String side) {
+  private ArbitraryModeWPI_TalonSRX initTalonMaster(Config drivePortConf, VelocityPIDParameters lowGear, VelocityPIDParameters highGear, String side) {
     ArbitraryModeWPI_TalonSRX _talon = new ArbitraryModeWPI_TalonSRX(drivePortConf.getInt(side + "Master"));
     final double closedLoopNeutralToMaxSpeedSeconds = 0.0;
 
@@ -171,22 +191,6 @@ public class RealDriveTrain extends DriveTrain {
 
     /* Config sensor used for Primary PID [Velocity] */
 
-    double lowGearP = 0.0;
-    double lowGearI = 0.0;
-    double lowGearD = 0.0;
-    double highGearP = 0.0;
-    double highGearI = 0.0;
-    double highGearD = 0.0;
-
-    lowGearMaxSpeed = readPIDConfigItem(drivePortConf, side, "LowGearMaxSpeed", 1);
-    lowGearP = readPIDConfigItem(drivePortConf, side, "LowGearP", 0);
-    lowGearI = readPIDConfigItem(drivePortConf, side, "LowGearI", 0);
-    lowGearD = readPIDConfigItem(drivePortConf, side, "LowGearD", 0);
-
-    highGearMaxSpeed = readPIDConfigItem(drivePortConf, side, "HighGearMaxSpeed", 1);
-    highGearP = readPIDConfigItem(drivePortConf, side, "HighGearP", 0);
-    highGearI = readPIDConfigItem(drivePortConf, side, "HighGearI", 0);
-    highGearD = readPIDConfigItem(drivePortConf, side, "HighGearD", 0);
 
     _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
     /**
@@ -201,28 +205,19 @@ public class RealDriveTrain extends DriveTrain {
     _talon.configPeakOutputReverse(-1, kTimeoutMs);
 
     /* Config the Velocity closed loop gains in slot0 */
-    _talon.config_kF(kLowGearPIDSlot, (1023 / lowGearMaxSpeed), kTimeoutMs);
-    _talon.config_kP(kLowGearPIDSlot, lowGearP, kTimeoutMs);
-    _talon.config_kI(kLowGearPIDSlot, lowGearI, kTimeoutMs);
-    _talon.config_kD(kLowGearPIDSlot, lowGearD, kTimeoutMs);
+    _talon.config_kF(kLowGearPIDSlot, (1023 / lowGear.maxSpeed), kTimeoutMs);
+    _talon.config_kP(kLowGearPIDSlot, lowGear.p, kTimeoutMs);
+    _talon.config_kI(kLowGearPIDSlot, lowGear.i, kTimeoutMs);
+    _talon.config_kD(kLowGearPIDSlot, lowGear.d, kTimeoutMs);
     _talon.config_IntegralZone(kLowGearPIDSlot, 50, kTimeoutMs);
     /* Config the Velocity closed loop gains in slot1 */
-    _talon.config_kF(kHighGearPIDSlot, (1023 / highGearMaxSpeed), kTimeoutMs);
-    _talon.config_kP(kHighGearPIDSlot, highGearP, kTimeoutMs);
-    _talon.config_kI(kHighGearPIDSlot, highGearI, kTimeoutMs);
-    _talon.config_kD(kHighGearPIDSlot, highGearD, kTimeoutMs);
+    _talon.config_kF(kHighGearPIDSlot, (1023 / highGear.maxSpeed), kTimeoutMs);
+    _talon.config_kP(kHighGearPIDSlot, highGear.p, kTimeoutMs);
+    _talon.config_kI(kHighGearPIDSlot, highGear.i, kTimeoutMs);
+    _talon.config_kD(kHighGearPIDSlot, highGear.d, kTimeoutMs);
     _talon.config_IntegralZone(kHighGearPIDSlot, 50, kTimeoutMs);
     _talon.configClosedloopRamp(closedLoopNeutralToMaxSpeedSeconds);
     return _talon;
-  }
-
-  private double readPIDConfigItem(Config drivePortConf, String side, String configItem, double defaultValue) {
-    double configValue = defaultValue;
-    if (drivePortConf.hasPath(side + "Side" + configItem)) {
-      configValue = drivePortConf.getDouble(side + "Side" + configItem);
-    }
-    System.out.println(side + "Side" + configItem + "=" + configValue);
-    return configValue;
   }
 
   private WPI_TalonSRX initTalonSlave(Config drivePortConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
@@ -244,10 +239,12 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
-    Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
-        new TracePair("Rotate", rotateAmount));
-    // logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
-    // logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
+    Trace.getInstance().addTrace(true, "move", new TracePair<>("ForwardBack", forwardBackSpeed),
+        new TracePair<>("Rotate", rotateAmount));
+    if (usingVelocityMode) {
+      logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
+      logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
+    }
     if (invertTurning) {
       rotateAmount = -rotateAmount;
     }
@@ -264,10 +261,10 @@ public class RealDriveTrain extends DriveTrain {
       System.out.println("TALON IS NULL!!! ");
     }
     double motorOutput = _talon.getMotorOutputPercent();
-    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
-        new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
-        new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
-        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
+    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair<>("Percent", (double) motorOutput * 100),
+        new TracePair<>("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
+        new TracePair<>("Error", (double) _talon.getClosedLoopError(slotIdx)),
+        new TracePair<>("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
 //        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()),
 //        new TracePair("Current Channel 0", (double) pdp.getCurrent(0)),
 //        new TracePair("Current Channel 1", (double) pdp.getCurrent(1)),
