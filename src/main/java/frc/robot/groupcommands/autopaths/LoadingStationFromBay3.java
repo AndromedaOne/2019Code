@@ -11,13 +11,13 @@ public class LoadingStationFromBay3 extends CommandGroup {
     // TODO: Add non placeholder values.
     addSequential(new MoveUsingEncoderPID(-10));
     addSequential(new TurnToCompassHeading(0));
-    addSequential(new MoveUsingEncoderPID(-15));
+    addSequential(new MoveUsingEncoderPID(-168));
     if (AutoStartingConfig.onRightSide) {
       addSequential(new TurnToCompassHeading(270));
     } else {
       addSequential(new TurnToCompassHeading(90));
     }
-    addSequential(new MoveUsingEncoderPID(-10));
+    addSequential(new MoveUsingEncoderPID(-87));
     addSequential(new TurnToCompassHeading(0));
     addSequential(new MoveUsingBackUltrasonic(17));
     addSequential(new MoveUsingBackLineFollower());
