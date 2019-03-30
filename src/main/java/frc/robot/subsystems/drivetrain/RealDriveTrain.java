@@ -30,6 +30,7 @@ public class RealDriveTrain extends DriveTrain {
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
+  private boolean invertTurning = false;
   // private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public boolean getShifterPresentFlag() {
@@ -46,6 +47,9 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
         driveConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
+    if (conf.hasPath("subsystems.driveTrain.invertTurning")) {
+      invertTurning = conf.getBoolean("subsystems.driveTrain.invertTurning");
+    }
 
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
@@ -229,6 +233,9 @@ public class RealDriveTrain extends DriveTrain {
         new TracePair("Rotate", rotateAmount));
     // logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
     // logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
+    if (invertTurning) {
+      rotateAmount = -rotateAmount;
+    }
     differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
   }
 
