@@ -64,8 +64,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
 import frc.robot.subsystems.leds.LEDs;
-import frc.robot.subsystems.leds.MockLEDs;
-import frc.robot.subsystems.leds.RealLEDs;
+import frc.robot.subsystems.leds.LeftLEDs;
+import frc.robot.subsystems.leds.RightLEDs;
 import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
@@ -102,7 +102,8 @@ public class Robot extends TimedRobot {
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
-  public static LEDs leds;
+  public static LEDs rightLeds;
+  public static LEDs leftLeds;
   public static InfraredDistanceSensor clawInfraredSensor;
   public static LineFollowerSensorBase frontLineSensor;
   public static MagEncoderSensor topArmExtensionEncoder;
@@ -220,13 +221,12 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
-    if (conf.hasPath("subsystems.led")) {
-      System.out.println("Using Real LEDs");
-      leds = new RealLEDs();
-    } else {
-      System.out.println("Using Fake LEDs");
-      leds = new MockLEDs();
-    }
+    // Wether the LEDs are on the robot or not the robot doesnt care
+    System.out.println("Creating Right LEDs");
+    rightLeds = new RightLEDs();
+    System.out.println("Creating Left LEDs");
+    leftLeds = new LeftLEDs();
+
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
@@ -421,7 +421,8 @@ public class Robot extends TimedRobot {
     if (robotInitDone) {
       PIDMultiton.resetDisableAll();
     }
-    leds.setPurple(1.0);
+    rightLeds.setPurple(1.0);
+    leftLeds.setPurple(1.0);
     Trace.getInstance().flushTraceFiles();
   }
 
@@ -457,6 +458,8 @@ public class Robot extends TimedRobot {
     driveTrain.shiftToLowGear();
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
+    rightLeds.setPurple(1.0);
+    leftLeds.setPurple(1.0);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -496,7 +499,8 @@ public class Robot extends TimedRobot {
     }
     driveTrain.shiftToLowGear();
     // This is to set the LEDs to the correct color for what mode we are in
-    leds.setWhite(1.0);
+    rightLeds.setWhite(1.0);
+    leftLeds.setWhite(1.0);
     gyroCorrectMove.setCurrentAngle();
   }
 
@@ -509,10 +513,14 @@ public class Robot extends TimedRobot {
       intakeAngleSensor.reset();
     }
     Scheduler.getInstance().run();
+    leftLeds.updateLEDs();
+    rightLeds.updateLEDs();
   }
 
   @Override
   public void testInit() {
+    leftLeds.setPurple(1.0);
+    rightLeds.setPurple(1.0);
     MoveArmAndWristSafely.stop();
     super.testInit();
   }
