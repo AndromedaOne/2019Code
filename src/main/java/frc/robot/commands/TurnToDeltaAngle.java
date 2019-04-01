@@ -35,6 +35,7 @@ public class TurnToDeltaAngle extends Command {
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("TurnToDeltaAngle");
+    gyroPID.disable();
   }
 
 }
