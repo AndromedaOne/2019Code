@@ -117,12 +117,18 @@ public class TeleOpDrive extends Command {
     double requestedSpeed = forwardBackwardStickValue * mod;
     if (requestedSpeed > previousSpeed) {
       previousSpeed += kAccelerationSlope;
+      if (previousSpeed > requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
     } else {
       previousSpeed -= kAccelerationSlope;
+      if (previousSpeed < requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
     }
 
     if (shifterDelayCounter >= delay) {
-      Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
+      Robot.gyroCorrectMove.moveUsingGyro(previousSpeed, rotateStickValue * mod, true, true);
     } else {
       Robot.gyroCorrectMove.stop();
     }
