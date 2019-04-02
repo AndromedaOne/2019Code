@@ -33,6 +33,16 @@ public class PIDConfiguration {
     d = dParam;
   }
 
+  private double f;
+
+  public double getF() {
+    return f;
+  }
+
+  public void setF(double fParam) {
+    f = fParam;
+  }
+
   private double minimumOutput;
 
   public double getMinimumOutput() {

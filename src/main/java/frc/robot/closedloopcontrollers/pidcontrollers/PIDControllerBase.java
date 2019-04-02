@@ -11,6 +11,7 @@ public class PIDControllerBase implements Sendable {
   protected double p = 0;
   protected double i = 0;
   protected double d = 0;
+  protected double f = 0;
   protected String subsystemName;
   protected String pidName;
   protected double currentSetpoint = 0;
@@ -24,8 +25,7 @@ public class PIDControllerBase implements Sendable {
     pidMultiton.setSetpoint(setpoint);
   }
 
-  public 
-  double getCurrentSetpoint() {
+  public double getCurrentSetpoint() {
     return currentSetpoint;
   }
 
@@ -77,6 +77,7 @@ public class PIDControllerBase implements Sendable {
     pidConfiguration.setP(p);
     pidConfiguration.setI(i);
     pidConfiguration.setD(d);
+    pidConfiguration.setF(f);
     pidConfiguration.setAbsoluteTolerance(absoluteTolerance);
     pidConfiguration.setMaximumOutput(outputRange);
     pidConfiguration.setMinimumOutput(-outputRange);
