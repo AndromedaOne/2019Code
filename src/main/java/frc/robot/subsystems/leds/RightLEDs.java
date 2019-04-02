@@ -3,6 +3,7 @@ package frc.robot.subsystems.leds;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class RightLEDs extends LEDs {
@@ -29,7 +30,10 @@ public class RightLEDs extends LEDs {
     } else {
       toggleLEDsOn();
     }
+
+    
   }
+ 
 
   @Override
   protected void initDefaultCommand() {

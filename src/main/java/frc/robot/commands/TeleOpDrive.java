@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.telemetries.Trace;
@@ -107,10 +108,11 @@ public class TeleOpDrive extends Command {
     }
 
     if (slowMoEnabled) {
-      mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
       if(shifterHigh) {
         // This makes us drive faster when we are in slow mode high gear
-        mod = Math.min(1, 0.75 + slowModeCounter * kSlowModeSlope);
+        mod = Math.min(0.75, 0.75 + slowModeCounter * kSlowModeSlope);
+      } else {
+        mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
       }
     } else {
       mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);
