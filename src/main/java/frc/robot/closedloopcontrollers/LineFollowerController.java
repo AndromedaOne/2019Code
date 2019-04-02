@@ -13,20 +13,22 @@ public class LineFollowerController {
   private LineFollowArraySensorReading values;
   private final double kMinimumLineAngle = Math.toRadians(2); // appx. 0.035 Radians.
   private final double kForwardSpeed = .25;
-  private final double kRotateScaleFactor = 5.5; // 6
-  private final double kDistanceFromWall = 3; // Inches
+  private double rotateScaleFactor = 5.5; // 6
   private int lineNotFoundCounter = 0;
-  private double minDistanceToWall = 4;
+  private double minDistanceToWall = 10;
 
   public LineFollowerController(MoveDrivetrainGyroCorrect theGyroCorrectMove,
       LineFollowerSensorBase lineFollowerSensorArray) {
+
     gyroCorrectMove = theGyroCorrectMove;
     sensor = lineFollowerSensorArray;
     if (Robot.getConfig().hasPath("sensors.lineFollowSensor.lineFollowSensor4905.minDistToWall")) {
       minDistanceToWall = Robot.getConfig().getDouble("sensors.lineFollowSensor.lineFollowSensor4905.minDistToWall");
       System.out.println("Setting Line Follower Controller to " + minDistanceToWall + "...");
     }
-
+    if (Robot.getConfig().hasPath("sensors.lineFollowSensor.lineFollowSensor4905.invertRotation")) {
+      rotateScaleFactor *= -1;
+    }
   }
 
   public void run() {
@@ -35,12 +37,12 @@ public class LineFollowerController {
     double rotate = 0;
     SmartDashboard.putBoolean("IsLineFound", values.lineFound);
     SmartDashboard.putNumber("Angle", values.lineAngle);
-    if (values.lineFound && frontUltrasonicRange > kDistanceFromWall) {
+    if (values.lineFound && frontUltrasonicRange > minDistanceToWall) {
       lineNotFoundCounter = 0;
       if (values.lineAngle <= -kMinimumLineAngle) {
-        rotate = kRotateScaleFactor * values.lineAngle;
+        rotate = rotateScaleFactor * values.lineAngle;
       } else if (values.lineAngle >= kMinimumLineAngle) {
-        rotate = kRotateScaleFactor * values.lineAngle;
+        rotate = rotateScaleFactor * values.lineAngle;
       } else {
         rotate = 0;
       }

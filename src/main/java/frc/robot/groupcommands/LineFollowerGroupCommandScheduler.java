@@ -13,6 +13,7 @@ public class LineFollowerGroupCommandScheduler extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Running...");
     double lineAngle = Robot.frontLineSensor.findLine().lineAngle;
     (new LineFollowerGroupCommand(lineAngle)).start();
   }
