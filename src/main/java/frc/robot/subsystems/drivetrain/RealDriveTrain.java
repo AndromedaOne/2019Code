@@ -45,13 +45,19 @@ public class RealDriveTrain extends DriveTrain {
 
     public VelocityPIDParameters(Config driveSubsystemConf, String gear) {
       final String CONFIG_PATH = gear + ".velocityPIDParameters";
-      if (driveSubsystemConf.hasPath(CONFIG_PATH)) {
+        System.out.println("We are currently reading Velocity PID parameters for " + gear);
+        if (driveSubsystemConf.hasPath(CONFIG_PATH)) {
         Config conf = driveSubsystemConf.getConfig(CONFIG_PATH);
         maxSpeed = conf.getDouble("maxSpeed");
+        System.out.println("Max Speed = " + maxSpeed);
         p = conf.getDouble("P");
+        System.out.println("P value = " + p);
         i = conf.getDouble("I");
+        System.out.println("I value = " + i);
         d = conf.getDouble("D");
+        System.out.println("D value = " + d);
       } else {
+        System.out.println("You're in the else loop.");
         maxSpeed = 1;
         p = 0;
         i = 0;
@@ -69,7 +75,8 @@ public class RealDriveTrain extends DriveTrain {
     VelocityPIDParameters highGearPidParams = new VelocityPIDParameters(driveSubConfig, "highGear");
     lowGearMaxSpeed = lowGearPidParams.maxSpeed;
     highGearMaxSpeed = highGearPidParams.maxSpeed;
-    
+    maxSpeed = lowGearMaxSpeed;
+
     
     driveTrainLeftMaster = initTalonMaster(drivePortConf, lowGearPidParams, highGearPidParams, "left");
     driveTrainLeftSlave = initTalonSlave(drivePortConf, "leftSlave", driveTrainLeftMaster,
@@ -261,7 +268,7 @@ public class RealDriveTrain extends DriveTrain {
       System.out.println("TALON IS NULL!!! ");
     }
     double motorOutput = _talon.getMotorOutputPercent();
-    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair<>("Percent", (double) motorOutput * 100),
+    Trace.getInstance().addTrace(true, "VCMeasure" + side, new TracePair<>("Percent", (double) motorOutput * 100),
         new TracePair<>("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
         new TracePair<>("Error", (double) _talon.getClosedLoopError(slotIdx)),
         new TracePair<>("Target", (double) _talon.getClosedLoopTarget(slotIdx)));

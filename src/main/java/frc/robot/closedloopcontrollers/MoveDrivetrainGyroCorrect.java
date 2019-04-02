@@ -12,7 +12,7 @@ public class MoveDrivetrainGyroCorrect {
   private double newRotateValue = 0;
   private boolean gyroCorrect = false;
   private double currentDelay = 0;
-  private static final double kDelay = 25;
+  private static final double kDelay = 25; //Note
   private static final double kProportion = 0.05;
   private boolean invertGyroCorrect = false;
 
