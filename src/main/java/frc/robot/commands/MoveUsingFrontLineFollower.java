@@ -16,12 +16,12 @@ public class MoveUsingFrontLineFollower extends Command {
   public MoveUsingFrontLineFollower() {
     controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.frontLineSensor);
     requires(Robot.driveTrain);
-    System.out.println("Calling the linefollower controller, moving to line...");
 
   }
 
   @Override
   protected void initialize() {
+    System.out.println("Running MUFLF");
     Trace.getInstance().logCommandStart("CallLineFollowerController");
     controller.initialize();
   }
