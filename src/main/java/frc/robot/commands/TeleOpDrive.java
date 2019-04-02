@@ -27,7 +27,7 @@ public class TeleOpDrive extends Command {
   private int slowModeCounter = 0;
   private double kSlowModeSlope = 1.0 / 50.0;
   private double previousSpeed = 0;
-  private final double kAccelerationSlope = 1 / 25;
+  private final double kAccelerationSlope = 1.0 / 25.0;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -105,7 +105,7 @@ public class TeleOpDrive extends Command {
 
     if (slowMoEnabled) {
       mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
-      if(shifterHigh) {
+      if (shifterHigh) {
         // This makes us drive faster when we are in slow mode high gear
         mod = Math.min(1, 0.75 + slowModeCounter * kSlowModeSlope);
       }
