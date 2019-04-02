@@ -15,11 +15,13 @@ import com.typesafe.config.ConfigFactory;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.MoveDrivetrainGyroCorrect;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDController;
@@ -413,6 +415,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     pneumaticStilts.stopAllLegs();
     if (robotInitDone) {
       PIDMultiton.resetDisableAll();
@@ -445,6 +450,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
     MoveArmAndWristSafely.stop();
@@ -481,6 +489,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
     MoveArmAndWristSafely.stop();
@@ -539,6 +550,9 @@ public class Robot extends TimedRobot {
     double topArmExtensionTicks = topArmExtensionEncoder.getDistanceTicks();
     double bottomArmExtensionTicks = bottomArmExtensionEncoder.getDistanceTicks();
     double shoulderTicks = shoulderEncoder.getDistanceTicks();
+    SmartDashboard.putNumber("topArmExtensionTicks", topArmExtensionTicks);
+    SmartDashboard.putNumber("bottomArmExtensionTicks", bottomArmExtensionTicks);
+    SmartDashboard.putNumber("shoulderTicks", shoulderTicks);
 
     double retraction = getExtensionIn(topArmExtensionTicks, bottomArmExtensionTicks);
     double wristDegrees = getWristRotDegrees(topArmExtensionTicks, bottomArmExtensionTicks);
