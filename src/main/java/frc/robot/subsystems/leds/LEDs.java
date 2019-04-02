@@ -8,7 +8,7 @@ public abstract class LEDs extends Subsystem {
   protected DigitalOutput red;
   protected DigitalOutput green;
   protected DigitalOutput blue;
-  protected final double kBlinkSpeedMultiplier = 0.1;
+  protected final double kBlinkSpeedMultiplier = 1.5;
   protected int blinkCounter = 0;
   private double redValue = 0;
   private double greenValue = 0;
