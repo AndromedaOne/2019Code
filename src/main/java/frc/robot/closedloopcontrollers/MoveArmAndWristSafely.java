@@ -312,6 +312,14 @@ public class MoveArmAndWristSafely {
     if (wristRotDeg < -maxWristRotDegrees) {
       safeArmMovements.wristRotateCounterClockwise = false;
     }
+    shoulderRotDeg += 180;
+    shoulderRotDeg = shoulderRotDeg % 360;
+    shoulderRotDeg -= 180;
+
+    shoulderRotDeg -= 180;
+    shoulderRotDeg = shoulderRotDeg % 360;
+    shoulderRotDeg += 180;
+
     if (shoulderRotDeg < -165 && extensionIn > maxExtensionInches - 10) {
       // System.out.println("Failing 1");
       // System.out.println("safety 1");
