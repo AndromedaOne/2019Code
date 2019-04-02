@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.DriverOveride;
 import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.RollIntakeGroupCommandScheduler;
@@ -84,6 +85,7 @@ public class OI {
   private JoystickButton turnToWest;
   private JoystickButton runIntakeIn;
   private JoystickButton runIntakeOut;
+  private JoystickButton driverOveride;
 
   private JoystickButton LowGamePieceButton;
   private JoystickButton MiddleGamePieceButton;
@@ -122,6 +124,9 @@ public class OI {
 
     retractRearLegs = new POVButton(driveController, POVDirectionNames.WEST.getValue());
     retractRearLegs.whenPressed(new RetractRearLegs());
+
+    driverOveride = new JoystickButton(driveController, ButtonsEnumerated.RIGHTSTICKBUTTON.getValue());
+    driverOveride.whenPressed(new DriverOveride());
 
     SmartDashboard.putData("Retract All", new RetractAll());
 
