@@ -108,6 +108,10 @@ public class TeleOpDrive extends Command {
 
     if (slowMoEnabled) {
       mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
+      if(shifterHigh) {
+        // This makes us drive faster when we are in slow mode high gear
+        mod = Math.min(1, 0.75 + slowModeCounter * kSlowModeSlope);
+      }
     } else {
       mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);
     }
