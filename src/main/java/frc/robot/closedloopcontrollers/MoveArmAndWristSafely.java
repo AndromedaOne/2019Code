@@ -143,10 +143,7 @@ public class MoveArmAndWristSafely {
     } else if (localTeleopWristPower < 0 && !teleopSafeArmMovements.wristRotateCounterClockwise) {
       localTeleopWristPower = 0;
     }
-    System.out.println("localTeleopShoulderPower: " + localTeleopShoulderPower);
-    System.out.println("!teleopSafeArmMovements.shoulderRotateClockwise: " + !teleopSafeArmMovements.shoulderRotateClockwise);
-    if (localTeleopShoulderPower > 0 && !teleopSafeArmMovements.shoulderRotateClockwise) {
-      System.out.println("Setting localTeleopShoulderPower Power to 0!");
+     if (localTeleopShoulderPower > 0 && !teleopSafeArmMovements.shoulderRotateClockwise) {
       localTeleopShoulderPower = 0;
     } else if (localTeleopShoulderPower < 0 && !teleopSafeArmMovements.shoulderRotateCounterClockwise) {
       localTeleopShoulderPower = 0;
@@ -327,9 +324,9 @@ public class MoveArmAndWristSafely {
       double extensionPower, double wristPower, double shoulderPower) {
 
     SafeArmMovements safeArmMovements = new SafeArmMovements();
-    //System.out.println("ShoulderRotDeg: " + shoulderRotDeg);
+   
     if (shoulderRotDeg > 180) {
-      //System.out.println("Oops we're past 180˚, disabling clockwise rotation");
+      
       safeArmMovements.shoulderRotateClockwise = false;
     }
     if (shoulderRotDeg < -180) {
