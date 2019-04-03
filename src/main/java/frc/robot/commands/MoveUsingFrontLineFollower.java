@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.LineFollowerController;
 import frc.robot.telemetries.Trace;
+import frc.robot.utilities.ButtonsEnumerated;
 
 /**
  *
@@ -34,7 +35,8 @@ public class MoveUsingFrontLineFollower extends Command {
 
   @Override
   protected boolean isFinished() {
-    return controller.isDone();
+    return controller.isDone()
+        || !ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTSTICKBUTTON, Robot.driveController);
   }
 
   @Override
