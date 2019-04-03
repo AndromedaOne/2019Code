@@ -86,6 +86,7 @@ public class OI {
   private JoystickButton runIntakeIn;
   private JoystickButton runIntakeOut;
   private JoystickButton driverOveride;
+  private JoystickButton followLine;
 
   private JoystickButton LowGamePieceButton;
   private JoystickButton MiddleGamePieceButton;
@@ -127,6 +128,9 @@ public class OI {
 
     driverOveride = new JoystickButton(driveController, ButtonsEnumerated.RIGHTSTICKBUTTON.getValue());
     driverOveride.whenPressed(new DriverOveride());
+
+    followLine = new JoystickButton(driveController, ButtonsEnumerated.LEFTSTICKBUTTON.getValue());
+    followLine.whenPressed(new LineFollowerGroupCommandScheduler());
 
     SmartDashboard.putData("Retract All", new RetractAll());
 

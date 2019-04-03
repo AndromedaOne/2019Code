@@ -27,7 +27,7 @@ public class TeleOpDrive extends Command {
   private int slowModeCounter = 0;
   private double kSlowModeSlope = 1.0 / 50.0;
   private double previousSpeed = 0;
-  private final double kAccelerationSlope = 1.0 / 25.0;
+  private final double kAccelerationSlope = 1.0 / 12.5;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
