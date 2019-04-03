@@ -226,10 +226,7 @@ public class MoveArmAndWristSafely {
     } else if (wristPower < 0 && !safeArmMovements.wristRotateCounterClockwise) {
       wristPower = 0;
     }
-    System.out.println("shoulderPower: " + shoulderPower);
-    System.out.println("!safeArmMovements.shoulderRotateClockwise: " + !safeArmMovements.shoulderRotateClockwise);
     if (shoulderPower > 0 && !safeArmMovements.shoulderRotateClockwise) {
-      System.out.println("Setting shoulder Power to 0!");
       shoulderPower = 0;
     } else if (shoulderPower < 0 && !safeArmMovements.shoulderRotateCounterClockwise) {
       shoulderPower = 0;
