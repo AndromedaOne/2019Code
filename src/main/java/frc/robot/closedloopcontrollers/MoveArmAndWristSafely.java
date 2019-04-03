@@ -128,8 +128,8 @@ public class MoveArmAndWristSafely {
     double shoulderPower = 0;
     SafeArmMovements teleopSafeArmMovements = new SafeArmMovements();
     if (!OI.overRideSafetiesButton.isPressed(Robot.operatorController)) {
-      teleopSafeArmMovements = isMovementSafe(localTeleopExtensionPower, localTeleopWristPower
-      , localTeleopShoulderPower);
+      teleopSafeArmMovements = isMovementSafe(localTeleopExtensionPower, localTeleopWristPower,
+          localTeleopShoulderPower);
     }
 
     if (localTeleopExtensionPower > 0 && !teleopSafeArmMovements.armRetraction) {
@@ -143,10 +143,7 @@ public class MoveArmAndWristSafely {
     } else if (localTeleopWristPower < 0 && !teleopSafeArmMovements.wristRotateCounterClockwise) {
       localTeleopWristPower = 0;
     }
-    System.out.println("localTeleopShoulderPower: " + localTeleopShoulderPower);
-    System.out.println("!teleopSafeArmMovements.shoulderRotateClockwise: " + !teleopSafeArmMovements.shoulderRotateClockwise);
     if (localTeleopShoulderPower > 0 && !teleopSafeArmMovements.shoulderRotateClockwise) {
-      System.out.println("Setting localTeleopShoulderPower Power to 0!");
       localTeleopShoulderPower = 0;
     } else if (localTeleopShoulderPower < 0 && !teleopSafeArmMovements.shoulderRotateCounterClockwise) {
       localTeleopShoulderPower = 0;
@@ -281,7 +278,6 @@ public class MoveArmAndWristSafely {
       }
     }
 
-    
     Robot.extendableArmAndWrist.moveArmWrist(extensionPower, wristPower, shoulderPower);
 
     SmartDashboard.putNumber("shoulderPower", shoulderPower);
@@ -299,7 +295,6 @@ public class MoveArmAndWristSafely {
    * @throws ArmOutOfBoundsException
    */
 
-
   private static SafeArmMovements isMovementSafe(double extensionVelocity, double wristRotVelocity,
       double shoulderRotVelocity) {
     ArmPosition armPosition = Robot.getCurrentArmPosition();
@@ -314,7 +309,6 @@ public class MoveArmAndWristSafely {
     double deltaWristRot = wristRotVelocityConversion * deltaTime * 1.0;
     double deltaShoulderRot = shoulderRotVelocityConversion * deltaTime * 1.0;
 
-
     SafeArmMovements safeArmMovements = isLocSafe(armPosition.getArmRetraction() + deltaExtension,
         armPosition.getWristAngle() + deltaWristRot, armPosition.getShoulderAngle() + deltaShoulderRot,
         extensionVelocity, wristRotVelocity, shoulderRotVelocity);
@@ -327,15 +321,16 @@ public class MoveArmAndWristSafely {
       double extensionPower, double wristPower, double shoulderPower) {
 
     SafeArmMovements safeArmMovements = new SafeArmMovements();
-    //System.out.println("ShoulderRotDeg: " + shoulderRotDeg);
+
     if (shoulderRotDeg > 180) {
-      //System.out.println("Oops we're past 180˚, disabling clockwise rotation");
+
       safeArmMovements.shoulderRotateClockwise = false;
     }
     if (shoulderRotDeg < -180) {
       safeArmMovements.shoulderRotateCounterClockwise = false;
     }
     if (extensionIn < 0) {
+
       safeArmMovements.armExtension = false;
     }
     if (extensionIn > maxExtensionInches) {
