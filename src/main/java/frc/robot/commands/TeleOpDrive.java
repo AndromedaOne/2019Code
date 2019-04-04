@@ -22,7 +22,8 @@ public class TeleOpDrive extends Command {
   private int delay = 4;
   private boolean shiftButtonPressed = false;
   private boolean slowModeButtonPressed = false;
-  private double kSlowModeModifier = 0.6;
+  private double kFirstGearModifier = 0.6;
+  private double kThirdGearModifier = 0.75;
   private double kAccelerationModifier = 0.6;
   private int slowModeCounter = 0;
   private double kSlowModeSlope = 1.0 / 50.0;
@@ -104,13 +105,11 @@ public class TeleOpDrive extends Command {
     }
 
     if (slowMoEnabled) {
-      mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
+      mod = kFirstGearModifier;
       if (shifterHigh) {
         // This makes us drive faster when we are in slow mode high gear
-        mod = Math.min(1, 0.75 + slowModeCounter * kSlowModeSlope);
+        mod = kThirdGearModifier;
       }
-    } else {
-      mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);
     }
 
     // This stops you from switching in slow over and over again while holding the
