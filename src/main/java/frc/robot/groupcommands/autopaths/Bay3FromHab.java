@@ -34,7 +34,7 @@ public class Bay3FromHab extends CommandGroup {
       addSequential(new MoveUsingFrontLineFollower());
     } else {
       // Moves us up to the wall
-      addSequential(new MoveUsingBackUltrasonic(3));
+      addSequential(new MoveUsingFrontUltrasonic(3));
     }
     addSequential(new ReleaseCurrentGamepiece());
     // moves us away from the wall after we place the game piece
