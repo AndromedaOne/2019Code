@@ -57,13 +57,13 @@ public abstract class LineFollowerSensorBase {
         SmartDashboard.putNumber("Distance From Center", currentDistanceFromCenter);
         SmartDashboard.putBoolean("Found Line", findLine().lineFound);
         SmartDashboard.putNumber("Line Angle", findLine().lineAngle);
-        Trace.getInstance().addTrace(true, "LineFollower", new TracePair("LS0", returnSensorReadingBuffer[0]),
-            new TracePair("LS1", returnSensorReadingBuffer[1]), new TracePair("LS2", returnSensorReadingBuffer[2]),
-            new TracePair("LS3", returnSensorReadingBuffer[3]), new TracePair("LS4", returnSensorReadingBuffer[4]),
-            new TracePair("LS5", returnSensorReadingBuffer[5]), new TracePair("LS6", returnSensorReadingBuffer[6]),
-            new TracePair("LS7", returnSensorReadingBuffer[7]),
-            new TracePair("DistFromCenter", currentDistanceFromCenter),
-            new TracePair("LineAngle", findLine().lineAngle));
+        Trace.getInstance().addTrace(true, "LineFollower", new TracePair<>("LS0", returnSensorReadingBuffer[0]),
+            new TracePair<>("LS1", returnSensorReadingBuffer[1]), new TracePair<>("LS2", returnSensorReadingBuffer[2]),
+            new TracePair<>("LS3", returnSensorReadingBuffer[3]), new TracePair<>("LS4", returnSensorReadingBuffer[4]),
+            new TracePair<>("LS5", returnSensorReadingBuffer[5]), new TracePair<>("LS6", returnSensorReadingBuffer[6]),
+            new TracePair<>("LS7", returnSensorReadingBuffer[7]),
+            new TracePair<>("DistFromCenter", currentDistanceFromCenter),
+            new TracePair<>("LineAngle", findLine().lineAngle));
         Timer.delay(threadTime);
       }
     }
