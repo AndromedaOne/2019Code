@@ -133,6 +133,7 @@ public class TeleOpDrive extends Command {
 
     if (shifterDelayCounter >= delay) {
       Robot.gyroCorrectMove.moveUsingGyro(previousSpeed, rotateStickValue * mod, true, true);
+      System.out.println("Previous Speed = " + previousSpeed);
     } else {
       Robot.gyroCorrectMove.stop();
     }
