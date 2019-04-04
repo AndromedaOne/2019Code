@@ -66,6 +66,7 @@ import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.leds.LeftLEDs;
+import frc.robot.subsystems.leds.MockLEDs;
 import frc.robot.subsystems.leds.RightLEDs;
 import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
@@ -222,11 +223,17 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
-    // Wether the LEDs are on the robot or not the robot doesnt care
-    System.out.println("Creating Right LEDs");
-    rightLeds = new RightLEDs();
-    System.out.println("Creating Left LEDs");
-    leftLeds = new LeftLEDs();
+
+    if (conf.hasPath("subsystems.LEDs")) {
+      System.out.println("Creating Right LEDs");
+      rightLeds = new RightLEDs();
+      System.out.println("Creating Left LEDs");
+      leftLeds = new LeftLEDs();
+    } else {
+      System.out.println("Creating Fake LEDs");
+      leftLeds = new MockLEDs();
+      rightLeds = new MockLEDs();
+    }
 
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
