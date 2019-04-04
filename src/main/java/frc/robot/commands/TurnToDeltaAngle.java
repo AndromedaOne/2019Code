@@ -13,10 +13,14 @@ public class TurnToDeltaAngle extends Command {
   public TurnToDeltaAngle(double theDeltaAngle) {
     deltaAngle = theDeltaAngle;
     requires(Robot.driveTrain);
+    if (Robot.getConfig().hasPath("sensors.lineFollowSensor.lineFollowSensor4905.invertRotation")) {
+      deltaAngle *= -1;
+    }
   }
 
   @Override
   protected void initialize() {
+    Robot.driveTrain.shiftToLowGear();
     double setPoint = NavXGyroSensor.getInstance().getZAngle() + deltaAngle;
     Trace.getInstance().logCommandStart("TurnToDeltaAngle");
     gyroPID.setSetpoint(setPoint);
@@ -31,6 +35,7 @@ public class TurnToDeltaAngle extends Command {
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("TurnToDeltaAngle");
+    gyroPID.disable();
   }
 
 }

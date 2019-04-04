@@ -126,6 +126,29 @@ public class MoveArmAndWristSafely {
     mutex.unlock();
 
     double shoulderPower = 0;
+    SafeArmMovements teleopSafeArmMovements = new SafeArmMovements();
+    if (!OI.overRideSafetiesButton.isPressed(Robot.operatorController)) {
+      teleopSafeArmMovements = isMovementSafe(localTeleopExtensionPower, localTeleopWristPower,
+          localTeleopShoulderPower);
+    }
+
+    if (localTeleopExtensionPower > 0 && !teleopSafeArmMovements.armRetraction) {
+      localTeleopExtensionPower = 0;
+    } else if (localTeleopExtensionPower < 0 && !teleopSafeArmMovements.armExtension) {
+      localTeleopExtensionPower = 0;
+    }
+
+    if (localTeleopWristPower > 0 && !teleopSafeArmMovements.wristRotateClockwise) {
+      localTeleopWristPower = 0;
+    } else if (localTeleopWristPower < 0 && !teleopSafeArmMovements.wristRotateCounterClockwise) {
+      localTeleopWristPower = 0;
+    }
+    if (localTeleopShoulderPower > 0 && !teleopSafeArmMovements.shoulderRotateClockwise) {
+      localTeleopShoulderPower = 0;
+    } else if (localTeleopShoulderPower < 0 && !teleopSafeArmMovements.shoulderRotateCounterClockwise) {
+      localTeleopShoulderPower = 0;
+
+    }
 
     if (Math.abs(localTeleopShoulderPower) >= 0.2) {
       shoulderPower = localTeleopShoulderPower;
@@ -203,7 +226,6 @@ public class MoveArmAndWristSafely {
     } else if (wristPower < 0 && !safeArmMovements.wristRotateCounterClockwise) {
       wristPower = 0;
     }
-
     if (shoulderPower > 0 && !safeArmMovements.shoulderRotateClockwise) {
       shoulderPower = 0;
     } else if (shoulderPower < 0 && !safeArmMovements.shoulderRotateCounterClockwise) {
@@ -255,6 +277,8 @@ public class MoveArmAndWristSafely {
 
     Robot.extendableArmAndWrist.moveArmWrist(extensionPower, wristPower, shoulderPower);
 
+    SmartDashboard.putNumber("shoulderPower", shoulderPower);
+
     SmartDashboard.putNumber("ShoulderAngle", currentArmPosition.getShoulderAngle());
     SmartDashboard.putNumber("WristAngle", currentArmPosition.getWristAngle());
     SmartDashboard.putNumber("ExtensionIn", currentArmPosition.getArmRetraction());
@@ -263,6 +287,7 @@ public class MoveArmAndWristSafely {
   /**
    * @param extensionVelocity
    * @param wristRotVelocity
+   * 
    * @param shoulderRotVelocity
    * @throws ArmOutOfBoundsException
    */
@@ -293,13 +318,16 @@ public class MoveArmAndWristSafely {
       double extensionPower, double wristPower, double shoulderPower) {
 
     SafeArmMovements safeArmMovements = new SafeArmMovements();
+
     if (shoulderRotDeg > 180) {
+
       safeArmMovements.shoulderRotateClockwise = false;
     }
     if (shoulderRotDeg < -180) {
       safeArmMovements.shoulderRotateCounterClockwise = false;
     }
     if (extensionIn < 0) {
+
       safeArmMovements.armExtension = false;
     }
     if (extensionIn > maxExtensionInches) {
@@ -310,8 +338,18 @@ public class MoveArmAndWristSafely {
 
     }
     if (wristRotDeg < -maxWristRotDegrees) {
+
       safeArmMovements.wristRotateCounterClockwise = false;
     }
+
+    shoulderRotDeg += 180;
+    shoulderRotDeg = shoulderRotDeg % 360;
+    shoulderRotDeg -= 180;
+
+    shoulderRotDeg -= 180;
+    shoulderRotDeg = shoulderRotDeg % 360;
+    shoulderRotDeg += 180;
+
     if (shoulderRotDeg < -165 && extensionIn > maxExtensionInches - 10) {
       // System.out.println("Failing 1");
       // System.out.println("safety 1");

@@ -27,7 +27,7 @@ public class TeleOpDrive extends Command {
   private int slowModeCounter = 0;
   private double kSlowModeSlope = 1.0 / 50.0;
   private double previousSpeed = 0;
-  private final double kAccelerationSlope = 1 / 25;
+  private final double kAccelerationSlope = 1.0 / 12.5;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -105,6 +105,10 @@ public class TeleOpDrive extends Command {
 
     if (slowMoEnabled) {
       mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
+      if (shifterHigh) {
+        // This makes us drive faster when we are in slow mode high gear
+        mod = Math.min(1, 0.75 + slowModeCounter * kSlowModeSlope);
+      }
     } else {
       mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);
     }
@@ -117,12 +121,18 @@ public class TeleOpDrive extends Command {
     double requestedSpeed = forwardBackwardStickValue * mod;
     if (requestedSpeed > previousSpeed) {
       previousSpeed += kAccelerationSlope;
+      if (previousSpeed > requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
     } else {
       previousSpeed -= kAccelerationSlope;
+      if (previousSpeed < requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
     }
 
     if (shifterDelayCounter >= delay) {
-      Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
+      Robot.gyroCorrectMove.moveUsingGyro(previousSpeed, rotateStickValue * mod, true, true);
     } else {
       Robot.gyroCorrectMove.stop();
     }

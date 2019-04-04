@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.LineFollowerController;
 import frc.robot.telemetries.Trace;
+import frc.robot.utilities.ButtonsEnumerated;
 
 /**
  *
@@ -16,12 +17,12 @@ public class MoveUsingFrontLineFollower extends Command {
   public MoveUsingFrontLineFollower() {
     controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.frontLineSensor);
     requires(Robot.driveTrain);
-    System.out.println("Calling the linefollower controller, moving to line...");
 
   }
 
   @Override
   protected void initialize() {
+    System.out.println("Running MUFLF");
     Trace.getInstance().logCommandStart("CallLineFollowerController");
     controller.initialize();
   }
@@ -34,7 +35,8 @@ public class MoveUsingFrontLineFollower extends Command {
 
   @Override
   protected boolean isFinished() {
-    return controller.isDone();
+    return controller.isDone()
+        || !ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTSTICKBUTTON, Robot.driveController);
   }
 
   @Override
