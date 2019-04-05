@@ -110,6 +110,8 @@ public class TeleOpDrive extends Command {
         // This makes us drive faster when we are in slow mode high gear
         mod = kThirdGearModifier;
       }
+    } else {
+      mod = 1;
     }
 
     // This stops you from switching in slow over and over again while holding the
