@@ -224,7 +224,7 @@ public class Robot extends TimedRobot {
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
 
-    if (conf.hasPath("subsystems.LEDs")) {
+    if (conf.hasPath("subsystems.led")) {
       System.out.println("Creating Right LEDs");
       rightLeds = new RightLEDs();
       System.out.println("Creating Left LEDs");
