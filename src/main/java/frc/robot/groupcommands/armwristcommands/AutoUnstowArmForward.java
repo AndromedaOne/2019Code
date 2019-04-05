@@ -10,9 +10,9 @@ import frc.robot.commands.armwristcommands.RotateWrist;
 public class AutoUnstowArmForward extends CommandGroup {
     
     public AutoUnstowArmForward(){
-        addParallel(new RetractArm(5));
+        addParallel(new RetractArm(0));
         addSequential(new RotateWrist(IntakeReady.setpoint.getWristAngle()));
-        addParallel(new RotateShoulder(-10));
+        addParallel(new RotateShoulder(50));
         //Intake is moved to the DOWN position twice because the starting postion is unknown. 
         addSequential(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
         addSequential(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
