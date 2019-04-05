@@ -22,6 +22,7 @@ import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
 import frc.robot.groupcommands.LineFollowerGroupCommandScheduler;
+import frc.robot.groupcommands.armwristcommands.AutoUnstowArmForward;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
 
@@ -139,6 +140,8 @@ public class OI {
 
     SmartDashboard.putData("LineFollowerGroupCommandSchedulerCaller", new LineFollowerGroupCommandScheduler());
     // Claw buttons are temp until I figure out the D-Pad
+
+    SmartDashboard.putData("Auto Unstow Arm",new AutoUnstowArmForward());
 
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
     turnToNorth.whenPressed(new TurnToCompassHeading(0));
