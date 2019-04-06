@@ -118,7 +118,7 @@ public class IntakeArmControl extends Command {
   @Override
   protected void execute() {
     counter++;
-    if (counter >= 100) {
+    if (counter >= 70) {
       isFinished = true;
     }
   }
