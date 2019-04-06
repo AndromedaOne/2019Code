@@ -15,8 +15,8 @@ public class IntakeArmControl extends Command {
 
   private IntakePIDController intakePositionsPID = IntakePIDController.getInstance();
 
-  private MoveIntakeArmDirection directionToMove;
-  private IntakeArmPositionsEnum nextIntakePosition;
+  private MoveIntakeArmDirection directionToMove = MoveIntakeArmDirection.UP;
+  private IntakeArmPositionsEnum nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
 
   private int counter = 0;
   private boolean isFinished = false;
