@@ -3,6 +3,7 @@ package frc.robot.subsystems.leds;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class LeftLEDs extends LEDs {
@@ -27,7 +28,13 @@ public class LeftLEDs extends LEDs {
       if (blinkCounter > blinkSpeed) {
         blinkCounter = 0;
         toggleLEDs();
+        if(SmartDashboard.getString("Left", "").equals("")) {
+          SmartDashboard.putString("Left", "\u26A0");
+        } else {
+          SmartDashboard.putString("Left", "");
+        }
       }
+
     } else {
       toggleLEDsOn();
     }
