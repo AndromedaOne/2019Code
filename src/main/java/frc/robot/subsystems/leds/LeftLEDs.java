@@ -43,7 +43,6 @@ public class LeftLEDs extends LEDs {
 
   @Override
   protected void initDefaultCommand() {
-
   }
 
 }
