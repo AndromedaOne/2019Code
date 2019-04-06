@@ -12,8 +12,8 @@ public class MoveDrivetrainGyroCorrect {
   private double newRotateValue = 0;
   private boolean gyroCorrect = false;
   private double currentDelay = 0;
-  private static final double kDelay = 25; //Note
-  private static final double kProportion = 0.0; //Should be 0.05, DON'T CHECK THIS IN!!!
+  private static final double kDelay = 25; // Note
+  private static final double kProportion = 0.0; // Should be 0.05, DON'T CHECK THIS IN!!!
   private boolean invertGyroCorrect = false;
 
   public MoveDrivetrainGyroCorrect(NavXGyroSensor theNavX, DriveTrain theDriveTrain) {
