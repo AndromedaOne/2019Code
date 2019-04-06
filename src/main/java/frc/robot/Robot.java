@@ -396,6 +396,11 @@ public class Robot extends TimedRobot {
     driveController = OI.getInstance().getDriveStick();
     armController = OI.getInstance().getOperatorStick();
 
+    // These are for the line follower, We blink these to tell what way we need to
+    // turn
+    SmartDashboard.putString("Right", "");
+    SmartDashboard.putString("Left", "");
+
     robotInitDone = true;
   }
 
