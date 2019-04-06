@@ -494,7 +494,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    SmartDashboard.putNumber("AutoTime", Timer.getMatchTime());
+    SmartDashboard.putNumber("MatchTime", Timer.getMatchTime());
     Scheduler.getInstance().run();
   }
 
@@ -531,7 +531,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     leftLeds.updateLEDs();
     rightLeds.updateLEDs();
-    SmartDashboard.putNumber("AutoTime", Timer.getMatchTime());
+    SmartDashboard.putNumber("MatchTime", Timer.getMatchTime());
   }
 
   @Override
