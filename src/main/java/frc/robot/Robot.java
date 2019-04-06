@@ -289,6 +289,7 @@ public class Robot extends TimedRobot {
       int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
       intakeAngleSensor.putSensorOnLiveWindow("Intake Sensor", "Angle");
+      SmartDashboard.putNumber("IntakeAngle", 0);
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
@@ -401,7 +402,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Right", "");
     SmartDashboard.putString("Left", "");
     SmartDashboard.putNumber("MatchTime", 0.0);
-    SmartDashboard.putNumber("CurrentSpeed", 2);
+    SmartDashboard.putNumber("CurrentSpeed", 3);
 
     robotInitDone = true;
   }
@@ -418,6 +419,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // This is for constant tracing
+    SmartDashboard.putNumber("IntakeAngle", intakeAngleSensor.getAngle());
     NavXGyroSensor.getInstance().getZAngle();
     NavXGyroSensor.getInstance().getXAngle();
   }
@@ -513,10 +515,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    driveTrain.shiftToLowGear();
+    driveTrain.shiftToHighGear();
     // This is to set the LEDs to the correct color for what mode we are in
-    rightLeds.setWhite(1.0);
-    leftLeds.setWhite(1.0);
+    rightLeds.setBlue(1.0);
+    leftLeds.setBlue(1.0);
     gyroCorrectMove.setCurrentAngle();
   }
 

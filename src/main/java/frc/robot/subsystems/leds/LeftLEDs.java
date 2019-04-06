@@ -22,7 +22,7 @@ public class LeftLEDs extends LEDs {
 
   @Override
   public void updateLEDs() {
-    if (Robot.frontLineSensor.findLine().lineFound && (Robot.frontLineSensor.findLine().lineAngle >= -0.4)) {
+    if (Robot.frontLineSensor.findLine().lineFound && (Robot.frontLineSensor.findLine().lineAngle >= -0.04)) {
       blinkCounter++;
       double blinkSpeed = (Robot.drivetrainFrontUltrasonic.getMinDistanceInches() * kBlinkSpeedMultiplier) - 13;
       if (blinkCounter > blinkSpeed) {
@@ -43,7 +43,6 @@ public class LeftLEDs extends LEDs {
 
   @Override
   protected void initDefaultCommand() {
-
   }
 
 }
