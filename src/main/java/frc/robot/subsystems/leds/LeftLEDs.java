@@ -22,7 +22,7 @@ public class LeftLEDs extends LEDs {
 
   @Override
   public void updateLEDs() {
-    if (Robot.frontLineSensor.findLine().lineFound && (Robot.frontLineSensor.findLine().lineAngle >= 0)) {
+    if (Robot.frontLineSensor.findLine().lineFound && (Robot.frontLineSensor.findLine().lineAngle >= -0.4)) {
       blinkCounter++;
       double blinkSpeed = (Robot.drivetrainFrontUltrasonic.getMinDistanceInches() * kBlinkSpeedMultiplier) - 13;
       if (blinkCounter > blinkSpeed) {
@@ -36,6 +36,7 @@ public class LeftLEDs extends LEDs {
       }
 
     } else {
+      SmartDashboard.putString("Left", "");
       toggleLEDsOn();
     }
   }

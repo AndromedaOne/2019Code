@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.telemetries.Trace;
@@ -143,15 +144,19 @@ public class TeleOpDrive extends Command {
     if (slowMoEnabled && shifterHigh) {
       Robot.rightLeds.setBlue(1.0);
       Robot.leftLeds.setBlue(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 3);
     } else if (slowMoEnabled && !shifterHigh) {
       Robot.rightLeds.setRed(1.0);
       Robot.leftLeds.setRed(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 1);
     } else if (!slowMoEnabled && shifterHigh) {
       Robot.rightLeds.setGreen(1.0);
       Robot.leftLeds.setGreen(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 4);
     } else {
       Robot.rightLeds.setWhite(1.0);
       Robot.leftLeds.setWhite(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 2);
     }
   }
 
