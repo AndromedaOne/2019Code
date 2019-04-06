@@ -54,6 +54,7 @@ public class TurnToCompassHeading extends Command {
 
   protected void end() {
     Trace.getInstance().logCommandStop("TurnToCompassHeading");
+    gyroPID.disable();
   }
 
 }
