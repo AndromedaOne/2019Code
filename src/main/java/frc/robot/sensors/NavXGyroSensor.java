@@ -104,8 +104,8 @@ public class NavXGyroSensor extends SensorBase implements PIDSource {
       SmartDashboard.putNumber("Get Robot Angle", correctedAngle);
     }
     robotAngleCount++;
-    Trace.getInstance().addTrace(true, "Gyro", new TracePair("Raw Angle", gyro.getAngle()),
-        new TracePair("Corrected Angle", correctedAngle));
+    Trace.getInstance().addTrace(false, "Gyro", new TracePair<>("Raw Angle", gyro.getAngle()),
+        new TracePair<>("Corrected Angle", correctedAngle));
 
     return correctedAngle;
   }

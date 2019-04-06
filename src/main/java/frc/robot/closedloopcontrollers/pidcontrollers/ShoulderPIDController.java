@@ -42,20 +42,7 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      /*
-       * Trace.getInstance().addTrace(true, "ShoulderPID", new TracePair("Output",
-       * output * 10000), new TracePair("SetpointTicks", pidMultiton.getSetpoint()),
-       * new TracePair("SetpointDegrees", pidMultiton.getSetpoint() *
-       * Robot.SHOULDERDEGREESPERTICK), new TracePair("AngleTicks",
-       * shoulderPIDSrc.pidGet()), new TracePair("AngleDegrees",
-       * shoulderPIDSrc.pidGet() * Robot.SHOULDERDEGREESPERTICK));
-       */
-      // try {
       MoveArmAndWristSafely.setPidShoulderPower(output);
-      // } catch (ArmOutOfBoundsException e) {
-      // System.out.println(e.getMessage());
-      // container.disable();
-      // }
     }
   }
 

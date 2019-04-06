@@ -32,8 +32,8 @@ import frc.robot.Robot;
 // Trace.getInstance().addTrace(...) at the point where you want to trace some
 // interesting values. the addTrace signature is as follow:
 // addTrace(<filename for trace file, .csv will be appended>,
-// 			new TracePair(<name of this column>, <value to be written>),
-//  		new TracePair(...),
+// 			new TracePair<>(<name of this column>, <value to be written>),
+//  		new TracePair<>(...),
 //			<as many items as you want to log>);
 //
 // on the first call to this method with a unique filename, 
@@ -43,10 +43,10 @@ import frc.robot.Robot;
 // been encountered, the method will simply store the values passed in.
 // an example for tracing the navx:
 // Trace.getInstance().addTrace("NavxGyro", 
-// 		new TracePair("Raw Angle", m_navX.getAngle()),
-//		new TracePair("X Accel", (double) m_navX.getWorldLinearAccelX()),
-//		new TracePair("X Accel", (double) m_navX.getWorldLinearAccelY()),
-//		new TracePair("Z Accel", (double) m_navX.getWorldLinearAccelZ()));
+// 		new TracePair<>("Raw Angle", m_navX.getAngle()),
+//		new TracePair<>("X Accel", (double) m_navX.getWorldLinearAccelX()),
+//		new TracePair<>("X Accel", (double) m_navX.getWorldLinearAccelY()),
+//		new TracePair<>("Z Accel", (double) m_navX.getWorldLinearAccelZ()));
 //
 // on the first call a file NavxGyro will be created in the trace directory.
 // the header: Raw Angle, X Accel, Y Accel, Z Accel will be written to the file along
@@ -197,7 +197,7 @@ public class Trace {
     }
   }
 
-  public void addTrace(boolean enable, String fileName, TracePair... header) {
+  public <T> void addTrace(boolean enable, String fileName, TracePair<T>... header) {
     if (!enable) {
       return;
     }
@@ -208,7 +208,8 @@ public class Trace {
     addEntry(traceEntry, header);
   }
 
-  private synchronized TraceEntry getTraceEntry(String fileName, TracePair... header) {
+  @SafeVarargs
+  private synchronized <T> TraceEntry getTraceEntry(String fileName, TracePair<T>... header) {
     TraceEntry traceEntry = null;
     try {
       if (!m_traces.containsKey(fileName)) {
@@ -219,7 +220,7 @@ public class Trace {
         traceEntry = new TraceEntry(outputFile, header.length);
         m_traces.put(fileName, traceEntry);
         String line = new String("Time");
-        for (TracePair pair : header) {
+        for (TracePair<T> pair : header) {
           line += "," + pair.getColumnName();
         }
         outputFile.write(line);
@@ -235,7 +236,8 @@ public class Trace {
     return traceEntry;
   }
 
-  private void addEntry(TraceEntry traceEntry, TracePair... values) {
+  @SafeVarargs
+  private <T> void addEntry(TraceEntry traceEntry, TracePair<T>... values) {
     try {
       if (!Robot.getInstance().isEnabled()) {
         return;
@@ -254,7 +256,7 @@ public class Trace {
       }
       long correctedTime = System.currentTimeMillis() - m_startTime;
       String line = new String(String.valueOf(correctedTime));
-      for (TracePair entry : values) {
+      for (TracePair<T> entry : values) {
         line += "," + entry.getValue();
       }
       traceEntry.getFile().write(line);
