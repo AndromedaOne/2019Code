@@ -398,7 +398,8 @@ public class Robot extends TimedRobot {
     driveController = OI.getInstance().getDriveStick();
     armController = OI.getInstance().getOperatorStick();
 
-    // These are all driver information that we want to display immediately on smartdashbard
+    // These are all driver information that we want to display immediately on
+    // smartdashbard
     SmartDashboard.putString("Right", "");
     SmartDashboard.putString("Left", "");
     SmartDashboard.putNumber("MatchTime", 0.0);

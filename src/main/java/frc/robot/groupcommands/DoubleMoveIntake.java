@@ -5,9 +5,9 @@ import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 
 public class DoubleMoveIntake extends CommandGroup {
-    public DoubleMoveIntake(MoveIntakeArmDirection directionToMove) {
+  public DoubleMoveIntake(MoveIntakeArmDirection directionToMove) {
 
-        addSequential(new IntakeArmControl(directionToMove));
-        addSequential(new IntakeArmControl(directionToMove));
-    }
+    addSequential(new IntakeArmControl(directionToMove));
+    addSequential(new IntakeArmControl(directionToMove));
+  }
 }
