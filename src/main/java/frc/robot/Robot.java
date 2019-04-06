@@ -289,6 +289,7 @@ public class Robot extends TimedRobot {
       int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
       intakeAngleSensor.putSensorOnLiveWindow("Intake Sensor", "Angle");
+      SmartDashboard.putNumber("IntakeAngle", 0);
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
@@ -418,6 +419,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // This is for constant tracing
+    SmartDashboard.putNumber("IntakeAngle", intakeAngleSensor.getAngle());
     NavXGyroSensor.getInstance().getZAngle();
     NavXGyroSensor.getInstance().getXAngle();
   }
