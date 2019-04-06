@@ -400,8 +400,8 @@ public class Robot extends TimedRobot {
     // These are all driver information that we want to display immediately on smartdashbard
     SmartDashboard.putString("Right", "");
     SmartDashboard.putString("Left", "");
-    SmartDashboard.putNumber("Match Time", 0.0);
-    SmartDashboard.putNumber("Current Speed", 2);
+    SmartDashboard.putNumber("MatchTime", 0.0);
+    SmartDashboard.putNumber("CurrentSpeed", 2);
 
     robotInitDone = true;
   }
@@ -494,7 +494,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    SmartDashboard.putNumber("Auto Time", Timer.getMatchTime());
+    SmartDashboard.putNumber("AutoTime", Timer.getMatchTime());
     Scheduler.getInstance().run();
   }
 
@@ -531,7 +531,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     leftLeds.updateLEDs();
     rightLeds.updateLEDs();
-    SmartDashboard.putNumber("Auto Time", Timer.getMatchTime());
+    SmartDashboard.putNumber("AutoTime", Timer.getMatchTime());
   }
 
   @Override

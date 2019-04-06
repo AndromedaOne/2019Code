@@ -144,19 +144,19 @@ public class TeleOpDrive extends Command {
     if (slowMoEnabled && shifterHigh) {
       Robot.rightLeds.setBlue(1.0);
       Robot.leftLeds.setBlue(1.0);
-      SmartDashboard.putNumber("Current Speed", 3);
+      SmartDashboard.putNumber("CurrentSpeed", 3);
     } else if (slowMoEnabled && !shifterHigh) {
       Robot.rightLeds.setRed(1.0);
       Robot.leftLeds.setRed(1.0);
-      SmartDashboard.putNumber("Current Speed", 1);
+      SmartDashboard.putNumber("CurrentSpeed", 1);
     } else if (!slowMoEnabled && shifterHigh) {
       Robot.rightLeds.setGreen(1.0);
       Robot.leftLeds.setGreen(1.0);
-      SmartDashboard.putNumber("Current Speed", 4);
+      SmartDashboard.putNumber("CurrentSpeed", 4);
     } else {
       Robot.rightLeds.setWhite(1.0);
       Robot.leftLeds.setWhite(1.0);
-      SmartDashboard.putNumber("Current Speed", 2);
+      SmartDashboard.putNumber("CurrentSpeed", 2);
     }
   }
 
