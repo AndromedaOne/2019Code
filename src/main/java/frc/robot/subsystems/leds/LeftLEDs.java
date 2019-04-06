@@ -28,7 +28,7 @@ public class LeftLEDs extends LEDs {
       if (blinkCounter > blinkSpeed) {
         blinkCounter = 0;
         toggleLEDs();
-        if(SmartDashboard.getString("Left", "").equals("")) {
+        if (SmartDashboard.getString("Left", "").equals("")) {
           SmartDashboard.putString("Left", "\u26A0");
         } else {
           SmartDashboard.putString("Left", "");
