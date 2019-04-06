@@ -41,7 +41,7 @@ public class TeleOpDrive extends Command {
   protected void initialize() {
     Trace.getInstance().logCommandStart("TeleOpDrive");
     mod = 1;
-    slowMoEnabled = false;
+    slowMoEnabled = true;
     shifterDelayCounter = 0;
   }
 
