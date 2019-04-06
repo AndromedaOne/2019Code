@@ -52,20 +52,7 @@ public class WristPIDController extends PIDControllerBase {
     @Override
     public void pidWrite(double output) {
       ArmPosition currentArmPosition = Robot.getCurrentArmPosition();
-      /*
-       * Trace.getInstance().addTrace(true, "WristPID", new TracePair("Output",
-       * output), new TracePair("SetpointTicks", pidMultiton.getSetpoint()), new
-       * TracePair("SetpointDegrees", pidMultiton.getSetpoint() *
-       * Robot.WRISTDEGREESPERTICK), new TracePair("TicksAngle",
-       * wristPIDSource.pidGet()), new TracePair("DegreeAngle",
-       * currentArmPosition.getWristAngle()));
-       */
-      // try {
       MoveArmAndWristSafely.setPidWristPower(output);
-      // } catch (ArmOutOfBoundsException e) {
-      // System.out.println(e.getMessage());
-      // container.disable();
-      // }
     }
   }
 

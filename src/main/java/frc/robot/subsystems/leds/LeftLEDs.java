@@ -24,7 +24,7 @@ public class LeftLEDs extends LEDs {
   public void updateLEDs() {
     if (Robot.frontLineSensor.findLine().lineFound && (Robot.frontLineSensor.findLine().lineAngle >= 0)) {
       blinkCounter++;
-      double blinkSpeed = (Robot.drivetrainFrontUltrasonic.getDistanceInches() * kBlinkSpeedMultiplier) - 13;
+      double blinkSpeed = (Robot.drivetrainFrontUltrasonic.getMinDistanceInches() * kBlinkSpeedMultiplier) - 13;
       if (blinkCounter > blinkSpeed) {
         blinkCounter = 0;
         toggleLEDs();

@@ -22,9 +22,13 @@ public class TeleOpDrive extends Command {
   private int delay = 4;
   private boolean shiftButtonPressed = false;
   private boolean slowModeButtonPressed = false;
-  private double kSlowModeModifier = 0.6;
+  private double kFirstGearModifier = 0.6;
+  private double kThirdGearModifier = 0.75;
+  private double kAccelerationModifier = 0.6;
   private int slowModeCounter = 0;
   private double kSlowModeSlope = 1.0 / 50.0;
+  private double previousSpeed = 0;
+  private final double kAccelerationSlope = 1.0 / 12.5;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -81,12 +85,6 @@ public class TeleOpDrive extends Command {
 
     double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
 
-    if (shifterDelayCounter >= delay) {
-      Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
-    } else {
-      Robot.gyroCorrectMove.stop();
-    }
-
     if (shifterDelayCounter == delay) {
       Robot.driveTrain.changeControlMode(NeutralMode.Brake);
     }
@@ -107,19 +105,37 @@ public class TeleOpDrive extends Command {
     }
 
     if (slowMoEnabled) {
-      mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
-      if(shifterHigh) {
+      mod = kFirstGearModifier;
+      if (shifterHigh) {
         // This makes us drive faster when we are in slow mode high gear
-        mod = Math.min(1, 0.75 + slowModeCounter * kSlowModeSlope);
+        mod = kThirdGearModifier;
       }
     } else {
-      mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);
+      mod = 1;
     }
 
     // This stops you from switching in slow over and over again while holding the
     // button
     if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
+    }
+    double requestedSpeed = forwardBackwardStickValue * mod;
+    if (requestedSpeed > previousSpeed) {
+      previousSpeed += kAccelerationSlope;
+      if (previousSpeed > requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
+    } else {
+      previousSpeed -= kAccelerationSlope;
+      if (previousSpeed < requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
+    }
+
+    if (shifterDelayCounter >= delay) {
+      Robot.gyroCorrectMove.moveUsingGyro(previousSpeed, rotateStickValue * mod, true, true);
+    } else {
+      Robot.gyroCorrectMove.stop();
     }
   }
 

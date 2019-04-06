@@ -229,8 +229,8 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
-    Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
-        new TracePair("Rotate", rotateAmount));
+    Trace.getInstance().addTrace(false, "move", new TracePair<>("ForwardBack", forwardBackSpeed),
+        new TracePair<>("Rotate", rotateAmount));
     // logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
     // logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
     if (invertTurning) {
@@ -249,15 +249,10 @@ public class RealDriveTrain extends DriveTrain {
       System.out.println("TALON IS NULL!!! ");
     }
     double motorOutput = _talon.getMotorOutputPercent();
-    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
-        new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
-        new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
-        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
-//        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()),
-//        new TracePair("Current Channel 0", (double) pdp.getCurrent(0)),
-//        new TracePair("Current Channel 1", (double) pdp.getCurrent(1)),
-//        new TracePair("Current Channel 2", (double) pdp.getCurrent(2)),
-//        new TracePair("Current Channel 3", (double) pdp.getCurrent(3)));
+    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair<>("Percent", (double) motorOutput * 100),
+        new TracePair<>("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
+        new TracePair<>("Error", (double) _talon.getClosedLoopError(slotIdx)),
+        new TracePair<>("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
   }
 
   public void stop() {

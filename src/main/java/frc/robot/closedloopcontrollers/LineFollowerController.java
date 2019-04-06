@@ -12,7 +12,7 @@ public class LineFollowerController {
   private LineFollowerSensorBase sensor;
   private LineFollowArraySensorReading values;
   private final double kMinimumLineAngle = Math.toRadians(2); // appx. 0.035 Radians.
-  private final double kForwardSpeed = .25;
+  private final double kForwardSpeed = .5;
   private double rotateScaleFactor = 5.5; // 6
   private int lineNotFoundCounter = 0;
   private double minDistanceToWall = 10;
@@ -73,7 +73,7 @@ public class LineFollowerController {
   }
 
   public void initialize() {
-
+    Robot.driveTrain.shiftToLowGear();
   }
 
   public boolean isDone() {
