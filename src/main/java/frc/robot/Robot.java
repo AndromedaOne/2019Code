@@ -289,7 +289,6 @@ public class Robot extends TimedRobot {
       int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
       intakeAngleSensor.putSensorOnLiveWindow("Intake Sensor", "Angle");
-      SmartDashboard.putNumber("IntakeAngle", 0);
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
