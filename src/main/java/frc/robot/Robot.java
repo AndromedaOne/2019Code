@@ -397,7 +397,8 @@ public class Robot extends TimedRobot {
     driveController = OI.getInstance().getDriveStick();
     armController = OI.getInstance().getOperatorStick();
 
-    // These are all driver information that we want to display immediately on smartdashbard
+    // These are all driver information that we want to display immediately on
+    // smartdashbard
     SmartDashboard.putString("Right", "");
     SmartDashboard.putString("Left", "");
     SmartDashboard.putNumber("MatchTime", 0.0);
@@ -418,6 +419,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // This is for constant tracing
+    SmartDashboard.putNumber("IntakeAngle", intakeAngleSensor.getAngle());
     NavXGyroSensor.getInstance().getZAngle();
     NavXGyroSensor.getInstance().getXAngle();
   }
