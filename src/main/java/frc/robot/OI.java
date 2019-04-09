@@ -21,6 +21,7 @@ import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
+import frc.robot.groupcommands.DoubleMoveIntake;
 import frc.robot.groupcommands.LineFollowerGroupCommandScheduler;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
@@ -150,7 +151,7 @@ public class OI {
     turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
-    intakeUp.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.UP));
+    intakeUp.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.UP));
     SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
 
     // TODO: Change these to actual buttons
@@ -158,7 +159,7 @@ public class OI {
     runIntakeIn.whileHeld(new RollIntakeIn());
 
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
-    intakeDown.whenPressed(new IntakeArmControl(MoveIntakeArmDirection.DOWN));
+    intakeDown.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("StowIntake", new StowIntakeArm());
 
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));

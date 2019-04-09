@@ -422,6 +422,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // This is for constant tracing
+    SmartDashboard.putNumber("IntakeAngle", intakeAngleSensor.getAngle());
     NavXGyroSensor.getInstance().getZAngle();
     NavXGyroSensor.getInstance().getXAngle();
   }
