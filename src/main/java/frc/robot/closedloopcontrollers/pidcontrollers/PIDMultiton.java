@@ -159,4 +159,9 @@ public class PIDMultiton {
     pidController.setI(i);
   }
 
+  public void setTolerance(double tolerance) {
+    pidController.setAbsoluteTolerance(tolerance, 7);
+
+  }
+
 }

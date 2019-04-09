@@ -63,7 +63,7 @@ public class PIDControllerBase {
    * 
    * @param pidConfiguration The configuration to use
    */
-  protected void setPIDConfiguration(PIDConfiguration pidConfiguration) {
+  public void setPIDConfiguration(PIDConfiguration pidConfiguration) {
     pidConfiguration.setP(p);
     pidConfiguration.setI(i);
     pidConfiguration.setD(d);
