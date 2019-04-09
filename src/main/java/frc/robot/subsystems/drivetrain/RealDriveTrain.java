@@ -8,6 +8,7 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.telemetries.Trace;
@@ -62,11 +63,22 @@ public class RealDriveTrain extends DriveTrain {
     }
   }
 
+  public enum RobotGear {
+    SLOWLOWGEAR, LOWGEAR, SLOWHIGHGEAR, HIGHGEAR
+  }
+
+  private RobotGear currentGear = RobotGear.SLOWHIGHGEAR;
   private final int kTimeoutMs = 30;
 
   private double lowGearMaxSpeed = 1;
   private double highGearMaxSpeed = 1;
-
+  private final double kFirstGearModifier = 0.6;
+  private final double kThirdGearModifier = 0.75;
+  private final double kAccelerationSlope = 1.0 / 12.5;
+  private double previousSpeed = 0;
+  private double gearMod = 1;
+  private int shifterDelayCounter = 0;
+  private int delay = 4;
   private double maxSpeed = lowGearMaxSpeed;
   private final int kLowGearPIDSlot = 0;
   private final int kHighGearPIDSlot = 1;
@@ -140,6 +152,89 @@ public class RealDriveTrain extends DriveTrain {
   private void setVelocityMode(ArbitraryModeWPI_TalonSRX talon) {
     talon.setControlMode(ControlMode.Velocity);
 
+  }
+
+  @Override
+  public void setGear(RobotGear gear) {
+    currentGear = gear;
+    switch (currentGear) {
+    case SLOWLOWGEAR:
+      gearMod = kFirstGearModifier;
+      Robot.leftLeds.setRed(1.0);
+      Robot.rightLeds.setRed(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 1);
+      shiftToLowGear();
+      break;
+    case LOWGEAR:
+      gearMod = 1;
+      Robot.leftLeds.setWhite(1.0);
+      Robot.rightLeds.setWhite(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 2);
+      shiftToLowGear();
+      break;
+    case SLOWHIGHGEAR:
+      gearMod = kThirdGearModifier;
+      Robot.leftLeds.setBlue(1.0);
+      Robot.rightLeds.setBlue(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 3);
+      shiftToHighGear();
+      break;
+    case HIGHGEAR:
+      gearMod = 1;
+      Robot.leftLeds.setGreen(1.0);
+      Robot.rightLeds.setGreen(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 4);
+      shiftToHighGear();
+      break;
+    }
+  }
+
+  @Override
+  public RobotGear getGear() {
+    return currentGear;
+  }
+
+  public void toggleShifter() {
+    switch (currentGear) {
+    case SLOWLOWGEAR:
+      System.out.println(" - Switching to Slow Low Gear - ");
+      setGear(RobotGear.SLOWHIGHGEAR);
+      break;
+    case LOWGEAR:
+      System.out.println(" - Switching to Low Gear - ");
+      // This is due to Erics preference to shift from Low Gear to Slow High
+      setGear(RobotGear.SLOWHIGHGEAR);
+      break;
+    case SLOWHIGHGEAR:
+      System.out.println(" - Switching to High Gear - ");
+      setGear(RobotGear.SLOWLOWGEAR);
+      break;
+    case HIGHGEAR:
+      System.out.println(" - Switching to Slow High Gear - ");
+      setGear(RobotGear.LOWGEAR);
+      break;
+    }
+  }
+
+  public void toggleSlowMode() {
+    switch (currentGear) {
+    case SLOWLOWGEAR:
+      System.out.println(" - Switching to Slow Low Gear - ");
+      setGear(RobotGear.LOWGEAR);
+      break;
+    case LOWGEAR:
+      System.out.println(" - Switching to Low Gear - ");
+      setGear(RobotGear.SLOWLOWGEAR);
+      break;
+    case SLOWHIGHGEAR:
+      System.out.println(" - Switching to High Gear - ");
+      setGear(RobotGear.HIGHGEAR);
+      break;
+    case HIGHGEAR:
+      System.out.println(" - Switching to Slow High Gear - ");
+      setGear(RobotGear.SLOWHIGHGEAR);
+      break;
+    }
   }
 
   // Inspired by
@@ -229,14 +324,33 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
-    Trace.getInstance().addTrace(false, "move", new TracePair<>("ForwardBack", forwardBackSpeed),
-        new TracePair<>("Rotate", rotateAmount));
     // logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
     // logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
     if (invertTurning) {
       rotateAmount = -rotateAmount;
     }
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
+    shifterDelayCounter++;
+    double requestedSpeed = forwardBackSpeed * gearMod;
+    if (requestedSpeed > previousSpeed) {
+      previousSpeed += kAccelerationSlope;
+      if (previousSpeed > requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
+    } else {
+      previousSpeed -= kAccelerationSlope;
+      if (previousSpeed < requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
+    }
+    if (shifterDelayCounter >= delay) {
+      Robot.driveTrain.changeControlMode(NeutralMode.Brake);
+    } else {
+      previousSpeed = 0;
+      rotateAmount = 0;
+    }
+    differentialDrive.arcadeDrive(previousSpeed, rotateAmount * gearMod, squaredInputs);
+    Trace.getInstance().addTrace(false, "move", new TracePair<>("ForwardBack", previousSpeed),
+        new TracePair<>("Rotate", rotateAmount));
   }
 
   /* String for output */
@@ -272,6 +386,8 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainLeftMaster.selectProfileSlot(kLowGearPIDSlot, 0);
     driveTrainRightMaster.selectProfileSlot(kLowGearPIDSlot, 0);
     slotIdx = 0;
+    shifterDelayCounter = 0;
+    changeControlMode(NeutralMode.Coast);
   }
 
   public void shiftToHighGear() {
@@ -282,6 +398,8 @@ public class RealDriveTrain extends DriveTrain {
       driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
       driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
       slotIdx = 1;
+      shifterDelayCounter = 0;
+      changeControlMode(NeutralMode.Coast);
     } else {
       System.out.println("NO SHIFTER");
     }
@@ -294,4 +412,5 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightMaster.setNeutralMode(mode);
     driveTrainRightSlave.setNeutralMode(mode);
   }
+
 }

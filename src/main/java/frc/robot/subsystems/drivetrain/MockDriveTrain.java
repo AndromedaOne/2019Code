@@ -3,6 +3,8 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import frc.robot.subsystems.drivetrain.RealDriveTrain.RobotGear;
+
 public class MockDriveTrain extends DriveTrain {
 
   @Override
@@ -43,5 +45,25 @@ public class MockDriveTrain extends DriveTrain {
   @Override
   public void changeControlMode(NeutralMode mode) {
     // System.out.println("Changed mode to: " + mode.toString());
+  }
+
+  @Override
+  public void setGear(RobotGear gear) {
+
+  }
+
+  @Override
+  public RobotGear getGear() {
+    return RobotGear.SLOWLOWGEAR;
+  }
+
+  @Override
+  public void toggleSlowMode() {
+    System.out.println("Toggle Slow Mode");
+  }
+
+  @Override
+  public void toggleShifter() {
+    System.out.println("Toggle Shifter");
   }
 }
