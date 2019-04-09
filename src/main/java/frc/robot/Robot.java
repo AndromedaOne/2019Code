@@ -137,10 +137,13 @@ public class Robot extends TimedRobot {
 
   public OI oi;
 
+  private static Config nameConfig = ConfigFactory.parseFile(new File("/home/lvuser/name.conf"));
+
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
-  private static Config environmentalConfig = ConfigFactory.parseFile(new File("/home/lvuser/robot.conf"));
+  private static Config environmentalConfig = ConfigFactory
+      .parseFile(new File("/home/lvuser/deploy/robotConfigs/" + nameConfig.getString("robot.name") + "/robot.conf"));
 
   /**
    * This config lives in the jar and has hardware-independent configs.
