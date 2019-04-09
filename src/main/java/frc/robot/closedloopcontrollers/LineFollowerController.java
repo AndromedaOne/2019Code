@@ -31,6 +31,7 @@ public class LineFollowerController {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void run() {
     double frontUltrasonicRange = Robot.drivetrainFrontUltrasonic.getMinDistanceInches();
     values = sensor.findLine();
@@ -55,9 +56,12 @@ public class LineFollowerController {
         gyroCorrectMove.moveUsingGyro(kForwardSpeed, 0, true, false);
       }
     }
+
     Trace.getInstance().addTrace(true, "LineFollowerController",
-        new TracePair<>("UltrasonicRange", frontUltrasonicRange), new TracePair<>("IsLineFound", values.lineFound),
-        new TracePair<>("LineAngle", values.lineAngle), new TracePair<>("LineNotFoundCounter", lineNotFoundCounter),
+        new TracePair<>("UltrasonicRange", frontUltrasonicRange),
+        new TracePair<>("IsLineFound",values.lineFound),
+        new TracePair<>("LineAngle", values.lineAngle),
+        new TracePair<>("LineNotFoundCounter", lineNotFoundCounter),
         new TracePair<>("Rotate", rotate));
     System.out.println("Front Ultrasonic: " + frontUltrasonicRange + ", Line Angle: " + values.lineAngle
         + ", Line not found Counter: " + lineNotFoundCounter);

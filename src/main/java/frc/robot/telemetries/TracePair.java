@@ -1,6 +1,6 @@
 package frc.robot.telemetries;
 
-public class TracePair<T> {
+public final class TracePair<T> {
   public TracePair(String columnName, T value) {
     m_columnName = columnName;
     m_value = value;

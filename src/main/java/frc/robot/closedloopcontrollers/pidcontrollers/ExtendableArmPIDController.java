@@ -14,8 +14,6 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private static ExtendableArmPIDController instance;
   private static ArmPIDOut armPIDOut;
   private static ArmPIDSource armPIDSource;
-  private final MagEncoderSensor topArmEncoder;
-  private final MagEncoderSensor bottomArmEncoder;
 
   private ExtendableArmPIDController() {
     super.absoluteTolerance = 0.5 / Robot.EXTENSIONINCHESPERTICK;
@@ -27,8 +25,6 @@ public class ExtendableArmPIDController extends PIDControllerBase {
     super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "Extension";
 
-    topArmEncoder = Robot.topArmExtensionEncoder;
-    bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     armPIDSource = new ArmPIDSource();
     armPIDSource.putSensorOnLiveWindow(super.subsystemName, "Extension");
     // topArmEncoder.putSensorOnLiveWindow(super.subsytemName,
