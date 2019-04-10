@@ -60,6 +60,8 @@ public class TeleOpDrive extends Command {
     if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
     }
+
+    Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue, rotateStickValue, true, true);
   }
 
   // Make this return true when this Command no longer needs to run execute()

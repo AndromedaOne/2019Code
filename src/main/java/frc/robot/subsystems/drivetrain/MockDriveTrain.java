@@ -3,8 +3,6 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import frc.robot.subsystems.drivetrain.RealDriveTrain.RobotGear;
-
 public class MockDriveTrain extends DriveTrain {
 
   @Override

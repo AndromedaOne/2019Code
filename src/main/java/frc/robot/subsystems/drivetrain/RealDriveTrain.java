@@ -63,10 +63,6 @@ public class RealDriveTrain extends DriveTrain {
     }
   }
 
-  public enum RobotGear {
-    SLOWLOWGEAR, LOWGEAR, SLOWHIGHGEAR, HIGHGEAR
-  }
-
   private RobotGear currentGear = RobotGear.SLOWHIGHGEAR;
   private final int kTimeoutMs = 30;
 
@@ -342,13 +338,15 @@ public class RealDriveTrain extends DriveTrain {
         previousSpeed = requestedSpeed;
       }
     }
+    double currentSpeed = previousSpeed;
+    double currentRotate = rotateAmount;
     if (shifterDelayCounter >= delay) {
       Robot.driveTrain.changeControlMode(NeutralMode.Brake);
     } else {
-      previousSpeed = 0;
-      rotateAmount = 0;
+      currentSpeed = 0;
+      currentRotate = 0;
     }
-    differentialDrive.arcadeDrive(previousSpeed, rotateAmount * gearMod, squaredInputs);
+    differentialDrive.arcadeDrive(currentSpeed, currentRotate * gearMod, squaredInputs);
     Trace.getInstance().addTrace(false, "move", new TracePair<>("ForwardBack", previousSpeed),
         new TracePair<>("Rotate", rotateAmount));
   }
@@ -380,6 +378,7 @@ public class RealDriveTrain extends DriveTrain {
   public void shiftToLowGear() {
     System.out.println("Shifting to low gear");
     if (shifterSolenoid != null) {
+      changeControlMode(NeutralMode.Coast);
       shifterSolenoid.set(DoubleSolenoid.Value.kForward);
     }
     maxSpeed = lowGearMaxSpeed;
@@ -387,19 +386,18 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightMaster.selectProfileSlot(kLowGearPIDSlot, 0);
     slotIdx = 0;
     shifterDelayCounter = 0;
-    changeControlMode(NeutralMode.Coast);
   }
 
   public void shiftToHighGear() {
     System.out.println("Shifting to high gear");
     if (shifterSolenoid != null) {
+      changeControlMode(NeutralMode.Coast);
       shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
       maxSpeed = highGearMaxSpeed;
       driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
       driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
       slotIdx = 1;
       shifterDelayCounter = 0;
-      changeControlMode(NeutralMode.Coast);
     } else {
       System.out.println("NO SHIFTER");
     }
