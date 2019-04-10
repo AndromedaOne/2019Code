@@ -5,11 +5,13 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 import frc.robot.telemetries.Trace;
 
 public class TurnToCompassHeading extends Command {
   private double heading = 0;
   private GyroPIDController gyroPID = GyroPIDController.getInstance();
+  private RobotGear savedGear = RobotGear.LOWGEAR;
 
   public TurnToCompassHeading(double theHeading) {
     heading = theHeading;
@@ -19,6 +21,7 @@ public class TurnToCompassHeading extends Command {
 
   protected void initialize() {
     Trace.getInstance().logCommandStart("TurnToCompassHeading");
+    savedGear = Robot.driveTrain.getGear();
     Robot.driveTrain.setGear(DriveTrain.RobotGear.LOWGEAR);
     double deltaAngle = heading - NavXGyroSensor.getInstance().getCompassHeading();
     System.out.println("Raw Delta Angle: " + deltaAngle);
@@ -56,7 +59,8 @@ public class TurnToCompassHeading extends Command {
 
   protected void end() {
     Trace.getInstance().logCommandStop("TurnToCompassHeading");
-    gyroPID.disable();
+    Robot.driveTrain.setGear(savedGear);
+    gyroPID.reset();
   }
 
 }

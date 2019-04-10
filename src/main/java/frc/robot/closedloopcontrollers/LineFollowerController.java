@@ -73,7 +73,6 @@ public class LineFollowerController {
   }
 
   public void initialize() {
-    Robot.driveTrain.shiftToLowGear();
   }
 
   public boolean isDone() {

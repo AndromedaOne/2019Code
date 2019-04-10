@@ -5,11 +5,13 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.NavXGyroSensor;
 import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 import frc.robot.telemetries.Trace;
 
 public class TurnToDeltaAngle extends Command {
   private GyroPIDController gyroPID = GyroPIDController.getInstance();
   private double deltaAngle;
+  private RobotGear savedGear = RobotGear.LOWGEAR;
 
   public TurnToDeltaAngle(double theDeltaAngle) {
     deltaAngle = theDeltaAngle;
@@ -21,6 +23,7 @@ public class TurnToDeltaAngle extends Command {
 
   @Override
   protected void initialize() {
+    savedGear = Robot.driveTrain.getGear();
     Robot.driveTrain.setGear(DriveTrain.RobotGear.LOWGEAR);
     double setPoint = NavXGyroSensor.getInstance().getZAngle() + deltaAngle;
     Trace.getInstance().logCommandStart("TurnToDeltaAngle");
@@ -36,7 +39,8 @@ public class TurnToDeltaAngle extends Command {
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("TurnToDeltaAngle");
-    gyroPID.disable();
+    Robot.driveTrain.setGear(savedGear);
+    gyroPID.reset();
   }
 
 }
