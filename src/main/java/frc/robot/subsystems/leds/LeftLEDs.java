@@ -3,6 +3,7 @@ package frc.robot.subsystems.leds;
 import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class LeftLEDs extends LEDs {
@@ -21,21 +22,27 @@ public class LeftLEDs extends LEDs {
 
   @Override
   public void updateLEDs() {
-    if (Robot.frontLineSensor.findLine().lineFound && (Robot.frontLineSensor.findLine().lineAngle >= 0)) {
+    if (Robot.frontLineSensor.findLine().lineFound && (Robot.frontLineSensor.findLine().lineAngle >= -0.4)) {
       blinkCounter++;
       double blinkSpeed = (Robot.drivetrainFrontUltrasonic.getMinDistanceInches() * kBlinkSpeedMultiplier) - 13;
       if (blinkCounter > blinkSpeed) {
         blinkCounter = 0;
         toggleLEDs();
+        if (SmartDashboard.getString("Left", "").equals("")) {
+          SmartDashboard.putString("Left", "\u26A0");
+        } else {
+          SmartDashboard.putString("Left", "");
+        }
       }
+
     } else {
+      SmartDashboard.putString("Left", "");
       toggleLEDsOn();
     }
   }
 
   @Override
   protected void initDefaultCommand() {
-
   }
 
 }

@@ -50,20 +50,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      /*
-       * Trace.getInstance().addTrace(true, "ExtensionPID", new TracePair("Output",
-       * output), new TracePair("SetpointTicks", pidMultiton.getSetpoint()), new
-       * TracePair("SetpointInches", pidMultiton.getSetpoint() *
-       * Robot.EXTENSIONINCHESPERTICK), new TracePair("ExtensionTicks",
-       * armPIDSource.pidGet()), new TracePair("ExtensionInches",
-       * armPIDSource.pidGet() * Robot.EXTENSIONINCHESPERTICK));
-       */
-      // try {
       MoveArmAndWristSafely.setPidExtensionPower(output);
-      // } catch (ArmOutOfBoundsException e) {
-      // System.out.println(e.getMessage());
-      // container.disable();
-      // }
     }
   }
 
