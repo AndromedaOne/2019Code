@@ -44,4 +44,24 @@ public class MockDriveTrain extends DriveTrain {
   public void changeControlMode(NeutralMode mode) {
     // System.out.println("Changed mode to: " + mode.toString());
   }
+
+  @Override
+  public void setGear(RobotGear gear) {
+
+  }
+
+  @Override
+  public RobotGear getGear() {
+    return RobotGear.SLOWLOWGEAR;
+  }
+
+  @Override
+  public void toggleSlowMode() {
+    System.out.println("Toggle Slow Mode");
+  }
+
+  @Override
+  public void toggleShifter() {
+    System.out.println("Toggle Shifter");
+  }
 }

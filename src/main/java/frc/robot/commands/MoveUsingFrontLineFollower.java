@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.LineFollowerController;
+import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 import frc.robot.telemetries.Trace;
 import frc.robot.utilities.ButtonsEnumerated;
 
@@ -13,6 +14,7 @@ import frc.robot.utilities.ButtonsEnumerated;
 public class MoveUsingFrontLineFollower extends Command {
   private LineFollowerController controller;
   private int counter = 0;
+  private RobotGear savedGear = RobotGear.LOWGEAR;
 
   public MoveUsingFrontLineFollower() {
     controller = new LineFollowerController(Robot.gyroCorrectMove, Robot.frontLineSensor);
@@ -24,6 +26,7 @@ public class MoveUsingFrontLineFollower extends Command {
   protected void initialize() {
     System.out.println("Running MUFLF");
     Trace.getInstance().logCommandStart("CallLineFollowerController");
+    savedGear = Robot.driveTrain.getGear();
     controller.initialize();
   }
 
@@ -42,6 +45,7 @@ public class MoveUsingFrontLineFollower extends Command {
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("CallLineFollowerController");
+    Robot.driveTrain.setGear(savedGear);
     controller.stop();
   }
 
