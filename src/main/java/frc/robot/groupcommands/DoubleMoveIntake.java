@@ -8,6 +8,6 @@ public class DoubleMoveIntake extends CommandGroup {
   public DoubleMoveIntake(MoveIntakeArmDirection directionToMove) {
 
     addSequential(new IntakeArmControl(directionToMove));
-    addSequential(new IntakeArmControl(directionToMove));
+    addSequential(new MoveIntakePrecisely(directionToMove));
   }
 }
