@@ -21,7 +21,7 @@ public class GyroPIDController extends PIDControllerBase {
     super.p = 0.01;
     super.i = 0.001;
     super.d = 0;
-    super.outputRange = 0.5;
+    super.outputRange = 0.8;
     super.subsystemName = "GyroPIDHeader";
     super.pidName = "GyroPID";
 

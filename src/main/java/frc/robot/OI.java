@@ -22,6 +22,7 @@ import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
 import frc.robot.groupcommands.DoubleMoveIntake;
+import frc.robot.groupcommands.GyroDoubleMove;
 import frc.robot.groupcommands.LineFollowerGroupCommandScheduler;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
@@ -142,13 +143,13 @@ public class OI {
     // Claw buttons are temp until I figure out the D-Pad
 
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
-    turnToNorth.whenPressed(new TurnToCompassHeading(0));
+    turnToNorth.whenPressed(new GyroDoubleMove(0, true));
     turnToEast = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
-    turnToEast.whenPressed(new TurnToCompassHeading(90));
+    turnToEast.whenPressed(new GyroDoubleMove(90, true));
     turnToSouth = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
-    turnToSouth.whenPressed(new TurnToCompassHeading(180));
+    turnToSouth.whenPressed(new GyroDoubleMove(180, true));
     turnToWest = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
-    turnToWest.whenPressed(new TurnToCompassHeading(270));
+    turnToWest.whenPressed(new GyroDoubleMove(270, true));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     intakeUp.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.UP));
