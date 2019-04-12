@@ -12,7 +12,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
   private EncoderPIDOut encoderPIDOut;
   private EncoderPIDIn encoderPIDSrc;
   private MagEncoderSensor encoder;
-
+  private final double kMinOut = 0.1;
   private static final double TICKSTOINCHESRATIO = 0;
 
   /**
@@ -70,7 +70,18 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
      * method. Also it traces the output, setpoint, and Encoder Ticks
      */
     @Override
-    public void pidWrite(double output) {
+    public void pidWrite(double input) {
+      double output = input;
+      if (output > 0) {
+        output = (output * (1 - kMinOut) + kMinOut);
+      } else {
+        output = (output * (1 - kMinOut) - kMinOut);
+      }
+
+      if(input == 0) {
+        output = 0;
+      }
+
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
   }
