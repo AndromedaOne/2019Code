@@ -13,10 +13,16 @@ public class IntakePIDController extends PIDControllerBase {
   private AngleSensor intakeAngleSensor;
 
   private IntakePIDController() {
-    super.absoluteTolerance = 0.035;
-    super.p = 0.25;
-    super.i = 0;
-    super.d = 0.25;
+    super.absoluteToleranceForQuickMovement = 0.035;
+    super.pForMovingQuickly = 0.25;
+    super.iForMovingQuickly = 0;
+    super.dForMovingQuickly = 0.25;
+
+    super.absoluteToleranceForPreciseMovement = 0.01;
+    super.pForMovingPrecisely = 0.125;
+    super.iForMovingPrecisely = 0;
+    super.dForMovingPrecisely = 0;
+
     super.outputRange = 1;
     super.subsystemName = "Intake";
     super.pidName = "IntakePID";

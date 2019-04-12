@@ -36,13 +36,7 @@ public class TurnToCompassHeading extends Command {
 
     double setPoint = deltaAngle + NavXGyroSensor.getInstance().getZAngle();
 
-    if (Math.abs(deltaAngle) < gyroPID.getAbsoluteTolerance()) {
-      System.out.println("Delta is to small, not moving!");
-      setPoint = NavXGyroSensor.getInstance().getZAngle();
-    }
-
     System.out.println(" - Turn to Compass Heading  - ");
-    System.out.println("Tolerance: " + gyroPID.getAbsoluteTolerance());
     System.out.println("Heading: " + heading);
     System.out.println("Delta Angle: " + deltaAngle);
     System.out.println("SetPoint: " + setPoint);

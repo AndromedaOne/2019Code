@@ -18,11 +18,11 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private final MagEncoderSensor bottomArmEncoder;
 
   private ExtendableArmPIDController() {
-    super.absoluteTolerance = 0.5 / Robot.EXTENSIONINCHESPERTICK;
+    super.absoluteToleranceForQuickMovement = 0.5 / Robot.EXTENSIONINCHESPERTICK;
     // PID loop will only return true if error is within 1.5 inches of setpoint
-    super.p = 1.0 * Math.pow(10, -4);
-    super.i = 0;
-    super.d = 0.0;// 1.0e-4;
+    super.pForMovingQuickly = 1.0 * Math.pow(10, -4);
+    super.iForMovingQuickly = 0;
+    super.dForMovingQuickly = 0.0;// 1.0e-4;
     super.outputRange = 0.85;
     super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "Extension";

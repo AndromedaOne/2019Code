@@ -15,10 +15,10 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
    * creates the encoderPID from the PIDMultiton class.
    */
   private DrivetrainEncoderPIDController() {
-    super.absoluteTolerance = 100;
-    super.p = 0.0001;
-    super.i = 0.00001;
-    super.d = 0;
+    super.absoluteToleranceForQuickMovement = 100;
+    super.pForMovingQuickly = 0.0001;
+    super.iForMovingQuickly = 0.00001;
+    super.dForMovingQuickly = 0;
     super.subsystemName = "EncoderPIDHeader";
     super.pidName = "EncoderPID";
 

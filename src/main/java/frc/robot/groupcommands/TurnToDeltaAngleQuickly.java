@@ -15,8 +15,9 @@ public class TurnToDeltaAngleQuickly extends CommandGroup {
         }
     }
     public void initialize (){
-        GyroPIDController.getInstance().pidMultiton.setPIDTerms(0.015, 0, 0);
-        GyroPIDController.getInstance().pidMultiton.setTolerance(20);
+
+        GyroPIDController.getInstance().pidMultiton.setPIDTerms(GyroPIDController.getInstance().getPForMovingQuickly(), GyroPIDController.getInstance().getIForMovingQuickly(), GyroPIDController.getInstance().getDForMovingQuickly());
+        GyroPIDController.getInstance().pidMultiton.setTolerance(GyroPIDController.getInstance().getToleranceForMovingQuickly());
 
 
     }  

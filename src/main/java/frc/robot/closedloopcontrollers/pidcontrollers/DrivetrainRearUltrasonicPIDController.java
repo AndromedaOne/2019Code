@@ -17,10 +17,10 @@ public class DrivetrainRearUltrasonicPIDController extends PIDControllerBase {
    * the PIDMultiton class.
    */
   private DrivetrainRearUltrasonicPIDController() {
-    super.absoluteTolerance = 3;
-    super.p = 0;
-    super.i = 0;
-    super.d = 0;
+    super.absoluteToleranceForQuickMovement = 3;
+    super.pForMovingQuickly = 0;
+    super.iForMovingQuickly = 0;
+    super.dForMovingQuickly = 0;
     super.subsystemName = "RearUltrasonicPIDHeader";
     super.pidName = "RearUltrasonicPID";
 
