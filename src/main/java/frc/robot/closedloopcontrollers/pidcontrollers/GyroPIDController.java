@@ -8,7 +8,7 @@ public class GyroPIDController extends PIDControllerBase {
   private static GyroPIDController instance;
   private NavXGyroSensor navXGyroSensor;
   private GyroPIDOut gyroPIDOut;
-  private double kMinOut = 0.2;
+  private double kMinOut = 0.1;
 
   /**
    * Sets the PID variables and absolute Tolerance; all other PID parameters are
@@ -21,7 +21,7 @@ public class GyroPIDController extends PIDControllerBase {
     super.p = 0.01;
     super.i = 0.001;
     super.d = 0;
-    super.outputRange = 0.8;
+    super.outputRange = 1;
     super.subsystemName = "GyroPIDHeader";
     super.pidName = "GyroPID";
 
@@ -51,7 +51,7 @@ public class GyroPIDController extends PIDControllerBase {
         output = 0;
       }
 
-      Robot.gyroCorrectMove.moveUsingGyro(0, input, false, false);
+      Robot.gyroCorrectMove.moveUsingGyro(0, output, false, false);
     }
 
   }

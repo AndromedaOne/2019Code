@@ -13,13 +13,13 @@ public class MoveIntakePrecisely extends CommandGroup {
 
     public void initialize() {
         IntakePIDController.getInstance().pidMultiton.setTolerance(0.01);
-        IntakePIDController.getInstance().pidMultiton.setPIDTerms(1.5, 0, 0.25);
+        IntakePIDController.getInstance().pidMultiton.setPIDTerms(0.125, 0, 0.25);
         
     }
 
     public void end() {
         IntakePIDController.getInstance().pidMultiton.setTolerance(0.035);
-        IntakePIDController.getInstance().pidMultiton.setPIDTerms(2, 0, 0.25);
+        IntakePIDController.getInstance().pidMultiton.setPIDTerms(0.25, 0, 0.25);
         
     }
 

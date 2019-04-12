@@ -347,7 +347,7 @@ public class RealDriveTrain extends DriveTrain {
       currentRotate = 0;
     }
     differentialDrive.arcadeDrive(currentSpeed, currentRotate * gearMod, squaredInputs);
-    Trace.getInstance().addTrace(false, "move", new TracePair<>("ForwardBack", previousSpeed),
+    Trace.getInstance().addTrace(true, "move", new TracePair<>("ForwardBack", previousSpeed),
         new TracePair<>("Rotate", rotateAmount));
   }
 

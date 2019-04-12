@@ -15,8 +15,8 @@ public class TurnToDeltaAnglePrecisely extends CommandGroup {
         }
     }
     public void initialize (){
-        GyroPIDController.getInstance().pidMultiton.setPIDTerms(0, 0, 0);
-        GyroPIDController.getInstance().pidMultiton.setTolerance(2);
+        GyroPIDController.getInstance().pidMultiton.setPIDTerms(0.01, 0, 0);
+        GyroPIDController.getInstance().pidMultiton.setTolerance(1);
 
 
     }  
