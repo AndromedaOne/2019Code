@@ -12,7 +12,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
   private EncoderPIDOut encoderPIDOut;
   private EncoderPIDIn encoderPIDSrc;
   private MagEncoderSensor encoder;
-  private final double kMinOut = 0.1;
+  private final double kMinOut = 0.0;
   private static final double TICKSTOINCHESRATIO = 0;
 
   /**
@@ -54,12 +54,12 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
 
     @Override
     public PIDSourceType getPIDSourceType() {
-      return null;
+      return PIDSourceType.kDisplacement;
     }
 
     @Override
     public double pidGet() {
-      return encoder.getDistanceTicks() * TICKSTOINCHESRATIO;
+      return -encoder.getDistanceTicks() * TICKSTOINCHESRATIO;
 	}
 
   }
@@ -81,6 +81,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
       if(input == 0) {
         output = 0;
       }
+      System.out.println("Calling pidWrite: " + output);
 
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
