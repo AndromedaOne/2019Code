@@ -373,12 +373,9 @@ public class Robot extends TimedRobot {
       Config cameraConf = conf.getConfig("cameras");
 
       UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera0"));
-      UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera1"));
       camera0.setResolution(320, 240);
-      camera0.setFPS(10);
+      camera0.setFPS(20);
 
-      camera1.setResolution(80, 60);
-      camera1.setFPS(10);
     }
 
     if (conf.hasPath("subsystems.climber")) {
