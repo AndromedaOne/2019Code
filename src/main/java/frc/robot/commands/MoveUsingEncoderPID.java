@@ -14,9 +14,9 @@ public class MoveUsingEncoderPID extends MoveTurnBase {
   /**
    * Takes a Setpoint in inches
    */
-  public MoveUsingEncoderPID(double distanceInInches) {
-    setpoint = distanceInInches;
-    System.out.println("Moving " + distanceInInches + " in inches using the encoders");
+  public MoveUsingEncoderPID(double setpointInInches) {
+    setpoint = setpointInInches;
+    System.out.println("Moving to " + setpointInInches + " in inches");
   }
 
   public void initialize() {
@@ -26,9 +26,10 @@ public class MoveUsingEncoderPID extends MoveTurnBase {
   }
 
   public boolean isFinished(){
-    return DrivetrainEncoderPIDController.getInstance().onTarget();
+    return DrivetrainEncoderPIDController.getInstance().onTarget(); 
   }
   public void end() {
+    System.out.println("Error:" + ((Robot.drivetrainLeftRearEncoder.getDistanceTicks() / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO) - setpoint));
     DrivetrainEncoderPIDController.getInstance().disable();
     DrivetrainEncoderPIDController.getInstance().reset();
   }

@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class RealMagEncoderSensor extends MagEncoderSensor {
   private WPI_TalonSRX talonSpeedController;
   private double initialPosition = 0;
+  private boolean invertEncoder = false;
 
   /**
    * Sets the talonSpeedController talon to the talon passed in, configures the
@@ -14,7 +15,8 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
    * 
    * @param talon Talon object to attach encoder to
    */
-  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam, boolean useAbsoluteReadings) {
+  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam, boolean useAbsoluteReadings, boolean invertEncoder) {
+    this.invertEncoder = invertEncoder;
     talonSpeedController = talon;
     if (!useAbsoluteReadings) {
       talonSpeedController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -24,10 +26,15 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
     talonSpeedController.setSensorPhase(!reverseDirectionParam); /* keep sensor and motor in phase */
   }
 
+  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam, boolean useAbsoluteReadings) {
+    this(talon, reverseDirectionParam, useAbsoluteReadings, false);
+  }
+
   @Override
   public double getDistanceTicks() {
-    double ticks = getPosition();
-    return ticks - initialPosition;
+    double ticks = getPosition() - initialPosition;
+    ticks = invertEncoder ? -ticks : ticks;
+    return ticks;
   }
 
   @Override

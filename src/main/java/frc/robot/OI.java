@@ -22,6 +22,7 @@ import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
 import frc.robot.groupcommands.DoubleMoveDrivetrainWithEncoder;
+import frc.robot.groupcommands.DoubleMoveDrivetrainWithEncoderScheduler;
 import frc.robot.groupcommands.DoubleMoveIntake;
 import frc.robot.groupcommands.GyroDoubleMove;
 import frc.robot.groupcommands.LineFollowerGroupCommandScheduler;
@@ -117,11 +118,13 @@ public class OI {
     extendAllLegs = new POVButton(driveController, POVDirectionNames.NORTH.getValue());
     extendAllLegs.whenPressed(new RaiseAll());
 
+    // WAS RAISE FRONT FOR l2
     extendFrontLegs = new JoystickButton(driveController, ButtonsEnumerated.STARTBUTTON.getValue());
-    extendFrontLegs.whenPressed(new RaiseFrontLegsForL2());
+    extendFrontLegs.whenPressed(new DoubleMoveDrivetrainWithEncoderScheduler(72));
 
+    // WAS RAISE BACK FOR l2
     extendRearLegs = new JoystickButton(driveController, ButtonsEnumerated.BACKBUTTON.getValue());
-    extendRearLegs.whenPressed(new RaiseBackLegsForL2());
+    extendRearLegs.whenPressed(new DoubleMoveDrivetrainWithEncoderScheduler(-72));
 
     retractFrontLegs = new POVButton(driveController, POVDirectionNames.EAST.getValue());
     retractFrontLegs.whenPressed(new RetractFrontLegs());
@@ -168,8 +171,8 @@ public class OI {
 
     SmartDashboard.putData("RaiseFrontL2", new RaiseFrontLegsForL2());
     SmartDashboard.putData("RaiseBackL2", new RaiseBackLegsForL2());
-    SmartDashboard.putData("ForwardMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(36));
-    SmartDashboard.putData("BackMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(-36));
+    SmartDashboard.putData("ForwardMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(72));
+    SmartDashboard.putData("BackMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(-72));
 
     ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
 
