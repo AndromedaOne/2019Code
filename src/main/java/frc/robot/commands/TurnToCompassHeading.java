@@ -4,11 +4,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.sensors.NavXGyroSensor;
+import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 import frc.robot.telemetries.Trace;
 
 public class TurnToCompassHeading extends Command {
   private double heading = 0;
   private GyroPIDController gyroPID = GyroPIDController.getInstance();
+  private RobotGear savedGear = RobotGear.LOWGEAR;
 
   public TurnToCompassHeading(double theHeading) {
     heading = theHeading;
@@ -18,6 +21,8 @@ public class TurnToCompassHeading extends Command {
 
   protected void initialize() {
     Trace.getInstance().logCommandStart("TurnToCompassHeading");
+    savedGear = Robot.driveTrain.getGear();
+    Robot.driveTrain.setGear(DriveTrain.RobotGear.LOWGEAR);
     double deltaAngle = heading - NavXGyroSensor.getInstance().getCompassHeading();
     System.out.println("Raw Delta Angle: " + deltaAngle);
     // This corrects turn that are over 180
@@ -31,13 +36,7 @@ public class TurnToCompassHeading extends Command {
 
     double setPoint = deltaAngle + NavXGyroSensor.getInstance().getZAngle();
 
-    if (Math.abs(deltaAngle) < gyroPID.getAbsoluteTolerance()) {
-      System.out.println("Delta is to small, not moving!");
-      setPoint = NavXGyroSensor.getInstance().getZAngle();
-    }
-
     System.out.println(" - Turn to Compass Heading  - ");
-    System.out.println("Tolerance: " + gyroPID.getAbsoluteTolerance());
     System.out.println("Heading: " + heading);
     System.out.println("Delta Angle: " + deltaAngle);
     System.out.println("SetPoint: " + setPoint);
@@ -49,11 +48,13 @@ public class TurnToCompassHeading extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return gyroPID.onTarget();
   }
 
   protected void end() {
     Trace.getInstance().logCommandStop("TurnToCompassHeading");
+    Robot.driveTrain.setGear(savedGear);
+    gyroPID.reset();
   }
 
 }

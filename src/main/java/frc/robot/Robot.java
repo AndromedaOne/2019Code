@@ -15,9 +15,10 @@ import com.typesafe.config.ConfigFactory;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -49,10 +50,10 @@ import frc.robot.sensors.limitswitchsensor.MockLimitSwitchSensor;
 import frc.robot.sensors.limitswitchsensor.RealLimitSwitchSensor;
 import frc.robot.sensors.linefollowersensor.LineFollowerSensorBase;
 import frc.robot.sensors.linefollowersensor.LineSensor4905;
+import frc.robot.sensors.linefollowersensor.MockLineFollowerSensorArray;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 import frc.robot.sensors.magencodersensor.MockMagEncoderSensor;
 import frc.robot.sensors.magencodersensor.RealMagEncoderSensor;
-import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensor;
 import frc.robot.sensors.ultrasonicsensor.MockUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.RealUltrasonicSensorPair;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
@@ -68,11 +69,14 @@ import frc.robot.subsystems.extendablearmandwrist.RealExtendableArmAndWrist;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntake;
 import frc.robot.subsystems.intake.RealIntake;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.LeftLEDs;
+import frc.robot.subsystems.leds.MockLEDs;
+import frc.robot.subsystems.leds.RightLEDs;
 import frc.robot.subsystems.pneumaticstilts.MockPneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.PneumaticStilts;
 import frc.robot.subsystems.pneumaticstilts.RealPneumaticStilts;
 import frc.robot.telemetries.Trace;
-import frc.robot.utilities.I2CBusDriver;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -85,7 +89,6 @@ public class Robot extends TimedRobot {
   private static Robot instance;
 
   public static PneumaticStilts pneumaticStilts;
-  public static NavXGyroSensor gyro;
   private boolean robotInitDone = false;
   public static Compressor compressor;
   public static Joystick driveController;
@@ -100,16 +103,16 @@ public class Robot extends TimedRobot {
   public static MagEncoderSensor drivetrainLeftRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static UltrasonicSensor drivetrainRearUltrasonic;
-  public static LineFollowerSensorBase lineFollowerSensorArray;
   public static Claw claw;
 
   public static MoveDrivetrainGyroCorrect gyroCorrectMove;
   public static Intake intake;
   public static AngleSensor intakeAngleSensor;
   public static LimitSwitchSensor intakeStowedSwitch;
-
+  public static LEDs rightLeds;
+  public static LEDs leftLeds;
   public static InfraredDistanceSensor clawInfraredSensor;
-  public static LineFollowerSensorBase frontLineSensor4905;
+  public static LineFollowerSensorBase frontLineSensor;
   public static MagEncoderSensor topArmExtensionEncoder;
   public static MagEncoderSensor bottomArmExtensionEncoder;
   public static MagEncoderSensor shoulderEncoder;
@@ -140,10 +143,13 @@ public class Robot extends TimedRobot {
 
   public OI oi;
 
+  private static Config nameConfig = ConfigFactory.parseFile(new File("/home/lvuser/name.conf"));
+
   /**
    * This config should live on the robot and have hardware- specific configs.
    */
-  private static Config environmentalConfig = ConfigFactory.parseFile(new File("/home/lvuser/robot.conf"));
+  private static Config environmentalConfig = ConfigFactory
+      .parseFile(new File("/home/lvuser/deploy/robotConfigs/" + nameConfig.getString("robot.name") + "/robot.conf"));
 
   /**
    * This config lives in the jar and has hardware-independent configs.
@@ -230,6 +236,18 @@ public class Robot extends TimedRobot {
       System.out.println("Using fake extendablearmandwrist");
       extendableArmAndWrist = new MockExtendableArmAndWrist();
     }
+
+    if (conf.hasPath("subsystems.led")) {
+      System.out.println("Creating Right LEDs");
+      rightLeds = new RightLEDs();
+      System.out.println("Creating Left LEDs");
+      leftLeds = new LeftLEDs();
+    } else {
+      System.out.println("Creating Fake LEDs");
+      leftLeds = new MockLEDs();
+      rightLeds = new MockLEDs();
+    }
+
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
@@ -283,6 +301,7 @@ public class Robot extends TimedRobot {
       int intakeAngleSensorPort = conf.getInt("sensors.intakeAngleSensor");
       intakeAngleSensor = new RealAngleSensor(intakeAngleSensorPort);
       intakeAngleSensor.putSensorOnLiveWindow("Intake Sensor", "Angle");
+      SmartDashboard.putNumber("IntakeAngle", 0);
     } else {
       System.out.println("Using mock intakeAngleSensor");
       intakeAngleSensor = new MockAngleSensor();
@@ -344,13 +363,12 @@ public class Robot extends TimedRobot {
     ultrasonicPID = DrivetrainRearUltrasonicPIDController.getInstance();
     System.out.println("This is " + getName() + ".");
 
-    I2CBusDriver sunfounderdevice = new I2CBusDriver(true, 9);
-    I2C sunfounderbus = sunfounderdevice.getBus();
-
     driveController = new Joystick(0);
 
     if (conf.hasPath("sensors.lineFollowSensor.lineFollowSensor4905")) {
-      frontLineSensor4905 = new LineSensor4905();
+      frontLineSensor = new LineSensor4905();
+    } else {
+      frontLineSensor = new MockLineFollowerSensorArray();
     }
 
     // Creates first instance to put onto live window
@@ -364,22 +382,14 @@ public class Robot extends TimedRobot {
       Config cameraConf = conf.getConfig("cameras");
 
       UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera0"));
-      UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera1"));
       camera0.setResolution(320, 240);
-      camera0.setFPS(10);
-      camera1.setResolution(320, 240);
-      camera1.setFPS(10);
+      camera0.setFPS(20);
+
     }
 
     if (conf.hasPath("subsystems.climber")) {
-      /*
-       * climbUltrasonicSensor = new
-       * RealUltrasonicSensor(conf.getInt("subsystems.climber.ultrasonic.ping"),
-       * conf.getInt("subsystems.climber.ultrasonic.echo"));
-       */
       pneumaticStilts = new RealPneumaticStilts();
     } else {
-      drivetrainFrontUltrasonic = new MockUltrasonicSensor();
       pneumaticStilts = new MockPneumaticStilts();
     }
     m_chooser.setDefaultOption("Default Auto", new TeleOpDrive());
@@ -397,6 +407,13 @@ public class Robot extends TimedRobot {
 
     driveController = OI.getInstance().getDriveStick();
     armController = OI.getInstance().getOperatorStick();
+
+    // These are all driver information that we want to display immediately on
+    // smartdashbard
+    SmartDashboard.putString("Right", "");
+    SmartDashboard.putString("Left", "");
+    SmartDashboard.putNumber("MatchTime", 0.0);
+    SmartDashboard.putNumber("CurrentSpeed", 3);
 
     robotInitDone = true;
   }
@@ -421,6 +438,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // This is for constant tracing
+    SmartDashboard.putNumber("IntakeAngle", intakeAngleSensor.getAngle());
     NavXGyroSensor.getInstance().getZAngle();
     NavXGyroSensor.getInstance().getXAngle();
   }
@@ -432,10 +450,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     pneumaticStilts.stopAllLegs();
     if (robotInitDone) {
       PIDMultiton.resetDisableAll();
     }
+    rightLeds.setPurple(1.0);
+    leftLeds.setPurple(1.0);
     Trace.getInstance().flushTraceFiles();
   }
 
@@ -462,13 +485,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     gyroCorrectMove.setCurrentAngle();
     m_autonomousCommand = m_chooser.getSelected();
-    gyro = NavXGyroSensor.getInstance();
     MoveArmAndWristSafely.stop();
     driveTrain.shiftToLowGear();
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
+    rightLeds.setPurple(1.0);
+    leftLeds.setPurple(1.0);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -488,6 +515,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    SmartDashboard.putNumber("MatchTime", Timer.getMatchTime());
     Scheduler.getInstance().run();
   }
 
@@ -497,13 +525,19 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Trace.getInstance().matchStarted();
+    }
     pneumaticStilts.retractFrontLegs();
     pneumaticStilts.retractRearLegs();
     MoveArmAndWristSafely.stop();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    driveTrain.shiftToLowGear();
+    driveTrain.shiftToHighGear();
+    // This is to set the LEDs to the correct color for what mode we are in
+    rightLeds.setBlue(1.0);
+    leftLeds.setBlue(1.0);
     gyroCorrectMove.setCurrentAngle();
   }
 
@@ -516,10 +550,15 @@ public class Robot extends TimedRobot {
       intakeAngleSensor.reset();
     }
     Scheduler.getInstance().run();
+    leftLeds.updateLEDs();
+    rightLeds.updateLEDs();
+    SmartDashboard.putNumber("MatchTime", Timer.getMatchTime());
   }
 
   @Override
   public void testInit() {
+    leftLeds.setPurple(1.0);
+    rightLeds.setPurple(1.0);
     MoveArmAndWristSafely.stop();
     super.testInit();
   }
@@ -548,6 +587,9 @@ public class Robot extends TimedRobot {
     double topArmExtensionTicks = topArmExtensionEncoder.getDistanceTicks();
     double bottomArmExtensionTicks = bottomArmExtensionEncoder.getDistanceTicks();
     double shoulderTicks = shoulderEncoder.getDistanceTicks();
+    SmartDashboard.putNumber("topArmExtensionTicks", topArmExtensionTicks);
+    SmartDashboard.putNumber("bottomArmExtensionTicks", bottomArmExtensionTicks);
+    SmartDashboard.putNumber("shoulderTicks", shoulderTicks);
 
     double retraction = getExtensionIn(topArmExtensionTicks, bottomArmExtensionTicks);
     double wristDegrees = getWristRotDegrees(topArmExtensionTicks, bottomArmExtensionTicks);

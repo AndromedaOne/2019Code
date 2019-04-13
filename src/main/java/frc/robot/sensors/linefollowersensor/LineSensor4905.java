@@ -90,6 +90,7 @@ public class LineSensor4905 extends LineFollowerSensorBase {
           b = b << 8;
         }
       }
+      // These should be negative, please don't change it if we work on this again.
       readingBuf[sensorNumber] = -b;
     }
   }

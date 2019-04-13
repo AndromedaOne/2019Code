@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
@@ -14,17 +12,8 @@ import frc.robot.utilities.EnumeratedRawAxis;
  *
  */
 public class TeleOpDrive extends Command {
-
-  private boolean slowMoEnabled;
-  private double mod;
-  private boolean shifterHigh = false;
-  private int shifterDelayCounter = 0;
-  private int delay = 4;
   private boolean shiftButtonPressed = false;
   private boolean slowModeButtonPressed = false;
-  private double kSlowModeModifier = 0.6;
-  private int slowModeCounter = 0;
-  private double kSlowModeSlope = 1.0 / 50.0;
 
   public TeleOpDrive() {
     requires(Robot.driveTrain);
@@ -35,9 +24,6 @@ public class TeleOpDrive extends Command {
   @Override
   protected void initialize() {
     Trace.getInstance().logCommandStart("TeleOpDrive");
-    mod = 1;
-    slowMoEnabled = false;
-    shifterDelayCounter = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -51,23 +37,9 @@ public class TeleOpDrive extends Command {
     // Then wait a given time for the gears to shift
     // Then switch the motors back to break mode and reapply power
     if (ButtonsEnumerated.isPressed(ButtonsEnumerated.LEFTBUMPERBUTTON, driveController)
-        && (shifterDelayCounter >= delay) && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
-      shifterDelayCounter = 0;
+        && Robot.driveTrain.getShifterPresentFlag() && !shiftButtonPressed) {
+      Robot.driveTrain.toggleShifter();
       shiftButtonPressed = true;
-      slowModeCounter = 0;
-      slowModeButtonPressed = true;
-      Robot.driveTrain.changeControlMode(NeutralMode.Coast);
-      Robot.gyroCorrectMove.stop();
-      if (shifterHigh) {
-        System.out.println(" - Shifting to Low Gear - ");
-        Robot.driveTrain.shiftToLowGear();
-        shifterHigh = false;
-      } else {
-        slowMoEnabled = true;
-        System.out.println(" - Shifting to High Gear - ");
-        Robot.driveTrain.shiftToHighGear();
-        shifterHigh = true;
-      }
     }
 
     // This stops you from shifting over and over again while holding the button
@@ -75,40 +47,12 @@ public class TeleOpDrive extends Command {
       shiftButtonPressed = false;
     }
 
-    shifterDelayCounter++;
     double forwardBackwardStickValue = -EnumeratedRawAxis.LEFTSTICKVERTICAL.getRawAxis(driveController);
-
     double rotateStickValue = EnumeratedRawAxis.RIGHTSTICKHORIZONTAL.getRawAxis(driveController);
 
-    if (shifterDelayCounter >= delay) {
-      Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue * mod, rotateStickValue * mod, true, true);
-    } else {
-      Robot.gyroCorrectMove.stop();
-    }
-
-    if (shifterDelayCounter == delay) {
-      Robot.driveTrain.changeControlMode(NeutralMode.Brake);
-    }
-
-    // This adds one tick everytime time after we last clicked the slow mode button
-    slowModeCounter++;
     if (ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick()) && !slowModeButtonPressed) {
-
-      slowModeCounter = 0;
       slowModeButtonPressed = true;
-      if (!slowMoEnabled) {
-        slowMoEnabled = true;
-        System.out.println("Slow Mode IS enabled!");
-      } else {
-        slowMoEnabled = false;
-        System.out.println("SLOW MODE HAS ENDED!");
-      }
-    }
-
-    if (slowMoEnabled) {
-      mod = Math.max(kSlowModeModifier, 1 - slowModeCounter * kSlowModeSlope);
-    } else {
-      mod = Math.min(1, 0.6 + slowModeCounter * kSlowModeSlope);
+      Robot.driveTrain.toggleSlowMode();
     }
 
     // This stops you from switching in slow over and over again while holding the
@@ -117,6 +61,7 @@ public class TeleOpDrive extends Command {
       slowModeButtonPressed = false;
     }
 
+    Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue, rotateStickValue, true, true);
   }
 
   // Make this return true when this Command no longer needs to run execute()

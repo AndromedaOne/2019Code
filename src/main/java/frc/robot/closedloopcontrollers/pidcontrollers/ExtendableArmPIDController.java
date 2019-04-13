@@ -18,11 +18,11 @@ public class ExtendableArmPIDController extends PIDControllerBase {
   private final MagEncoderSensor bottomArmEncoder;
 
   private ExtendableArmPIDController() {
-    super.absoluteTolerance = 0.5 / Robot.EXTENSIONINCHESPERTICK;
+    super.absoluteToleranceForQuickMovement = 0.5 / Robot.EXTENSIONINCHESPERTICK;
     // PID loop will only return true if error is within 1.5 inches of setpoint
-    super.p = 1.0 * Math.pow(10, -4); // 5.0e-5;
-    super.i = 0;
-    super.d = 0.0;// 1.0e-4;
+    super.pForMovingQuickly = 1.0 * Math.pow(10, -4);
+    super.iForMovingQuickly = 0;
+    super.dForMovingQuickly = 0.0;// 1.0e-4;
     super.outputRange = 0.85;
     super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "Extension";
@@ -50,20 +50,7 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      /*
-       * Trace.getInstance().addTrace(true, "ExtensionPID", new TracePair("Output",
-       * output), new TracePair("SetpointTicks", pidMultiton.getSetpoint()), new
-       * TracePair("SetpointInches", pidMultiton.getSetpoint() *
-       * Robot.EXTENSIONINCHESPERTICK), new TracePair("ExtensionTicks",
-       * armPIDSource.pidGet()), new TracePair("ExtensionInches",
-       * armPIDSource.pidGet() * Robot.EXTENSIONINCHESPERTICK));
-       */
-      // try {
       MoveArmAndWristSafely.setPidExtensionPower(output);
-      // } catch (ArmOutOfBoundsException e) {
-      // System.out.println(e.getMessage());
-      // container.disable();
-      // }
     }
   }
 

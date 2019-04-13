@@ -8,6 +8,7 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.telemetries.Trace;
@@ -30,6 +31,7 @@ public class RealDriveTrain extends DriveTrain {
   public static DifferentialDrive differentialDrive;
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
+  private boolean invertTurning = false;
   // private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public boolean getShifterPresentFlag() {
@@ -46,6 +48,9 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
         driveConf.getBoolean("rightSideInverted"));
     differentialDrive = new DifferentialDrive(driveTrainLeftMaster, driveTrainRightMaster);
+    if (conf.hasPath("subsystems.driveTrain.invertTurning")) {
+      invertTurning = conf.getBoolean("subsystems.driveTrain.invertTurning");
+    }
 
     // Gear Shift Solenoid
     if (Robot.getConfig().hasPath("subsystems.driveTrain.shifter")) {
@@ -58,11 +63,18 @@ public class RealDriveTrain extends DriveTrain {
     }
   }
 
+  private RobotGear currentGear = RobotGear.SLOWHIGHGEAR;
   private final int kTimeoutMs = 30;
 
   private double lowGearMaxSpeed = 1;
   private double highGearMaxSpeed = 1;
-
+  private final double kFirstGearModifier = 0.6;
+  private final double kThirdGearModifier = 0.75;
+  private final double kAccelerationSlope = 1.0 / 12.5;
+  private double previousSpeed = 0;
+  private double gearMod = 1;
+  private int shifterDelayCounter = 0;
+  private int delay = 4;
   private double maxSpeed = lowGearMaxSpeed;
   private final int kLowGearPIDSlot = 0;
   private final int kHighGearPIDSlot = 1;
@@ -136,6 +148,89 @@ public class RealDriveTrain extends DriveTrain {
   private void setVelocityMode(ArbitraryModeWPI_TalonSRX talon) {
     talon.setControlMode(ControlMode.Velocity);
 
+  }
+
+  @Override
+  public void setGear(RobotGear gear) {
+    currentGear = gear;
+    switch (currentGear) {
+    case SLOWLOWGEAR:
+      gearMod = kFirstGearModifier;
+      Robot.leftLeds.setRed(1.0);
+      Robot.rightLeds.setRed(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 1);
+      shiftToLowGear();
+      break;
+    case LOWGEAR:
+      gearMod = 1;
+      Robot.leftLeds.setWhite(1.0);
+      Robot.rightLeds.setWhite(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 2);
+      shiftToLowGear();
+      break;
+    case SLOWHIGHGEAR:
+      gearMod = kThirdGearModifier;
+      Robot.leftLeds.setBlue(1.0);
+      Robot.rightLeds.setBlue(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 3);
+      shiftToHighGear();
+      break;
+    case HIGHGEAR:
+      gearMod = 1;
+      Robot.leftLeds.setGreen(1.0);
+      Robot.rightLeds.setGreen(1.0);
+      SmartDashboard.putNumber("CurrentSpeed", 4);
+      shiftToHighGear();
+      break;
+    }
+  }
+
+  @Override
+  public RobotGear getGear() {
+    return currentGear;
+  }
+
+  public void toggleShifter() {
+    switch (currentGear) {
+    case SLOWLOWGEAR:
+      System.out.println(" - Switching to Slow Low Gear - ");
+      setGear(RobotGear.SLOWHIGHGEAR);
+      break;
+    case LOWGEAR:
+      System.out.println(" - Switching to Low Gear - ");
+      // This is due to Erics preference to shift from Low Gear to Slow High
+      setGear(RobotGear.SLOWHIGHGEAR);
+      break;
+    case SLOWHIGHGEAR:
+      System.out.println(" - Switching to High Gear - ");
+      setGear(RobotGear.SLOWLOWGEAR);
+      break;
+    case HIGHGEAR:
+      System.out.println(" - Switching to Slow High Gear - ");
+      setGear(RobotGear.LOWGEAR);
+      break;
+    }
+  }
+
+  public void toggleSlowMode() {
+    switch (currentGear) {
+    case SLOWLOWGEAR:
+      System.out.println(" - Switching to Slow Low Gear - ");
+      setGear(RobotGear.LOWGEAR);
+      break;
+    case LOWGEAR:
+      System.out.println(" - Switching to Low Gear - ");
+      setGear(RobotGear.SLOWLOWGEAR);
+      break;
+    case SLOWHIGHGEAR:
+      System.out.println(" - Switching to High Gear - ");
+      setGear(RobotGear.HIGHGEAR);
+      break;
+    case HIGHGEAR:
+      System.out.println(" - Switching to Slow High Gear - ");
+      setGear(RobotGear.SLOWHIGHGEAR);
+      break;
+    }
   }
 
   // Inspired by
@@ -225,11 +320,35 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
-    Trace.getInstance().addTrace(true, "move", new TracePair("ForwardBack", forwardBackSpeed),
-        new TracePair("Rotate", rotateAmount));
     // logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
     // logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
-    differentialDrive.arcadeDrive(forwardBackSpeed, rotateAmount, squaredInputs);
+    if (invertTurning) {
+      rotateAmount = -rotateAmount;
+    }
+    shifterDelayCounter++;
+    double requestedSpeed = forwardBackSpeed * gearMod;
+    if (requestedSpeed > previousSpeed) {
+      previousSpeed += kAccelerationSlope;
+      if (previousSpeed > requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
+    } else {
+      previousSpeed -= kAccelerationSlope;
+      if (previousSpeed < requestedSpeed) {
+        previousSpeed = requestedSpeed;
+      }
+    }
+    double currentSpeed = previousSpeed;
+    double currentRotate = rotateAmount;
+    if (shifterDelayCounter >= delay) {
+      Robot.driveTrain.changeControlMode(NeutralMode.Brake);
+    } else {
+      currentSpeed = 0;
+      currentRotate = 0;
+    }
+    differentialDrive.arcadeDrive(currentSpeed, currentRotate * gearMod, squaredInputs);
+    Trace.getInstance().addTrace(true, "move", new TracePair<>("ForwardBack", previousSpeed),
+        new TracePair<>("Rotate", rotateAmount));
   }
 
   /* String for output */
@@ -242,15 +361,10 @@ public class RealDriveTrain extends DriveTrain {
       System.out.println("TALON IS NULL!!! ");
     }
     double motorOutput = _talon.getMotorOutputPercent();
-    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair("Percent", (double) motorOutput * 100),
-        new TracePair("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
-        new TracePair("Error", (double) _talon.getClosedLoopError(slotIdx)),
-        new TracePair("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
-//        new TracePair("Battery Voltage", (double) _talon.getBusVoltage()),
-//        new TracePair("Current Channel 0", (double) pdp.getCurrent(0)),
-//        new TracePair("Current Channel 1", (double) pdp.getCurrent(1)),
-//        new TracePair("Current Channel 2", (double) pdp.getCurrent(2)),
-//        new TracePair("Current Channel 3", (double) pdp.getCurrent(3)));
+    Trace.getInstance().addTrace(false, "VCMeasure" + side, new TracePair<>("Percent", (double) motorOutput * 100),
+        new TracePair<>("Speed", (double) _talon.getSelectedSensorVelocity(slotIdx)),
+        new TracePair<>("Error", (double) _talon.getClosedLoopError(slotIdx)),
+        new TracePair<>("Target", (double) _talon.getClosedLoopTarget(slotIdx)));
   }
 
   public void stop() {
@@ -264,22 +378,26 @@ public class RealDriveTrain extends DriveTrain {
   public void shiftToLowGear() {
     System.out.println("Shifting to low gear");
     if (shifterSolenoid != null) {
+      changeControlMode(NeutralMode.Coast);
       shifterSolenoid.set(DoubleSolenoid.Value.kForward);
     }
     maxSpeed = lowGearMaxSpeed;
     driveTrainLeftMaster.selectProfileSlot(kLowGearPIDSlot, 0);
     driveTrainRightMaster.selectProfileSlot(kLowGearPIDSlot, 0);
     slotIdx = 0;
+    shifterDelayCounter = 0;
   }
 
   public void shiftToHighGear() {
     System.out.println("Shifting to high gear");
     if (shifterSolenoid != null) {
+      changeControlMode(NeutralMode.Coast);
       shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
       maxSpeed = highGearMaxSpeed;
       driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
       driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
       slotIdx = 1;
+      shifterDelayCounter = 0;
     } else {
       System.out.println("NO SHIFTER");
     }
@@ -292,4 +410,5 @@ public class RealDriveTrain extends DriveTrain {
     driveTrainRightMaster.setNeutralMode(mode);
     driveTrainRightSlave.setNeutralMode(mode);
   }
+
 }

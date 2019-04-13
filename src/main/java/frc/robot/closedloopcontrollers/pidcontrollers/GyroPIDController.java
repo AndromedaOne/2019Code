@@ -8,6 +8,7 @@ public class GyroPIDController extends PIDControllerBase {
   private static GyroPIDController instance;
   private NavXGyroSensor navXGyroSensor;
   private GyroPIDOut gyroPIDOut;
+  private double kMinOut = 0.1;
 
   /**
    * Sets the PID variables and absolute Tolerance; all other PID parameters are
@@ -16,11 +17,17 @@ public class GyroPIDController extends PIDControllerBase {
    * PIDMultiton class.
    */
   private GyroPIDController() {
-    super.absoluteTolerance = 3;
-    super.p = 0.01;
-    super.i = 0.001;
-    super.d = 0;
-    super.outputRange = 0.5;
+    super.absoluteToleranceForQuickMovement = 20;
+    super.pForMovingQuickly = 0.015;
+    super.iForMovingQuickly = 0.0;
+    super.dForMovingQuickly = 0;
+
+    super.absoluteToleranceForPreciseMovement = 1;
+    super.pForMovingPrecisely = 0.01;
+    super.iForMovingPrecisely = 0;
+    super.dForMovingPrecisely = 0;
+
+    super.outputRange = 1;
     super.subsystemName = "GyroPIDHeader";
     super.pidName = "GyroPID";
 
@@ -38,12 +45,18 @@ public class GyroPIDController extends PIDControllerBase {
      * method. Also it traces the output, setpoint, and angle
      */
     @Override
-    public void pidWrite(double output) {
-      if ((output > 0) && (output < 0.1)) {
-        output = 0.1;
-      } else if ((output < 0) && (output > -0.1)) {
-        output = -0.1;
+    public void pidWrite(double input) {
+      double output = input;
+      if (output > 0) {
+        output = (output * (1 - kMinOut) + kMinOut);
+      } else {
+        output = (output * (1 - kMinOut) - kMinOut);
       }
+
+      if(input == 0) {
+        output = 0;
+      }
+
       Robot.gyroCorrectMove.moveUsingGyro(0, output, false, false);
     }
 
@@ -63,7 +76,4 @@ public class GyroPIDController extends PIDControllerBase {
     return instance;
   }
 
-  public double getAbsoluteTolerance() {
-    return super.absoluteTolerance;
-  }
 }

@@ -16,11 +16,11 @@ public class ShoulderPIDController extends PIDControllerBase {
   private MagEncoderSensor shoulderEncoder;
 
   private ShoulderPIDController() {
-    super.absoluteTolerance = 1.5 / Robot.SHOULDERDEGREESPERTICK;
+    super.absoluteToleranceForQuickMovement = 3.5 / Robot.SHOULDERDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.0 * Math.pow(10, -4);
-    super.i = 0;
-    super.d = 0;
+    super.pForMovingQuickly = 1.0 * Math.pow(10, -4);
+    super.iForMovingQuickly = 0;
+    super.dForMovingQuickly = 0;
     super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "ShoulderPID";
 
@@ -42,20 +42,7 @@ public class ShoulderPIDController extends PIDControllerBase {
 
     @Override
     public void pidWrite(double output) {
-      /*
-       * Trace.getInstance().addTrace(true, "ShoulderPID", new TracePair("Output",
-       * output * 10000), new TracePair("SetpointTicks", pidMultiton.getSetpoint()),
-       * new TracePair("SetpointDegrees", pidMultiton.getSetpoint() *
-       * Robot.SHOULDERDEGREESPERTICK), new TracePair("AngleTicks",
-       * shoulderPIDSrc.pidGet()), new TracePair("AngleDegrees",
-       * shoulderPIDSrc.pidGet() * Robot.SHOULDERDEGREESPERTICK));
-       */
-      // try {
       MoveArmAndWristSafely.setPidShoulderPower(output);
-      // } catch (ArmOutOfBoundsException e) {
-      // System.out.println(e.getMessage());
-      // container.disable();
-      // }
     }
   }
 

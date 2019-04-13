@@ -1,6 +1,8 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 
@@ -8,26 +10,58 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
 
   private static DrivetrainEncoderPIDController instance;
   private EncoderPIDOut encoderPIDOut;
+  private EncoderPIDIn encoderPIDSrc;
   private MagEncoderSensor encoder;
+  private final double kMinOut = 0.0;
+  private static final double TICKSTOINCHESRATIO = 0;
 
   /**
    * Sets the encoder, encoderPIDOut, trace, and pidConfiguration variables. Also
    * creates the encoderPID from the PIDMultiton class.
    */
   private DrivetrainEncoderPIDController() {
-    super.absoluteTolerance = 100;
-    super.p = 0.0001;
-    super.i = 0.00001;
-    super.d = 0;
+    super.absoluteToleranceForQuickMovement = 100;
+    super.pForMovingQuickly = 0.0001;
+    super.iForMovingQuickly = 0.00001;
+    super.dForMovingQuickly = 0;
+
+    super.absoluteToleranceForPreciseMovement = 100;
+    super.pForMovingPrecisely = 0.0001;
+    super.iForMovingPrecisely = 0.00001;
+    super.dForMovingPrecisely = 0;
+
+
     super.subsystemName = "EncoderPIDHeader";
     super.pidName = "EncoderPID";
 
     encoder = Robot.drivetrainLeftRearEncoder;
     encoder.putSensorOnLiveWindow(super.subsystemName, "LeftRearEncoder");
     encoderPIDOut = new EncoderPIDOut();
+    encoderPIDSrc = new EncoderPIDIn();
     pidConfiguration = new PIDConfiguration();
     super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(encoder, encoderPIDOut, super.pidConfiguration);
+    super.pidMultiton = PIDMultiton.getInstance(encoderPIDSrc, encoderPIDOut, super.pidConfiguration);
+  }
+
+  private class EncoderPIDIn implements PIDSource {
+
+    
+
+    @Override
+    public void setPIDSourceType(PIDSourceType pidSource) {
+
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+      return PIDSourceType.kDisplacement;
+    }
+
+    @Override
+    public double pidGet() {
+      return -encoder.getDistanceTicks() * TICKSTOINCHESRATIO;
+	}
+
   }
 
   private class EncoderPIDOut implements PIDOutput {
@@ -36,7 +70,19 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
      * method. Also it traces the output, setpoint, and Encoder Ticks
      */
     @Override
-    public void pidWrite(double output) {
+    public void pidWrite(double input) {
+      double output = input;
+      if (output > 0) {
+        output = (output * (1 - kMinOut) + kMinOut);
+      } else {
+        output = (output * (1 - kMinOut) - kMinOut);
+      }
+
+      if(input == 0) {
+        output = 0;
+      }
+      System.out.println("Calling pidWrite: " + output);
+
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
   }

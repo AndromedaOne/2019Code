@@ -15,8 +15,8 @@ public class IntakeArmControl extends Command {
 
   private IntakePIDController intakePositionsPID = IntakePIDController.getInstance();
 
-  private MoveIntakeArmDirection directionToMove;
-  private IntakeArmPositionsEnum nextIntakePosition;
+  private MoveIntakeArmDirection directionToMove = MoveIntakeArmDirection.UP;
+  private IntakeArmPositionsEnum nextIntakePosition = IntakeArmPositionsEnum.UNKNOWN;
 
   private int counter = 0;
   private boolean isFinished = false;
@@ -86,7 +86,7 @@ public class IntakeArmControl extends Command {
    * Tells intake to go down and does not try to go further when at Groundheight
    */
   private void setDownSetpoint() {
-    intakePositionsPID.pidMultiton.setPIDTerms(5, 0, 0.40);
+    intakePositionsPID.pidMultiton.setPIDTerms(7, 0, 0.40);
     switch (Robot.intake.getCurrentIntakeArmPosition()) {
     case STOWED:
       intakePositionsPID.setSetpoint(Robot.intake.getCargoSetpoint());
@@ -118,7 +118,7 @@ public class IntakeArmControl extends Command {
   @Override
   protected void execute() {
     counter++;
-    if (counter >= 75) {
+    if (counter >= 35) {
       isFinished = true;
     }
   }
