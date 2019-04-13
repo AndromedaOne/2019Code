@@ -11,7 +11,13 @@ public class MoveUsingEncoderQuickly extends CommandGroup {
     }
 
     public void initialize() {
+<<<<<<< doubleMovePIDRefactor
         DrivetrainEncoderPIDController.getInstance().pidMultiton.setPIDTerms(DrivetrainEncoderPIDController.getInstance().getPForMovingQuickly(), DrivetrainEncoderPIDController.getInstance().getIForMovingQuickly(), DrivetrainEncoderPIDController.getInstance().getDForMovingQuickly());
+=======
+        DrivetrainEncoderPIDController.getInstance().pidMultiton.setPIDTerms(DrivetrainEncoderPIDController.getInstance().getPForMovingQuickly(),
+        DrivetrainEncoderPIDController.getInstance().getIForMovingQuickly(),
+        DrivetrainEncoderPIDController.getInstance().getDForMovingQuickly());
+>>>>>>> local
         DrivetrainEncoderPIDController.getInstance().pidMultiton.setTolerance(DrivetrainEncoderPIDController.getInstance().getToleranceForMovingQuickly());
     }
 
