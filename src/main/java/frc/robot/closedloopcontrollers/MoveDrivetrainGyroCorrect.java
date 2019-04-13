@@ -33,6 +33,11 @@ public class MoveDrivetrainGyroCorrect {
     currentDelay = 0;
   }
 
+  public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs,
+  boolean useAccelLimits) {
+    moveUsingGyro(forwardBackward, rotation, useDelay, useSquaredInputs, useAccelLimits);
+  } 
+
   /**
    * This moves the robot and corrects for any rotation using the gyro
    * 
@@ -40,7 +45,7 @@ public class MoveDrivetrainGyroCorrect {
    * after turning this allows the robot to drift naturally as you turn
    */
   public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs) {
-    moveUsingGyro(forwardBackward, rotation, useDelay, useSquaredInputs, navX.getCompassHeading());
+    moveUsingGyro(forwardBackward, rotation, useDelay, useSquaredInputs, navX.getCompassHeading(), true);
   }
 
   /**
@@ -53,7 +58,7 @@ public class MoveDrivetrainGyroCorrect {
    * to correct to the heading it should have turn to.
    */
   public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs,
-      double heading) {
+      double heading, boolean useAccelLimits) {
 
     double robotDeltaAngle = navX.getCompassHeading() - heading;
     double robotAngle = navX.getZAngle() + robotDeltaAngle;
@@ -83,6 +88,6 @@ public class MoveDrivetrainGyroCorrect {
     } else {
       newRotateValue = rotation;
     }
-    driveTrain.move(forwardBackward, newRotateValue, useSquaredInputs);
+    driveTrain.move(forwardBackward, newRotateValue, useSquaredInputs, useAccelLimits);
   }
 }

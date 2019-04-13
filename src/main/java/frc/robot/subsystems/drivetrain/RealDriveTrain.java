@@ -319,7 +319,7 @@ public class RealDriveTrain extends DriveTrain {
   public void periodic() {
   }
 
-  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
+  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs, boolean useAccelLimits) {
     // logMeasurements("Left", driveTrainLeftMaster, forwardBackSpeed, false);
     // logMeasurements("Right", driveTrainRightMaster, -forwardBackSpeed, true);
     if (invertTurning) {
@@ -327,17 +327,22 @@ public class RealDriveTrain extends DriveTrain {
     }
     shifterDelayCounter++;
     double requestedSpeed = forwardBackSpeed * gearMod;
-    if (requestedSpeed > previousSpeed) {
-      previousSpeed += kAccelerationSlope;
-      if (previousSpeed > requestedSpeed) {
-        previousSpeed = requestedSpeed;
+    if(useAccelLimits) {
+      if (requestedSpeed > previousSpeed) {
+        previousSpeed += kAccelerationSlope;
+        if (previousSpeed > requestedSpeed) {
+          previousSpeed = requestedSpeed;
+        }
+      } else {
+        previousSpeed -= kAccelerationSlope;
+        if (previousSpeed < requestedSpeed) {
+          previousSpeed = requestedSpeed;
+        }
       }
     } else {
-      previousSpeed -= kAccelerationSlope;
-      if (previousSpeed < requestedSpeed) {
-        previousSpeed = requestedSpeed;
-      }
+      previousSpeed = requestedSpeed;
     }
+
     double currentSpeed = previousSpeed;
     double currentRotate = rotateAmount;
     if (shifterDelayCounter >= delay) {

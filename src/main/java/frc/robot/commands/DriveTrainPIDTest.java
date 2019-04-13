@@ -48,7 +48,7 @@ public class DriveTrainPIDTest extends Command {
       currentSpeed = -kMaxSpeed;
       speedIncrement = -speedIncrement;
     }
-    Robot.driveTrain.move(currentSpeed, 0, false);
+    Robot.driveTrain.move(currentSpeed, 0, false, false);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -61,7 +61,7 @@ public class DriveTrainPIDTest extends Command {
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("DriveTrainPIDTest");
-    Robot.driveTrain.move(0, 0, false);
+    Robot.driveTrain.move(0, 0, false, false);
   }
 
   // Called when another command which requires one or more of the same

@@ -24,7 +24,7 @@ public abstract class DriveTrain extends Subsystem {
 
   public abstract boolean getShifterPresentFlag();
 
-  public abstract void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs);
+  public abstract void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs, boolean useAccelLimits);
 
   public abstract void stop();
 

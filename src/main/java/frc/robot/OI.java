@@ -21,6 +21,7 @@ import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
+import frc.robot.groupcommands.DoubleMoveDrivetrainWithEncoder;
 import frc.robot.groupcommands.DoubleMoveIntake;
 import frc.robot.groupcommands.GyroDoubleMove;
 import frc.robot.groupcommands.LineFollowerGroupCommandScheduler;
@@ -167,6 +168,8 @@ public class OI {
 
     SmartDashboard.putData("RaiseFrontL2", new RaiseFrontLegsForL2());
     SmartDashboard.putData("RaiseBackL2", new RaiseBackLegsForL2());
+    SmartDashboard.putData("ForwardMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(36));
+    SmartDashboard.putData("BackMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(-36));
 
     ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
 

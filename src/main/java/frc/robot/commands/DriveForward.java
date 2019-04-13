@@ -21,7 +21,7 @@ public class DriveForward extends Command {
 
   @Override
   protected void execute() {
-    Robot.driveTrain.move(.5, 0, false);
+    Robot.driveTrain.move(.5, 0, false, false);
   }
 
   @Override
@@ -32,7 +32,7 @@ public class DriveForward extends Command {
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("DriveForward");
-    Robot.driveTrain.move(0, 0, false);
+    Robot.driveTrain.move(0, 0, false, false);
   }
 
   @Override

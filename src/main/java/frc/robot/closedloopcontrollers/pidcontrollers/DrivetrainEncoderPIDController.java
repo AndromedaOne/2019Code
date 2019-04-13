@@ -13,8 +13,8 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
   private EncoderPIDOut encoderPIDOut;
   private EncoderPIDIn encoderPIDSrc;
   private MagEncoderSensor encoder;
-  private final double kMinOut = 0.125;
-  private static final double TICKSTOINCHESRATIO = 1;
+  private final double kMinOut = 0.19;
+  private static final double TICKSTOINCHESRATIO = 2064.1216;
 
   /**
    * Sets the encoder, encoderPIDOut, trace, and pidConfiguration variables. Also
@@ -23,12 +23,12 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
   private DrivetrainEncoderPIDController() {
     super.outputRange = 1;
 
-    super.absoluteToleranceForQuickMovement = 100;
-    super.pForMovingQuickly = 0.0001;
+    super.absoluteToleranceForQuickMovement = TICKSTOINCHESRATIO * 10;
+    super.pForMovingQuickly = 5.0e-5;
     super.iForMovingQuickly = 0.0;
     super.dForMovingQuickly = 0;
 
-    super.absoluteToleranceForPreciseMovement = 100;
+    super.absoluteToleranceForPreciseMovement = TICKSTOINCHESRATIO * 1;
     super.pForMovingPrecisely = 1.0e-5;
     super.iForMovingPrecisely = 0.0;
     super.dForMovingPrecisely = 0;
