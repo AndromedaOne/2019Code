@@ -25,11 +25,13 @@ public class MoveUsingEncoderPID extends MoveTurnBase {
     DrivetrainEncoderPIDController.getInstance().enable();
   }
 
-  public boolean isFinished(){
-    return DrivetrainEncoderPIDController.getInstance().onTarget(); 
+  public boolean isFinished() {
+    return DrivetrainEncoderPIDController.getInstance().onTarget();
   }
+
   public void end() {
-    System.out.println("Error:" + ((Robot.drivetrainLeftRearEncoder.getDistanceTicks() / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO) - setpoint));
+    System.out.println("Error:" + ((Robot.drivetrainLeftRearEncoder.getDistanceTicks()
+        / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO) - setpoint));
     DrivetrainEncoderPIDController.getInstance().disable();
     DrivetrainEncoderPIDController.getInstance().reset();
   }

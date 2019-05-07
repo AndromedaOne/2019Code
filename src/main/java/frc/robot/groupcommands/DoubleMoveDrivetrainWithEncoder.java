@@ -6,14 +6,14 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainEncoderPIDContro
 import frc.robot.subsystems.drivetrain.*;
 
 public class DoubleMoveDrivetrainWithEncoder extends CommandGroup {
-    public DoubleMoveDrivetrainWithEncoder(double distanceInInches) {
-        double setpoint = distanceInInches + Robot.drivetrainLeftRearEncoder.getDistanceTicks() 
-            / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO;
-        addSequential(new MoveUsingEncoderQuickly(setpoint));
-        addSequential(new MoveUsingEncoderPrecisely(setpoint));
-    }
+  public DoubleMoveDrivetrainWithEncoder(double distanceInInches) {
+    double setpoint = distanceInInches + Robot.drivetrainLeftRearEncoder.getDistanceTicks()
+        / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO;
+    addSequential(new MoveUsingEncoderQuickly(setpoint));
+    addSequential(new MoveUsingEncoderPrecisely(setpoint));
+  }
 
-    public void initialize() {
-        Robot.driveTrain.setGear(DriveTrain.RobotGear.LOWGEAR);
-    }
+  public void initialize() {
+    Robot.driveTrain.setGear(DriveTrain.RobotGear.LOWGEAR);
+  }
 }

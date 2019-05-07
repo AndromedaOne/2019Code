@@ -34,9 +34,9 @@ public class MoveDrivetrainGyroCorrect {
   }
 
   public void moveUsingGyro(double forwardBackward, double rotation, boolean useDelay, boolean useSquaredInputs,
-  boolean useAccelLimits) {
+      boolean useAccelLimits) {
     moveUsingGyro(forwardBackward, rotation, useDelay, useSquaredInputs, useAccelLimits);
-  } 
+  }
 
   /**
    * This moves the robot and corrects for any rotation using the gyro

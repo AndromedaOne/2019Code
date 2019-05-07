@@ -18,7 +18,6 @@ import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
 import frc.robot.commands.RollIntakeGroupCommandScheduler;
 import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
-import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
 import frc.robot.groupcommands.DoubleMoveDrivetrainWithEncoder;

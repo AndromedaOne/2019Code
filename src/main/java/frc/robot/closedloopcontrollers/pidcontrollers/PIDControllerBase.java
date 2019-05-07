@@ -3,19 +3,19 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 public class PIDControllerBase {
   public PIDMultiton pidMultiton;
   protected double outputRange = 1;
-  
+
   protected PIDConfiguration pidConfiguration = new PIDConfiguration();
 
   protected double pForMovingQuickly = 0;
   protected double iForMovingQuickly = 0;
   protected double dForMovingQuickly = 0;
   protected double absoluteToleranceForQuickMovement = 0;
-  
+
   protected double pForMovingPrecisely = 0;
   protected double iForMovingPrecisely = 0;
   protected double dForMovingPrecisely = 0;
   protected double absoluteToleranceForPreciseMovement = 0;
-  
+
   protected String subsystemName;
   protected String pidName;
 

@@ -48,7 +48,8 @@ public class RealIntake extends Intake {
 
   @Override
   public void moveIntakeArm(double speed) {
-    Trace.getInstance().addTrace(true, "IntakeSpeed", new TracePair<>("Speed", speed), new TracePair<>("Angle", Robot.intakeAngleSensor.getAngle()));
+    Trace.getInstance().addTrace(true, "IntakeSpeed", new TracePair<>("Speed", speed),
+        new TracePair<>("Angle", Robot.intakeAngleSensor.getAngle()));
     intakeArmTalon.set(speed);
   }
 

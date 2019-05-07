@@ -15,7 +15,8 @@ public class RealMagEncoderSensor extends MagEncoderSensor {
    * 
    * @param talon Talon object to attach encoder to
    */
-  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam, boolean useAbsoluteReadings, boolean invertEncoder) {
+  public RealMagEncoderSensor(WPI_TalonSRX talon, boolean reverseDirectionParam, boolean useAbsoluteReadings,
+      boolean invertEncoder) {
     this.invertEncoder = invertEncoder;
     talonSpeedController = talon;
     if (!useAbsoluteReadings) {

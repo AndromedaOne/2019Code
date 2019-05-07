@@ -53,7 +53,7 @@ public class GyroPIDController extends PIDControllerBase {
         output = (output * (1 - kMinOut) - kMinOut);
       }
 
-      if(input == 0) {
+      if (input == 0) {
         output = 0;
       }
 

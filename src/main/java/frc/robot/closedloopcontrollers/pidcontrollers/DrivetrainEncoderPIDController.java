@@ -33,7 +33,6 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     super.iForMovingPrecisely = 0.0;
     super.dForMovingPrecisely = 0;
 
-
     super.subsystemName = "EncoderPIDHeader";
     super.pidName = "EncoderPID";
 
@@ -48,8 +47,6 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
 
   private class EncoderPIDIn extends SensorBase implements PIDSource {
 
-    
-
     @Override
     public void setPIDSourceType(PIDSourceType pidSource) {
 
@@ -62,9 +59,9 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
 
     @Override
     public double pidGet() {
-      
+
       return encoder.getDistanceTicks() / TICKSTOINCHESRATIO;
-	}
+    }
 
     @Override
     public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
@@ -88,11 +85,11 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
         output = (output * (1 - kMinOut) - kMinOut);
       }
 
-      if(input == 0) {
+      if (input == 0) {
         System.out.println("Input = 0");
         Robot.driveTrain.stop();
         output = 0;
-      }else{
+      } else {
         Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
       }
     }
@@ -110,6 +107,6 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
       instance = new DrivetrainEncoderPIDController();
     }
     return instance;
-  }  
+  }
 
 }

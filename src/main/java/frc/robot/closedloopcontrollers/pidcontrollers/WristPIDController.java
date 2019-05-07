@@ -21,7 +21,7 @@ public class WristPIDController extends PIDControllerBase {
   private WristPIDController() {
     super.absoluteToleranceForQuickMovement = 3.0 / Robot.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.pForMovingQuickly = 1.05e-4; 
+    super.pForMovingQuickly = 1.05e-4;
     super.iForMovingQuickly = 0.0; // 2.0e-6;
     super.dForMovingQuickly = 0.0; // 1.0e-5;
     super.outputRange = 0.6;

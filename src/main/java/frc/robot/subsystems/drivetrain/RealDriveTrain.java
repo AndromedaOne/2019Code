@@ -327,7 +327,7 @@ public class RealDriveTrain extends DriveTrain {
     }
     shifterDelayCounter++;
     double requestedSpeed = forwardBackSpeed * gearMod;
-    if(useAccelLimits) {
+    if (useAccelLimits) {
       if (requestedSpeed > previousSpeed) {
         previousSpeed += kAccelerationSlope;
         if (previousSpeed > requestedSpeed) {
