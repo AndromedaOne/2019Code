@@ -17,9 +17,10 @@ public class TeleopIntake extends Command {
   protected void initialize() {
     Trace.getInstance().logCommandStart("TeleopIntake");
   }
- protected void execute() {
-   MoveIntakeSafely.moveIntake(0);
- }
+
+  protected void execute() {
+    MoveIntakeSafely.moveIntake(0);
+  }
 
   @Override
   protected boolean isFinished() {

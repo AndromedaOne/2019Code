@@ -56,5 +56,4 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
     shoulderJointTalon.set(ControlMode.PercentOutput, -shoulderRotSpeed);
   }
 
-  
 }
