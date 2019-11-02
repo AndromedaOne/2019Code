@@ -97,6 +97,7 @@ public class Robot extends TimedRobot {
   public static DrivetrainRearUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
+  public static MagEncoderSensor drivetrainRightRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static UltrasonicSensor drivetrainRearUltrasonic;
   public static Claw claw;
@@ -243,6 +244,7 @@ public class Robot extends TimedRobot {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
       drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false, true);
+      drivetrainRightRearEncoder = new RealMagEncoderSensor(driveTrain.getRightRearTalon(), false, false, true);
     } else {
       System.out.println("Using fake drivetrain");
       driveTrain = new MockDriveTrain();
@@ -424,6 +426,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("IntakeAngle", intakeAngleSensor.getAngle());
     NavXGyroSensor.getInstance().getZAngle();
     NavXGyroSensor.getInstance().getXAngle();
+    SmartDashboard.putNumber("Drivetrain Left Encoder", drivetrainLeftRearEncoder.getDistanceTicks());
+    SmartDashboard.putNumber("Drivetrain Right Encoder", drivetrainRightRearEncoder.getDistanceTicks());
   }
 
   /**

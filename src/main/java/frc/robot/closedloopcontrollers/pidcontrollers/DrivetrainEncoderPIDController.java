@@ -13,7 +13,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
   private EncoderPIDOut encoderPIDOut;
   private EncoderPIDIn encoderPIDSrc;
   private MagEncoderSensor encoder;
-  private final double kMinOut = 0.176;
+  private final double kMinOut = 0.125;
   public static final double TICKSTOINCHESRATIO = 2064.1216;
 
   /**
@@ -23,8 +23,8 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
   private DrivetrainEncoderPIDController() {
     super.outputRange = 1;
 
-    super.absoluteToleranceForQuickMovement = 8;
-    super.pForMovingQuickly = 0.025;
+    super.absoluteToleranceForQuickMovement = 1;
+    super.pForMovingQuickly = 0.004;
     super.iForMovingQuickly = 0.0;
     super.dForMovingQuickly = 0;
 
@@ -66,7 +66,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     @Override
     public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
       putReadingOnLiveWindow(subsystemNameParam, sensorNameParam, this::pidGet);
-
+      
     }
 
   }

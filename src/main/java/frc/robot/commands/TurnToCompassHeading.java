@@ -52,6 +52,8 @@ public class TurnToCompassHeading extends Command {
   }
 
   protected void end() {
+    System.out.println(" - Gyro PID Finished - ");
+    System.out.println("Current Compass Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
     Trace.getInstance().logCommandStop("TurnToCompassHeading");
     Robot.driveTrain.setGear(savedGear);
     gyroPID.reset();

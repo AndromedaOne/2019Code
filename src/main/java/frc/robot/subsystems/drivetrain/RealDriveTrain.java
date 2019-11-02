@@ -380,6 +380,10 @@ public class RealDriveTrain extends DriveTrain {
     return driveTrainLeftMaster;
   }
 
+  public WPI_TalonSRX getRightRearTalon() {
+    return driveTrainRightMaster;
+  }
+
   public void shiftToLowGear() {
     System.out.println("Shifting to low gear");
     if (shifterSolenoid != null) {

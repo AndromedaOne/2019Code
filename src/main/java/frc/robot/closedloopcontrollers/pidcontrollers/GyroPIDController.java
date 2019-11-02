@@ -8,7 +8,7 @@ public class GyroPIDController extends PIDControllerBase {
   private static GyroPIDController instance;
   private NavXGyroSensor navXGyroSensor;
   private GyroPIDOut gyroPIDOut;
-  private double kMinOut = 0.1;
+  private double kMinOut = 0.0625;
 
   /**
    * Sets the PID variables and absolute Tolerance; all other PID parameters are
@@ -17,8 +17,8 @@ public class GyroPIDController extends PIDControllerBase {
    * PIDMultiton class.
    */
   private GyroPIDController() {
-    super.absoluteToleranceForQuickMovement = 20;
-    super.pForMovingQuickly = 0.015;
+    super.absoluteToleranceForQuickMovement = 1;
+    super.pForMovingQuickly = 0.011;
     super.iForMovingQuickly = 0.0;
     super.dForMovingQuickly = 0;
 

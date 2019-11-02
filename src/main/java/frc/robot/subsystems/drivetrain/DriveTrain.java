@@ -41,6 +41,8 @@ public abstract class DriveTrain extends Subsystem {
 
   public abstract WPI_TalonSRX getLeftRearTalon();
 
+  public abstract WPI_TalonSRX getRightRearTalon();
+
   public abstract void toggleSlowMode();
 
   public abstract void toggleShifter();

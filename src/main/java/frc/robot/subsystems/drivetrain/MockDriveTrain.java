@@ -64,4 +64,9 @@ public class MockDriveTrain extends DriveTrain {
   public void toggleShifter() {
     System.out.println("Toggle Shifter");
   }
+
+  @Override
+  public WPI_TalonSRX getRightRearTalon() {
+    return null;
+  }
 }
