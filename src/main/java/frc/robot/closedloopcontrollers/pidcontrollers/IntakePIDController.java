@@ -4,6 +4,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveIntakeSafely;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.anglesensor.AngleSensor;
 
 public class IntakePIDController extends PIDControllerBase {
@@ -13,15 +14,10 @@ public class IntakePIDController extends PIDControllerBase {
   private AngleSensor intakeAngleSensor;
 
   private IntakePIDController() {
-    super.absoluteToleranceForQuickMovement = 0.035;
-    super.pForMovingQuickly = 0.25;
-    super.iForMovingQuickly = 0;
-    super.dForMovingQuickly = 0.25;
-
-    super.absoluteToleranceForPreciseMovement = 0.01;
-    super.pForMovingPrecisely = 0.125;
-    super.iForMovingPrecisely = 0;
-    super.dForMovingPrecisely = 0;
+    super.absoluteTolerance = 0.035;
+    super.p = 0.25;
+    super.i = 0;
+    super.d = 0.25;
 
     super.outputRange = 1;
     super.subsystemName = "Intake";

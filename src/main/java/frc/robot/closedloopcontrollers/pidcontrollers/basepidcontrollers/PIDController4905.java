@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.closedloopcontrollers.pidcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers;
 
 import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.Notifier;

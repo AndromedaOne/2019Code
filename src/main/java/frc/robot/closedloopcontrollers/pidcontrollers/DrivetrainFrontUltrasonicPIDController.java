@@ -2,6 +2,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -19,10 +20,10 @@ public class DrivetrainFrontUltrasonicPIDController extends PIDControllerBase {
    * the PIDMultiton class.
    */
   private DrivetrainFrontUltrasonicPIDController() {
-    super.absoluteToleranceForQuickMovement = 3;
-    super.pForMovingQuickly = 0;
-    super.iForMovingQuickly = 0;
-    super.dForMovingQuickly = 0;
+    super.absoluteTolerance = 3;
+    super.p = 0;
+    super.i = 0;
+    super.d = 0;
     super.subsystemName = "FrontUltrasonicPIDHeader";
     super.pidName = "FrontUltrasonicPID";
 

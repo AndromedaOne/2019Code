@@ -7,8 +7,7 @@ import org.junit.Test;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import frc.robot.closedloopcontrollers.pidcontrollers.PIDConfiguration;
-import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 
 public class PIDControllerTest {
   @Test

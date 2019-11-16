@@ -14,18 +14,14 @@ import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriverOveride;
 import frc.robot.commands.IntakeArmControl;
-import frc.robot.commands.MoveUsingEncoderPID;
 import frc.robot.commands.IntakeArmControl.MoveIntakeArmDirection;
+import frc.robot.commands.MoveUsingEncoderPID;
 import frc.robot.commands.RollIntakeGroupCommandScheduler;
 import frc.robot.commands.RollIntakeIn;
 import frc.robot.commands.StowIntakeArm;
 import frc.robot.commands.TurnToCompassHeading;
 import frc.robot.commands.armwristcommands.*;
 import frc.robot.commands.stilts.*;
-import frc.robot.groupcommands.DoubleMoveDrivetrainWithEncoder;
-import frc.robot.groupcommands.DoubleMoveDrivetrainWithEncoderScheduler;
-import frc.robot.groupcommands.DoubleMoveIntake;
-import frc.robot.groupcommands.GyroDoubleMove;
 import frc.robot.groupcommands.LineFollowerGroupCommandScheduler;
 import frc.robot.utilities.ButtonsEnumerated;
 import frc.robot.utilities.POVDirectionNames;
@@ -121,11 +117,13 @@ public class OI {
 
     // WAS RAISE FRONT FOR l2
     extendFrontLegs = new JoystickButton(driveController, ButtonsEnumerated.STARTBUTTON.getValue());
-    extendFrontLegs.whenPressed(new DoubleMoveDrivetrainWithEncoderScheduler(72));
+    // extendFrontLegs.whenPressed(new
+    // DoubleMoveDrivetrainWithEncoderScheduler(72));
 
     // WAS RAISE BACK FOR l2
     extendRearLegs = new JoystickButton(driveController, ButtonsEnumerated.BACKBUTTON.getValue());
-    extendRearLegs.whenPressed(new DoubleMoveDrivetrainWithEncoderScheduler(-72));
+    // extendRearLegs.whenPressed(new
+    // DoubleMoveDrivetrainWithEncoderScheduler(-72));
 
     retractFrontLegs = new POVButton(driveController, POVDirectionNames.EAST.getValue());
     retractFrontLegs.whenPressed(new RetractFrontLegs());
@@ -150,14 +148,14 @@ public class OI {
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
     turnToNorth.whenPressed(new TurnToCompassHeading(0));
     turnToEast = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
-    turnToEast.whenPressed(new GyroDoubleMove(90, true));
+    // turnToEast.whenPressed(new GyroDoubleMove(90, true));
     turnToSouth = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
     turnToSouth.whenPressed(new MoveUsingEncoderPID(150));
     turnToWest = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
-    turnToWest.whenPressed(new GyroDoubleMove(270, true));
+    // turnToWest.whenPressed(new GyroDoubleMove(270, true));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
-    intakeUp.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.UP));
+    // intakeUp.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.UP));
     SmartDashboard.putData("MoveIntakeUp", new IntakeArmControl(MoveIntakeArmDirection.UP));
 
     // TODO: Change these to actual buttons
@@ -165,15 +163,17 @@ public class OI {
     runIntakeIn.whileHeld(new RollIntakeIn());
 
     intakeDown = new POVButton(operatorController, POVDirectionNames.SOUTH.getValue());
-    intakeDown.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.DOWN));
+    // intakeDown.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.DOWN));
     SmartDashboard.putData("StowIntake", new StowIntakeArm());
 
     SmartDashboard.putData("MoveIntakeDown", new IntakeArmControl(MoveIntakeArmDirection.DOWN));
 
     SmartDashboard.putData("RaiseFrontL2", new RaiseFrontLegsForL2());
     SmartDashboard.putData("RaiseBackL2", new RaiseBackLegsForL2());
-    SmartDashboard.putData("ForwardMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(72));
-    SmartDashboard.putData("BackMoveUsingEncoder", new DoubleMoveDrivetrainWithEncoder(-72));
+    // SmartDashboard.putData("ForwardMoveUsingEncoder", new
+    // DoubleMoveDrivetrainWithEncoder(72));
+    // SmartDashboard.putData("BackMoveUsingEncoder", new
+    // DoubleMoveDrivetrainWithEncoder(-72));
 
     ButtonsEnumerated.ABUTTON.getJoystickButton(operatorController).whenPressed(new LowGamePieceArmCommand());
 

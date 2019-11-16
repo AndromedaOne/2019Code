@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 
@@ -19,11 +20,11 @@ public class WristPIDController extends PIDControllerBase {
   private static WristPIDSource wristPIDSource;
 
   private WristPIDController() {
-    super.absoluteToleranceForQuickMovement = 3.0 / Robot.WRISTDEGREESPERTICK;
+    super.absoluteTolerance = 3.0 / Robot.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.pForMovingQuickly = 1.05e-4;
-    super.iForMovingQuickly = 0.0; // 2.0e-6;
-    super.dForMovingQuickly = 0.0; // 1.0e-5;
+    super.p = 1.05e-4;
+    super.i = 0.0; // 2.0e-6;
+    super.d = 0.0; // 1.0e-5;
     super.outputRange = 0.6;
     super.subsystemName = "Extendable Arm and Wrist";
     super.pidName = "Wrist";

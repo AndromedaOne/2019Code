@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 
@@ -23,15 +24,10 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
   private DrivetrainEncoderPIDController() {
     super.outputRange = 1;
 
-    super.absoluteToleranceForQuickMovement = 1;
-    super.pForMovingQuickly = 0.004;
-    super.iForMovingQuickly = 0.0;
-    super.dForMovingQuickly = 0;
-
-    super.absoluteToleranceForPreciseMovement = 1;
-    super.pForMovingPrecisely = 1;
-    super.iForMovingPrecisely = 0.0;
-    super.dForMovingPrecisely = 0;
+    super.absoluteTolerance = 1;
+    super.p = 0.004;
+    super.i = 0.0;
+    super.d = 0;
 
     super.subsystemName = "EncoderPIDHeader";
     super.pidName = "EncoderPID";
@@ -66,7 +62,7 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
     @Override
     public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
       putReadingOnLiveWindow(subsystemNameParam, sensorNameParam, this::pidGet);
-      
+
     }
 
   }

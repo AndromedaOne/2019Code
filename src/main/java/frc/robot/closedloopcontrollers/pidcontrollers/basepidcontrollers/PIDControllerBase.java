@@ -1,4 +1,4 @@
-package frc.robot.closedloopcontrollers.pidcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers;
 
 public class PIDControllerBase {
   public PIDMultiton pidMultiton;
@@ -6,15 +6,10 @@ public class PIDControllerBase {
 
   protected PIDConfiguration pidConfiguration = new PIDConfiguration();
 
-  protected double pForMovingQuickly = 0;
-  protected double iForMovingQuickly = 0;
-  protected double dForMovingQuickly = 0;
-  protected double absoluteToleranceForQuickMovement = 0;
-
-  protected double pForMovingPrecisely = 0;
-  protected double iForMovingPrecisely = 0;
-  protected double dForMovingPrecisely = 0;
-  protected double absoluteToleranceForPreciseMovement = 0;
+  protected double p = 0;
+  protected double i = 0;
+  protected double d = 0;
+  protected double absoluteTolerance = 0;
 
   protected String subsystemName;
   protected String pidName;
@@ -72,10 +67,10 @@ public class PIDControllerBase {
    * @param pidConfiguration The configuration to use
    */
   public void setPIDConfiguration(PIDConfiguration pidConfiguration) {
-    pidConfiguration.setP(pForMovingQuickly);
-    pidConfiguration.setI(iForMovingQuickly);
-    pidConfiguration.setD(dForMovingQuickly);
-    pidConfiguration.setAbsoluteTolerance(absoluteToleranceForQuickMovement);
+    pidConfiguration.setP(p);
+    pidConfiguration.setI(i);
+    pidConfiguration.setD(d);
+    pidConfiguration.setAbsoluteTolerance(absoluteTolerance);
     pidConfiguration.setMaximumOutput(outputRange);
     pidConfiguration.setMinimumOutput(-outputRange);
     pidConfiguration.setLiveWindowName(subsystemName);
@@ -83,35 +78,18 @@ public class PIDControllerBase {
   }
 
   public double getPForMovingQuickly() {
-    return pForMovingQuickly;
+    return p;
   }
 
   public double getIForMovingQuickly() {
-    return iForMovingQuickly;
+    return i;
   }
 
   public double getDForMovingQuickly() {
-    return dForMovingQuickly;
+    return d;
   }
 
   public double getToleranceForMovingQuickly() {
-    return absoluteToleranceForQuickMovement;
+    return absoluteTolerance;
   }
-
-  public double getPForMovingPrecisely() {
-    return pForMovingPrecisely;
-  }
-
-  public double getIForMovingPrecisely() {
-    return iForMovingPrecisely;
-  }
-
-  public double getDForMovingPrecisely() {
-    return dForMovingPrecisely;
-  }
-
-  public double getToleranceForMovingPrecisely() {
-    return absoluteToleranceForPreciseMovement;
-  }
-
 }

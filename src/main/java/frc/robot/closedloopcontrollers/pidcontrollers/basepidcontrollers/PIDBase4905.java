@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.closedloopcontrollers.pidcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers;
 
 import static java.util.Objects.requireNonNull;
 

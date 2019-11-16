@@ -21,12 +21,12 @@ public class MoveUsingEncoderPID extends MoveTurnBase {
 
   public void initialize() {
     Trace.getInstance().logCommandStart("MoveUsingEncoderPID");
-    DrivetrainEncoderPIDController.getInstance().setSetpoint(Robot.drivetrainLeftRearEncoder.getDistanceTicks() 
-    / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO + setpoint);
-    System.out.println("Current Pos: " + Robot.drivetrainLeftRearEncoder.getDistanceTicks() 
-    / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO);
-    System.out.println("Setpoint: " + Robot.drivetrainLeftRearEncoder.getDistanceTicks() 
-    / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO + setpoint);
+    DrivetrainEncoderPIDController.getInstance().setSetpoint(Robot.drivetrainLeftRearEncoder.getDistanceTicks()
+        / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO + setpoint);
+    System.out.println("Current Pos: " + Robot.drivetrainLeftRearEncoder.getDistanceTicks()
+        / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO);
+    System.out.println("Setpoint: " + Robot.drivetrainLeftRearEncoder.getDistanceTicks()
+        / DrivetrainEncoderPIDController.getInstance().TICKSTOINCHESRATIO + setpoint);
     DrivetrainEncoderPIDController.getInstance().enable();
   }
 

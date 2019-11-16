@@ -2,6 +2,7 @@ package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.NavXGyroSensor;
 
 public class GyroPIDController extends PIDControllerBase {
@@ -17,15 +18,10 @@ public class GyroPIDController extends PIDControllerBase {
    * PIDMultiton class.
    */
   private GyroPIDController() {
-    super.absoluteToleranceForQuickMovement = 1;
-    super.pForMovingQuickly = 0.011;
-    super.iForMovingQuickly = 0.0;
-    super.dForMovingQuickly = 0;
-
-    super.absoluteToleranceForPreciseMovement = 1;
-    super.pForMovingPrecisely = 0.01;
-    super.iForMovingPrecisely = 0;
-    super.dForMovingPrecisely = 0;
+    super.absoluteTolerance = 1;
+    super.p = 0.011;
+    super.i = 0.0;
+    super.d = 0;
 
     super.outputRange = 1;
     super.subsystemName = "GyroPIDHeader";
