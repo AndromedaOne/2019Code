@@ -41,6 +41,10 @@ def includeDesktopSupport = false
 // Maven central needed for JUnit
 repositories {
     mavenCentral()
+
+    maven {
+        url = 'https://maven.pkg.github.com/AndromedaOne'
+    }
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
@@ -57,6 +61,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 
+    compile 'com.frc4905:AlienLib:0.0.1'
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
