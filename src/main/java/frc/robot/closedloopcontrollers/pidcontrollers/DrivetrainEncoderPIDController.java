@@ -8,7 +8,7 @@ import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 
-public class DrivetrainEncoderPIDController extends PIDControllerBase {
+public class DrivetrainEncoderPIDController {
 
   private static DrivetrainEncoderPIDController instance;
   private EncoderPIDOut encoderPIDOut;
@@ -22,23 +22,14 @@ public class DrivetrainEncoderPIDController extends PIDControllerBase {
    * creates the encoderPID from the PIDMultiton class.
    */
   private DrivetrainEncoderPIDController() {
-    super.outputRange = 1;
 
-    super.absoluteTolerance = 1;
-    super.p = 0.004;
-    super.i = 0.0;
-    super.d = 0;
-
-    super.subsystemName = "EncoderPIDHeader";
-    super.pidName = "EncoderPID";
+    PIDConfiguration pidConfiguration = new PIDConfiguration(0.004, 0, 0, 0, kMinOut,
+     1, 1, "EncoderPIDHeader", "EncoderPID");
 
     encoder = Robot.drivetrainLeftRearEncoder;
     encoderPIDOut = new EncoderPIDOut();
     encoderPIDSrc = new EncoderPIDIn();
-    encoderPIDSrc.putSensorOnLiveWindow(super.subsystemName, "PIDin");
-    pidConfiguration = new PIDConfiguration();
-    super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(encoderPIDSrc, encoderPIDOut, super.pidConfiguration);
+    encoderPIDSrc.putSensorOnLiveWindow(pidConfiguration.getLiveWindowName(), "PIDin");PIDMultiton.getInstance(encoderPIDSrc, encoderPIDOut, pidConfiguration);
   }
 
   private class EncoderPIDIn extends SensorBase implements PIDSource {

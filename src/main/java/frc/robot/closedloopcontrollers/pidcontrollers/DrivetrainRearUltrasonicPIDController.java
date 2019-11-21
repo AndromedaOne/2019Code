@@ -18,18 +18,20 @@ public class DrivetrainRearUltrasonicPIDController extends PIDControllerBase {
    * the PIDMultiton class.
    */
   private DrivetrainRearUltrasonicPIDController() {
-    super.absoluteTolerance = 3;
-    super.p = 0;
-    super.i = 0;
-    super.d = 0;
-    super.subsystemName = "RearUltrasonicPIDHeader";
-    super.pidName = "RearUltrasonicPID";
+    double absoluteTolerance = 3;
+    double p = 0;
+    double i = 0;
+    double d = 0;
+    String subsystemName = "RearUltrasonicPIDHeader";
+    String pidName = "RearUltrasonicPID";
+
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1,
+     subsystemName, pidName);
 
     ultrasonic = Robot.drivetrainFrontUltrasonic;
-    ultrasonic.putSensorOnLiveWindow(super.subsystemName, "RearUltrasonic");
+    ultrasonic.putSensorOnLiveWindow(subsystemName, "RearUltrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
-    super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, super.pidConfiguration);
+    PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, pidConfiguration);
   }
 
   private class UltrasonicPIDOut implements PIDOutput {

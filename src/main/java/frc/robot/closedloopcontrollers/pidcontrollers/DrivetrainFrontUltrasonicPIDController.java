@@ -4,10 +4,8 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
-import frc.robot.telemetries.Trace;
-import frc.robot.telemetries.TracePair;
 
-public class DrivetrainFrontUltrasonicPIDController extends PIDControllerBase {
+public class DrivetrainFrontUltrasonicPIDController {
 
   private static DrivetrainFrontUltrasonicPIDController instance;
   private UltrasonicPIDOut ultrasonicPIDOut;
@@ -20,18 +18,20 @@ public class DrivetrainFrontUltrasonicPIDController extends PIDControllerBase {
    * the PIDMultiton class.
    */
   private DrivetrainFrontUltrasonicPIDController() {
-    super.absoluteTolerance = 3;
-    super.p = 0;
-    super.i = 0;
-    super.d = 0;
-    super.subsystemName = "FrontUltrasonicPIDHeader";
-    super.pidName = "FrontUltrasonicPID";
+    double absoluteTolerance = 3;
+    double p = 0;
+    double i = 0;
+    double d = 0;
+    String subsystemName = "FrontUltrasonicPIDHeader";
+    String pidName = "FrontUltrasonicPID";
+
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1,
+     subsystemName, pidName);
 
     ultrasonic = Robot.drivetrainFrontUltrasonic;
-    ultrasonic.putSensorOnLiveWindow(super.subsystemName, "FrontUltrasonic");
+    ultrasonic.putSensorOnLiveWindow(subsystemName, "FrontUltrasonic");
     ultrasonicPIDOut = new UltrasonicPIDOut();
-    super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, super.pidConfiguration);
+    PIDMultiton.getInstance(ultrasonic, ultrasonicPIDOut, pidConfiguration);
   }
 
   private class UltrasonicPIDOut implements PIDOutput {
@@ -42,9 +42,6 @@ public class DrivetrainFrontUltrasonicPIDController extends PIDControllerBase {
      */
     @Override
     public void pidWrite(double output) {
-      Trace.getInstance().addTrace(true, "FrontUltrasonicDrivetrain", new TracePair<>("Output", output),
-          new TracePair<>("Setpoint", pidMultiton.getSetpoint()), new TracePair("DistanceInches", ultrasonic.pidGet()));
-
       Robot.gyroCorrectMove.moveUsingGyro(output, 0, false, false);
     }
 
