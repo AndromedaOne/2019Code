@@ -1,5 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
@@ -59,6 +62,19 @@ public class TeleOpDrive extends Command {
     // button
     if (!ButtonsEnumerated.RIGHTBUMPERBUTTON.isPressed(OI.getInstance().getDriveStick())) {
       slowModeButtonPressed = false;
+    }
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+
+//read values periodically
+    double x = tx.getDouble(0.0);
+    double y = ty.getDouble(0.0);
+    double area = ta.getDouble(0.0);
+    if (ButtonsEnumerated.ABUTTON.isPressed(OI.getInstance().getDriveStick())) {
+      rotateStickValue = x * 0.1;
     }
 
     Robot.gyroCorrectMove.moveUsingGyro(forwardBackwardStickValue, rotateStickValue, true, true);
