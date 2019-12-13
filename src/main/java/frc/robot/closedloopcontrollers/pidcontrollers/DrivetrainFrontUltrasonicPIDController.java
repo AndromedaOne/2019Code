@@ -25,8 +25,7 @@ public class DrivetrainFrontUltrasonicPIDController {
     String subsystemName = "FrontUltrasonicPIDHeader";
     String pidName = "FrontUltrasonicPID";
 
-    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1,
-     subsystemName, pidName);
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1, subsystemName, pidName);
 
     ultrasonic = Robot.drivetrainFrontUltrasonic;
     ultrasonic.putSensorOnLiveWindow(subsystemName, "FrontUltrasonic");

@@ -5,7 +5,7 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.ultrasonicsensor.UltrasonicSensor;
 
-public class DrivetrainRearUltrasonicPIDController extends PIDControllerBase {
+public class DrivetrainRearUltrasonicPIDController {
 
   private static DrivetrainRearUltrasonicPIDController instance;
   private UltrasonicPIDOut ultrasonicPIDOut;
@@ -25,8 +25,7 @@ public class DrivetrainRearUltrasonicPIDController extends PIDControllerBase {
     String subsystemName = "RearUltrasonicPIDHeader";
     String pidName = "RearUltrasonicPID";
 
-    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1,
-     subsystemName, pidName);
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1, subsystemName, pidName);
 
     ultrasonic = Robot.drivetrainFrontUltrasonic;
     ultrasonic.putSensorOnLiveWindow(subsystemName, "RearUltrasonic");

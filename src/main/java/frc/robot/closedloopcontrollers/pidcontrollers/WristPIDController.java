@@ -10,37 +10,38 @@ import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 
-public class WristPIDController extends PIDControllerBase {
+public class WristPIDController {
 
   private static WristPIDController instance;
   private WristPIDOut wristPIDOut;
   private final MagEncoderSensor topArmEncoder;
   private final MagEncoderSensor bottomArmEncoder;
+  private PIDMultiton pidMultiton;
 
   private static WristPIDSource wristPIDSource;
 
   private WristPIDController() {
-    super.absoluteTolerance = 3.0 / Robot.WRISTDEGREESPERTICK;
+    double absoluteTolerance = 3.0 / Robot.WRISTDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.05e-4;
-    super.i = 0.0; // 2.0e-6;
-    super.d = 0.0; // 1.0e-5;
-    super.outputRange = 0.6;
-    super.subsystemName = "Extendable Arm and Wrist";
-    super.pidName = "Wrist";
+    double p = 1.05e-4;
+    double i = 0.0; // 2.0e-6;
+    double d = 0.0; // 1.0e-5;
+    double outputRange = 0.6;
+    String subsystemName = "Extendable Arm and Wrist";
+    String pidName = "Wrist";
+
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, absoluteTolerance, subsystemName,
+        pidName);
+
+    pidMultiton = PIDMultiton.getInstance(wristPIDSource, wristPIDOut, pidConfiguration);
 
     wristPIDSource = new WristPIDSource();
-    wristPIDSource.putSensorOnLiveWindow(super.subsystemName, "WristAngle");
+    wristPIDSource.putSensorOnLiveWindow(subsystemName, "WristAngle");
 
     topArmEncoder = Robot.topArmExtensionEncoder;
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;
-    // topArmEncoder.putSensorOnLiveWindow(super.subsytemName, "WristTopEncoder");
-    // bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName,
-    // "WristBottomEncoder");
     wristPIDOut = new WristPIDOut();
-    super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(wristPIDSource, wristPIDOut, super.pidConfiguration);
-    wristPIDOut.setContainer(super.pidMultiton);
+    wristPIDOut.setContainer(pidMultiton);
   }
 
   private class WristPIDOut implements PIDOutput {
@@ -98,8 +99,15 @@ public class WristPIDController extends PIDControllerBase {
     }
   }
 
-  @Override
   public void setSetpoint(double setpoint) {
     pidMultiton.setSetpoint(setpoint / Robot.WRISTDEGREESPERTICK);
+  }
+
+  public void enable() {
+    pidMultiton.enable();
+  }
+
+  public boolean onTarget() {
+    return pidMultiton.onTarget();
   }
 }

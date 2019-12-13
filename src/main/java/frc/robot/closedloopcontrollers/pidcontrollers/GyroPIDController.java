@@ -5,11 +5,12 @@ import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.NavXGyroSensor;
 
-public class GyroPIDController extends PIDControllerBase {
+public class GyroPIDController {
   private static GyroPIDController instance;
   private NavXGyroSensor navXGyroSensor;
   private GyroPIDOut gyroPIDOut;
   private double kMinOut = 0.0625;
+  private PIDMultiton pidMultiton;
 
   /**
    * Sets the PID variables and absolute Tolerance; all other PID parameters are
@@ -18,20 +19,23 @@ public class GyroPIDController extends PIDControllerBase {
    * PIDMultiton class.
    */
   private GyroPIDController() {
-    super.absoluteTolerance = 1;
-    super.p = 0.011;
-    super.i = 0.0;
-    super.d = 0;
+    double absoluteTolerance = 1;
+    double p = 0.011;
+    double i = 0.0;
+    double d = 0;
 
-    super.outputRange = 1;
-    super.subsystemName = "GyroPIDHeader";
-    super.pidName = "GyroPID";
+    double outputRange = 1;
+    String subsystemName = "GyroPIDHeader";
+    String pidName = "GyroPID";
+
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, absoluteTolerance, subsystemName,
+        pidName);
+
+    pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, pidConfiguration);
 
     navXGyroSensor = NavXGyroSensor.getInstance();
     gyroPIDOut = new GyroPIDOut();
-    navXGyroSensor.putSensorOnLiveWindow(super.subsystemName, "Gyro");
-    super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, super.pidConfiguration);
+    navXGyroSensor.putSensorOnLiveWindow(subsystemName, "Gyro");
   }
 
   private class GyroPIDOut implements PIDOutput {
@@ -70,6 +74,10 @@ public class GyroPIDController extends PIDControllerBase {
       instance = new GyroPIDController();
     }
     return instance;
+  }
+
+  public PIDMultiton getPIDMultiton() {
+    return pidMultiton;
   }
 
 }

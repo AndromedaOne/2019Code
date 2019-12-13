@@ -9,29 +9,33 @@ import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 
-public class ShoulderPIDController extends PIDControllerBase {
+public class ShoulderPIDController {
 
   private static ShoulderPIDController instance;
   private ShoulderPIDOut shoulderPIDOut;
   private ShoulderPIDSource shoulderPIDSrc;
   private MagEncoderSensor shoulderEncoder;
+  private PIDMultiton pidMultiton;
 
   private ShoulderPIDController() {
-    super.absoluteTolerance = 3.5 / Robot.SHOULDERDEGREESPERTICK;
+    double absoluteTolerance = 3.5 / Robot.SHOULDERDEGREESPERTICK;
     // PID loop will only return true if error is within 5 degrees of setpoint
-    super.p = 1.0 * Math.pow(10, -4);
-    super.i = 0;
-    super.d = 0;
-    super.subsystemName = "Extendable Arm and Wrist";
-    super.pidName = "ShoulderPID";
+    double p = 1.0 * Math.pow(10, -4);
+    double i = 0;
+    double d = 0;
+    String subsystemName = "Extendable Arm and Wrist";
+    String pidName = "ShoulderPID";
+
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, absoluteTolerance, subsystemName,
+        pidName);
 
     shoulderPIDOut = new ShoulderPIDOut();
     shoulderEncoder = Robot.shoulderEncoder;
     shoulderPIDSrc = new ShoulderPIDSource();
-    super.setPIDConfiguration(super.pidConfiguration);
-    shoulderEncoder.putSensorOnLiveWindow(super.subsystemName, "ShoulderEncoder");
-    super.pidMultiton = PIDMultiton.getInstance(shoulderPIDSrc, shoulderPIDOut, super.pidConfiguration);
-    shoulderPIDOut.setContainer(super.pidMultiton);
+    shoulderEncoder.putSensorOnLiveWindow(subsystemName, "ShoulderEncoder");
+    shoulderPIDOut.setContainer(pidMultiton);
+
+    pidMultiton = PIDMultiton.getInstance(shoulderPIDSrc, shoulderPIDOut, pidConfiguration);
   }
 
   private class ShoulderPIDOut implements PIDOutput {
@@ -83,9 +87,16 @@ public class ShoulderPIDController extends PIDControllerBase {
     }
   }
 
-  @Override
   public void setSetpoint(double setpoint) {
     pidMultiton.setSetpoint(setpoint / Robot.SHOULDERDEGREESPERTICK);
+  }
+
+  public void enable() {
+    pidMultiton.enable();
+  }
+
+  public boolean onTarget() {
+    return pidMultiton.onTarget();
   }
 
 }

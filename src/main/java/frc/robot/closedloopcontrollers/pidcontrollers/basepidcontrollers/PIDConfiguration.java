@@ -12,8 +12,8 @@ public class PIDConfiguration {
   private String m_liveWindowName;
   private String m_pidName;
 
-  public PIDConfiguration(double p, double i, double d, double f, double minOut,
-   double maxOut, double absoluteTolerance, String liveWindowName, String pidName) {
+  public PIDConfiguration(double p, double i, double d, double f, double minOut, double maxOut,
+      double absoluteTolerance, String liveWindowName, String pidName) {
     m_p = p;
     m_i = i;
     m_d = d;
@@ -23,7 +23,7 @@ public class PIDConfiguration {
     m_absoluteTolerance = absoluteTolerance;
     m_liveWindowName = liveWindowName;
     m_pidName = pidName;
-   }
+  }
 
   public double getP() {
     return m_p;

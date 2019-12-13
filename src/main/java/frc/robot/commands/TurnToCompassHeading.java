@@ -42,13 +42,13 @@ public class TurnToCompassHeading extends Command {
     System.out.println("SetPoint: " + setPoint);
     System.out.println("Current Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
     System.out.println("Current Z Angle: " + NavXGyroSensor.getInstance().getZAngle());
-    gyroPID.setSetpoint(setPoint);
-    gyroPID.enable();
+    gyroPID.getPIDMultiton().setSetpoint(setPoint);
+    gyroPID.getPIDMultiton().enable();
   }
 
   @Override
   protected boolean isFinished() {
-    return gyroPID.onTarget();
+    return gyroPID.getPIDMultiton().onTarget();
   }
 
   protected void end() {
@@ -56,7 +56,7 @@ public class TurnToCompassHeading extends Command {
     System.out.println("Current Compass Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
     Trace.getInstance().logCommandStop("TurnToCompassHeading");
     Robot.driveTrain.setGear(savedGear);
-    gyroPID.reset();
+    gyroPID.getPIDMultiton().reset();
   }
 
 }

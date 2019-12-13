@@ -27,20 +27,20 @@ public class TurnToDeltaAngle extends Command {
     Robot.driveTrain.setGear(DriveTrain.RobotGear.LOWGEAR);
     double setPoint = NavXGyroSensor.getInstance().getZAngle() + deltaAngle;
     Trace.getInstance().logCommandStart("TurnToDeltaAngle");
-    gyroPID.setSetpoint(setPoint);
-    gyroPID.enable();
+    gyroPID.getPIDMultiton().setSetpoint(setPoint);
+    gyroPID.getPIDMultiton().enable();
   }
 
   @Override
   protected boolean isFinished() {
-    return gyroPID.onTarget();
+    return gyroPID.getPIDMultiton().onTarget();
   }
 
   @Override
   protected void end() {
     Trace.getInstance().logCommandStop("TurnToDeltaAngle");
     Robot.driveTrain.setGear(savedGear);
-    gyroPID.reset();
+    gyroPID.getPIDMultiton().reset();
   }
 
 }

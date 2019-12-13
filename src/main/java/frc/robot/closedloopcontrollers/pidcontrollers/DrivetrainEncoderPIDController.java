@@ -16,6 +16,7 @@ public class DrivetrainEncoderPIDController {
   private MagEncoderSensor encoder;
   private final double kMinOut = 0.125;
   public static final double TICKSTOINCHESRATIO = 2064.1216;
+  private PIDMultiton pidMultiton;
 
   /**
    * Sets the encoder, encoderPIDOut, trace, and pidConfiguration variables. Also
@@ -23,13 +24,14 @@ public class DrivetrainEncoderPIDController {
    */
   private DrivetrainEncoderPIDController() {
 
-    PIDConfiguration pidConfiguration = new PIDConfiguration(0.004, 0, 0, 0, kMinOut,
-     1, 1, "EncoderPIDHeader", "EncoderPID");
+    PIDConfiguration pidConfiguration = new PIDConfiguration(0.004, 0, 0, 0, kMinOut, 1, 1, "EncoderPIDHeader",
+        "EncoderPID");
 
     encoder = Robot.drivetrainLeftRearEncoder;
     encoderPIDOut = new EncoderPIDOut();
     encoderPIDSrc = new EncoderPIDIn();
-    encoderPIDSrc.putSensorOnLiveWindow(pidConfiguration.getLiveWindowName(), "PIDin");PIDMultiton.getInstance(encoderPIDSrc, encoderPIDOut, pidConfiguration);
+    encoderPIDSrc.putSensorOnLiveWindow(pidConfiguration.getLiveWindowName(), "PIDin");
+    pidMultiton = PIDMultiton.getInstance(encoderPIDSrc, encoderPIDOut, pidConfiguration);
   }
 
   private class EncoderPIDIn extends SensorBase implements PIDSource {
@@ -94,6 +96,10 @@ public class DrivetrainEncoderPIDController {
       instance = new DrivetrainEncoderPIDController();
     }
     return instance;
+  }
+
+  public PIDMultiton getPIDMultiton() {
+    return pidMultiton;
   }
 
 }

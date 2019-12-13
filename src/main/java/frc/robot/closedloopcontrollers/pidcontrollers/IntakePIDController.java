@@ -2,33 +2,42 @@
 package frc.robot.closedloopcontrollers.pidcontrollers;
 
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveIntakeSafely;
 import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.anglesensor.AngleSensor;
 
-public class IntakePIDController extends PIDControllerBase {
+public class IntakePIDController {
 
   private static IntakePIDController instance;
   private IntakePIDOut intakePIDOut;
+  private IntakePIDSource intakePIDSrc;
   private AngleSensor intakeAngleSensor;
+  private PIDMultiton pidMultiton;
 
   private IntakePIDController() {
-    super.absoluteTolerance = 0.035;
-    super.p = 0.25;
-    super.i = 0;
-    super.d = 0.25;
+    double absoluteTolerance = 0.035;
+    double p = 0.25;
+    double i = 0;
+    double d = 0.25;
 
-    super.outputRange = 1;
-    super.subsystemName = "Intake";
-    super.pidName = "IntakePID";
+    double outputRange = 1;
+    String subsystemName = "Intake";
+    String pidName = "IntakePID";
+
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1, subsystemName, pidName);
+
+    PIDMultiton pidMultiton = PIDMultiton.getInstance(intakeAngleSensor, intakePIDOut, pidConfiguration);
 
     intakeAngleSensor = Robot.intakeAngleSensor;
-    intakeAngleSensor.putSensorOnLiveWindow(super.subsystemName, "Intake");
+
+    intakeAngleSensor.putSensorOnLiveWindow(subsystemName, "Intake");
     intakePIDOut = new IntakePIDOut();
-    super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(intakeAngleSensor, intakePIDOut, super.pidConfiguration);
-    intakePIDOut.setContainer(super.pidMultiton);
+    intakePIDOut.setContainer(pidMultiton);
+
+    pidMultiton = PIDMultiton.getInstance(intakePIDSrc, intakePIDOut, pidConfiguration);
   }
 
   private class IntakePIDOut implements PIDOutput {
@@ -45,6 +54,23 @@ public class IntakePIDController extends PIDControllerBase {
     }
   }
 
+  private class IntakePIDSource implements PIDSource {
+
+    @Override
+    public void setPIDSourceType(PIDSourceType pidSource) {
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+      return PIDSourceType.kDisplacement;
+    }
+
+    @Override
+    public double pidGet() {
+      return intakeAngleSensor.getAngle();
+    }
+  }
+
   public static IntakePIDController getInstance() {
     System.out.println(" --- Asking for Intake PID Instance ---");
     if (instance == null) {
@@ -52,6 +78,30 @@ public class IntakePIDController extends PIDControllerBase {
       instance = new IntakePIDController();
     }
     return instance;
+  }
+
+  public PIDMultiton getPIDMultiton() {
+    return pidMultiton;
+  }
+
+  public void enable() {
+    pidMultiton.enable();
+  }
+
+  public void disable() {
+    pidMultiton.disable();
+  }
+
+  public boolean onTarget() {
+    return pidMultiton.onTarget();
+  }
+
+  public void setSetpoint(double setpoint) {
+    pidMultiton.setSetpoint(setpoint);
+  }
+
+  public boolean isEnabled() {
+    return pidMultiton.isEnabled();
   }
 
 }
