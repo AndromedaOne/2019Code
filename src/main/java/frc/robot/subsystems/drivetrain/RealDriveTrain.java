@@ -301,7 +301,8 @@ public class RealDriveTrain extends DriveTrain {
     return configValue;
   }
 
-  private WPI_TalonSRX initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
+  // I JUST CHANGED THIS TO STATIC
+  private static WPI_TalonSRX initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
     WPI_TalonSRX slaveMotor = new WPI_TalonSRX(driveConf.getInt(motorName));
     slaveMotor.configFactoryDefault();
     slaveMotor.follow(master);
