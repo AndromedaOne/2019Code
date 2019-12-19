@@ -1,9 +1,9 @@
 package frc.robot.subsystems.drivetrain.drivecontrol;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.TalonSRX_4905;
 
 public class PercentVBusControl extends DriveControl {
 
@@ -11,7 +11,7 @@ public class PercentVBusControl extends DriveControl {
     // TODO need to fix this too:
     double m_maxSpeed = 1.0;
 
-    public PercentVBusControl(WPI_TalonSRX leftMaster, WPI_TalonSRX rightMaster) {
+    public PercentVBusControl(TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster) {
         super(leftMaster, rightMaster);
         m_differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
         
@@ -30,9 +30,8 @@ public class PercentVBusControl extends DriveControl {
         m_differentialDrive.setMaxOutput(m_maxSpeed);
     }
     
-    private void setVBusMode(WPI_TalonSRX talon) {
-        // TODO wrong need to fix later
-        talon.set(ControlMode.PercentOutput, 0);
+    private void setVBusMode(TalonSRX_4905 talon) {
+        talon.setControlMode(ControlMode.PercentOutput);
     }
       
     @Override

@@ -14,6 +14,7 @@ import frc.robot.subsystems.drivetrain.drivecontrol.DriveControl;
 import frc.robot.subsystems.drivetrain.drivecontrol.DriveControlEnum;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
+import frc.robot.TalonSRX_4905;
 
 /* For the Java CTRE Talon API Docs, see this link:
 http://www.ctr-electronics.com/downloads/api/java/html/index.html
@@ -23,11 +24,11 @@ http://www.ctr-electronics.com/downloads/api/java/html/index.html
  *
  */
 public class RealDriveTrain extends DriveTrain {
-  public static WPI_TalonSRX driveTrainLeftMaster;
-  public static WPI_TalonSRX driveTrainLeftSlave;
+  public static TalonSRX_4905 driveTrainLeftMaster;
+  public static TalonSRX_4905 driveTrainLeftSlave;
   public static SpeedControllerGroup driveTrainLeftSpeedController;
-  public static WPI_TalonSRX driveTrainRightMaster;
-  public static WPI_TalonSRX driveTrainRightSlave;
+  public static TalonSRX_4905 driveTrainRightMaster;
+  public static TalonSRX_4905 driveTrainRightSlave;
   public static SpeedControllerGroup driveTrainRightSpeedController;
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
@@ -170,8 +171,8 @@ public class RealDriveTrain extends DriveTrain {
   // Inspired by
   // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
   // and
-  private WPI_TalonSRX initTalonMaster(Config driveConf, String side) {
-    WPI_TalonSRX _talon = new WPI_TalonSRX(driveConf.getInt(side + "Master"));
+  private TalonSRX_4905 initTalonMaster(Config driveConf, String side) {
+    TalonSRX_4905 _talon = new TalonSRX_4905(driveConf.getInt(side + "Master"));
 
     /* Factory Default all hardware to prevent unexpected behaviour */
     _talon.configFactoryDefault();
@@ -194,8 +195,8 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   // I JUST CHANGED THIS TO STATIC
-  private static WPI_TalonSRX initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
-    WPI_TalonSRX slaveMotor = new WPI_TalonSRX(driveConf.getInt(motorName));
+  private static TalonSRX_4905 initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
+    TalonSRX_4905 slaveMotor = new TalonSRX_4905(driveConf.getInt(motorName));
     slaveMotor.configFactoryDefault();
     slaveMotor.follow(master);
     slaveMotor.setInverted(isInverted);

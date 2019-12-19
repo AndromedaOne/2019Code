@@ -3,13 +3,14 @@ package frc.robot.subsystems.drivetrain.drivecontrol;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.TalonSRX_4905;
 
 public abstract class DriveControl {
 
-    WPI_TalonSRX m_leftMaster;
-    WPI_TalonSRX m_rightMaster;
+    TalonSRX_4905 m_leftMaster;
+    TalonSRX_4905 m_rightMaster;
 
-    public DriveControl(WPI_TalonSRX leftMaster, WPI_TalonSRX rightMaster){
+    public DriveControl(TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster){
         m_leftMaster = leftMaster;
         m_rightMaster = rightMaster;
     }
@@ -18,7 +19,7 @@ public abstract class DriveControl {
 
     public abstract void stop();
 
-    public static DriveControl createDriveControl(DriveControlEnum driveControlEnum, WPI_TalonSRX leftMaster, WPI_TalonSRX rightMaster) {
+    public static DriveControl createDriveControl(DriveControlEnum driveControlEnum, TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster) {
         switch(driveControlEnum) {
             case VELOCITY:
                 return new VelocityControl(leftMaster, rightMaster);

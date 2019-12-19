@@ -6,6 +6,7 @@ import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
+import frc.robot.TalonSRX_4905;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
 
 public class VelocityControl extends DriveControl {
@@ -17,7 +18,7 @@ public class VelocityControl extends DriveControl {
     private double highGearMaxSpeed = 1;
     private final double m_closedLoopNeutralToMaxSpeedSeconds = 0.0;
 
-    public VelocityControl(WPI_TalonSRX leftMaster, WPI_TalonSRX rightMaster) {
+    public VelocityControl(TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster) {
         super(leftMaster, rightMaster);
         
         m_differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
@@ -39,9 +40,8 @@ public class VelocityControl extends DriveControl {
         
       }
     
-      private void setVelocityMode(WPI_TalonSRX talon, String side) {
-        // TODO very wrong fix later!!!!
-        talon.set(ControlMode.Velocity, 0);
+      private void setVelocityMode(TalonSRX_4905 talon, String side) {
+        talon.setControlMode(ControlMode.Velocity);
         setPIDParameters(talon, side);
       }
 
