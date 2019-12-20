@@ -12,6 +12,7 @@ import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.subsystems.drivetrain.drivecontrol.DriveControl;
 import frc.robot.subsystems.drivetrain.drivecontrol.DriveControlEnum;
+import frc.robot.subsystems.drivetrain.drivecontrol.DriveControlFactory;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
 import frc.robot.TalonSRX_4905;
@@ -61,11 +62,7 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
-    if (driveConf.getBoolean("useVelocityMode")) {
-      m_driveControl = DriveControl.createDriveControl(DriveControlEnum.VELOCITY, driveTrainLeftMaster, driveTrainRightMaster);
-    }else {
-      m_driveControl = DriveControl.createDriveControl(DriveControlEnum.PERCENTVBUS, driveTrainLeftMaster, driveTrainRightMaster);
-    }
+    m_driveControl = DriveControlFactory.create(driveTrainLeftMaster, driveTrainRightMaster);
   }
 
   private RobotGear currentGear = RobotGear.SLOWHIGHGEAR;

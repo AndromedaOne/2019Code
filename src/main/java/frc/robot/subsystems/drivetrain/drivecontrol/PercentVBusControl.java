@@ -8,7 +8,6 @@ import frc.robot.TalonSRX_4905;
 public class PercentVBusControl extends DriveControl {
 
     DifferentialDrive m_differentialDrive;
-    // TODO need to fix this too:
     double m_maxSpeed = 1.0;
 
     public PercentVBusControl(TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster) {

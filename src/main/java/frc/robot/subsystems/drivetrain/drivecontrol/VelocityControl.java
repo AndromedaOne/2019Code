@@ -97,15 +97,4 @@ public class VelocityControl extends DriveControl {
         m_differentialDrive.stopMotor();
     }
 
-     // TODO look at:
-  /**
-   * Specialization of WPI_TalonSRX
-   * 
-   * The WPI_TalonSRX class implements a set() method to set the speed of the
-   * TalonSRX. Unfortunately, that method <i>always</i> drives the motor in
-   * PercentOutput mode. We need to be able drive the motor in Velocity mode to
-   * use the closed loop velocity mode. So we extend WPI_TalonSRX and provide our
-   * own set() method which allows us to set the control mode (via the newly added
-   * setControlMode() method.)
-   */
 }
