@@ -31,15 +31,14 @@ public class ExtendableArmPIDController {
 
     PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1, subsystemName, pidName);
 
-    pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, pidConfiguration);
-
     topArmEncoder = Robot.topArmExtensionEncoder;
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     armPIDSource = new ArmPIDSource();
     armPIDSource.putSensorOnLiveWindow(subsystemName, "Extension");
     armPIDOut = new ArmPIDOut();
-    PIDMultiton.getInstance(armPIDSource, armPIDOut, pidConfiguration);
     armPIDOut.setContainer(pidMultiton);
+
+    pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, pidConfiguration);
   }
 
   private class ArmPIDOut implements PIDOutput {

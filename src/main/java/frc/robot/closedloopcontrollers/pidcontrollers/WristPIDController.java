@@ -33,8 +33,6 @@ public class WristPIDController {
     PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, absoluteTolerance, subsystemName,
         pidName);
 
-    pidMultiton = PIDMultiton.getInstance(wristPIDSource, wristPIDOut, pidConfiguration);
-
     wristPIDSource = new WristPIDSource();
     wristPIDSource.putSensorOnLiveWindow(subsystemName, "WristAngle");
 
@@ -42,6 +40,8 @@ public class WristPIDController {
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     wristPIDOut = new WristPIDOut();
     wristPIDOut.setContainer(pidMultiton);
+
+    pidMultiton = PIDMultiton.getInstance(wristPIDSource, wristPIDOut, pidConfiguration);
   }
 
   private class WristPIDOut implements PIDOutput {

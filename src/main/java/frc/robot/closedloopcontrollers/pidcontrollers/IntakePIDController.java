@@ -13,7 +13,6 @@ public class IntakePIDController {
 
   private static IntakePIDController instance;
   private IntakePIDOut intakePIDOut;
-  private IntakePIDSource intakePIDSrc;
   private AngleSensor intakeAngleSensor;
   private PIDMultiton pidMultiton;
 
@@ -29,15 +28,13 @@ public class IntakePIDController {
 
     PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1, subsystemName, pidName);
 
-    PIDMultiton pidMultiton = PIDMultiton.getInstance(intakeAngleSensor, intakePIDOut, pidConfiguration);
-
     intakeAngleSensor = Robot.intakeAngleSensor;
 
     intakeAngleSensor.putSensorOnLiveWindow(subsystemName, "Intake");
     intakePIDOut = new IntakePIDOut();
     intakePIDOut.setContainer(pidMultiton);
 
-    pidMultiton = PIDMultiton.getInstance(intakePIDSrc, intakePIDOut, pidConfiguration);
+    pidMultiton = PIDMultiton.getInstance(intakeAngleSensor, intakePIDOut, pidConfiguration);
   }
 
   private class IntakePIDOut implements PIDOutput {
@@ -51,23 +48,6 @@ public class IntakePIDController {
     public void pidWrite(double output) {
       output = -output;
       MoveIntakeSafely.moveIntake(output);
-    }
-  }
-
-  private class IntakePIDSource implements PIDSource {
-
-    @Override
-    public void setPIDSourceType(PIDSourceType pidSource) {
-    }
-
-    @Override
-    public PIDSourceType getPIDSourceType() {
-      return PIDSourceType.kDisplacement;
-    }
-
-    @Override
-    public double pidGet() {
-      return intakeAngleSensor.getAngle();
     }
   }
 

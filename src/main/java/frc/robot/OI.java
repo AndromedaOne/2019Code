@@ -148,11 +148,11 @@ public class OI {
     turnToNorth = new JoystickButton(driveController, ButtonsEnumerated.YBUTTON.getValue());
     turnToNorth.whenPressed(new TurnToCompassHeading(0));
     turnToEast = new JoystickButton(driveController, ButtonsEnumerated.BBUTTON.getValue());
-    // turnToEast.whenPressed(new GyroDoubleMove(90, true));
+    turnToEast.whenPressed(new TurnToCompassHeading(90));
     turnToSouth = new JoystickButton(driveController, ButtonsEnumerated.ABUTTON.getValue());
-    turnToSouth.whenPressed(new MoveUsingEncoderPID(150));
+    turnToSouth.whenPressed(new TurnToCompassHeading(180));
     turnToWest = new JoystickButton(driveController, ButtonsEnumerated.XBUTTON.getValue());
-    // turnToWest.whenPressed(new GyroDoubleMove(270, true));
+    turnToWest.whenPressed(new TurnToCompassHeading(270));
 
     intakeUp = new POVButton(operatorController, POVDirectionNames.NORTH.getValue());
     // intakeUp.whenPressed(new DoubleMoveIntake(MoveIntakeArmDirection.UP));

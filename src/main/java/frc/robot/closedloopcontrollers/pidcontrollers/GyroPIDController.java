@@ -31,11 +31,11 @@ public class GyroPIDController {
     PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, absoluteTolerance, subsystemName,
         pidName);
 
-    pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, pidConfiguration);
-
     navXGyroSensor = NavXGyroSensor.getInstance();
     gyroPIDOut = new GyroPIDOut();
     navXGyroSensor.putSensorOnLiveWindow(subsystemName, "Gyro");
+
+    pidMultiton = PIDMultiton.getInstance(navXGyroSensor, gyroPIDOut, pidConfiguration);
   }
 
   private class GyroPIDOut implements PIDOutput {
