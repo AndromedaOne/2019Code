@@ -10,6 +10,7 @@ import frc.robot.Robot;
 import frc.robot.TalonSRX_4905;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDConfiguration;
 import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
+import frc.robot.sensors.SensorBase;
 import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -45,6 +46,8 @@ public class VelocityWPIPidControl extends DriveControl {
         setPID(velocityWPIPidLeftMaster, "left", gear);
         setPID(velocityWPIPidRightMaster, "right", gear);
         m_differentialDrive = new DifferentialDrive(velocityWPIPidLeftMaster, velocityWPIPidRightMaster);
+
+        
     }
 
     @Override
@@ -105,7 +108,7 @@ public class VelocityWPIPidControl extends DriveControl {
             pidConfiguration.setPIDName("WPITalonVelocityPID");
 
             m_pidMultiton = PIDMultiton.getInstance(velocityWPIPidTalonIn, velocityWPIPidControlOut, pidConfiguration);
-
+            velocityWPIPidTalonIn.putSensorOnLiveWindow("DriveTrain", "WPITalonVelocityPIDIn");
         }
         
         @Override
@@ -132,7 +135,7 @@ public class VelocityWPIPidControl extends DriveControl {
             m_pidMultiton.pidController.setF(f);
         }
 
-        private class VelocityWPIPidTalonIn implements PIDSource {
+        private class VelocityWPIPidTalonIn extends SensorBase implements PIDSource {
 
             @Override
             public void setPIDSourceType(PIDSourceType pidSource) {
@@ -150,6 +153,12 @@ public class VelocityWPIPidControl extends DriveControl {
             public double pidGet() {
                 // TODO Auto-generated method stub
                 return getSelectedSensorVelocity();
+            }
+
+            @Override
+            public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
+                putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "PidGet", this::pidGet);
+
             }
 
         }
