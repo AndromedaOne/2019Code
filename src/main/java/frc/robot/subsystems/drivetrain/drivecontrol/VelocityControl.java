@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
 import frc.robot.TalonSRX_4905;
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
+import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 
 public class VelocityControl extends DriveControl {
 
@@ -18,11 +19,15 @@ public class VelocityControl extends DriveControl {
     private double highGearMaxSpeed = 1;
     private final double m_closedLoopNeutralToMaxSpeedSeconds = 0.0;
 
+    TalonSRX_4905 m_leftMaster;
+    TalonSRX_4905 m_rightMaster;
+
     public VelocityControl(TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster) {
         super(leftMaster, rightMaster);
         
         m_differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
-
+        m_leftMaster = leftMaster;
+        m_rightMaster = rightMaster;
         setVelocityMode();
     }
 
@@ -96,5 +101,22 @@ public class VelocityControl extends DriveControl {
     public void stop() {
         m_differentialDrive.stopMotor();
     }
+
+  @Override
+  public void shiftSpeed(RobotGear robotGear) {
+    int speed = 0;
+    switch(robotGear) {
+      case HIGHGEAR:
+        speed = 1;
+        break;
+      
+      case SLOWHIGHGEAR:
+        speed = 1;
+        break;
+    }
+    m_leftMaster.selectProfileSlot(speed, 0);
+    m_rightMaster.selectProfileSlot(speed, 0);
+
+  }
 
 }

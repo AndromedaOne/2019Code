@@ -15,8 +15,8 @@ public class TalonSRX_4905 extends WPI_TalonSRX {
    * own set() method which allows us to set the control mode (via the newly added
    * setControlMode() method.)
    */
-    private ControlMode controlMode = ControlMode.PercentOutput;
-    private double speed;
+    protected ControlMode controlMode = ControlMode.PercentOutput;
+    protected double speed;
 
     public TalonSRX_4905(int deviceNumber) {
       super(deviceNumber);

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.subsystems.drivetrain.drivecontrol.DriveControl;
-import frc.robot.subsystems.drivetrain.drivecontrol.DriveControlEnum;
 import frc.robot.subsystems.drivetrain.drivecontrol.DriveControlFactory;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
@@ -273,8 +272,7 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid.set(DoubleSolenoid.Value.kForward);
     }
     maxSpeed = lowGearMaxSpeed;
-    driveTrainLeftMaster.selectProfileSlot(kLowGearPIDSlot, 0);
-    driveTrainRightMaster.selectProfileSlot(kLowGearPIDSlot, 0);
+    m_driveControl.shiftSpeed(RobotGear.LOWGEAR);
     slotIdx = 0;
     shifterDelayCounter = 0;
   }
@@ -285,8 +283,7 @@ public class RealDriveTrain extends DriveTrain {
       changeControlMode(NeutralMode.Coast);
       shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
       maxSpeed = highGearMaxSpeed;
-      driveTrainLeftMaster.selectProfileSlot(kHighGearPIDSlot, 0);
-      driveTrainRightMaster.selectProfileSlot(kHighGearPIDSlot, 0);
+      m_driveControl.shiftSpeed(RobotGear.HIGHGEAR);
       slotIdx = 1;
       shifterDelayCounter = 0;
     } else {

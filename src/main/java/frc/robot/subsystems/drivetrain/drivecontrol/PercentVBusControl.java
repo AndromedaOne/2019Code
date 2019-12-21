@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.TalonSRX_4905;
+import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 
 public class PercentVBusControl extends DriveControl {
 
@@ -36,5 +37,10 @@ public class PercentVBusControl extends DriveControl {
     @Override
     public void stop() {
         m_differentialDrive.stopMotor();
+    }
+
+    @Override
+    public void shiftSpeed(RobotGear robotGear) {
+        return;
     }
 }
