@@ -18,6 +18,7 @@ public class VelocityWPIPidControl extends DriveControl {
 
     public VelocityWPIPidControl(TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster) {
         super(leftMaster, rightMaster);
+
         velocityWPIPidLeftMaster = (VelocityWPIPidTalon) leftMaster;
         velocityWPIPidRightMaster = (VelocityWPIPidTalon) rightMaster;
 
@@ -42,8 +43,6 @@ public class VelocityWPIPidControl extends DriveControl {
         setPID(velocityWPIPidLeftMaster, "left", gear);
         setPID(velocityWPIPidRightMaster, "right", gear);
         m_differentialDrive = new DifferentialDrive(velocityWPIPidLeftMaster, velocityWPIPidRightMaster);
-
-        
     }
 
     @Override

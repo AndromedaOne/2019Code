@@ -12,11 +12,11 @@ import frc.robot.sensors.SensorBase;
 
 public class VelocityWPIPidTalon extends TalonSRX_4905 {
 
-    PIDMultiton m_pidMultiton;
+    private PIDMultiton m_pidMultiton;
     
-    public VelocityWPIPidTalon(int port) {
+    public VelocityWPIPidTalon(int port, double p, double i, double d, double f, String liveWindowName, String pidName) {
         super(port); 
-        PIDConfiguration pidConfiguration = new PIDConfiguration();
+        PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, f, 0, 1.0, 0, liveWindowName, pidName);
         
         VelocityWPIPidTalonIn velocityWPIPidTalonIn = new VelocityWPIPidTalonIn();
 
