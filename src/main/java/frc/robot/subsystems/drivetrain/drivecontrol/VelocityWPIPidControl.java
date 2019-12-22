@@ -1,16 +1,12 @@
 package frc.robot.subsystems.drivetrain.drivecontrol;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.typesafe.config.Config;
 
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
+
 import frc.robot.Robot;
 import frc.robot.TalonSRX_4905;
-import frc.robot.closedloopcontrollers.pidcontrollers.PIDConfiguration;
-import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
-import frc.robot.sensors.SensorBase;
+
+import frc.robot.closedloopcontrollers.pidcontrollers.VelocityWPIPidTalon;
 import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -91,88 +87,6 @@ public class VelocityWPIPidControl extends DriveControl {
         }
         System.out.println(side + "Side" + configItem + "=" + configValue);
         return configValue;
-    }
-
-    private class VelocityWPIPidTalon extends TalonSRX_4905 {
-
-        PIDMultiton m_pidMultiton;
-        
-        public VelocityWPIPidTalon(int port) {
-            super(port); 
-            PIDConfiguration pidConfiguration = new PIDConfiguration();
-            
-            VelocityWPIPidTalonIn velocityWPIPidTalonIn = new VelocityWPIPidTalonIn();
-
-            VelocityWPIPidControlOut velocityWPIPidControlOut = new VelocityWPIPidControlOut();
-            pidConfiguration.setLiveWindowName("DriveTrain");
-            pidConfiguration.setPIDName("WPITalonVelocityPID");
-
-            m_pidMultiton = PIDMultiton.getInstance(velocityWPIPidTalonIn, velocityWPIPidControlOut, pidConfiguration);
-            velocityWPIPidTalonIn.putSensorOnLiveWindow("DriveTrain", "WPITalonVelocityPIDIn");
-        }
-        
-        @Override
-        public void set(double speed) {
-            super.speed = speed;
-            m_pidMultiton.setSetpoint(speed);
-            m_pidMultiton.enable();
-            feed();
-        }
-
-        public void setP(double p) {
-            m_pidMultiton.pidController.setF(p);
-        }
-
-        public void setI(double i) {
-            m_pidMultiton.pidController.setI(i);
-        }
-
-        public void setD(double d) {
-            m_pidMultiton.pidController.setD(d);
-        }
-
-        public void setF(double f) {
-            m_pidMultiton.pidController.setF(f);
-        }
-
-        private class VelocityWPIPidTalonIn extends SensorBase implements PIDSource {
-
-            @Override
-            public void setPIDSourceType(PIDSourceType pidSource) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public PIDSourceType getPIDSourceType() {
-                // TODO Auto-generated method stub
-                return PIDSourceType.kRate;
-            }
-
-            @Override
-            public double pidGet() {
-                // TODO Auto-generated method stub
-                return getSelectedSensorVelocity();
-            }
-
-            @Override
-            public void putSensorOnLiveWindow(String subsystemNameParam, String sensorNameParam) {
-                putReadingOnLiveWindow(subsystemNameParam, sensorNameParam + "PidGet", this::pidGet);
-
-            }
-
-        }
-
-
-        private class VelocityWPIPidControlOut implements PIDOutput {
-
-            @Override
-            public void pidWrite(double output) {
-                set(ControlMode.PercentOutput, output);
-            }
-
-
-        }
     }
 
     @Override
