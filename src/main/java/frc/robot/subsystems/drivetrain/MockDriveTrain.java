@@ -41,7 +41,7 @@ public class MockDriveTrain extends DriveTrain {
   }
 
   @Override
-  public void changeControlMode(NeutralMode mode) {
+  public void changeNeutralMode(NeutralMode mode) {
     // System.out.println("Changed mode to: " + mode.toString());
   }
 

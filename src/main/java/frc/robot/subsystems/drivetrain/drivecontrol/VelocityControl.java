@@ -19,15 +19,10 @@ public class VelocityControl extends DriveControl {
     private double highGearMaxSpeed = 1;
     private final double m_closedLoopNeutralToMaxSpeedSeconds = 0.0;
 
-    TalonSRX_4905 m_leftMaster;
-    TalonSRX_4905 m_rightMaster;
-
     public VelocityControl(TalonSRX_4905 leftMaster, TalonSRX_4905 rightMaster) {
         super(leftMaster, rightMaster);
-        
+      
         m_differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
-        m_leftMaster = leftMaster;
-        m_rightMaster = rightMaster;
         setVelocityMode();
     }
 
@@ -74,17 +69,17 @@ public class VelocityControl extends DriveControl {
         highGearD = readPIDConfigItem(driveConf, side, "HighGearD", 0);
 
           /* Config the Velocity closed loop gains in slot0 */
-        _talon.config_kF(RealDriveTrain.kLowGearPIDSlot, (1023 / lowGearMaxSpeed), RealDriveTrain.kTimeoutMs);
-        _talon.config_kP(RealDriveTrain.kLowGearPIDSlot, lowGearP, RealDriveTrain.kTimeoutMs);
-        _talon.config_kI(RealDriveTrain.kLowGearPIDSlot, lowGearI, RealDriveTrain.kTimeoutMs);
-        _talon.config_kD(RealDriveTrain.kLowGearPIDSlot, lowGearD, RealDriveTrain.kTimeoutMs);
-        _talon.config_IntegralZone(RealDriveTrain.kLowGearPIDSlot, 50, RealDriveTrain.kTimeoutMs);
+        _talon.config_kF(RealDriveTrain.kLowGearPIDSlot, (1023 / lowGearMaxSpeed), DriveControlFactory.kTimeoutMs);
+        _talon.config_kP(RealDriveTrain.kLowGearPIDSlot, lowGearP, DriveControlFactory.kTimeoutMs);
+        _talon.config_kI(RealDriveTrain.kLowGearPIDSlot, lowGearI, DriveControlFactory.kTimeoutMs);
+        _talon.config_kD(RealDriveTrain.kLowGearPIDSlot, lowGearD, DriveControlFactory.kTimeoutMs);
+        _talon.config_IntegralZone(RealDriveTrain.kLowGearPIDSlot, 50, DriveControlFactory.kTimeoutMs);
         /* Config the Velocity closed loop gains in slot1 */
-        _talon.config_kF(RealDriveTrain.kHighGearPIDSlot, (1023 / highGearMaxSpeed), RealDriveTrain.kTimeoutMs);
-        _talon.config_kP(RealDriveTrain.kHighGearPIDSlot, highGearP, RealDriveTrain.kTimeoutMs);
-        _talon.config_kI(RealDriveTrain.kHighGearPIDSlot, highGearI, RealDriveTrain.kTimeoutMs);
-        _talon.config_kD(RealDriveTrain.kHighGearPIDSlot, highGearD, RealDriveTrain.kTimeoutMs);
-        _talon.config_IntegralZone(RealDriveTrain.kHighGearPIDSlot, 50, RealDriveTrain.kTimeoutMs);
+        _talon.config_kF(RealDriveTrain.kHighGearPIDSlot, (1023 / highGearMaxSpeed), DriveControlFactory.kTimeoutMs);
+        _talon.config_kP(RealDriveTrain.kHighGearPIDSlot, highGearP, DriveControlFactory.kTimeoutMs);
+        _talon.config_kI(RealDriveTrain.kHighGearPIDSlot, highGearI, DriveControlFactory.kTimeoutMs);
+        _talon.config_kD(RealDriveTrain.kHighGearPIDSlot, highGearD, DriveControlFactory.kTimeoutMs);
+        _talon.config_IntegralZone(RealDriveTrain.kHighGearPIDSlot, 50, DriveControlFactory.kTimeoutMs);
         _talon.configClosedloopRamp(m_closedLoopNeutralToMaxSpeedSeconds);
       }
     

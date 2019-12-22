@@ -24,12 +24,7 @@ http://www.ctr-electronics.com/downloads/api/java/html/index.html
  *
  */
 public class RealDriveTrain extends DriveTrain {
-  public static TalonSRX_4905 driveTrainLeftMaster;
-  public static TalonSRX_4905 driveTrainLeftSlave;
-  public static SpeedControllerGroup driveTrainLeftSpeedController;
-  public static TalonSRX_4905 driveTrainRightMaster;
-  public static TalonSRX_4905 driveTrainRightSlave;
-  public static SpeedControllerGroup driveTrainRightSpeedController;
+  
   public static DoubleSolenoid shifterSolenoid;
   private boolean shifterPresentFlag = false;
   private boolean invertTurning = false;
@@ -44,12 +39,6 @@ public class RealDriveTrain extends DriveTrain {
   public RealDriveTrain() {
     Config conf = Robot.getConfig();
     Config driveConf = conf.getConfig("ports.driveTrain");
-    driveTrainLeftMaster = initTalonMaster(driveConf, "left");
-    driveTrainLeftSlave = initTalonSlave(driveConf, "leftSlave", driveTrainLeftMaster,
-        driveConf.getBoolean("leftSideInverted"));
-    driveTrainRightMaster = initTalonMaster(driveConf, "right");
-    driveTrainRightSlave = initTalonSlave(driveConf, "rightSlave", driveTrainRightMaster,
-        driveConf.getBoolean("rightSideInverted"));
     
     if (conf.hasPath("subsystems.driveTrain.invertTurning")) {
       invertTurning = conf.getBoolean("subsystems.driveTrain.invertTurning");
@@ -61,11 +50,10 @@ public class RealDriveTrain extends DriveTrain {
       shifterSolenoid = new DoubleSolenoid(driveConf.getInt("pneumatics.forwardChannel"),
           driveConf.getInt("pneumatics.backwardsChannel"));
     }
-    m_driveControl = DriveControlFactory.create(driveTrainLeftMaster, driveTrainRightMaster);
+    m_driveControl = DriveControlFactory.create();
   }
 
   private RobotGear currentGear = RobotGear.SLOWHIGHGEAR;
-  public static final int kTimeoutMs = 30;
 
   private double lowGearMaxSpeed = 1;
   private double highGearMaxSpeed = 1;
@@ -164,42 +152,6 @@ public class RealDriveTrain extends DriveTrain {
     }
   }
 
-  // Inspired by
-  // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
-  // and
-  private TalonSRX_4905 initTalonMaster(Config driveConf, String side) {
-    TalonSRX_4905 _talon = new TalonSRX_4905(driveConf.getInt(side + "Master"));
-
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    _talon.configFactoryDefault();
-    _talon.setInverted(driveConf.getBoolean(side + "SideInverted"));
-    _talon.setSensorPhase(driveConf.getBoolean(side + "SideSensorInverted"));
-
-    _talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
-    /**
-     * Phase sensor accordingly. Positive Sensor Reading should match Green
-     * (blinking) Leds on Talon
-     * 
-     * /* Config the peak and nominal outputs
-     */
-    _talon.configNominalOutputForward(0, kTimeoutMs);
-    _talon.configNominalOutputReverse(0, kTimeoutMs);
-    _talon.configPeakOutputForward(1, kTimeoutMs);
-    _talon.configPeakOutputReverse(-1, kTimeoutMs);
-
-    return _talon;
-  }
-
-  // I JUST CHANGED THIS TO STATIC
-  private static TalonSRX_4905 initTalonSlave(Config driveConf, String motorName, WPI_TalonSRX master, boolean isInverted) {
-    TalonSRX_4905 slaveMotor = new TalonSRX_4905(driveConf.getInt(motorName));
-    slaveMotor.configFactoryDefault();
-    slaveMotor.follow(master);
-    slaveMotor.setInverted(isInverted);
-
-    return slaveMotor;
-  }
-
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new TeleOpDrive());
@@ -236,7 +188,7 @@ public class RealDriveTrain extends DriveTrain {
     double currentSpeed = previousSpeed;
     double currentRotate = rotateAmount;
     if (shifterDelayCounter >= delay) {
-      Robot.driveTrain.changeControlMode(NeutralMode.Brake);
+      Robot.driveTrain.changeNeutralMode(NeutralMode.Brake);
     } else {
       currentSpeed = 0;
       currentRotate = 0;
@@ -267,17 +219,17 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   public WPI_TalonSRX getLeftRearTalon() {
-    return driveTrainLeftMaster;
+    return m_driveControl.getLeftMaster();
   }
 
   public WPI_TalonSRX getRightRearTalon() {
-    return driveTrainRightMaster;
+    return m_driveControl.getRightMaster();
   }
 
   public void shiftToLowGear() {
     System.out.println("Shifting to low gear");
     if (shifterSolenoid != null) {
-      changeControlMode(NeutralMode.Coast);
+      changeNeutralMode(NeutralMode.Coast);
       shifterSolenoid.set(DoubleSolenoid.Value.kForward);
     }
     maxSpeed = lowGearMaxSpeed;
@@ -289,7 +241,7 @@ public class RealDriveTrain extends DriveTrain {
   public void shiftToHighGear() {
     System.out.println("Shifting to high gear");
     if (shifterSolenoid != null) {
-      changeControlMode(NeutralMode.Coast);
+      changeNeutralMode(NeutralMode.Coast);
       shifterSolenoid.set(DoubleSolenoid.Value.kReverse);
       maxSpeed = highGearMaxSpeed;
       m_driveControl.shiftSpeed(RobotGear.HIGHGEAR);
@@ -301,11 +253,9 @@ public class RealDriveTrain extends DriveTrain {
   }
 
   @Override
-  public void changeControlMode(NeutralMode mode) {
-    driveTrainLeftMaster.setNeutralMode(mode);
-    driveTrainLeftSlave.setNeutralMode(mode);
-    driveTrainRightMaster.setNeutralMode(mode);
-    driveTrainRightSlave.setNeutralMode(mode);
+  public void changeNeutralMode(NeutralMode mode) {
+    for(TalonSRX_4905 a : DriveControlFactory.getSpeedControllers()) {
+      a.setNeutralMode(mode);
+    }
   }
-
 }

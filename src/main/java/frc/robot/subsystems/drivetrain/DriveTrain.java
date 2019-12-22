@@ -37,7 +37,7 @@ public abstract class DriveTrain extends Subsystem {
 
   public abstract RobotGear getGear();
 
-  public abstract void changeControlMode(NeutralMode mode);
+  public abstract void changeNeutralMode(NeutralMode mode);
 
   public abstract WPI_TalonSRX getLeftRearTalon();
 
