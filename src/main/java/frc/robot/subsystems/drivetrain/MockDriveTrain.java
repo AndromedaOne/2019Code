@@ -11,7 +11,7 @@ public class MockDriveTrain extends DriveTrain {
   }
 
   @Override
-  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs) {
+  public void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs, boolean useAccelLimits) {
     // System.out.println("Moving at" + forwardBackSpeed / 100 + "% and rotating at"
     // + rotateAmount / 100 + "%");
   }
@@ -63,5 +63,10 @@ public class MockDriveTrain extends DriveTrain {
   @Override
   public void toggleShifter() {
     System.out.println("Toggle Shifter");
+  }
+
+  @Override
+  public WPI_TalonSRX getRightRearTalon() {
+    return null;
   }
 }

@@ -5,6 +5,8 @@ import com.typesafe.config.Config;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import frc.robot.Robot;
 import frc.robot.commands.TeleopIntake;
+import frc.robot.telemetries.Trace;
+import frc.robot.telemetries.TracePair;
 
 /* TODO
 * Test to make sure speed is accurate in RAISEARMSPEED
@@ -46,6 +48,8 @@ public class RealIntake extends Intake {
 
   @Override
   public void moveIntakeArm(double speed) {
+    Trace.getInstance().addTrace(true, "IntakeSpeed", new TracePair<>("Speed", speed),
+        new TracePair<>("Angle", Robot.intakeAngleSensor.getAngle()));
     intakeArmTalon.set(speed);
   }
 

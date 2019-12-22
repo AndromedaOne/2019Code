@@ -6,39 +6,39 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.ArmPosition;
 import frc.robot.Robot;
 import frc.robot.closedloopcontrollers.MoveArmAndWristSafely;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.*;
 import frc.robot.sensors.SensorBase;
 import frc.robot.sensors.magencodersensor.MagEncoderSensor;
 
-public class ExtendableArmPIDController extends PIDControllerBase {
+public class ExtendableArmPIDController {
 
   private static ExtendableArmPIDController instance;
   private static ArmPIDOut armPIDOut;
   private static ArmPIDSource armPIDSource;
   private final MagEncoderSensor topArmEncoder;
   private final MagEncoderSensor bottomArmEncoder;
+  private PIDMultiton pidMultiton;
 
   private ExtendableArmPIDController() {
-    super.absoluteTolerance = 0.5 / Robot.EXTENSIONINCHESPERTICK;
+    double absoluteTolerance = 0.5 / Robot.EXTENSIONINCHESPERTICK;
     // PID loop will only return true if error is within 1.5 inches of setpoint
-    super.p = 1.0 * Math.pow(10, -4); // 5.0e-5;
-    super.i = 0;
-    super.d = 0.0;// 1.0e-4;
-    super.outputRange = 0.85;
-    super.subsystemName = "Extendable Arm and Wrist";
-    super.pidName = "Extension";
+    double p = 1.0 * Math.pow(10, -4);
+    double i = 0;
+    double d = 0.0;// 1.0e-4;
+    double outputRange = 0.85;
+    String subsystemName = "Extendable Arm and Wrist";
+    String pidName = "Extension";
+
+    PIDConfiguration pidConfiguration = new PIDConfiguration(p, i, d, 0, 0, 1, 1, subsystemName, pidName);
 
     topArmEncoder = Robot.topArmExtensionEncoder;
     bottomArmEncoder = Robot.bottomArmExtensionEncoder;
     armPIDSource = new ArmPIDSource();
-    armPIDSource.putSensorOnLiveWindow(super.subsystemName, "Extension");
-    // topArmEncoder.putSensorOnLiveWindow(super.subsytemName,
-    // "ExtensionTopEncoder");
-    // bottomArmEncoder.putSensorOnLiveWindow(super.subsytemName,
-    // "ExtensionBottomEncoder");
+    armPIDSource.putSensorOnLiveWindow(subsystemName, "Extension");
     armPIDOut = new ArmPIDOut();
-    super.setPIDConfiguration(super.pidConfiguration);
-    super.pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, super.pidConfiguration);
-    armPIDOut.setContainer(super.pidMultiton);
+    armPIDOut.setContainer(pidMultiton);
+
+    pidMultiton = PIDMultiton.getInstance(armPIDSource, armPIDOut, pidConfiguration);
   }
 
   private class ArmPIDOut implements PIDOutput {
@@ -96,9 +96,16 @@ public class ExtendableArmPIDController extends PIDControllerBase {
 
   }
 
-  @Override
   public void setSetpoint(double setpoint) {
     pidMultiton.setSetpoint(setpoint / Robot.EXTENSIONINCHESPERTICK);
+  }
+
+  public void enable() {
+    pidMultiton.enable();
+  }
+
+  public boolean onTarget() {
+    return pidMultiton.onTarget();
   }
 
 }

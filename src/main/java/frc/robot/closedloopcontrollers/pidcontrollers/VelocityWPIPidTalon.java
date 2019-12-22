@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import frc.robot.TalonSRX_4905;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.PIDConfiguration;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.PIDMultiton;
 import frc.robot.sensors.SensorBase;
 
 public class VelocityWPIPidTalon extends TalonSRX_4905 {

@@ -52,7 +52,6 @@ public class RealExtendableArmAndWrist extends ExtendableArmAndWrist {
 
   @Override
   public void moveArmWrist(double extensionSpeed, double wristRotSpeed, double shoulderRotSpeed) {
-
     differentialDrive.arcadeDrive(-extensionSpeed, -wristRotSpeed);
     shoulderJointTalon.set(ControlMode.PercentOutput, -shoulderRotSpeed);
   }

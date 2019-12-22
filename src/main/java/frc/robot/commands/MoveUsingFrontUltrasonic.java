@@ -1,8 +1,9 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainRearUltrasonicPIDController;
 
-public class MoveUsingFrontUltrasonic extends MoveTurnBase {
+public class MoveUsingFrontUltrasonic extends Command {
 
   private DrivetrainRearUltrasonicPIDController frontUltrasonic = DrivetrainRearUltrasonicPIDController.getInstance();
   private double setpoint = 0;
@@ -14,7 +15,8 @@ public class MoveUsingFrontUltrasonic extends MoveTurnBase {
     setpoint = distanceFromWallInInches;
   }
 
-  public void initialize() {
-    moveUsingFrontUltrasonic(setpoint);
+  @Override
+  protected boolean isFinished() {
+    return false;
   }
 }

@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-public class MoveUsingBackUltrasonic extends MoveTurnBase {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class MoveUsingBackUltrasonic extends Command {
 
   /**
    * Takes a Setpoint in inches This is the distance you will be from the wall
@@ -11,5 +13,10 @@ public class MoveUsingBackUltrasonic extends MoveTurnBase {
 
   public void initialize() {
     // TODO There is no back ultrasonic set up yet
+  }
+
+  @Override
+  protected boolean isFinished() {
+    return false;
   }
 }

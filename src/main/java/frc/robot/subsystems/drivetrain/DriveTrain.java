@@ -24,7 +24,8 @@ public abstract class DriveTrain extends Subsystem {
 
   public abstract boolean getShifterPresentFlag();
 
-  public abstract void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs);
+  public abstract void move(double forwardBackSpeed, double rotateAmount, boolean squaredInputs,
+      boolean useAccelLimits);
 
   public abstract void stop();
 
@@ -39,6 +40,8 @@ public abstract class DriveTrain extends Subsystem {
   public abstract void changeControlMode(NeutralMode mode);
 
   public abstract WPI_TalonSRX getLeftRearTalon();
+
+  public abstract WPI_TalonSRX getRightRearTalon();
 
   public abstract void toggleSlowMode();
 

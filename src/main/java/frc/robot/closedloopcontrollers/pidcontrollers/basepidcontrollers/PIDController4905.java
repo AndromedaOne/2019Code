@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.closedloopcontrollers.pidcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers;
 
 import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.Notifier;
@@ -139,7 +139,7 @@ public class PIDController4905 extends PIDBase4905 implements Controller {
       } finally {
         m_thisMutex.unlock();
       }
-
+      System.out.println("Disabled and calling pidWrite0");
       m_pidOutput.pidWrite(0);
     } finally {
       m_pidWriteMutex.unlock();

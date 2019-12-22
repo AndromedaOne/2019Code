@@ -1,4 +1,4 @@
-package frc.robot.closedloopcontrollers.pidcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -157,6 +157,10 @@ public class PIDMultiton {
     pidController.setP(p);
     pidController.setD(d);
     pidController.setI(i);
+  }
+
+  public void setTolerance(double tolerance) {
+    pidController.setAbsoluteTolerance(tolerance, 7);
   }
 
 }

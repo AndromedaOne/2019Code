@@ -30,9 +30,9 @@ import frc.robot.closedloopcontrollers.pidcontrollers.DrivetrainRearUltrasonicPI
 import frc.robot.closedloopcontrollers.pidcontrollers.ExtendableArmPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.GyroPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.IntakePIDController;
-import frc.robot.closedloopcontrollers.pidcontrollers.PIDMultiton;
 import frc.robot.closedloopcontrollers.pidcontrollers.ShoulderPIDController;
 import frc.robot.closedloopcontrollers.pidcontrollers.WristPIDController;
+import frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers.PIDMultiton;
 import frc.robot.commands.*;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.sensors.NavXGyroSensor;
@@ -97,6 +97,7 @@ public class Robot extends TimedRobot {
   public static DrivetrainRearUltrasonicPIDController ultrasonicPID;
   public static GyroPIDController gyroPID;
   public static MagEncoderSensor drivetrainLeftRearEncoder;
+  public static MagEncoderSensor drivetrainRightRearEncoder;
   public static UltrasonicSensor drivetrainFrontUltrasonic;
   public static UltrasonicSensor drivetrainRearUltrasonic;
   public static Claw claw;
@@ -242,7 +243,8 @@ public class Robot extends TimedRobot {
     if (conf.hasPath("subsystems.driveTrain")) {
       System.out.println("Using real drivetrain");
       driveTrain = new RealDriveTrain();
-      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false);
+      drivetrainLeftRearEncoder = new RealMagEncoderSensor(driveTrain.getLeftRearTalon(), false, false, true);
+      drivetrainRightRearEncoder = new RealMagEncoderSensor(driveTrain.getRightRearTalon(), false, false, true);
     } else {
       System.out.println("Using fake drivetrain");
       driveTrain = new MockDriveTrain();
@@ -373,11 +375,9 @@ public class Robot extends TimedRobot {
       Config cameraConf = conf.getConfig("cameras");
 
       UsbCamera camera0 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera0"));
-      UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture(cameraConf.getInt("camera1"));
       camera0.setResolution(320, 240);
-      camera0.setFPS(10);
-      camera1.setResolution(320, 240);
-      camera1.setFPS(10);
+      camera0.setFPS(20);
+
     }
 
     if (conf.hasPath("subsystems.climber")) {
@@ -426,6 +426,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("IntakeAngle", intakeAngleSensor.getAngle());
     NavXGyroSensor.getInstance().getZAngle();
     NavXGyroSensor.getInstance().getXAngle();
+    SmartDashboard.putNumber("Drivetrain Left Encoder", drivetrainLeftRearEncoder.getDistanceTicks());
+    SmartDashboard.putNumber("Drivetrain Right Encoder", drivetrainRightRearEncoder.getDistanceTicks());
   }
 
   /**

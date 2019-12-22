@@ -209,7 +209,7 @@ public class Trace {
   }
 
   @SafeVarargs
-  private synchronized <T> TraceEntry getTraceEntry(String fileName, TracePair<T>... header) {
+  private final synchronized <T> TraceEntry getTraceEntry(String fileName, TracePair<T>... header) {
     TraceEntry traceEntry = null;
     try {
       if (!m_traces.containsKey(fileName)) {
@@ -237,7 +237,7 @@ public class Trace {
   }
 
   @SafeVarargs
-  private <T> void addEntry(TraceEntry traceEntry, TracePair<T>... values) {
+  private final <T> void addEntry(TraceEntry traceEntry, TracePair<T>... values) {
     try {
       if (!Robot.getInstance().isEnabled()) {
         return;

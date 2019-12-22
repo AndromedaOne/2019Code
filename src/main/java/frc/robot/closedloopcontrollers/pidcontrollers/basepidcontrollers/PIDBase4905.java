@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.closedloopcontrollers.pidcontrollers;
+package frc.robot.closedloopcontrollers.pidcontrollers.basepidcontrollers;
 
 import static java.util.Objects.requireNonNull;
 
@@ -327,7 +327,7 @@ public class PIDBase4905 extends SendableBase implements PIDInterface, PIDOutput
       Trace.getInstance().addTrace(true, m_pidName, new TracePair<>("TotalError", m_totalError),
           new TracePair<>("PError", m_pError), new TracePair("IError", m_iError), new TracePair("DError", m_dError),
           new TracePair<>("FeedForward", m_feedForward), new TracePair("AccumError", m_accumError),
-          new TracePair<>("Input", input), new TracePair("Setpoint", m_setpoint));
+          new TracePair<>("Input", input), new TracePair("Setpoint", m_setpoint), new TracePair("P-Value", P));
     }
   }
 

@@ -36,31 +36,27 @@ public class TurnToCompassHeading extends Command {
 
     double setPoint = deltaAngle + NavXGyroSensor.getInstance().getZAngle();
 
-    if (Math.abs(deltaAngle) < gyroPID.getAbsoluteTolerance()) {
-      System.out.println("Delta is to small, not moving!");
-      setPoint = NavXGyroSensor.getInstance().getZAngle();
-    }
-
     System.out.println(" - Turn to Compass Heading  - ");
-    System.out.println("Tolerance: " + gyroPID.getAbsoluteTolerance());
     System.out.println("Heading: " + heading);
     System.out.println("Delta Angle: " + deltaAngle);
     System.out.println("SetPoint: " + setPoint);
     System.out.println("Current Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
     System.out.println("Current Z Angle: " + NavXGyroSensor.getInstance().getZAngle());
-    gyroPID.setSetpoint(setPoint);
-    gyroPID.enable();
+    gyroPID.getPIDMultiton().setSetpoint(setPoint);
+    gyroPID.getPIDMultiton().enable();
   }
 
   @Override
   protected boolean isFinished() {
-    return gyroPID.onTarget();
+    return gyroPID.getPIDMultiton().onTarget();
   }
 
   protected void end() {
+    System.out.println(" - Gyro PID Finished - ");
+    System.out.println("Current Compass Heading: " + NavXGyroSensor.getInstance().getCompassHeading());
     Trace.getInstance().logCommandStop("TurnToCompassHeading");
     Robot.driveTrain.setGear(savedGear);
-    gyroPID.reset();
+    gyroPID.getPIDMultiton().reset();
   }
 
 }
