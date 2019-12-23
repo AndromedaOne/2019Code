@@ -28,22 +28,29 @@ public class DriveControlFactory {
         Config driveConf = conf.getConfig("ports.driveTrain");
         boolean isPercentVBus = driveConf.getBoolean("isPercentVBus");
 
-        leftMaster = initTalonMaster(driveConf, "left");
-        rightMaster = initTalonMaster(driveConf, "right");
+        if(isPercentVBus){
+          leftMaster = initTalonMaster(driveConf, "left");
+          rightMaster = initTalonMaster(driveConf, "right");
+          initializedSpeedControllers.add(leftMaster);
+          initializedSpeedControllers.add(rightMaster);
+
+          leftSlave = initTalonSlave(driveConf, "leftSlave", leftMaster, driveConf.getBoolean("leftSideInverted"));
+          rightSlave = initTalonSlave(driveConf, "rightSlave", rightMaster, driveConf.getBoolean("rightSideInverted"));
+          initializedSpeedControllers.add(leftSlave);
+          initializedSpeedControllers.add(rightSlave);
+          return new PercentVBusControl(leftMaster, rightMaster);
+        }
+        
+        initializedSpeedControllers.clear();
+        leftMaster = new VelocityWPIPidTalon(leftMaster.getDeviceID(), 0, 0, 0, 0, "DriveTrain", "velocityWPIPidLeftMaster");
+        rightMaster = new VelocityWPIPidTalon(rightMaster.getDeviceID(), 0, 0, 0, 0, "DriveTrain", "velocityWPIPidRightMaster");
         initializedSpeedControllers.add(leftMaster);
         initializedSpeedControllers.add(rightMaster);
-
         leftSlave = initTalonSlave(driveConf, "leftSlave", leftMaster, driveConf.getBoolean("leftSideInverted"));
         rightSlave = initTalonSlave(driveConf, "rightSlave", rightMaster, driveConf.getBoolean("rightSideInverted"));
         initializedSpeedControllers.add(leftSlave);
         initializedSpeedControllers.add(rightSlave);
 
-        if(isPercentVBus){
-            return new PercentVBusControl(leftMaster, rightMaster);
-        }
-        
-        leftMaster = new VelocityWPIPidTalon(leftMaster.getDeviceID(), 0, 0, 0, 0, "DriveTrain", "velocityWPIPidLeftMaster");
-        rightMaster = new VelocityWPIPidTalon(rightMaster.getDeviceID(), 0, 0, 0, 0, "DriveTrain", "velocityWPIPidRightMaster");
         return new VelocityWPIPidControl(leftMaster, rightMaster);
         
     } 
