@@ -2,14 +2,17 @@ package frc.robot.subsystems.drivetrain.drivecontrol;
 
 import java.util.Vector;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.typesafe.config.Config;
 
 import frc.robot.Robot;
-
-import frc.robot.TalonSRX_4905;
-import frc.robot.closedloopcontrollers.pidcontrollers.VelocityWPIPidTalon;
+import frc.robot.closedloopcontrollers.pidcontrollers.velocitypidwpi.VelocityPidWPIDriveTrainLeftTalon;
+import frc.robot.closedloopcontrollers.pidcontrollers.velocitypidwpi.VelocityPidWPIDriveTrainRightTalon;
+import frc.robot.closedloopcontrollers.pidcontrollers.velocitypidwpi.VelocityPidWPIForTalon;
+import frc.robot.talonsrx_4905.TalonSRX_4905;
+import frc.robot.talonsrx_4905.TalonSRX_4905SetterControlMode;
 
 public class DriveControlFactory {
 
@@ -21,6 +24,7 @@ public class DriveControlFactory {
     private static TalonSRX_4905 leftSlave;
     private static TalonSRX_4905 rightSlave;
 
+    private static boolean speedControllersInitializedFlag = false;
     private static Vector<TalonSRX_4905> initializedSpeedControllers;
 
     public static DriveControl create(){
@@ -28,7 +32,7 @@ public class DriveControlFactory {
         Config driveConf = conf.getConfig("ports.driveTrain");
         boolean isPercentVBus = driveConf.getBoolean("isPercentVBus");
 
-        if(isPercentVBus){
+        if(!speedControllersInitializedFlag) {
           leftMaster = initTalonMaster(driveConf, "left");
           rightMaster = initTalonMaster(driveConf, "right");
           initializedSpeedControllers.add(leftMaster);
@@ -38,18 +42,17 @@ public class DriveControlFactory {
           rightSlave = initTalonSlave(driveConf, "rightSlave", rightMaster, driveConf.getBoolean("rightSideInverted"));
           initializedSpeedControllers.add(leftSlave);
           initializedSpeedControllers.add(rightSlave);
+          speedControllersInitializedFlag = true;
+        }
+
+        if(isPercentVBus){
+          leftMaster.setControlMode(ControlMode.PercentOutput);
+          rightMaster.setControlMode(ControlMode.PercentOutput);
           return new PercentVBusControl(leftMaster, rightMaster);
         }
         
-        initializedSpeedControllers.clear();
-        leftMaster = new VelocityWPIPidTalon(leftMaster.getDeviceID(), 0, 0, 0, 0, "DriveTrain", "velocityWPIPidLeftMaster");
-        rightMaster = new VelocityWPIPidTalon(rightMaster.getDeviceID(), 0, 0, 0, 0, "DriveTrain", "velocityWPIPidRightMaster");
-        initializedSpeedControllers.add(leftMaster);
-        initializedSpeedControllers.add(rightMaster);
-        leftSlave = initTalonSlave(driveConf, "leftSlave", leftMaster, driveConf.getBoolean("leftSideInverted"));
-        rightSlave = initTalonSlave(driveConf, "rightSlave", rightMaster, driveConf.getBoolean("rightSideInverted"));
-        initializedSpeedControllers.add(leftSlave);
-        initializedSpeedControllers.add(rightSlave);
+        leftMaster.switchOutputSetter(new VelocityPidWPIDriveTrainLeftTalon());
+        rightMaster.switchOutputSetter(new VelocityPidWPIDriveTrainRightTalon());
 
         return new VelocityWPIPidControl(leftMaster, rightMaster);
         
@@ -91,5 +94,11 @@ public class DriveControlFactory {
 
   public static Vector<TalonSRX_4905> getSpeedControllers() {
       return initializedSpeedControllers;
+  }
+  public static TalonSRX_4905 getLeftMaster(){
+    return leftMaster;
+  }
+  public static TalonSRX_4905 getRightMaster(){
+    return rightMaster;
   }
 }

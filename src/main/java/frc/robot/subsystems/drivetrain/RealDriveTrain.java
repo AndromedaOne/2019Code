@@ -12,9 +12,10 @@ import frc.robot.Robot;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.subsystems.drivetrain.drivecontrol.DriveControl;
 import frc.robot.subsystems.drivetrain.drivecontrol.DriveControlFactory;
+import frc.robot.talonsrx_4905.TalonSRX_4905;
 import frc.robot.telemetries.Trace;
 import frc.robot.telemetries.TracePair;
-import frc.robot.TalonSRX_4905;
+
 
 /* For the Java CTRE Talon API Docs, see this link:
 http://www.ctr-electronics.com/downloads/api/java/html/index.html

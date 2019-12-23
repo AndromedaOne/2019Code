@@ -6,9 +6,10 @@ import com.typesafe.config.Config;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
-import frc.robot.TalonSRX_4905;
+
 import frc.robot.subsystems.drivetrain.RealDriveTrain;
 import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
+import frc.robot.talonsrx_4905.TalonSRX_4905;
 
 public class VelocityControl extends DriveControl {
 

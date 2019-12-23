@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.talonsrx_4905;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -17,9 +17,11 @@ public class TalonSRX_4905 extends WPI_TalonSRX {
    */
     protected ControlMode controlMode = ControlMode.PercentOutput;
     protected double speed;
+    TalonSRX_4905SetterBase m_talonSRX_4905Setter;
 
     public TalonSRX_4905(int deviceNumber) {
       super(deviceNumber);
+      m_talonSRX_4905Setter = new TalonSRX_4905SetterControlMode(this, controlMode);
     }
 
     /**
@@ -30,12 +32,22 @@ public class TalonSRX_4905 extends WPI_TalonSRX {
      */
     public void setControlMode(ControlMode controlMode) {
       this.controlMode = controlMode;
+      m_talonSRX_4905Setter = new TalonSRX_4905SetterControlMode(this, controlMode);
+
+    }
+
+    public void switchOutputSetter(TalonSRX_4905SetterBase talonSRX_4905Setter) {
+      m_talonSRX_4905Setter = talonSRX_4905Setter;
+    }
+
+    public TalonSRX_4905SetterBase getTalonSRX_4905Setter() {
+      return m_talonSRX_4905Setter;
     }
 
     @Override
     public void set(double speed) {
+      m_talonSRX_4905Setter.set(speed);
       this.speed = speed;
-      set(controlMode, speed);
       feed();
     }
 

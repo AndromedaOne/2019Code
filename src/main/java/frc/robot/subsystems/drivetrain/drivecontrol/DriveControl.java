@@ -1,7 +1,7 @@
 package frc.robot.subsystems.drivetrain.drivecontrol;
 
-import frc.robot.TalonSRX_4905;
 import frc.robot.subsystems.drivetrain.DriveTrain.RobotGear;
+import frc.robot.talonsrx_4905.TalonSRX_4905;
 
 public abstract class DriveControl {
 
